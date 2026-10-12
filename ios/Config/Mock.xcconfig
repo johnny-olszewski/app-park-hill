@@ -1,0 +1,11 @@
+// Mock: no backend. Services read contract fixtures; the app makes no network
+// connections. Debug only; Mock never ships.
+
+#include "App.xcconfig"
+
+APP_ENVIRONMENT = Mock
+APP_ENVIRONMENT_ID = mock
+APP_DISPLAY_NAME = Park Hill Mock
+
+// Mock sources are compiled here, and only here.
+EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift

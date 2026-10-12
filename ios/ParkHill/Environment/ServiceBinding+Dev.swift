@@ -7,4 +7,11 @@ enum ServiceBinding {
         name: "Dev",
         backend: .fromInfoPlist()
     )
+
+    @MainActor
+    static func makeScreenRegistry() -> ScreenRegistry {
+        var registry = ScreenRegistry()
+        registry.registerSharedScreens()
+        return registry
+    }
 }

@@ -81,6 +81,22 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 
 The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/`. Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
 
+## Screens and launch
+
+`AppCoordinator` (`ParkHill/Navigation/`) owns launch: it fetches the entry screen, resolves it through `ScreenRegistry` and shows it, a loading indicator or the launch error screen. On return to the foreground it fetches again.
+
+| Situation | Shows |
+|---|---|
+| `get_entry` succeeds with a registered key | That screen; the envelope is cached for the locale |
+| `get_entry` fails, cached entry exists | The cached screen |
+| `get_entry` fails, no usable cache | Error screen with retry (bundled text) |
+| `get_entry` returns a key this build does not register | Error screen, even with a cache (guide 5.3 rule 5); logged |
+| Foreground refetch fails | The screen already showing |
+
+The cache is one JSON file per locale under `Application Support/Cache/entry/`. Sign-out deletes `Application Support/Cache/` (IOS-005).
+
+**Adding a screen:** add its data model and view under `ParkHill/Screens/`, then register its key in `ScreenRegistry+Shared.swift`. Mock-only screens (`.mock` keys) register in `ParkHill/Mocks/ScreenRegistry+Mock.swift`. Each binding builds the registry from the screen sets its configuration includes. Views never create other screens or change navigation; coordinators do.
+
 ## Tests
 
 ```

@@ -132,7 +132,7 @@ Rules:
 2. Signed out: call `get_entry`, render the screen, cache the envelope per locale as last good.
 3. Signed in: show the signed-in destination (placeholder until IOS-008 and AND-008, then tabs via `get_tabs`, cached the same way).
 4. Fetch failure with a cache: render the cache. Without a cache: full screen error with retry, using bundled strings.
-5. Unknown screen keys are dropped. If nothing usable remains, treat as failure with no cache.
+5. Unknown screen keys are dropped. If nothing usable remains, treat as failure with no cache: show the error screen with retry, even when a cached copy exists.
 6. Return to foreground refetches and applies changes.
 7. Sign-out deletes all user data on the device, including caches.
 8. A request refused as unauthorized gets one silent renewal and retry; if still refused, the user is signed out and returned to sign-in. Network failures never sign anyone out (`specs/AUTH.md` 4.3).
@@ -251,6 +251,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-10 | Between EP-02 and EP-04, sign-out is a hardcoded client toolbar button on Home, marked `TEMPORARY(EP-04)` on every line and removed by IOS-015/AND-015. Tab icons are bundled placeholders until design delivers artwork under the same keys |
 | 2026-10-10 | Native platform feel (5.5): each client uses its platform's system components; behavior matches across platforms, presentation does not have to. The lost-access message is an alert on iOS and a `Snackbar` on Android; the custom iOS notice view is dropped |
 | 2026-10-12 | Git workflow (7.1): one branch and PR per task, commit subjects `[<TASK-ID>][<k>/n] <summary>` with a bulleted body, no tool or agent mentions, merge commits only. Repo is private and created in SUP-001 |
+| 2026-10-12 | 5.3 rule 5: a response with nothing usable (for example an entry screen key this build does not register) shows the error screen even when a cached copy exists. Chosen over falling back to the cache |
 
 ## 9. Known risks
 

@@ -1,0 +1,62 @@
+# SUP-008: Implement get_tabs for signed-in users
+
+| Field | Value |
+|---|---|
+| Area | backend, contract |
+| Epic | EP-02 |
+| Depends on | SUP-005 |
+| Paired with | None |
+| Status | Draft (revisit after EP-01) |
+
+## Intent
+
+Make the backend the source of the signed-in app's tabs. Changing a tab's title, order or presence becomes a data change. Built signed-in only from the start so it can vary by user when roles land, without a rework.
+
+## Scope
+
+- `tabs` table (id, sort order, title string key, icon key, root screen key, enabled), in migrations.
+- `get_tabs(p_locale)` per guide 4.1: tabs in order, each with its root screen envelope embedded.
+- Screens `home.root` and `community.home`, data `{}`, plus English strings, in migrations.
+- Fixtures: `/contract/fixtures/get_tabs.json`, `get_screen.home.root.json`, `get_screen.community.home.json`.
+- pgTAP tests.
+
+## Out of scope
+
+- Per-user content of embedded screens (EP-03, SUP-012). The list of tabs is the same for everyone.
+- Screen content.
+
+## Acceptance criteria
+
+| # | Criterion | Intent |
+|---|---|---|
+| AC1 | `get_tabs('en')` as a signed-in persona returns `version` and `tabs` in order, each with `id`, `title`, `icon_key` and `screen: {key, data}`, matching the fixture | One call gives a client the whole shell |
+| AC2 | `get_tabs` as `anon` is refused with the documented signed-in error | Tabs are for signed-in users only |
+| AC3 | Titles are resolved for the locale with `en` fallback | Strings are backend content |
+| AC4 | Changing `enabled`, `sort_order` or a title string changes the next response with no other change | Tabs are remotely driven |
+| AC5 | `get_screen` returns the same envelope `get_tabs` embeds for each root screen | One parser per screen |
+| AC6 | A `tabs` row cannot reference a screen key missing from `screens` (foreign key) | The backend cannot publish a tab pointing nowhere |
+| AC7 | Tables are not directly readable or writable by clients | All access goes through functions |
+| AC8 | pgTAP tests cover AC1 to AC7 and AC9 | Enforced, not documented |
+| AC9 | Enabling a sixth tab is refused by a database check, and `get_tabs` never returns more than five | Five-tab maximum is owned by the backend |
+
+## Technical notes
+
+- Maximum of five enabled tabs, enforced in the database and in `get_tabs`.
+- Reuses the per-screen assembly functions from SUP-003.
+- Calls `require_active_user()` first (SUP-005).
+
+## Verification
+
+```
+cd backend && supabase db reset && supabase test db
+```
+
+## Definition of done
+
+- [ ] All acceptance criteria pass
+- [ ] Fixtures committed and match live output
+- [ ] No work outside Scope
+
+## Open questions
+
+None.

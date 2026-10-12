@@ -1,0 +1,152 @@
+# Park Hill App: Backlog
+
+Index of epics and tasks. Epics live in `epics/`, tasks in `tasks/`, specs in `specs/`. Tasks follow `TASK_TEMPLATE.md` and are governed by `ENGINEERING_GUIDE.md`.
+
+Each task targets one platform: `SUP` (backend), `IOS`, `AND`, numbered sequentially per platform. Platforms can proceed in parallel; follow each task's "Depends on" for cross-platform order.
+
+**Before the first store upload:** replace the placeholder app identifier root (`app.parkhill.placeholder`) on both platforms; see the guide's decision log.
+
+The Status column here mirrors the Status field in each task. Update both in the same change.
+
+## [EP-01: Foundation and authentication](epics/EP-01-foundation-and-auth.md)
+
+### Milestone A: foundation
+
+#### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-001: Create the monorepo scaffold](tasks/SUP-001-monorepo-scaffold.md) | None | Draft |
+| [SUP-002: Set up the local Supabase backend project](tasks/SUP-002-local-supabase.md) | SUP-001 | Draft |
+| [SUP-003: Define the screen contract and implement get_entry and get_screen](tasks/SUP-003-screen-contract.md) | SUP-002 | Draft |
+| [SUP-004: Add backend CI on GitHub Actions against local Supabase](tasks/SUP-004-backend-ci.md) | SUP-003 | Draft |
+
+#### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-001: Create the iOS project with Mock and Dev build configurations](tasks/IOS-001-project-and-build-configs.md) | SUP-001 | Draft |
+| [IOS-002: Build the iOS backend service layer with production and mock implementations](tasks/IOS-002-backend-service-and-mock.md) | SUP-003, IOS-001 | Draft |
+| [IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry](tasks/IOS-003-root-coordinator-and-registry.md) | IOS-002 | Draft |
+| [IOS-004: Add iOS CI on GitHub Actions](tasks/IOS-004-ci.md) | IOS-003, SUP-004 | Draft |
+
+#### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-001: Create the Android project with Mock and Dev build variants](tasks/AND-001-project-and-build-variants.md) | SUP-001 | Draft |
+| [AND-002: Build the Android backend service layer with production and mock implementations](tasks/AND-002-backend-service-and-mock.md) | SUP-003, AND-001 | Draft |
+| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Draft |
+| [AND-004: Add Android CI on GitHub Actions](tasks/AND-004-ci.md) | AND-003, SUP-004 | Draft |
+
+### Milestone B: authentication
+
+#### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-005: Add profiles, seeded personas and a signed-in check function](tasks/SUP-005-profiles-and-personas.md) | SUP-003 | Draft |
+| [SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting](tasks/SUP-006-sign-in-function.md) | SUP-005 | Draft |
+| [SUP-007: Extend backend CI for auth: Edge Function tests and dataset check](tasks/SUP-007-auth-ci.md) | SUP-004, SUP-006 | Draft |
+
+#### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-005: Build the iOS auth service with production and mock implementations](tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Draft |
+| [IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder](tasks/IOS-006-sign-in-flow.md) | IOS-003, IOS-005 | Draft |
+| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Draft |
+
+#### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-005: Build the Android auth service with production and mock implementations](tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Draft |
+| [AND-006: Build the Android sign-in flow, mock persona picker and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
+| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Draft |
+
+## [EP-02: Tabs](epics/EP-02-tabs.md)
+
+### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-008: Implement get_tabs for signed-in users](tasks/SUP-008-get-tabs.md) | SUP-005 | Draft (revisit after EP-01) |
+
+### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](tasks/IOS-008-tab-shell.md) | IOS-006, SUP-008 | Draft (revisit after EP-01) |
+
+### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-008: Build the Android backend-fed tab shell and remove the placeholder](tasks/AND-008-tab-shell.md) | AND-006, SUP-008 | Draft (revisit after EP-01) |
+
+## [EP-03: Community](epics/EP-03-community.md)
+
+### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-009: Add data-driven roles, permissions and the permission check](tasks/SUP-009-roles-and-permissions.md) | SUP-005 | Draft |
+| [SUP-010: Add the groups schema, server-side rules and group personas](tasks/SUP-010-groups-schema-and-seed.md) | SUP-009 | Draft |
+| [SUP-011: Extend the screen contract with toolbar, actions and shared group types](tasks/SUP-011-toolbar-actions-and-shared-types.md) | SUP-003 | Draft |
+| [SUP-012: Build the Community screens: home, browse and group detail](tasks/SUP-012-community-screens.md) | SUP-008, SUP-010, SUP-011 | Draft |
+| [SUP-013: Build the people picker and create-group screens](tasks/SUP-013-picker-and-create-screens.md) | SUP-012 | Draft |
+| [SUP-014: Build the group operations with permission checks and all-or-nothing saves](tasks/SUP-014-group-operations.md) | SUP-010, SUP-011 | Draft |
+
+### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-009: Build iOS toolbar, action handling and shared screen behavior](tasks/IOS-009-actions-toolbar-and-screen-infrastructure.md) | IOS-008, SUP-011 | Draft |
+| [IOS-010: Build the iOS Community home and Browse all groups screens](tasks/IOS-010-community-home-and-browse.md) | IOS-009, SUP-012 | Draft |
+| [IOS-011: Build the iOS group detail view and screen](tasks/IOS-011-group-detail.md) | IOS-010, SUP-012, SUP-014 | Draft |
+| [IOS-012: Build the iOS people picker and create-group form](tasks/IOS-012-people-picker-and-create-group.md) | IOS-009, SUP-013 | Draft |
+| [IOS-013: Build iOS group edit mode with batched changes](tasks/IOS-013-group-edit-mode.md) | IOS-011, IOS-012, SUP-014 | Draft |
+| [IOS-014: Add iOS Community UI tests per persona against local Supabase (local)](tasks/IOS-014-community-ui-tests-per-persona.md) | IOS-013, SUP-014 | Draft |
+
+### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-009: Build Android toolbar, action handling and shared screen behavior](tasks/AND-009-actions-toolbar-and-screen-infrastructure.md) | AND-008, SUP-011 | Draft |
+| [AND-010: Build the Android Community home and Browse all groups screens](tasks/AND-010-community-home-and-browse.md) | AND-009, SUP-012 | Draft |
+| [AND-011: Build the Android group detail view and screen](tasks/AND-011-group-detail.md) | AND-010, SUP-012, SUP-014 | Draft |
+| [AND-012: Build the Android people picker and create-group form](tasks/AND-012-people-picker-and-create-group.md) | AND-009, SUP-013 | Draft |
+| [AND-013: Build Android group edit mode with batched changes](tasks/AND-013-group-edit-mode.md) | AND-011, AND-012, SUP-014 | Draft |
+| [AND-014: Add Android Community UI tests per persona against local Supabase (local)](tasks/AND-014-community-ui-tests-per-persona.md) | AND-013, SUP-014 | Draft |
+
+## [EP-04: People and roles](epics/EP-04-people-and-roles.md)
+
+### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-015: Extend profiles with phone, photo and directory visibility](tasks/SUP-015-people-profiles-and-visibility.md) | SUP-010 | Draft |
+| [SUP-016: Build the person detail screen and the account toolbar item](tasks/SUP-016-person-screen-and-account-item.md) | SUP-012, SUP-015 | Draft |
+| [SUP-017: Add the directory part to Browse and the browse button rule](tasks/SUP-017-directory-in-browse.md) | SUP-015, SUP-016 | Draft |
+| [SUP-018: Build profile and role saving with all-or-nothing batches](tasks/SUP-018-profile-and-role-operations.md) | SUP-015 | Draft |
+
+### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-015: Build the iOS person detail screen and account entry](tasks/IOS-015-person-detail.md) | IOS-011, SUP-016 | Draft |
+| [IOS-016: Build iOS profile edit mode with photo upload](tasks/IOS-016-profile-edit-mode.md) | IOS-015, SUP-018 | Draft |
+| [IOS-017: Add the iOS directory and segmented control to Browse](tasks/IOS-017-browse-segments-and-directory.md) | IOS-010, SUP-017 | Draft |
+| [IOS-018: Build the iOS Edit roles half sheet](tasks/IOS-018-edit-roles-sheet.md) | IOS-015, SUP-018 | Draft |
+| [IOS-019: Add iOS people and directory UI tests per persona against local Supabase (local)](tasks/IOS-019-people-ui-tests-per-persona.md) | IOS-016, IOS-017, IOS-018, SUP-018 | Draft |
+
+### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-015: Build the Android person detail screen and account entry](tasks/AND-015-person-detail.md) | AND-011, SUP-016 | Draft |
+| [AND-016: Build Android profile edit mode with photo upload](tasks/AND-016-profile-edit-mode.md) | AND-015, SUP-018 | Draft |
+| [AND-017: Add the Android directory and segmented control to Browse](tasks/AND-017-browse-segments-and-directory.md) | AND-010, SUP-017 | Draft |
+| [AND-018: Build the Android Edit roles half sheet](tasks/AND-018-edit-roles-sheet.md) | AND-015, SUP-018 | Draft |
+| [AND-019: Add Android people and directory UI tests per persona against local Supabase (local)](tasks/AND-019-people-ui-tests-per-persona.md) | AND-016, AND-017, AND-018, SUP-018 | Draft |

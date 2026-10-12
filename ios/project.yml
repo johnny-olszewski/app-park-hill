@@ -20,12 +20,20 @@ configFiles:
   Dev-Debug: Config/Base.xcconfig
   Dev-Release: Config/Base.xcconfig
 
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    exactVersion: 2.55.3
+
 targets:
   ParkHill:
     type: application
     platform: iOS
     sources:
       - path: ParkHill
+    dependencies:
+      - package: Supabase
+        product: Supabase
     configFiles:
       Mock-Debug: Config/Mock.xcconfig
       Dev-Debug: Config/Dev.xcconfig

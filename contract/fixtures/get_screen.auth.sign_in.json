@@ -3,10 +3,10 @@
   "data": {
     "title": "Sign in",
     "email_label": "Email",
-    "password_label": "Password",
     "submit_label": "Sign in",
-    "cannot_connect_message": "Can't connect. Check your connection and try again.",
+    "password_label": "Password",
+    "secondary_actions": [],
     "session_ended_message": "You've been signed out. Please sign in again.",
-    "secondary_actions": []
+    "cannot_connect_message": "Can't connect. Check your connection and try again."
   }
 }

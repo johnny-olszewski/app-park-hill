@@ -6,7 +6,7 @@
 | Epic | EP-01 |
 | Depends on | SUP-001 |
 | Paired with | AND-001 |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 

@@ -1,0 +1,26 @@
+{
+  "local_password": "parkhill-local",
+  "personas": [
+    {
+      "id": "attendee",
+      "email": "attendee@parkhill.test",
+      "display_name": "Attendee",
+      "description": "Signed-in user with default access",
+      "state": "active"
+    },
+    {
+      "id": "admin",
+      "email": "admin@parkhill.test",
+      "display_name": "Admin",
+      "description": "Will hold the admin role when roles land",
+      "state": "active"
+    },
+    {
+      "id": "disabled",
+      "email": "disabled@parkhill.test",
+      "display_name": "Disabled",
+      "description": "Banned account for testing the disabled path",
+      "state": "banned"
+    }
+  ]
+}

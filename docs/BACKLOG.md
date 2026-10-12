@@ -17,7 +17,7 @@ The Status column here mirrors the Status field in each task. Update both in the
 | Task | Depends on | Status |
 |---|---|---|
 | [SUP-001: Create the monorepo scaffold](tasks/SUP-001-monorepo-scaffold.md) | None | Done |
-| [SUP-002: Set up the local Supabase backend project](tasks/SUP-002-local-supabase.md) | SUP-001 | Draft |
+| [SUP-002: Set up the local Supabase backend project](tasks/SUP-002-local-supabase.md) | SUP-001 | Done |
 | [SUP-003: Define the screen contract and implement get_entry and get_screen](tasks/SUP-003-screen-contract.md) | SUP-002 | Draft |
 | [SUP-004: Add backend CI on GitHub Actions against local Supabase](tasks/SUP-004-backend-ci.md) | SUP-003 | Draft |
 

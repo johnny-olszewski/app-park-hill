@@ -31,6 +31,11 @@ targets:
     platform: iOS
     sources:
       - path: ParkHill
+      # Contract fixtures, bundled for the mock services. App.xcconfig
+      # excludes them from every configuration except Mock.
+      - path: ../contract/fixtures
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: Supabase
         product: Supabase

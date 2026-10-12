@@ -12,6 +12,7 @@ INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait
 
 // Build-time environment selection (guide 5.2). Every binding file and all
 // mock sources are excluded, then only this environment's binding is added
-// back. An environment that needs mocks (Mock) overrides the exclusion.
-EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift */Mocks/*
+// back. Contract fixtures are mock data and excluded too. An environment
+// that needs mocks (Mock) overrides the exclusion.
+EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift */Mocks/* */contract/fixtures
 INCLUDED_SOURCE_FILE_NAMES = ServiceBinding+$(APP_ENVIRONMENT).swift

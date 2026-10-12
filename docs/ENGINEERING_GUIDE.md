@@ -193,7 +193,7 @@ Rules:
 
 The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
 
-1. **One branch per task**, created from an up-to-date `main` and named after the task file without `.md`, for example `SUP-002-local-supabase`.
+1. **One branch per task**, created from an up-to-date `main` and named `task/` plus the task file name without `.md`, for example `task/SUP-002-local-supabase`. The `task/` prefix groups task branches; other kinds of branches get their own prefix when needed.
 2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
 3. **Commit message format:**
 

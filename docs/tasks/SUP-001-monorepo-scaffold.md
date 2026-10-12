@@ -39,7 +39,7 @@ Give every later task a fixed place to put things, with the guide, specs, backlo
 | AC6 | `gh repo view app-park-hill` reports visibility `PRIVATE`, default branch `main`, merge commits allowed, squash and rebase merging disabled, and delete branch on merge enabled; `git remote get-url origin` points to it | Code is backed up, reviewed through PRs, and per-commit history survives merging |
 | AC7 | `ENGINEERING_GUIDE.md` 7.1 defines branch naming, the `[<TASK-ID>][<k>/n]` commit message format, PR title and body, merge method and task status updates; `CLAUDE.md` points to it | Every contributor and agent produces the same history |
 | AC8 | `.github/pull_request_template.md` exists with sections for the task link, summary, acceptance criteria, verification and reviewer notes | Every PR is reviewed against its task the same way |
-| AC9 | SUP-001 lands through a PR from branch `SUP-001-monorepo-scaffold` whose commits follow 7.1. The only commit made directly on `main` is `[SUP-001][1/n] Add planning docs`, which created it | The workflow is proven on the first task |
+| AC9 | SUP-001 lands through a PR from branch `task/SUP-001-monorepo-scaffold` whose commits follow 7.1. The only commit made directly on `main` is `[SUP-001][1/n] Add planning docs`, which created it | The workflow is proven on the first task |
 
 ## Technical notes
 

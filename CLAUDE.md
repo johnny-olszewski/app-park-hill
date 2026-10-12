@@ -17,7 +17,7 @@ Rules:
 
 Follow `docs/ENGINEERING_GUIDE.md` 7.1. In short:
 
-- Branch from an up-to-date `main`, named after the task file without `.md` (`SUP-002-local-supabase`). Never commit to `main`.
+- Branch from an up-to-date `main`, named `task/` plus the task file name without `.md` (`task/SUP-002-local-supabase`). Never commit to `main`.
 - Split the work into standalone, logical commits ordered for review.
 - Commit subject `[<TASK-ID>][<k>/n] <few-word summary>`, where `<k>` counts the task's commits from 1 and `n` is the literal letter `n`. Then a blank line and a short bulleted list of brief details.
 - The last commit sets the task's status to Done in the task file, its epic and `docs/BACKLOG.md`.

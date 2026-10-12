@@ -29,7 +29,7 @@ None.
 
 ## Checklist
 
-- [ ] Branch is named after the task file
+- [ ] Branch is named `task/<task file name>`
 - [ ] Commits follow `[<TASK-ID>][<k>/n]`, each standalone and logical
 - [ ] Task status set to Done in the task file, its epic and `docs/BACKLOG.md`
 - [ ] No work outside the task's Scope

@@ -6,7 +6,7 @@
 | Epic | EP-01 |
 | Depends on | None |
 | Paired with | None |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 

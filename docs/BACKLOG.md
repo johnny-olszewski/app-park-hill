@@ -45,7 +45,7 @@ The Status column here mirrors the Status field in each task. Update both in the
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-005: Add profiles, seeded personas and a signed-in check function](tasks/SUP-005-profiles-and-personas.md) | SUP-003 | Draft |
+| [SUP-005: Add profiles, seeded personas and a signed-in check function](tasks/SUP-005-profiles-and-personas.md) | SUP-003 | Done |
 | [SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting](tasks/SUP-006-sign-in-function.md) | SUP-005 | Draft |
 | [SUP-007: Extend backend CI for auth: Edge Function tests and dataset check](tasks/SUP-007-auth-ci.md) | SUP-004, SUP-006 | Draft |
 

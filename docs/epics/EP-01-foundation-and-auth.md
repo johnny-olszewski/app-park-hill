@@ -59,7 +59,7 @@ The app launches on both platforms, in Mock and Dev, to a backend-driven entry s
 |---|---|---|
 | [IOS-001: Create the iOS project with Mock and Dev build configurations](../tasks/IOS-001-project-and-build-configs.md) | SUP-001 | Done |
 | [IOS-002: Build the iOS backend service layer with production and mock implementations](../tasks/IOS-002-backend-service-and-mock.md) | SUP-003, IOS-001 | Done |
-| [IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry](../tasks/IOS-003-root-coordinator-and-registry.md) | IOS-002 | Draft |
+| [IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry](../tasks/IOS-003-root-coordinator-and-registry.md) | IOS-002 | Done |
 | [IOS-004: Add iOS CI on GitHub Actions](../tasks/IOS-004-ci.md) | IOS-003, SUP-004 | Draft |
 
 #### Android (AND)

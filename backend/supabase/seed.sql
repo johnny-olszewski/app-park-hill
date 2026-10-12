@@ -1,0 +1,3 @@
+-- Test data only: test accounts and test content for local Supabase and CI.
+-- Never applied to a hosted project. App configuration (screens, strings,
+-- tabs) belongs in migrations.

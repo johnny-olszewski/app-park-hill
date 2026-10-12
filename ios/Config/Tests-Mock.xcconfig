@@ -1,0 +1,6 @@
+// Mock tests: no backend. Integration tests need local Supabase and are
+// excluded; client CI runs these (guide 6).
+
+#include "Tests.xcconfig"
+
+EXCLUDED_SOURCE_FILE_NAMES = */Integration/*

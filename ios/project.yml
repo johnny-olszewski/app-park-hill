@@ -20,12 +20,25 @@ configFiles:
   Dev-Debug: Config/Base.xcconfig
   Dev-Release: Config/Base.xcconfig
 
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    exactVersion: 2.55.3
+
 targets:
   ParkHill:
     type: application
     platform: iOS
     sources:
       - path: ParkHill
+      # Contract fixtures, bundled for the mock services. App.xcconfig
+      # excludes them from every configuration except Mock.
+      - path: ../contract/fixtures
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - package: Supabase
+        product: Supabase
     configFiles:
       Mock-Debug: Config/Mock.xcconfig
       Dev-Debug: Config/Dev.xcconfig
@@ -36,12 +49,16 @@ targets:
     platform: iOS
     sources:
       - path: ParkHillTests
+      # Every configuration's tests decode the fixtures.
+      - path: ../contract/fixtures
+        type: folder
+        buildPhase: resources
     dependencies:
       - target: ParkHill
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: $(PRODUCT_BUNDLE_IDENTIFIER_ROOT).tests
-        GENERATE_INFOPLIST_FILE: YES
+    configFiles:
+      Mock-Debug: Config/Tests-Mock.xcconfig
+      Dev-Debug: Config/Tests-Dev.xcconfig
+      Dev-Release: Config/Tests-Dev.xcconfig
 
 schemes:
   ParkHill-Mock:

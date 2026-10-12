@@ -38,7 +38,7 @@ Monorepo.
 /ios         SwiftUI app
 /android     Kotlin + Compose app
 /docs        This guide, the task template, the backlog, epics, specs, tasks
-/.github     GitHub Actions workflows
+/.github     GitHub Actions workflows and the pull request template
 ```
 
 A contract change lands in one PR: migration, fixture, and both client models together.
@@ -189,6 +189,30 @@ Rules:
 4. An agent that finds ambiguity or a conflict with this guide stops and asks. It does not guess and does not expand scope.
 5. Decisions that change this guide are recorded in section 8 in the same PR.
 
+### 7.1 Git workflow
+
+The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
+
+1. **One branch per task**, created from an up-to-date `main` and named `task/` plus the task file name without `.md`, for example `task/SUP-002-local-supabase`. The `task/` prefix groups task branches; other kinds of branches get their own prefix when needed.
+2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
+3. **Commit message format:**
+
+   ```
+   [SUP-002][1/n] Add Supabase CLI project
+
+   - Run supabase init in /backend
+   - Pin the API port to 54321 in config.toml
+   ```
+
+   - Subject: `[<TASK-ID>][<k>/n] <summary>`. `<k>` numbers the task's commits from 1 in order. `n` is always the literal letter `n`. The summary is a few words in the imperative, usually taken from the task's Scope.
+   - Body: a blank line, then a short bulleted list of brief details.
+   - No mention of tools, assistants or agents, and no co-author or "generated with" trailers.
+4. **One pull request per task.** Title `[<TASK-ID>] <task title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
+5. **Task status:** the branch's last commit sets the task's status to Done in the task file, its epic and `BACKLOG.md`. Merging the PR makes it true. An open PR is how a task shows as in review.
+6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
+7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
+8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
+
 ## 8. Decision log
 
 | Date | Decision |
@@ -226,6 +250,7 @@ Rules:
 | 2026-10-10 | Repo `app-park-hill` on GitHub. Bundle and application ID root is the placeholder `app.parkhill.placeholder`, defined once per platform. **Must be replaced before the first store upload**, once store listing ownership (church or personal) is decided |
 | 2026-10-10 | Between EP-02 and EP-04, sign-out is a hardcoded client toolbar button on Home, marked `TEMPORARY(EP-04)` on every line and removed by IOS-015/AND-015. Tab icons are bundled placeholders until design delivers artwork under the same keys |
 | 2026-10-10 | Native platform feel (5.5): each client uses its platform's system components; behavior matches across platforms, presentation does not have to. The lost-access message is an alert on iOS and a `Snackbar` on Android; the custom iOS notice view is dropped |
+| 2026-10-12 | Git workflow (7.1): one branch and PR per task, commit subjects `[<TASK-ID>][<k>/n] <summary>` with a bulleted body, no tool or agent mentions, merge commits only. Repo is private and created in SUP-001 |
 
 ## 9. Known risks
 

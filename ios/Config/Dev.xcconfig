@@ -1,0 +1,20 @@
+// Dev: real Supabase backend, local Supabase by default.
+// To target another backend, create Config/Dev.local.xcconfig (gitignored)
+// and set BACKEND_URL and BACKEND_ANON_KEY there. See ios/README.md.
+
+#include "App.xcconfig"
+
+APP_ENVIRONMENT = Dev
+APP_ENVIRONMENT_ID = dev
+APP_DISPLAY_NAME = Park Hill Dev
+
+// Backend values, read at runtime from Info.plist. "/$()/" keeps "//" from
+// starting an xcconfig comment.
+BACKEND_URL = http:/$()/127.0.0.1:54321
+// Well-known local Supabase anon key (the CLI's fixed default), not a secret.
+BACKEND_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+// Carries the backend keys and Dev's local HTTP exception.
+INFOPLIST_FILE = Config/Dev-Info.plist
+
+#include? "Dev.local.xcconfig"

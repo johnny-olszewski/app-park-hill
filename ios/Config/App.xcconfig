@@ -1,0 +1,17 @@
+// App target settings shared by every environment. Each environment's
+// xcconfig includes this file and sets APP_ENVIRONMENT.
+
+PRODUCT_NAME = ParkHill
+PRODUCT_BUNDLE_IDENTIFIER = $(PRODUCT_BUNDLE_IDENTIFIER_ROOT).$(APP_ENVIRONMENT_ID)
+
+GENERATE_INFOPLIST_FILE = YES
+INFOPLIST_KEY_CFBundleDisplayName = $(APP_DISPLAY_NAME)
+INFOPLIST_KEY_UILaunchScreen_Generation = YES
+INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES
+INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait
+
+// Build-time environment selection (guide 5.2). Every binding file and all
+// mock sources are excluded, then only this environment's binding is added
+// back. An environment that needs mocks (Mock) overrides the exclusion.
+EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift */Mocks/*
+INCLUDED_SOURCE_FILE_NAMES = ServiceBinding+$(APP_ENVIRONMENT).swift

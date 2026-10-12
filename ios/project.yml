@@ -1,0 +1,79 @@
+# XcodeGen spec. Generate the project with `make project`; the .xcodeproj is
+# not committed. Build settings live in Config/*.xcconfig, not here.
+name: ParkHill
+
+options:
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+# One debug configuration per environment, plus a release configuration for
+# each environment that can ship. Mock never ships, so it has no release.
+configs:
+  Mock-Debug: debug
+  Dev-Debug: debug
+  Dev-Release: release
+
+configFiles:
+  Mock-Debug: Config/Base.xcconfig
+  Dev-Debug: Config/Base.xcconfig
+  Dev-Release: Config/Base.xcconfig
+
+targets:
+  ParkHill:
+    type: application
+    platform: iOS
+    sources:
+      - path: ParkHill
+    configFiles:
+      Mock-Debug: Config/Mock.xcconfig
+      Dev-Debug: Config/Dev.xcconfig
+      Dev-Release: Config/Dev.xcconfig
+
+  ParkHillTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ParkHillTests
+    dependencies:
+      - target: ParkHill
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(PRODUCT_BUNDLE_IDENTIFIER_ROOT).tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  ParkHill-Mock:
+    build:
+      targets:
+        ParkHill: all
+        ParkHillTests: [test]
+    run:
+      config: Mock-Debug
+    test:
+      config: Mock-Debug
+      targets: [ParkHillTests]
+    profile:
+      config: Mock-Debug
+    analyze:
+      config: Mock-Debug
+    archive:
+      config: Mock-Debug
+
+  ParkHill-Dev:
+    build:
+      targets:
+        ParkHill: all
+        ParkHillTests: [test]
+    run:
+      config: Dev-Debug
+    test:
+      config: Dev-Debug
+      targets: [ParkHillTests]
+    profile:
+      config: Dev-Release
+    analyze:
+      config: Dev-Debug
+    archive:
+      config: Dev-Release

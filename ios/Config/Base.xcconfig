@@ -1,0 +1,12 @@
+// Shared by every configuration and target.
+
+// Placeholder. Replace before the first store upload (guide decision log).
+// Every bundle identifier derives from this one value.
+PRODUCT_BUNDLE_IDENTIFIER_ROOT = app.parkhill.placeholder
+
+MARKETING_VERSION = 0.1.0
+CURRENT_PROJECT_VERSION = 1
+
+SWIFT_VERSION = 6.0
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+TARGETED_DEVICE_FAMILY = 1

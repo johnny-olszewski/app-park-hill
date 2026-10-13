@@ -6,13 +6,14 @@ typealias AppAuthService = SupabaseAuthService
 enum ServiceBinding {
     static let environment = AppEnvironment(
         name: "Dev",
-        backend: .fromInfoPlist()
+        backend: .fromInfoPlist(),
+        showsBackendLabel: AppEnvironment.showsBackendLabel()
     )
 
     @MainActor
-    static func makeScreenRegistry() -> ScreenRegistry {
+    static func makeScreenRegistry(services: AppServices) -> ScreenRegistry {
         var registry = ScreenRegistry()
-        registry.registerSharedScreens()
+        registry.registerSharedScreens(auth: services.auth)
         return registry
     }
 }

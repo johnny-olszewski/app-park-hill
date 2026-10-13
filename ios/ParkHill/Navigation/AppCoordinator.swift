@@ -2,20 +2,27 @@ import Observation
 import OSLog
 import SwiftUI
 
-/// Owns launch and what the app shows at its root (guide 5.1, 5.3): the
-/// signed-out entry screen or the signed-in destination, driven by the auth
-/// state stream.
+/// Owns launch and the app's root (guide 5.1, 5.3). The signed-in destination
+/// is the root; the signed-out entry screen is presented over it as a
+/// full-screen cover, shown and hidden by the auth state stream.
 @MainActor
 @Observable
 final class AppCoordinator {
-    enum State {
+    /// What the entry cover shows.
+    enum EntryState {
         case loading
         case screen(ResolvedScreen)
         case error
-        case signedIn(AuthUser)
     }
 
-    private(set) var state: State = .loading
+    /// True until the stored session has been checked at launch.
+    private(set) var isLaunching = true
+    /// The signed-in user the root shows, or nil when there is none. Kept
+    /// while the entry cover animates in, then cleared.
+    private(set) var signedInUser: AuthUser?
+    /// Whether the entry cover is presented.
+    private(set) var isEntryPresented = false
+    private(set) var entry: EntryState = .loading
     /// Why the user was last signed out, for the sign-in screen's notice.
     private(set) var signOutReason: SignOutReason?
 
@@ -44,12 +51,19 @@ final class AppCoordinator {
     /// Launch: restore the session (specs/AUTH.md 4.1), then follow the auth
     /// state for the rest of the app's life.
     func start() async {
-        state = .loading
         switch await auth.restoreSession() {
         case .signedIn(let user):
-            state = .signedIn(user)
+            signedInUser = user
+            isLaunching = false
         case .signedOut(let reason):
             signOutReason = reason
+            // On a cold start the cover is simply there; it does not slide in.
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                isEntryPresented = true
+                isLaunching = false
+            }
             await loadEntry()
         }
         observeAuth()
@@ -57,12 +71,20 @@ final class AppCoordinator {
 
     /// Error screen retry.
     func retry() async {
-        state = .loading
+        entry = .loading
         await loadEntry()
     }
 
     func signOut() async {
         await auth.signOut()
+    }
+
+    /// The entry cover finished presenting: drop the signed-in content behind
+    /// it, so nothing about the last user stays on screen.
+    func entryDidAppear() {
+        if isEntryPresented {
+            signedInUser = nil
+        }
     }
 
     /// Return to the foreground refetches (guide 5.3 rule 6). Signed in, the
@@ -74,10 +96,10 @@ final class AppCoordinator {
             wasInBackground = true
         case .active where wasInBackground:
             wasInBackground = false
-            if case .signedIn = state {
-                _ = try? await backend.whoami()
-            } else {
+            if isEntryPresented {
                 await loadEntry()
+            } else if signedInUser != nil {
+                _ = try? await backend.whoami()
             }
         default:
             break
@@ -87,12 +109,15 @@ final class AppCoordinator {
     func handle(_ authState: AuthState) async {
         switch authState {
         case .signedIn(let user):
+            // The destination is in place under the cover before it hides.
             signOutReason = nil
-            state = .signedIn(user)
+            signedInUser = user
+            isEntryPresented = false
         case .signedOut(let reason):
-            guard case .signedIn = state else { return }
+            guard !isEntryPresented, !isLaunching else { return }
             signOutReason = reason
-            state = .loading
+            entry = .loading
+            isEntryPresented = true
             await loadEntry()
         }
     }
@@ -121,10 +146,10 @@ final class AppCoordinator {
         // A response this build cannot show is unusable: the error screen
         // shows even when a cached entry exists (guide 5.3 rule 5).
         guard let screen = registry.resolve(envelope) else {
-            state = .error
+            entry = .error
             return
         }
-        state = .screen(screen)
+        entry = .screen(screen)
         do {
             try cache.save(envelope, locale: locale)
         } catch {
@@ -135,11 +160,11 @@ final class AppCoordinator {
     /// After a failed fetch: keep a screen already showing, else the last good
     /// cached entry, else the error screen (guide 5.3 rule 4).
     private func showFallback(locale: String) {
-        if case .screen = state { return }
+        if case .screen = entry { return }
         if let cached = cache.load(locale: locale), let screen = registry.resolve(cached) {
-            state = .screen(screen)
+            entry = .screen(screen)
         } else {
-            state = .error
+            entry = .error
         }
     }
 }

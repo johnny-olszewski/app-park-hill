@@ -1,0 +1,4 @@
+// UI test target settings shared by every configuration.
+
+PRODUCT_BUNDLE_IDENTIFIER = $(PRODUCT_BUNDLE_IDENTIFIER_ROOT).uitests
+GENERATE_INFOPLIST_FILE = YES

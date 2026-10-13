@@ -1,0 +1,5 @@
+// Mock UI tests: no backend; client CI runs these. Dev UI tests are excluded.
+
+#include "UITests.xcconfig"
+
+EXCLUDED_SOURCE_FILE_NAMES = */Dev/*

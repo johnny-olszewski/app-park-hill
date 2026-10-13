@@ -6,7 +6,7 @@ import Testing
 struct ScreenRegistryTests {
     private func makeRegistry() -> ScreenRegistry {
         var registry = ScreenRegistry()
-        registry.registerSharedScreens()
+        registry.registerSharedScreens(auth: StubAuthService())
         return registry
     }
 
@@ -28,14 +28,15 @@ struct ScreenRegistryTests {
     }
 
     @Test func passesDecodedDataToTheScreen() throws {
+        struct Data: Decodable, Equatable { let title: String }
         var registry = ScreenRegistry()
-        var received: SignInScreenData?
-        registry.register("test.screen", data: SignInScreenData.self) { data in
+        var received: Data?
+        registry.register("test.screen", data: Data.self) { data in
             received = data
             return EmptyView()
         }
         _ = try #require(registry.resolve(ScreenEnvelope(key: "test.screen", data: .object(["title": .string("Hello"), "extra": .bool(true)]))))
-        #expect(received == SignInScreenData(title: "Hello"))
+        #expect(received == Data(title: "Hello"))
     }
 
     @Test func realSignInFixtureResolves() throws {

@@ -41,10 +41,29 @@ final class StubBackendService: BackendService {
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
         throw .unknownScreen
     }
+
+    private let whoamiCallCount = OSAllocatedUnfairLock(initialState: 0)
+
+    /// Calls to `whoami`.
+    var whoamiCalls: Int { whoamiCallCount.withLock { $0 } }
+
+    func whoami() async throws(BackendError) -> Profile {
+        whoamiCallCount.withLock { $0 += 1 }
+        return Profile(id: "stub", displayName: "Stub")
+    }
 }
 
 extension ScreenEnvelope {
+    /// A complete `auth.sign_in` envelope with the given title.
     static func signIn(title: String = "Sign in") -> ScreenEnvelope {
-        ScreenEnvelope(key: "auth.sign_in", data: .object(["title": .string(title)]))
+        ScreenEnvelope(key: "auth.sign_in", data: .object([
+            "title": .string(title),
+            "email_label": .string("Email"),
+            "password_label": .string("Password"),
+            "submit_label": .string("Sign in"),
+            "cannot_connect_message": .string("Can't connect."),
+            "session_ended_message": .string("You've been signed out."),
+            "secondary_actions": .array([]),
+        ]))
     }
 }

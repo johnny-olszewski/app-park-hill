@@ -98,7 +98,7 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 
 ## Screens and launch
 
-`AppCoordinator` (`ParkHill/Navigation/`) owns launch: it fetches the entry screen, resolves it through `ScreenRegistry` and shows it, a loading indicator or the launch error screen. On return to the foreground it fetches again.
+`AppCoordinator` (`ParkHill/Navigation/`) owns launch and the root. The root is the signed-in destination (tabs from IOS-008); the signed-out entry is a full-screen cover over it, holding a loading indicator, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. Signing in hides the cover to reveal the destination; signing out or access ending presents it again, and the destination is cleared once the cover is up. A cold start that is signed out shows the cover without animation. On return to the foreground the entry is fetched again.
 
 | Situation | Shows |
 |---|---|
@@ -110,7 +110,17 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 
 The cache is one JSON file per locale under `Application Support/Cache/entry/`. Sign-out deletes `Application Support/Cache/` (IOS-005).
 
+**Signed in:** the coordinator follows `AuthService.stateChanges()`. Launch with a stored session goes straight to the signed-in destination (the temporary placeholder in `ParkHill/Temporary/`, deleted by IOS-008); signing out, or access ending, returns to the entry screen, with `session_ended_message` shown when access ended. Returning to the foreground while signed in calls `whoami()`, so a disabled account is signed out on its next foreground.
+
+**Entry by configuration:** Dev shows `auth.sign_in` from `get_entry`. Mock shows the persona picker (`auth.sign_in.mock`), built from the active personas in the bundled `contract/seed/dataset.json`; it exists only in mock sources.
+
+**Backend label:** non-release builds show their target (`DEV · http://127.0.0.1:54321`, `MOCK · no network`) at the bottom of entry screens. Dev reads `SHOW_BACKEND_LABEL` (YES in `Dev-Debug`, NO in `Dev-Release`) from Info.plist; no code checks the configuration.
+
 **Adding a screen:** add its data model and view under `ParkHill/Screens/`, then register its key in `ScreenRegistry+Shared.swift`. Mock-only screens (`.mock` keys) register in `ParkHill/Mocks/ScreenRegistry+Mock.swift`. Each binding builds the registry from the screen sets its configuration includes. Views never create other screens or change navigation; coordinators do.
+
+## Design
+
+`ParkHill/Design/Theme.swift` holds the Park Hill tokens from the wireframes: colors with light and dark values, the serif used for titles and headings, and styles for system buttons and text fields. Brand comes through color and type on system components (guide 5.5); there are no custom controls. Headings use the iOS system serif until the brand fonts are bundled.
 
 ## Tests
 
@@ -123,6 +133,8 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 |---|---|---|
 | `ParkHillTests/Services/`, `Auth/`, `Navigation/`, top level | Mock and Dev | Nothing. Supabase services are tested against a stubbed transport and in-memory session storage |
 | `ParkHillTests/Mocks/` | Mock | Nothing |
+| `ParkHillUITests/Mock/` | Mock | Nothing. UI tests for the persona picker |
+| `ParkHillUITests/Dev/` | Dev | Local Supabase, reset recently: each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it |
 | `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset`. Persona credentials come from the bundled `contract/seed/dataset.json` |
 
 Client CI runs Mock only (guide 6), so run the Dev tests locally before merging changes to `/ios`, `/backend` or `/contract`.

@@ -7,10 +7,10 @@ enum ServiceBinding {
     static let environment = AppEnvironment.mock
 
     @MainActor
-    static func makeScreenRegistry() -> ScreenRegistry {
+    static func makeScreenRegistry(services: AppServices) -> ScreenRegistry {
         var registry = ScreenRegistry()
-        registry.registerSharedScreens()
-        registry.registerMockScreens()
+        registry.registerSharedScreens(auth: services.auth)
+        registry.registerMockScreens(auth: services.auth)
         return registry
     }
 }

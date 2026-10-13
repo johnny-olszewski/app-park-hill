@@ -252,6 +252,10 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-10 | Native platform feel (5.5): each client uses its platform's system components; behavior matches across platforms, presentation does not have to. The lost-access message is an alert on iOS and a `Snackbar` on Android; the custom iOS notice view is dropped |
 | 2026-10-12 | Git workflow (7.1): one branch and PR per task, commit subjects `[<TASK-ID>][<k>/n] <summary>` with a bulleted body, no tool or agent mentions, merge commits only. Repo is private and created in SUP-001 |
 | 2026-10-12 | 5.3 rule 5: a response with nothing usable (for example an entry screen key this build does not register) shows the error screen even when a cached copy exists. Chosen over falling back to the cache |
+| 2026-10-13 | Park Hill wireframes (EP-01 to EP-04) are the visual reference. iOS applies their tokens (colors, serif headings, button and field styles) to system components from `ios/ParkHill/Design`; headings use the system serif until the brand fonts (Cormorant Garamond, Overpass) are bundled |
+| 2026-10-13 | Sign-in messages: `session_ended_message` and `cannot_connect_message` in an inline box above the fields; backend refusals under the password field in the danger color (wireframe proposal) |
+| 2026-10-13 | While signed in, return to the foreground calls `whoami()` so a disabled account is signed out on its next foreground, until tabs give the app a backend-driven signed-in screen |
+| 2026-10-13 | The signed-out entry is a full-screen cover over the signed-in root (placeholder, then tabs). Sign-in hides it; sign-out and lost access present it. It has no close button: only signing in dismisses it |
 
 ## 9. Known risks
 

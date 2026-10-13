@@ -6,6 +6,8 @@
 	<string>$(BACKEND_URL)</string>
 	<key>BackendAnonKey</key>
 	<string>$(BACKEND_ANON_KEY)</string>
+	<key>ShowBackendLabel</key>
+	<string>$(SHOW_BACKEND_LABEL)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

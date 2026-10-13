@@ -31,9 +31,12 @@ targets:
     platform: iOS
     sources:
       - path: ParkHill
-      # Contract fixtures, bundled for the mock services. App.xcconfig
-      # excludes them from every configuration except Mock.
+      # Contract fixtures and the persona dataset, bundled for the mock
+      # services. App.xcconfig excludes them from every configuration except Mock.
       - path: ../contract/fixtures
+        type: folder
+        buildPhase: resources
+      - path: ../contract/seed
         type: folder
         buildPhase: resources
     dependencies:
@@ -64,17 +67,37 @@ targets:
       Dev-Debug: Config/Tests-Dev.xcconfig
       Dev-Release: Config/Tests-Dev.xcconfig
 
+  ParkHillUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: ParkHillUITests
+      # Persona credentials and expected backend messages.
+      - path: ../contract/seed
+        type: folder
+        buildPhase: resources
+      - path: ../contract/fixtures
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - target: ParkHill
+    configFiles:
+      Mock-Debug: Config/UITests-Mock.xcconfig
+      Dev-Debug: Config/UITests-Dev.xcconfig
+      Dev-Release: Config/UITests-Dev.xcconfig
+
 schemes:
   ParkHill-Mock:
     build:
       targets:
         ParkHill: all
         ParkHillTests: [test]
+        ParkHillUITests: [test]
     run:
       config: Mock-Debug
     test:
       config: Mock-Debug
-      targets: [ParkHillTests]
+      targets: [ParkHillTests, ParkHillUITests]
     profile:
       config: Mock-Debug
     analyze:
@@ -87,11 +110,12 @@ schemes:
       targets:
         ParkHill: all
         ParkHillTests: [test]
+        ParkHillUITests: [test]
     run:
       config: Dev-Debug
     test:
       config: Dev-Debug
-      targets: [ParkHillTests]
+      targets: [ParkHillTests, ParkHillUITests]
     profile:
       config: Dev-Release
     analyze:

@@ -7,20 +7,21 @@ import Testing
 struct AppCoordinatorTests {
     private let cache = EntryCache(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
 
-    private func makeCoordinator(_ backend: StubBackendService) -> AppCoordinator {
+    private func makeCoordinator(_ backend: StubBackendService, auth: StubAuthService = StubAuthService()) -> AppCoordinator {
         var registry = ScreenRegistry()
-        registry.registerSharedScreens()
-        return AppCoordinator(backend: backend, registry: registry, cache: cache, locale: { "en" })
+        registry.registerSharedScreens(auth: auth)
+        return AppCoordinator(backend: backend, auth: auth, registry: registry, cache: cache, locale: { "en" })
     }
 
+    /// The entry screen key, when the entry cover is presented and shows one.
     private func shownKey(_ coordinator: AppCoordinator) -> String? {
-        if case .screen(let screen) = coordinator.state { return screen.key }
-        return nil
+        guard coordinator.isEntryPresented, case .screen(let screen) = coordinator.entry else { return nil }
+        return screen.key
     }
 
     private func isError(_ coordinator: AppCoordinator) -> Bool {
-        if case .error = coordinator.state { return true }
-        return false
+        guard coordinator.isEntryPresented, case .error = coordinator.entry else { return false }
+        return true
     }
 
     // MARK: Launch
@@ -133,5 +134,106 @@ struct AppCoordinatorTests {
 
         #expect(backend.entryCalls.count == 2)
         #expect(shownKey(coordinator) == "auth.sign_in")
+    }
+
+    // MARK: Signed in (IOS-006)
+
+    private let attendee = AuthUser(id: "u1", email: "attendee@parkhill.test")
+
+    @Test func launchWithASessionGoesStraightToSignedInWithoutGetEntry() async {
+        let backend = StubBackendService(entry: .success(.signIn()))
+        let coordinator = makeCoordinator(backend, auth: StubAuthService(restore: .signedIn(attendee)))
+
+        await coordinator.start()
+
+        #expect(coordinator.signedInUser == attendee)
+        #expect(!coordinator.isEntryPresented)
+        #expect(!coordinator.isLaunching)
+        #expect(backend.entryCalls.isEmpty)
+    }
+
+    @Test func launchSignedOutPresentsTheEntryCover() async {
+        let coordinator = makeCoordinator(StubBackendService(entry: .success(.signIn())))
+        #expect(coordinator.isLaunching)
+
+        await coordinator.start()
+
+        #expect(!coordinator.isLaunching)
+        #expect(coordinator.isEntryPresented)
+        #expect(coordinator.signedInUser == nil)
+    }
+
+    @Test func signingInSwitchesToSignedIn() async {
+        let auth = StubAuthService()
+        let coordinator = makeCoordinator(StubBackendService(entry: .success(.signIn())), auth: auth)
+        await coordinator.start()
+
+        await coordinator.handle(.signedIn(attendee))
+
+        #expect(coordinator.signedInUser == attendee)
+        #expect(!coordinator.isEntryPresented, "the cover hides over the signed-in root")
+        #expect(coordinator.signOutReason == nil)
+    }
+
+    @Test func signOutReturnsToTheEntryScreen() async {
+        let backend = StubBackendService(entry: .success(.signIn()))
+        let auth = StubAuthService(restore: .signedIn(attendee))
+        let coordinator = makeCoordinator(backend, auth: auth)
+        await coordinator.start()
+
+        await coordinator.handle(.signedOut(.userRequest))
+
+        #expect(shownKey(coordinator) == "auth.sign_in")
+        #expect(coordinator.signOutReason == .userRequest)
+        #expect(backend.entryCalls.count == 1)
+        #expect(coordinator.signedInUser == attendee, "kept while the cover animates in")
+
+        coordinator.entryDidAppear()
+        #expect(coordinator.signedInUser == nil, "cleared once the cover covers it")
+    }
+
+    @Test func entryAppearingWhileSignedInKeepsTheUser() async {
+        let coordinator = makeCoordinator(
+            StubBackendService(entry: .success(.signIn())),
+            auth: StubAuthService(restore: .signedIn(attendee))
+        )
+        await coordinator.start()
+        coordinator.entryDidAppear()
+        #expect(coordinator.signedInUser == attendee)
+    }
+
+    @Test func accessEndingReturnsToSignInWithTheSessionEndedReason() async {
+        let coordinator = makeCoordinator(
+            StubBackendService(entry: .success(.signIn())),
+            auth: StubAuthService(restore: .signedIn(attendee))
+        )
+        await coordinator.start()
+
+        await coordinator.handle(.signedOut(.sessionEnded))
+
+        #expect(shownKey(coordinator) == "auth.sign_in")
+        #expect(coordinator.signOutReason == .sessionEnded)
+    }
+
+    @Test func signOutAsksTheAuthService() async {
+        let auth = StubAuthService(restore: .signedIn(attendee))
+        let coordinator = makeCoordinator(StubBackendService(entry: .success(.signIn())), auth: auth)
+        await coordinator.start()
+
+        await coordinator.signOut()
+
+        #expect(auth.signOuts == 1)
+    }
+
+    @Test func foregroundWhileSignedInChecksTheSessionWithWhoami() async {
+        let backend = StubBackendService(entry: .success(.signIn()))
+        let coordinator = makeCoordinator(backend, auth: StubAuthService(restore: .signedIn(attendee)))
+        await coordinator.start()
+
+        await coordinator.scenePhaseChanged(to: .background)
+        await coordinator.scenePhaseChanged(to: .active)
+
+        #expect(backend.whoamiCalls == 1)
+        #expect(backend.entryCalls.isEmpty)
     }
 }

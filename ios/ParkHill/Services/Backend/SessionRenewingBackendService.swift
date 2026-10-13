@@ -21,6 +21,10 @@ struct SessionRenewingBackendService: BackendService {
         }
     }
 
+    func whoami() async throws(BackendError) -> Profile {
+        try await withRenewal { () async throws(BackendError) in try await base.whoami() }
+    }
+
     private func withRenewal<T>(_ request: () async throws(BackendError) -> T) async throws(BackendError) -> T {
         do {
             return try await request()

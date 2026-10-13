@@ -7,10 +7,18 @@ struct AppEnvironment: Sendable {
     let name: String
     /// The backend this build talks to, or nil when it has none.
     let backend: BackendTarget?
+    /// Whether screens show which backend this build targets: every
+    /// non-release build (guide 5.2 rule 5). Set by the build configuration.
+    var showsBackendLabel: Bool = false
 
     /// Human-readable backend target, for the launch log and debug UI.
     var backendLabel: String {
         backend?.url.absoluteString ?? "none"
+    }
+
+    /// Configuration and backend, for the on-screen label.
+    var targetLabel: String {
+        "\(name) · \(backend?.url.absoluteString ?? "no network")"
     }
 }
 
@@ -34,5 +42,13 @@ extension BackendTarget {
             fatalError("BackendURL and BackendAnonKey must be set by the configuration's xcconfig")
         }
         return BackendTarget(url: url, anonKey: anonKey)
+    }
+}
+
+extension AppEnvironment {
+    /// Reads the `ShowBackendLabel` value the configuration writes into
+    /// Info.plist (YES in debug configurations, NO in release).
+    static func showsBackendLabel(_ bundle: Bundle = .main) -> Bool {
+        (bundle.object(forInfoDictionaryKey: "ShowBackendLabel") as? String) == "YES"
     }
 }

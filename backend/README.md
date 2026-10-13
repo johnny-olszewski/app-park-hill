@@ -91,7 +91,7 @@ Shared local password: `parkhill-local`.
 2. Run `make fixtures`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/fixtures`.
 3. Commit the dataset and the generated files together.
 
-Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, fixture folders) and fails if anything differs from what is committed.
+Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, fixture folders) and fails if anything differs from what is committed.
 
 ## Rules
 

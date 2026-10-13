@@ -96,6 +96,7 @@ Generated from the real backend by `make fixtures` in `/backend`, from the perso
 | `fixtures/get_entry.json` | `get_entry('en')`, signed out |
 | `fixtures/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
 | `fixtures/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
+| `fixtures/<persona>/whoami.json` | `whoami()` signed in as an active persona |
 | `fixtures/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
 | `fixtures/sign_in.error.json` | `sign_in` with a wrong password |
 

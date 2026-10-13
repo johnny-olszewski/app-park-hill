@@ -5,6 +5,7 @@ seed first. Never edit fixtures by hand.
 Layout:
   get_entry.json, get_screen.<key>.json            signed out
   <persona>/get_screen.<key>.json                  signed in as an active persona
+  <persona>/whoami.json                            whoami() as that persona
   sign_in.ok.json, sign_in.error.json              the sign_in Edge Function
 A screen a caller may not see (any 4xx) gets no file for that caller.
 Session tokens in sign_in.ok.json are placeholders, so it never churns.
@@ -90,6 +91,7 @@ def main() -> None:
     for persona in dataset.active_personas(data):
         print(f"{persona['id']}:")
         token = supabase.sign_in(persona["email"], data["local_password"])
+        capture(root / persona["id"] / "whoami.json", lambda token=token: supabase.rpc("whoami", {}, token=token))
         for key in keys:
             capture(
                 root / persona["id"] / f"get_screen.{key}.json",

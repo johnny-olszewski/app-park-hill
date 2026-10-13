@@ -21,4 +21,11 @@ enum TestFixtures {
             .map { $0.standardizedFileURL.path.replacingOccurrences(of: rootPath, with: "") }
             .sorted()
     }
+
+    /// Fixtures of screen responses (`get_entry`, `get_screen`, `get_tabs`), in
+    /// any persona folder. Other fixtures, such as `sign_in.*.json`, have their
+    /// own models.
+    static func screenEnvelopePaths() -> [String] {
+        allJSONPaths().filter { ($0 as NSString).lastPathComponent.hasPrefix("get_") }
+    }
 }

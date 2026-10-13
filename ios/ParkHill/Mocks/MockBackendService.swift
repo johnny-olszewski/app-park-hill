@@ -8,7 +8,7 @@ struct MockBackendService: BackendService {
     private let personaState: MockPersonaState
 
     init(environment: AppEnvironment) {
-        self.init(fixtures: .bundled, personaState: MockPersonaState())
+        self.init(fixtures: .bundled, personaState: .shared)
     }
 
     init(fixtures: FixtureStore, personaState: MockPersonaState) {

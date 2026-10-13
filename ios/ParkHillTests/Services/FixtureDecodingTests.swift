@@ -28,6 +28,16 @@ struct FixtureDecodingTests {
         #expect(data["secondary_actions"] == .array([]))
     }
 
+    @Test func signInFixturesDecodeIntoTheirModels() throws {
+        let ok = try JSONDecoder().decode(SignInSuccess.self, from: TestFixtures.data("sign_in.ok.json"))
+        #expect(ok.status == "ok")
+        #expect(!ok.session.userId.isEmpty)
+        let error = try JSONDecoder().decode(SignInFailure.self, from: TestFixtures.data("sign_in.error.json"))
+        #expect(error.status == "error")
+        #expect(error.code == "invalid_credentials")
+        #expect(!error.message.isEmpty)
+    }
+
     @Test func unknownFieldsAreIgnored() throws {
         let json = #"{"key": "auth.sign_in", "data": {"title": "Sign in"}, "toolbar": [], "future_field": {"x": 1}}"#
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: Data(json.utf8))

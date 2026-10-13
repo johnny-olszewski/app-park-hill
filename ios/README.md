@@ -79,7 +79,22 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 | `SupabaseBackendService` | Dev | Calls `get_entry` and `get_screen` through the shared client from `SupabaseClientProvider`, with the standard request headers |
 | `MockBackendService` | Mock | Reads the bundled fixtures: `get_entry.json`, `get_screen.<key>.json`, preferring `<persona>/<name>.json` for the current persona |
 
-The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/`. Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
+The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/` (and by the Dev-only integration tests). Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
+
+### Auth
+
+Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/`), declared by each binding as `AppAuthService`.
+
+| Type | Configurations | Behavior |
+|---|---|---|
+| `SupabaseAuthService` | Dev | Signs in through the backend's `sign_in` function, then hands the session to the shared Supabase client, which stores it in the Keychain and renews it |
+| `MockAuthService` | Mock | `signIn(persona:)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted across launches |
+
+- **Sign-in errors** are `SignInError`: `rejected(code:message:)` carries the backend's text unchanged, plus `network` and `unexpected`.
+- **Staying signed in:** `restoreSession()` treats a stored session as signed in when offline; a refused renewal signs out with reason `sessionEnded`.
+- **Unauthorized rule:** `AppServices.backend` wraps the backend service in `SessionRenewingBackendService`. A request refused as unauthorized gets one renewal and one retry; if either is refused, the session ends. Network failures never sign anyone out.
+- **Sign-out** deletes the session (revoking it when online), `Application Support/Cache/` and `Application Support/UserFiles/`, even offline.
+- `stateChanges()` streams the current `AuthState`, then every change. IOS-006 drives the coordinator from it.
 
 ## Screens and launch
 
@@ -106,9 +121,9 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 
 | Folder | Runs in | Needs |
 |---|---|---|
-| `ParkHillTests/Services/`, top level | Mock and Dev | Nothing. Supabase services are tested against a stubbed transport |
+| `ParkHillTests/Services/`, `Auth/`, `Navigation/`, top level | Mock and Dev | Nothing. Supabase services are tested against a stubbed transport and in-memory session storage |
 | `ParkHillTests/Mocks/` | Mock | Nothing |
-| `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset` |
+| `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset`. Persona credentials come from the bundled `contract/seed/dataset.json` |
 
 Client CI runs Mock only (guide 6), so run the Dev tests locally before merging changes to `/ios`, `/backend` or `/contract`.
 

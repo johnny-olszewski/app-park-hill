@@ -87,7 +87,7 @@ Sign in with a seeded account (Dev) or a persona (Mock), stay signed in and sign
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-005: Build the iOS auth service with production and mock implementations](../tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Draft |
+| [IOS-005: Build the iOS auth service with production and mock implementations](../tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Done |
 | [IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder](../tasks/IOS-006-sign-in-flow.md) | IOS-003, IOS-005 | Draft |
 | [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](../tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Draft |
 

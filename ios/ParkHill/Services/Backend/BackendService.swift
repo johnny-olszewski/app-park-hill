@@ -1,8 +1,6 @@
 /// The only path to backend data (guide 5.1). Each configuration's binding
 /// declares the concrete type as `AppBackendService`.
 protocol BackendService: Sendable {
-    init(environment: AppEnvironment)
-
     /// The signed-out entry screen (`get_entry`).
     func getEntry(locale: String) async throws(BackendError) -> ScreenEnvelope
 

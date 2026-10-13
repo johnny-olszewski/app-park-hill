@@ -3,6 +3,9 @@ import os
 /// The persona the Mock build is signed in as, shared by the mock services.
 /// Set by the mock auth service (IOS-005); nil means signed out.
 final class MockPersonaState: Sendable {
+    /// The one instance the mock services share in the running app.
+    static let shared = MockPersonaState()
+
     private let persona = OSAllocatedUnfairLock<String?>(initialState: nil)
 
     var current: String? {

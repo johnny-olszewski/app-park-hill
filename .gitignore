@@ -45,3 +45,6 @@ backend/supabase/.env
 
 # Node / Deno
 node_modules/
+
+# Python
+__pycache__/

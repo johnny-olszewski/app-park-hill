@@ -32,6 +32,7 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_entry(p_locale)` | Signed out (`anon`) | The signed-out entry screen envelope. Today always `auth.sign_in` |
 | `get_screen(p_key, p_locale, p_params)` | Depends on the screen | One screen envelope. Used for refresh and for screens reached by navigation |
 | `get_tabs(p_locale)` | Signed in only | Tabs in order, each with its root screen envelope embedded (SUP-008) |
+| `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 Arguments: `p_locale` is a locale code such as `en`; `p_params` is a JSON object, `{}` when the screen takes no parameters.
 
@@ -42,6 +43,9 @@ Errors use PostgREST's error body. The `message` field is a stable code clients 
 | `message` | HTTP | `code` | When | `details` |
 |---|---|---|---|---|
 | `unknown_screen` | 400 | `P0001` | `get_screen` called with a key the backend does not register | The requested key |
+| `session_ended` | 400 | `P0001` | A signed-in function was called with no valid user, or the account is banned or deleted | None |
+
+Clients treat `session_ended` like an HTTP 401 (expired or invalid token): one silent session renewal and retry, then sign out (`specs/AUTH.md` 4.3).
 
 Example:
 
@@ -62,9 +66,16 @@ A network failure produces no body; clients tell the two apart by whether a resp
 
 ## Fixtures
 
-| File | Response |
-|---|---|
-| `fixtures/get_entry.json` | `get_entry('en')` |
-| `fixtures/get_screen.auth.sign_in.json` | `get_screen('auth.sign_in', 'en', '{}')` |
+Generated from the real backend by `make fixtures` in `/backend`, from the personas in `seed/dataset.json`. Never edit them by hand; `make data-check` fails on any drift.
 
-Fixtures are copies of live responses from local Supabase. A contract change updates the migration, the fixture and both client models in one PR.
+| Path | Response |
+|---|---|
+| `fixtures/get_entry.json` | `get_entry('en')`, signed out |
+| `fixtures/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
+| `fixtures/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
+
+A screen a caller may not see has no file for that caller. Client mocks prefer the current persona's file and fall back to the signed-out one.
+
+## Personas
+
+`seed/dataset.json` defines the personas once (`specs/AUTH.md` 7). It generates the local accounts in `backend/supabase/seed.sql` and the persona fixture folders above. A contract change updates the migration or dataset, regenerates the fixtures and updates both client models in one PR.

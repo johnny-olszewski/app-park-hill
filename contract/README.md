@@ -34,6 +34,29 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_tabs(p_locale)` | Signed in only | Tabs in order, each with its root screen envelope embedded (SUP-008) |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
+### `sign_in` Edge Function
+
+`POST /functions/v1/sign_in` with the anon key and the standard headers. Spec: `specs/AUTH.md` 5.5.
+
+```json
+{ "email": "attendee@parkhill.test", "password": "...", "locale": "en" }
+```
+
+| HTTP | Body |
+|---|---|
+| 200 | `{ "status": "ok", "session": { "access_token", "refresh_token", "expires_at", "user_id" } }` |
+| 400, 401, 403, 429 | `{ "status": "error", "code": "<code>", "message": "<localized text>" }` |
+
+| `code` | HTTP | When |
+|---|---|---|
+| `invalid_credentials` | 401 | Wrong email or password. Identical for unknown emails |
+| `account_disabled` | 403 | The account is banned |
+| `too_many_attempts` | 429 | 5 failures per email or 20 per client address within 15 minutes |
+| `invalid_request` | 400 | Missing or malformed fields |
+| `unknown` | 400 | Anything else; generic message |
+
+Clients show `message` as given. Messages are the `auth.error.<code>` strings for the request locale, falling back to `en`.
+
 Arguments: `p_locale` is a locale code such as `en`; `p_params` is a JSON object, `{}` when the screen takes no parameters.
 
 ## Errors
@@ -73,6 +96,8 @@ Generated from the real backend by `make fixtures` in `/backend`, from the perso
 | `fixtures/get_entry.json` | `get_entry('en')`, signed out |
 | `fixtures/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
 | `fixtures/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
+| `fixtures/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
+| `fixtures/sign_in.error.json` | `sign_in` with a wrong password |
 
 A screen a caller may not see has no file for that caller. Client mocks prefer the current persona's file and fall back to the signed-out one.
 

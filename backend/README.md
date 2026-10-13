@@ -28,6 +28,7 @@ Run from `/backend`.
 | Regenerate `seed.sql` from the dataset | `make seed` |
 | Reset, then regenerate contract fixtures from the live backend | `make fixtures` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
+| Run the Edge Function tests (stack running) | `make test-functions` |
 
 Only one local Supabase project can use these ports at a time. If `supabase start` reports a port already allocated, stop the other project with `supabase stop --project-id <id>`.
 
@@ -55,6 +56,20 @@ Pinned in `supabase/config.toml`. Client Dev configs default to the API URL.
 | `supabase/seed.sql` | Test data, loaded after migrations on reset |
 | `supabase/functions/` | Edge Functions |
 | `supabase/tests/` | pgTAP tests, as `*.test.sql` |
+| `tests/functions/` | Edge Function tests |
+| `scripts/` | Data generators and checks used by the Makefile |
+
+## Edge Functions
+
+`supabase start` serves every function in `supabase/functions/` at `http://127.0.0.1:54321/functions/v1/<name>`. After adding a function or changing `config.toml`, restart the stack (`supabase stop && supabase start`). If an edit to a function's code does not take effect, restart the runtime: `docker restart supabase_edge_runtime_app-park-hill`.
+
+| Function | Purpose |
+|---|---|
+| `sign_in` | Email and password sign-in with backend-decided, localized errors and attempt limiting (`specs/AUTH.md` 5.5). Thresholds are the `LIMITS` block in `supabase/functions/sign_in/index.ts` |
+
+Function tests are black-box HTTP tests in `tests/functions/` (Python, standard library). They reset sign-in attempts and restore any strings they change.
+
+`sign_in` never logs or stores the request body. Attempts are stored in `auth_attempts` with the email as a keyed hash; only the service role can read them.
 
 ## Personas
 

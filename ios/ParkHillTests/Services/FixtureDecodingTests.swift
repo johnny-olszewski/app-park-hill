@@ -7,8 +7,8 @@ struct FixtureDecodingTests {
         #expect(TestFixtures.allJSONPaths().contains("get_entry.json"))
     }
 
-    @Test(arguments: TestFixtures.allJSONPaths())
-    func everyFixtureDecodesAsAScreenEnvelope(path: String) throws {
+    @Test(arguments: TestFixtures.screenEnvelopePaths())
+    func everyScreenFixtureDecodesAsAScreenEnvelope(path: String) throws {
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data(path))
         #expect(!envelope.key.isEmpty)
         guard case .object = envelope.data else {

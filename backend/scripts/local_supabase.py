@@ -30,9 +30,10 @@ class LocalSupabase:
         self.anon_key = status["ANON_KEY"]
         self.service_key = status["SERVICE_ROLE_KEY"]
 
-    def request(self, method: str, path: str, body=None, token: str | None = None, service: bool = False):
+    def request(self, method: str, path: str, body=None, token: str | None = None, service: bool = False,
+                headers: dict | None = None):
         key = self.service_key if service else self.anon_key
-        headers = {"apikey": key, "Content-Type": "application/json"}
+        headers = {"apikey": key, "Content-Type": "application/json", **(headers or {})}
         bearer = self.service_key if service else token
         if bearer:
             headers["Authorization"] = f"Bearer {bearer}"
@@ -46,6 +47,21 @@ class LocalSupabase:
 
     def rpc(self, function: str, params: dict, token: str | None = None):
         return self.request("POST", f"/rest/v1/rpc/{function}", params, token=token)
+
+    def call_function(self, name: str, body: bytes, headers: dict | None = None, method: str = "POST"):
+        """Calls an Edge Function and returns (status, parsed JSON body), never raising on HTTP errors."""
+        all_headers = {"apikey": self.anon_key, "Content-Type": "application/json", **(headers or {})}
+        req = urllib.request.Request(
+            f"{self.api_url}/functions/v1/{name}",
+            data=body if method != "GET" else None,
+            headers=all_headers,
+            method=method,
+        )
+        try:
+            with urllib.request.urlopen(req) as response:
+                return response.status, json.loads(response.read())
+        except urllib.error.HTTPError as error:
+            return error.code, json.loads(error.read() or b"null")
 
     def sign_in(self, email: str, password: str) -> str:
         """Signs in with Supabase Auth directly and returns the access token."""

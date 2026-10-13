@@ -386,6 +386,10 @@ deno_version = 2
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
+# sign_in is called signed out, so it accepts requests without a user JWT.
+[functions.sign_in]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327

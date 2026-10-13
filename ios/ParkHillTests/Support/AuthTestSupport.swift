@@ -13,27 +13,58 @@ final class InMemoryAuthStorage: SupabaseSessionStorage {
     var isEmpty: Bool { values.withLock { $0.isEmpty } }
 }
 
-/// Test double for `AuthService`: a fixed renewal result, recorded calls.
+/// Test double for `AuthService`: fixed renewal, restore and sign-in
+/// results, a state stream tests drive with `send`, and recorded calls.
 final class StubAuthService: AuthService {
     private struct Calls {
         var renewals = 0
         var endSessions = 0
+        var signOuts = 0
+        var signIns: [String] = []
     }
 
     private let renewal: SessionRenewal
+    private let restore: AuthState
+    private let signInResult: Result<AuthUser, SignInError>
     private let calls = OSAllocatedUnfairLock(initialState: Calls())
+    private let state: StateBroadcaster<AuthState>
 
-    init(renewal: SessionRenewal) {
+    init(
+        renewal: SessionRenewal = .notSignedIn,
+        restore: AuthState = .signedOut(nil),
+        signIn: Result<AuthUser, SignInError> = .failure(.unexpected)
+    ) {
         self.renewal = renewal
+        self.restore = restore
+        self.signInResult = signIn
+        self.state = StateBroadcaster(restore)
     }
 
     var renewals: Int { calls.withLock { $0.renewals } }
     var endSessions: Int { calls.withLock { $0.endSessions } }
+    var signOuts: Int { calls.withLock { $0.signOuts } }
+    var signIns: [String] { calls.withLock { $0.signIns } }
 
-    func restoreSession() async -> AuthState { .signedOut(nil) }
-    func signIn(email: String, password: String) async throws(SignInError) -> AuthUser { throw .unexpected }
-    func signOut() async {}
-    func stateChanges() -> AsyncStream<AuthState> { AsyncStream { $0.finish() } }
+    /// Emits a state, as the real service does when access changes.
+    func send(_ newState: AuthState) {
+        state.send(newState)
+    }
+
+    func restoreSession() async -> AuthState { restore }
+
+    func signIn(email: String, password: String) async throws(SignInError) -> AuthUser {
+        calls.withLock { $0.signIns.append(email) }
+        let user = try signInResult.get()
+        state.send(.signedIn(user))
+        return user
+    }
+
+    func signOut() async {
+        calls.withLock { $0.signOuts += 1 }
+        state.send(.signedOut(.userRequest))
+    }
+
+    func stateChanges() -> AsyncStream<AuthState> { state.stream() }
 
     func renewAfterUnauthorized() async -> SessionRenewal {
         calls.withLock { $0.renewals += 1 }
@@ -42,6 +73,7 @@ final class StubAuthService: AuthService {
 
     func endSession() async {
         calls.withLock { $0.endSessions += 1 }
+        state.send(.signedOut(.sessionEnded))
     }
 }
 

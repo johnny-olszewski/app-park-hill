@@ -38,6 +38,16 @@ struct FixtureDecodingTests {
         #expect(!error.message.isEmpty)
     }
 
+    @Test func whoamiFixturesDecodeIntoProfiles() throws {
+        let paths = TestFixtures.allJSONPaths().filter { $0.hasSuffix("/whoami.json") }
+        #expect(!paths.isEmpty)
+        for path in paths {
+            let profile = try JSONDecoder().decode(Profile.self, from: TestFixtures.data(path))
+            #expect(!profile.id.isEmpty)
+            #expect(!profile.displayName.isEmpty)
+        }
+    }
+
     @Test func unknownFieldsAreIgnored() throws {
         let json = #"{"key": "auth.sign_in", "data": {"title": "Sign in"}, "toolbar": [], "future_field": {"x": 1}}"#
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: Data(json.utf8))

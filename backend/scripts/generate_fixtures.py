@@ -5,7 +5,9 @@ seed first. Never edit fixtures by hand.
 Layout:
   get_entry.json, get_screen.<key>.json            signed out
   <persona>/get_screen.<key>.json                  signed in as an active persona
+  sign_in.ok.json, sign_in.error.json              the sign_in Edge Function
 A screen a caller may not see (any 4xx) gets no file for that caller.
+Session tokens in sign_in.ok.json are placeholders, so it never churns.
 """
 
 import json
@@ -47,6 +49,26 @@ def clear(root: Path) -> None:
                 child.unlink()
 
 
+def write_sign_in_fixtures(supabase: LocalSupabase, data: dict) -> None:
+    attendee = next(p for p in dataset.active_personas(data) if p["id"] == "attendee")
+    headers = {"X-Forwarded-For": "fixtures"}
+
+    def call(password: str):
+        body = json.dumps({"email": attendee["email"], "password": password, "locale": LOCALE}).encode()
+        return supabase.call_function("sign_in", body, headers)
+
+    status, error = call("not-the-password")
+    if status != 401:
+        raise SystemExit(f"sign_in error fixture: expected 401, got {status}: {error}")
+    write(dataset.FIXTURES_PATH / "sign_in.error.json", error)
+
+    status, ok = call(data["local_password"])
+    if status != 200:
+        raise SystemExit(f"sign_in ok fixture: expected 200, got {status}: {ok}")
+    ok["session"].update(access_token="<access_token>", refresh_token="<refresh_token>", expires_at=0)
+    write(dataset.FIXTURES_PATH / "sign_in.ok.json", ok)
+
+
 def main() -> None:
     data = dataset.load()
     supabase = LocalSupabase()
@@ -61,6 +83,9 @@ def main() -> None:
             root / f"get_screen.{key}.json",
             lambda key=key: supabase.rpc("get_screen", {"p_key": key, "p_locale": LOCALE, "p_params": {}}),
         )
+
+    print("sign_in:")
+    write_sign_in_fixtures(supabase, data)
 
     for persona in dataset.active_personas(data):
         print(f"{persona['id']}:")

@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "session": {
+    "access_token": "<access_token>",
+    "refresh_token": "<refresh_token>",
+    "expires_at": 0,
+    "user_id": "9f6798b4-9e35-5b41-8207-9290979b50c3"
+  }
+}

@@ -4,7 +4,7 @@
 PYTHON ?= python3
 GENERATED := supabase/seed.sql ../contract/fixtures
 
-.PHONY: seed fixtures data-check
+.PHONY: seed fixtures data-check test-functions
 
 ## Generate supabase/seed.sql from the dataset
 seed:
@@ -25,3 +25,7 @@ data-check: fixtures
 		exit 1; \
 	fi
 	@echo "Generated data matches the dataset."
+
+## Run the Edge Function tests against the running local stack
+test-functions:
+	$(PYTHON) -m unittest discover --start-directory tests/functions --verbose

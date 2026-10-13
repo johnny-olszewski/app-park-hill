@@ -1,8 +1,9 @@
 import Foundation
 import os
 
-/// Answers every request on a `URLSession` built by `makeSession()` with the
-/// current stub, and records the requests. Suites using it must be serialized.
+/// Answers requests on a `URLSession` built by `makeSession()` with the stub
+/// for their URL path (or the fallback), and records the requests. Suites
+/// using it must be serialized.
 final class StubURLProtocol: URLProtocol {
     enum Response: Sendable {
         case http(status: Int, body: String)
@@ -10,7 +11,8 @@ final class StubURLProtocol: URLProtocol {
     }
 
     private struct State {
-        var response: Response = .http(status: 200, body: "{}")
+        var routes: [String: Response] = [:]
+        var fallback: Response = .http(status: 200, body: "{}")
         var requests: [URLRequest] = []
     }
 
@@ -22,8 +24,14 @@ final class StubURLProtocol: URLProtocol {
         return URLSession(configuration: configuration)
     }
 
+    /// Every request gets `response`.
     static func stub(_ response: Response) {
-        state.withLock { $0 = State(response: response) }
+        state.withLock { $0 = State(fallback: response) }
+    }
+
+    /// Requests whose URL path is a key get that response; others get `fallback`.
+    static func stub(routes: [String: Response], fallback: Response = .failure(.notConnectedToInternet)) {
+        state.withLock { $0 = State(routes: routes, fallback: fallback) }
     }
 
     static var requests: [URLRequest] {
@@ -37,7 +45,7 @@ final class StubURLProtocol: URLProtocol {
         let request = request
         let response = Self.state.withLock { state in
             state.requests.append(request)
-            return state.response
+            return state.routes[request.url?.path ?? ""] ?? state.fallback
         }
         switch response {
         case .http(let status, let body):

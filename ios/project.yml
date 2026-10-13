@@ -53,6 +53,10 @@ targets:
       - path: ../contract/fixtures
         type: folder
         buildPhase: resources
+      # Personas and the local password for integration tests.
+      - path: ../contract/seed
+        type: folder
+        buildPhase: resources
     dependencies:
       - target: ParkHill
     configFiles:

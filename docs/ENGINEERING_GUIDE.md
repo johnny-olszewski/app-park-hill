@@ -255,6 +255,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-13 | Park Hill wireframes (EP-01 to EP-04) are the visual reference. iOS applies their tokens (colors, serif headings, button and field styles) to system components from `ios/ParkHill/Design`; headings use the system serif until the brand fonts (Cormorant Garamond, Overpass) are bundled |
 | 2026-10-13 | Sign-in messages: `session_ended_message` and `cannot_connect_message` in an inline box above the fields; backend refusals under the password field in the danger color (wireframe proposal) |
 | 2026-10-13 | While signed in, return to the foreground calls `whoami()` so a disabled account is signed out on its next foreground, until tabs give the app a backend-driven signed-in screen |
+| 2026-10-13 | The signed-out entry is a full-screen cover over the signed-in root (placeholder, then tabs). Sign-in hides it; sign-out and lost access present it. It has no close button: only signing in dismisses it |
 
 ## 9. Known risks
 

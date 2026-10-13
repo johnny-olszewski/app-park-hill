@@ -98,7 +98,7 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 
 ## Screens and launch
 
-`AppCoordinator` (`ParkHill/Navigation/`) owns launch: it fetches the entry screen, resolves it through `ScreenRegistry` and shows it, a loading indicator or the launch error screen. On return to the foreground it fetches again.
+`AppCoordinator` (`ParkHill/Navigation/`) owns launch and the root. The root is the signed-in destination (tabs from IOS-008); the signed-out entry is a full-screen cover over it, holding a loading indicator, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. Signing in hides the cover to reveal the destination; signing out or access ending presents it again, and the destination is cleared once the cover is up. A cold start that is signed out shows the cover without animation. On return to the foreground the entry is fetched again.
 
 | Situation | Shows |
 |---|---|

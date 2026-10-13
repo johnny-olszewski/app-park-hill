@@ -2,7 +2,8 @@
 /// declares; never checks which configuration it is.
 struct AppServices: Sendable {
     let environment: AppEnvironment
-    let auth: any AuthService
+    /// The concrete type, so the Mock binding can reach mock-only sign-in.
+    let auth: AppAuthService
     /// Backend calls with the unauthorized rule applied: one renewal and
     /// retry, then sign-out.
     let backend: any BackendService

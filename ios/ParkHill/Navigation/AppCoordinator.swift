@@ -2,8 +2,9 @@ import Observation
 import OSLog
 import SwiftUI
 
-/// Owns launch and what the app shows at its root (guide 5.1, 5.3). The
-/// signed-in state arrives in IOS-006.
+/// Owns launch and what the app shows at its root (guide 5.1, 5.3): the
+/// signed-out entry screen or the signed-in destination, driven by the auth
+/// state stream.
 @MainActor
 @Observable
 final class AppCoordinator {
@@ -11,32 +12,47 @@ final class AppCoordinator {
         case loading
         case screen(ResolvedScreen)
         case error
+        case signedIn(AuthUser)
     }
 
     private(set) var state: State = .loading
+    /// Why the user was last signed out, for the sign-in screen's notice.
+    private(set) var signOutReason: SignOutReason?
 
     private let backend: any BackendService
+    private let auth: any AuthService
     private let registry: ScreenRegistry
     private let cache: EntryCache
     private let locale: () -> String
     private var wasInBackground = false
+    private var authObservation: Task<Void, Never>?
 
     init(
         backend: any BackendService,
+        auth: any AuthService,
         registry: ScreenRegistry,
         cache: EntryCache,
         locale: @escaping () -> String = { AppLocale.current() }
     ) {
         self.backend = backend
+        self.auth = auth
         self.registry = registry
         self.cache = cache
         self.locale = locale
     }
 
-    /// Launch: fetch the entry screen.
+    /// Launch: restore the session (specs/AUTH.md 4.1), then follow the auth
+    /// state for the rest of the app's life.
     func start() async {
         state = .loading
-        await loadEntry()
+        switch await auth.restoreSession() {
+        case .signedIn(let user):
+            state = .signedIn(user)
+        case .signedOut(let reason):
+            signOutReason = reason
+            await loadEntry()
+        }
+        observeAuth()
     }
 
     /// Error screen retry.
@@ -45,16 +61,49 @@ final class AppCoordinator {
         await loadEntry()
     }
 
-    /// Refetches when the app returns to the foreground (guide 5.3 rule 6).
+    func signOut() async {
+        await auth.signOut()
+    }
+
+    /// Return to the foreground refetches (guide 5.3 rule 6). Signed in, the
+    /// request also checks the session is still active, so a disabled account
+    /// is signed out on its next foreground (specs/AUTH.md 4.3).
     func scenePhaseChanged(to phase: ScenePhase) async {
         switch phase {
         case .background:
             wasInBackground = true
         case .active where wasInBackground:
             wasInBackground = false
-            await loadEntry()
+            if case .signedIn = state {
+                _ = try? await backend.whoami()
+            } else {
+                await loadEntry()
+            }
         default:
             break
+        }
+    }
+
+    func handle(_ authState: AuthState) async {
+        switch authState {
+        case .signedIn(let user):
+            signOutReason = nil
+            state = .signedIn(user)
+        case .signedOut(let reason):
+            guard case .signedIn = state else { return }
+            signOutReason = reason
+            state = .loading
+            await loadEntry()
+        }
+    }
+
+    private func observeAuth() {
+        authObservation?.cancel()
+        let changes = auth.stateChanges()
+        authObservation = Task { [weak self] in
+            for await change in changes {
+                await self?.handle(change)
+            }
         }
     }
 

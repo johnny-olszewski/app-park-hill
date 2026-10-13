@@ -6,6 +6,10 @@ protocol BackendService: Sendable {
 
     /// One screen by key (`get_screen`).
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope
+
+    /// The signed-in caller's profile (`whoami`). Refused as `unauthorized`
+    /// when there is no active session.
+    func whoami() async throws(BackendError) -> Profile
 }
 
 extension BackendService {

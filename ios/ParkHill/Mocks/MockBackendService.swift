@@ -24,6 +24,16 @@ struct MockBackendService: BackendService {
         try envelope(named: "get_screen.\(key)", missing: .unknownScreen)
     }
 
+    func whoami() async throws(BackendError) -> Profile {
+        guard personaState.current != nil else { throw .unauthorized }
+        guard let data = fixtures.data(named: "whoami", persona: personaState.current) else { throw .server }
+        do {
+            return try JSONDecoder().decode(Profile.self, from: data)
+        } catch {
+            throw .decoding
+        }
+    }
+
     private func envelope(named name: String, missing: BackendError) throws(BackendError) -> ScreenEnvelope {
         guard let data = fixtures.data(named: name, persona: personaState.current) else {
             throw missing

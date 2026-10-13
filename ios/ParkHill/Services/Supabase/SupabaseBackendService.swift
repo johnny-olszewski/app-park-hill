@@ -22,7 +22,14 @@ struct SupabaseBackendService: BackendService {
         try await call("get_screen", params: ScreenParams(p_key: key, p_locale: locale, p_params: params))
     }
 
-    private func call(_ function: String, params: some Encodable & Sendable) async throws(BackendError) -> ScreenEnvelope {
+    func whoami() async throws(BackendError) -> Profile {
+        try await call("whoami", params: NoParams())
+    }
+
+    private func call<Response: Decodable>(
+        _ function: String,
+        params: some Encodable & Sendable
+    ) async throws(BackendError) -> Response {
         let data: Data
         do {
             data = try await client.rpc(function, params: params).execute().data
@@ -30,7 +37,7 @@ struct SupabaseBackendService: BackendService {
             throw Self.map(error)
         }
         do {
-            return try JSONDecoder().decode(ScreenEnvelope.self, from: data)
+            return try JSONDecoder().decode(Response.self, from: data)
         } catch {
             throw .decoding
         }
@@ -57,6 +64,8 @@ struct SupabaseBackendService: BackendService {
         }
     }
 }
+
+private struct NoParams: Encodable, Sendable {}
 
 private struct EntryParams: Encodable, Sendable {
     let p_locale: String

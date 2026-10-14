@@ -150,3 +150,23 @@ The Status column here mirrors the Status field in each task. Update both in the
 | [AND-017: Add the Android directory and segmented control to Browse](tasks/AND-017-browse-segments-and-directory.md) | AND-010, SUP-017 | Draft |
 | [AND-018: Build the Android Edit roles half sheet](tasks/AND-018-edit-roles-sheet.md) | AND-015, SUP-018 | Draft |
 | [AND-019: Add Android people and directory UI tests per persona against local Supabase (local)](tasks/AND-019-people-ui-tests-per-persona.md) | AND-016, AND-017, AND-018, SUP-018 | Draft |
+
+## [EP-05: Contract names](epics/EP-05-contract-names.md)
+
+### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006 | Draft |
+
+### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-006 | Draft |
+
+### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-006 | Draft |

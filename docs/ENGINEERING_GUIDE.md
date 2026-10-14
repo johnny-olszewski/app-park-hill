@@ -212,6 +212,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
+9. **Planning branches.** Changes that only add or revise epics, specs, tasks or the backlog, without implementing a task, use a branch named `plan/` plus the epic file name without `.md`, for example `plan/EP-05-contract-names`. The rules above apply with the epic ID in place of the task ID: commits `[EP-05][<k>/n] <summary>`, PR title `[EP-05] <epic title>`, and the PR template's task link and checklist adapted to the epic. A planning PR sets no task to Done.
 
 ## 8. Decision log
 
@@ -256,6 +257,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-13 | Sign-in messages: `session_ended_message` and `cannot_connect_message` in an inline box above the fields; backend refusals under the password field in the danger color (wireframe proposal) |
 | 2026-10-13 | While signed in, return to the foreground calls `whoami()` so a disabled account is signed out on its next foreground, until tabs give the app a backend-driven signed-in screen |
 | 2026-10-13 | The signed-out entry is a full-screen cover over the signed-in root (placeholder, then tabs). Sign-in hides it; sign-out and lost access present it. It has no close button: only signing in dismisses it |
+| 2026-10-14 | Planning-only changes use `plan/<epic file name>` branches with the epic ID in commit subjects and the PR title (7.1 rule 9) |
 
 ## 9. Known risks
 

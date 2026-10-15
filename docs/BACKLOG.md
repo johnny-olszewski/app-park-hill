@@ -10,7 +10,25 @@ The Status column here mirrors the Status field in each task. Update both in the
 
 Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table groups its tasks by the behavior they deliver. Epics planned before slices existed are divided into slices when their next work is planned.
 
+### Slice order
+
+1. [EP-01.A](epics/EP-01-foundation-and-auth.md#slices): CI for backend and iOS
+2. [EP-01.B](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, launch and CI
+3. [EP-01.C](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, sign-in
+4. [EP-06.C](epics/EP-06-mock-menu.md#slices): Android catch-up, dev tools and Mock sign-in
+
+Android is then level; new feature slices (EP-05, EP-02 onward) include every platform.
+
 ## [EP-01: Foundation and authentication](epics/EP-01-foundation-and-auth.md)
+
+### Slices
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-01.A](epics/EP-01-foundation-and-auth.md#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Draft |
+| [EP-01.B](epics/EP-01-foundation-and-auth.md#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Draft |
+| [EP-01.C](epics/EP-01-foundation-and-auth.md#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
+
 
 ### Milestone A: foundation
 
@@ -64,7 +82,7 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-005: Build the Android auth service with production and mock implementations](tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Draft |
-| [AND-006: Build the Android sign-in flow, mock persona picker and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
+| [AND-006: Build the Android sign-in flow and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
 | [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Draft |
 
 ## [EP-02: Tabs](epics/EP-02-tabs.md)
@@ -182,6 +200,7 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 |---|---|---|---|---|
 | [EP-06.A](epics/EP-06-mock-menu.md#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](epics/EP-06-mock-menu.md#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
+| [EP-06.C](epics/EP-06-mock-menu.md#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Draft |
 
 ### Backend (SUP)
 

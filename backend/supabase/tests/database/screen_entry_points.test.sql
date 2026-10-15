@@ -112,6 +112,7 @@ select is(
 
 reset role;
 
+select ok(false, 'temporary CI check');
 select * from finish();
 
 rollback;

@@ -171,3 +171,25 @@ The Status column here mirrors the Status field in each task. Update both in the
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-006 | Draft |
+
+## [EP-06: Mock menu](epics/EP-06-mock-menu.md)
+
+### Backend (SUP)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Draft |
+
+### iOS (IOS)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry](tasks/IOS-021-dev-tools-overlay.md) | IOS-006 | Draft |
+| [IOS-022: Show the production sign-in in Mock with persona and result tools](tasks/IOS-022-mock-sign-in-tools.md) | IOS-021, SUP-021 | Draft |
+
+### Android (AND)
+
+| Task | Depends on | Status |
+|---|---|---|
+| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](tasks/AND-021-dev-tools-overlay.md) | AND-006 | Draft |
+| [AND-022: Show the production sign-in in Mock with persona and result tools](tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Draft |

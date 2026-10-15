@@ -1,5 +1,7 @@
 # Agent instructions
 
+Park Hill is a real app and a proving ground for a transferable architecture and an agent-driven way of working (`docs/ENGINEERING_GUIDE.md`, Purpose). When two approaches both work, prefer the one that generalizes and that the next agent can follow from the repo alone.
+
 Before changing anything:
 
 1. Read `docs/ENGINEERING_GUIDE.md`. It governs every task; if a task conflicts with it, the guide wins.

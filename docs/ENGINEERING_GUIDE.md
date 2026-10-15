@@ -2,6 +2,8 @@
 
 Status: v0.2 (planning). This document governs every task. If a task conflicts with this guide, the guide wins until it is changed in its own PR.
 
+**Purpose.** Park Hill is a real app and also a proving ground. Its architecture (backend-driven, natively rendered clients on Supabase) and the way its work is planned and built (agents implementing tasks from these documents, a person reviewing behavior) are meant to transfer to other businesses and use cases. When two designs both work for Park Hill, prefer the one that generalizes and that an agent can follow from the repo alone.
+
 ## 1. Goals
 
 1. **Iteration velocity over release cadence.** Anything that can change without an app release should be able to.
@@ -261,6 +263,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-14 | EP-05 Contract names: backend function names and screen keys are listed once in `contract/names.json`; generated constants in `contract/generated/` are compiled by both clients; `make data-check` fails on drift. Generated into `/contract` rather than into each client so the backend task stays within one platform |
 | 2026-10-15 | Planning branches (7.1 rule 9) may cover several epics: `plan/<short name>`, commits `[PLAN][<k>/n]`, PR title `[PLAN] <summary>`. Supersedes the 2026-10-14 one-epic-per-plan-branch entry |
 | 2026-10-15 | EP-06 Mock menu: Mock shows the production entry screen from its recorded response; `auth.sign_in.mock` and the persona picker are removed. Mock and debug options live in a menu opened by long-pressing a pill at the top of every screen, drawn once in a debug-only overlay window above everything the app presents, never by screens. Per-screen tools are registered by screen key; the screen registry reports the current screen. In Mock, the menu chooses the persona and the next sign-in result. Future demo mode is a real backend session with a private sandbox per demo and never reuses mock code |
+| 2026-10-15 | Purpose recorded at the top of this guide and in `CLAUDE.md`: Park Hill is also a proving ground for a transferable architecture and agent-driven workflow; prefer designs that generalize |
 
 ## 9. Known risks
 

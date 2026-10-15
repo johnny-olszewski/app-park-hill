@@ -184,7 +184,7 @@ The Status column here mirrors the Status field in each task. Update both in the
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry](tasks/IOS-021-dev-tools-overlay.md) | IOS-006 | Draft |
+| [IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry](tasks/IOS-021-dev-tools-overlay.md) | IOS-006 | Done |
 | [IOS-022: Show the production sign-in in Mock with persona and result tools](tasks/IOS-022-mock-sign-in-tools.md) | IOS-021, SUP-021 | Draft |
 
 ### Android (AND)

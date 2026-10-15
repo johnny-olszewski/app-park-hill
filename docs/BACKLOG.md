@@ -180,7 +180,7 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-06.A](epics/EP-06-mock-menu.md#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | In review |
+| [EP-06.A](epics/EP-06-mock-menu.md#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](epics/EP-06-mock-menu.md#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Draft |
 
 ### Backend (SUP)

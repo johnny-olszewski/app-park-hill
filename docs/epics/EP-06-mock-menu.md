@@ -39,7 +39,7 @@ Implemented in this order (guide 7.2). Android tasks are left out until the Andr
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | In review |
+| [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Draft |
 
 ### EP-06.A: Dev tools over the app

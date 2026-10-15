@@ -7,20 +7,10 @@ struct MockBackendServiceTests {
         try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data(path))
     }
 
-    @Test func bundledEntryIsThePersonaPickerWithActivePersonasOnly() async throws {
-        let service = MockBackendService(environment: .mock)
-        let entry = try await service.getEntry(locale: "en")
-        #expect(entry.key == "auth.sign_in.mock")
-        let picker = try JSONDecoder().decode(PersonaPickerData.self, from: JSONEncoder().encode(entry.data))
-        let dataset = try TestDataset.load()
-        #expect(picker.personas.map(\.id) == dataset.personas.filter { $0.state == "active" }.map(\.id))
-        #expect(!picker.personas.contains { $0.id == "disabled" })
-        #expect(try await service.getScreen(key: "auth.sign_in.mock", locale: "en") == entry)
-    }
-
-    @Test func withoutAnEntryOverrideTheEntryFixtureIsUsed() async throws {
-        let service = MockBackendService(fixtures: .bundled, personaState: MockPersonaState())
-        #expect(try await service.getEntry(locale: "en") == expected("get_entry.json"))
+    @Test func theEntryIsTheRecordedProductionSignIn() async throws {
+        let entry = try await MockBackendService(environment: .mock).getEntry(locale: "en")
+        #expect(entry == (try expected("get_entry.json")))
+        #expect(entry.key == "auth.sign_in")
     }
 
     @Test func whoamiReturnsTheSignedInPersonasProfile() async throws {

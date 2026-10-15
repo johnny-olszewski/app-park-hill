@@ -5,3 +5,5 @@
 #include "Tests.xcconfig"
 
 EXCLUDED_SOURCE_FILE_NAMES = */Mocks/*
+// Release builds of the app have no dev tools, so neither do their tests.
+EXCLUDED_SOURCE_FILE_NAMES[config=Dev-Release] = */Mocks/* */DevTools/*

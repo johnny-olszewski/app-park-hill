@@ -4,6 +4,8 @@ import SwiftUI
 @main
 struct ParkHillApp: App {
     private let environment = ServiceBinding.environment
+    /// Debug builds: the dev tools pill and menu. Release builds: nothing.
+    private let devTools: AppDevTools
     @State private var coordinator: AppCoordinator
 
     init() {
@@ -11,17 +13,19 @@ struct ParkHillApp: App {
         Theme.applyNavigationBarAppearance()
         Logger.app.info("Environment \(environment.name, privacy: .public), backend \(environment.backendLabel, privacy: .public)")
         let services = AppServices(environment: environment)
+        let devTools = AppDevTools(environment: environment, services: services)
+        self.devTools = devTools
         _coordinator = State(initialValue: AppCoordinator(
             backend: services.backend,
             auth: services.auth,
-            registry: ServiceBinding.makeScreenRegistry(services: services),
+            registry: ServiceBinding.makeScreenRegistry(services: services, tracker: devTools.screenTracker),
             cache: .standard
         ))
     }
 
     var body: some Scene {
         WindowGroup {
-            AppRootView(coordinator: coordinator, environment: environment)
+            devTools.attach(to: AppRootView(coordinator: coordinator, environment: environment))
         }
     }
 }

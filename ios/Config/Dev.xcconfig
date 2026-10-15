@@ -18,6 +18,10 @@ BACKEND_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1k
 SHOW_BACKEND_LABEL = YES
 SHOW_BACKEND_LABEL[config=Dev-Release] = NO
 
+// Release ships without dev tools (App.xcconfig).
+DEV_TOOLS[config=Dev-Release] = Disabled
+DEV_TOOLS_EXCLUDED[config=Dev-Release] = */DevTools/*
+
 // Carries the backend keys and Dev's local HTTP exception.
 INFOPLIST_FILE = Config/Dev-Info.plist
 

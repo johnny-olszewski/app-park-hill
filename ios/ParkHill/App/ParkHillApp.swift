@@ -9,6 +9,7 @@ struct ParkHillApp: App {
 
     init() {
         let environment = ServiceBinding.environment
+        print(MockLeak().value)
         Theme.applyNavigationBarAppearance()
         Logger.app.info("Environment \(environment.name, privacy: .public), backend \(environment.backendLabel, privacy: .public)")
         let services = AppServices(environment: environment)

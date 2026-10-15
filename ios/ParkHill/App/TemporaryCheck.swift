@@ -1,5 +1,3 @@
-import Foundation
-
-#if DEBUG
-let temporaryCheck = 1
-#endif
+struct MockLeak {
+    let value = 1
+}

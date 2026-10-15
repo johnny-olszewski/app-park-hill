@@ -75,7 +75,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 |---|---|---|
 | [IOS-005: Build the iOS auth service with production and mock implementations](tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Done |
 | [IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder](tasks/IOS-006-sign-in-flow.md) | IOS-003, IOS-005 | Done |
-| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Draft |
+| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Done |
 
 #### Android (AND)
 

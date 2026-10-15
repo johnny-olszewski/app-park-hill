@@ -222,11 +222,12 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 A slice is the set of tasks, across platforms, that together deliver one change in behavior a person can check: in the app, or for developers (for example a CI check). It is the unit of implementation, review and acceptance. Tasks stay per platform, so each keeps one owner.
 
 1. **Defined in the epic.** Each epic has a Slices section listing every slice: ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. `BACKLOG.md` lists each epic's slices above its task tables. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice.
-2. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
+2. **Sizing.** Split a behavior into separate slices only where the state between them is worth having on its own; a slice that only prepares for the next is merged into it.
+3. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
    - **Exception, in force until agents run implementation:** while Johnny implements by hand, Android tasks are left out of slices and no Android work starts, so the workflow settles on iOS first. Android tasks stay planned in the epic. Ending the exception is a decision log entry.
-3. **Order and checks.** Tasks are implemented in the slice's order. When a task's commits are done, its acceptance criteria are verified and its tests run before the next task starts. After the last task, the slice's behavior criteria are verified by using the result.
-4. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria; commits stay per task for reading the code.
-5. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
+4. **Order and checks.** Tasks are implemented in the slice's order. When a task's commits are done, its acceptance criteria are verified and its tests run before the next task starts. After the last task, the slice's behavior criteria are verified by using the result.
+5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria; commits stay per task for reading the code.
+6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
 
 ## 8. Decision log
 
@@ -279,6 +280,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | Purpose recorded at the top of this guide and in `CLAUDE.md`: Park Hill is also a proving ground for a transferable architecture and agent-driven workflow; prefer designs that generalize |
 | 2026-10-15 | Slices (7.2): tasks are grouped by the behavior they deliver; one branch and PR per slice, commits still per task, each task verified before the next, the slice's behavior criteria checked by the reviewer. Replaces one task per branch and PR. Behavior criteria live in a Slices section of each epic |
 | 2026-10-15 | Slices are lockstep across platforms and start only when their dependencies are Done. Exception until agents run implementation: Android tasks are left out of slices and Android work waits, while the workflow settles on iOS |
+| 2026-10-15 | Slice sizing (7.2 rule 2): split only where the in-between state is worth having on its own; scaffolding-only slices merge into the next. EP-06.A stands alone because Dev builds use the menu without any mock tools |
 
 ## 9. Known risks
 

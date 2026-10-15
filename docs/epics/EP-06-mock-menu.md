@@ -35,7 +35,7 @@ The Mock build shows the production app, starting with the real sign-in screen, 
 
 ## Slices
 
-Implemented in this order (guide 7.2). Android tasks are left out until the Android exception ends (guide 7.2 rule 2); they stay listed under Tasks.
+Implemented in this order (guide 7.2). Android tasks are left out until the Android exception ends (guide 7.2 rule 3); they stay listed under Tasks.
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|

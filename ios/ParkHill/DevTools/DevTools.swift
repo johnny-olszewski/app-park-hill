@@ -19,6 +19,7 @@ final class DevTools {
         for tool in AppTools.all(environment: environment, tracker: tracker, session: session, auth: services.auth) {
             registry.registerAppTool(tool)
         }
+        registerEnvironmentTools(in: &registry, services: services)
     }
 
     var screenTracker: (any ScreenTracker)? { tracker }

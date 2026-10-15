@@ -39,7 +39,7 @@ extension Font {
     static let phHeading = Font.system(.title2, design: .serif)
     /// Small uppercase labels above fields and lists.
     static let phLabel = Font.caption2.weight(.semibold)
-    /// The backend-target label.
+    /// Diagnostic text, such as the dev tools pill.
     static let phDiagnostic = Font.system(.caption2, design: .monospaced).weight(.semibold)
 }
 
@@ -135,19 +135,5 @@ extension View {
     /// The small uppercase label style used above fields and lists.
     func brandLabel() -> some View {
         font(.phLabel).tracking(0.7).textCase(.uppercase).foregroundStyle(Color.phInk)
-    }
-}
-
-/// Backend-target label at the bottom of entry screens (non-release builds).
-struct BackendTargetLabel: View {
-    let text: String
-
-    var body: some View {
-        Text(text)
-            .font(.phDiagnostic)
-            .textCase(.uppercase)
-            .foregroundStyle(Color.phInkMuted)
-            .frame(maxWidth: .infinity)
-            .accessibilityIdentifier("backendTargetLabel")
     }
 }

@@ -32,7 +32,7 @@ Mock and Dev install side by side.
 
 **Dev** is the real end-to-end path. Its backend URL and anon key come from `Config/Dev.xcconfig` and default to local Supabase at `http://127.0.0.1:54321` (start it from `/backend`). No hosted project is used unless you override it.
 
-At launch every build logs its environment and backend target, for example `Environment Dev, backend http://127.0.0.1:54321`. The value is available as `ServiceBinding.environment.backendLabel`.
+At launch every build logs its environment and backend target, for example `Environment Dev, backend http://127.0.0.1:54321`. The value is available as `ServiceBinding.environment.backendLabel`. Debug builds also show the environment on screen in the dev tools pill (see Dev tools).
 
 ### Pointing Dev at another backend
 
@@ -50,19 +50,20 @@ BACKEND_ANON_KEY = <anon key>
 | File | Role |
 |---|---|
 | `Config/Base.xcconfig` | Shared by every configuration and target. Holds `PRODUCT_BUNDLE_IDENTIFIER_ROOT`, the only place the bundle identifier root appears |
-| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` |
+| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift` and `DevToolsBinding+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DevToolsBinding+$(DEV_TOOLS).swift` |
 | `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/fixtures` |
-| `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig` |
+| `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig`; `Dev-Release` sets `DEV_TOOLS = Disabled` and excludes `DevTools/` |
 | `Config/Dev-Info.plist` | Puts the backend values into Info.plist, plus the local HTTP exception (`NSAllowsLocalNetworking`), which exists only in Dev |
 | `ParkHill/Environment/ServiceBinding+Dev.swift` | Dev binding: `AppBackendService = SupabaseBackendService` |
 | `ParkHill/Mocks/ServiceBinding+Mock.swift` | Mock binding: `AppBackendService = MockBackendService` |
-| `Config/Tests-Mock.xcconfig`, `Config/Tests-Dev.xcconfig` | Test target: Mock excludes `ParkHillTests/Integration/`, Dev excludes `ParkHillTests/Mocks/` |
+| `Config/Tests-Mock.xcconfig`, `Config/Tests-Dev.xcconfig` | Test target: Mock excludes `ParkHillTests/Integration/`, Dev excludes `ParkHillTests/Mocks/` (and `ParkHillTests/DevTools/` in `Dev-Release`) |
+| `ParkHill/DevTools/DevToolsBinding+Enabled.swift`, `ParkHill/Environment/DevToolsBinding+Disabled.swift` | Dev tools binding: `AppDevTools = DevTools` in debug configurations, `NoDevTools` in release |
 
 ### Adding an environment
 
 For example, QA, reusing the Supabase services with different values:
 
-1. Add `Config/QA.xcconfig`: include `App.xcconfig`, set `APP_ENVIRONMENT = QA`, `APP_ENVIRONMENT_ID = qa`, `APP_DISPLAY_NAME`, `BACKEND_URL`, `BACKEND_ANON_KEY` and `INFOPLIST_FILE = Config/QA-Info.plist`.
+1. Add `Config/QA.xcconfig`: include `App.xcconfig`, set `APP_ENVIRONMENT = QA`, `APP_ENVIRONMENT_ID = qa`, `APP_DISPLAY_NAME`, `BACKEND_URL`, `BACKEND_ANON_KEY` and `INFOPLIST_FILE = Config/QA-Info.plist`. Leave dev tools out of its release configuration: `DEV_TOOLS[config=QA-Release] = Disabled` and `DEV_TOOLS_EXCLUDED[config=QA-Release] = */DevTools/*`.
 2. Add `Config/QA-Info.plist` with the `BackendURL` and `BackendAnonKey` keys only. No HTTP exception: shipping environments use TLS.
 3. Add `ParkHill/Environment/ServiceBinding+QA.swift`, declaring the environment and service types like the Dev binding.
 4. In `project.yml`, add `QA-Debug: debug` and `QA-Release: release` under `configs`, map them in every `configFiles` section (project, app and tests; QA tests use `Tests-Dev.xcconfig`), and add a `ParkHill-QA` scheme.
@@ -114,9 +115,27 @@ The cache is one JSON file per locale under `Application Support/Cache/entry/`. 
 
 **Entry by configuration:** Dev shows `auth.sign_in` from `get_entry`. Mock shows the persona picker (`auth.sign_in.mock`), built from the active personas in the bundled `contract/seed/dataset.json`; it exists only in mock sources.
 
-**Backend label:** non-release builds show their target (`DEV · http://127.0.0.1:54321`, `MOCK · no network`) at the bottom of entry screens. Dev reads `SHOW_BACKEND_LABEL` (YES in `Dev-Debug`, NO in `Dev-Release`) from Info.plist; no code checks the configuration.
+**Environment on screen:** debug builds show `MOCK` or `DEV` in the dev tools pill on every screen; the full backend address is in the menu's Build tool. Release builds show nothing. Screens never draw it themselves.
 
 **Adding a screen:** add its data model and view under `ParkHill/Screens/`, then register its key in `ScreenRegistry+Shared.swift`. Mock-only screens (`.mock` keys) register in `ParkHill/Mocks/ScreenRegistry+Mock.swift`. Each binding builds the registry from the screen sets its configuration includes. Views never create other screens or change navigation; coordinators do.
+
+## Dev tools
+
+Debug configurations (`Mock-Debug`, `Dev-Debug`) put a pill at the top of every screen, centered just below the status bar, showing the environment (`MOCK`, `DEV`). **Long-press the pill** to open the menu. There is no on-screen hint; the gesture is for the team.
+
+The pill lives in its own window (`DevToolsWindow`) one level above the app's window, so it stays above the sign-in full-screen cover and any sheet. That window takes touches only on the pill and while the menu is open; everything else reaches the app. Closing the menu hands key status back to the app's window.
+
+The menu shows, in order:
+
+1. **Warnings**: every armed failure reported by any tool. While one exists, the pill shows an alert icon.
+2. **Screen tools**: tools registered for the current screen's key.
+3. **App tools**: Build (environment and backend address), Screen (current screen key and data as copyable JSON), Data (clear cached data, with confirmation), Session (sign out).
+
+**Current screen:** `ScreenRegistry` reports every screen it resolves to a `ScreenTracker` when it appears and disappears. The dev tools tracker treats the newest visible one as current. Screens never reference the tracker; release builds pass none.
+
+**Adding a tool:** build a `DevTool` (an id, a section title, optional `warning`, and the rows as a view) and register it on `DevTools.registry`: `register(_:forScreen:)` for one screen key, or `registerAppTool(_:)` for every screen. A tool that arms a non-normal result returns its warning text from `warning` while armed. Keep tools under `ParkHill/DevTools/` (all debug builds) or `ParkHill/Mocks/` (Mock only), never under `ParkHill/Screens/`.
+
+**Release builds:** `Dev-Release` compiles `NoDevTools` instead: no window, no pill, no tracking, and no file from `DevTools/`. Check a release binary with `nm` for `DevTools` symbols: only `NoDevTools` may appear.
 
 ## Design
 
@@ -133,7 +152,8 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 |---|---|---|
 | `ParkHillTests/Services/`, `Auth/`, `Navigation/`, top level | Mock and Dev | Nothing. Supabase services are tested against a stubbed transport and in-memory session storage |
 | `ParkHillTests/Mocks/` | Mock | Nothing |
-| `ParkHillUITests/Mock/` | Mock | Nothing. UI tests for the persona picker |
+| `ParkHillTests/DevTools/` | Mock and Dev-Debug | Nothing |
+| `ParkHillUITests/Mock/` | Mock | Nothing. UI tests for the persona picker and the dev tools pill and menu |
 | `ParkHillUITests/Dev/` | Dev | Local Supabase, reset recently: each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it |
 | `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset`. Persona credentials come from the bundled `contract/seed/dataset.json` |
 
@@ -143,5 +163,6 @@ Client CI runs Mock only (guide 6), so run the Dev tests locally before merging 
 
 - No `#if` on configuration and no runtime environment checks in app code.
 - Mock-only code lives under `ParkHill/Mocks/`. It is compiled only in `Mock-Debug` and never in any Release configuration.
+- Dev tools code lives under `ParkHill/DevTools/`. It is compiled only in debug configurations and never in any Release configuration.
 - Only the service layer imports the Supabase SDK or builds requests.
 - Edit `project.yml` and the xcconfigs, never the generated project.

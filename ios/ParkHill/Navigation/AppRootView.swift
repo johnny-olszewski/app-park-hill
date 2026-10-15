@@ -4,7 +4,6 @@ import SwiftUI
 /// presented over it as a full-screen cover.
 struct AppRootView: View {
     let coordinator: AppCoordinator
-    let environment: AppEnvironment
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -12,7 +11,6 @@ struct AppRootView: View {
             .fullScreenCover(isPresented: .constant(coordinator.isEntryPresented)) {
                 EntryView(coordinator: coordinator)
                     .onAppear { coordinator.entryDidAppear() }
-                    .environment(\.backendTargetLabel, backendTargetLabel)
                     .environment(\.sessionEndedNotice, coordinator.signOutReason == .sessionEnded)
                     .tint(Color.phInk)
             }
@@ -39,10 +37,6 @@ struct AppRootView: View {
                 }
             }
         }
-    }
-
-    private var backendTargetLabel: String? {
-        environment.showsBackendLabel ? environment.targetLabel : nil
     }
 }
 

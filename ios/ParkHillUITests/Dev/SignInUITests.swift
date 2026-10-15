@@ -24,7 +24,7 @@ final class SignInUITests: XCTestCase {
     func testSignInStaysSignedInAcrossRelaunchThenSignsOut() throws {
         let email = try UITestData.email(of: "attendee")
         app.launchSignedOut(entry: emailField)
-        XCTAssertTrue(app.staticTexts["backendTargetLabel"].exists)
+        XCTAssertTrue(app.devToolsPill.exists)
 
         signIn(email: email, password: try UITestData.localPassword())
         app.dismissSavePasswordPrompt()

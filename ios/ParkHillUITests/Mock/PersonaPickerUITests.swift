@@ -12,7 +12,7 @@ final class PersonaPickerUITests: XCTestCase {
         app.launchSignedOut(entry: attendee)
 
         XCTAssertFalse(app.buttons["personaPicker.disabled"].exists, "only active personas are listed")
-        XCTAssertTrue(app.staticTexts["backendTargetLabel"].exists)
+        XCTAssertTrue(app.devToolsPill.exists)
 
         attendee.tap()
         XCTAssertTrue(app.staticTexts["placeholder.user"].waitForExistence(timeout: 5))

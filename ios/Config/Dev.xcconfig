@@ -14,11 +14,8 @@ BACKEND_URL = http:/$()/127.0.0.1:54321
 // Well-known local Supabase anon key (the CLI's fixed default), not a secret.
 BACKEND_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
 
-// Non-release builds show the backend they target (guide 5.2 rule 5).
-SHOW_BACKEND_LABEL = YES
-SHOW_BACKEND_LABEL[config=Dev-Release] = NO
-
-// Release ships without dev tools (App.xcconfig).
+// Release ships without dev tools (App.xcconfig). Debug builds show their
+// environment in the dev tools pill (guide 5.2 rule 5).
 DEV_TOOLS[config=Dev-Release] = Disabled
 DEV_TOOLS_EXCLUDED[config=Dev-Release] = */DevTools/*
 

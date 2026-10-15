@@ -4,11 +4,7 @@ typealias AppBackendService = SupabaseBackendService
 typealias AppAuthService = SupabaseAuthService
 
 enum ServiceBinding {
-    static let environment = AppEnvironment(
-        name: "Dev",
-        backend: .fromInfoPlist(),
-        showsBackendLabel: AppEnvironment.showsBackendLabel()
-    )
+    static let environment = AppEnvironment(name: "Dev", backend: .fromInfoPlist())
 
     @MainActor
     static func makeScreenRegistry(services: AppServices, tracker: (any ScreenTracker)?) -> ScreenRegistry {

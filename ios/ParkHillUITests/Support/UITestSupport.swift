@@ -19,6 +19,18 @@ extension XCUIApplication {
         XCTFail("neither the entry screen nor the signed-in placeholder appeared")
     }
 
+    /// The dev tools pill at the top of every screen (debug builds).
+    var devToolsPill: XCUIElement {
+        descendants(matching: .any)["devTools.pill"]
+    }
+
+    /// Long-presses the pill and waits for the menu.
+    func openDevToolsMenu() {
+        XCTAssertTrue(devToolsPill.waitForExistence(timeout: 5), "no dev tools pill")
+        devToolsPill.press(forDuration: 1)
+        XCTAssertTrue(buttons["devTools.done"].waitForExistence(timeout: 5), "the dev tools menu did not open")
+    }
+
     /// Dismisses the system's offer to save a password, if it appears.
     func dismissSavePasswordPrompt() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")

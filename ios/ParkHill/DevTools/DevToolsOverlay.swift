@@ -97,7 +97,6 @@ struct DevToolsMenu: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])
         .tint(Color.phInk)
     }
 }

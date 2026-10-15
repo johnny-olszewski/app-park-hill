@@ -76,7 +76,6 @@ final class SignInViewModel {
 /// All text comes from the screen data.
 struct SignInScreen: View {
     @State private var model: SignInViewModel
-    @Environment(\.backendTargetLabel) private var backendTargetLabel
     @Environment(\.sessionEndedNotice) private var sessionEndedNotice
     @FocusState private var focus: Field?
 
@@ -154,11 +153,6 @@ struct SignInScreen: View {
                 .padding(.top, 4)
             }
             .scrollDismissesKeyboard(.interactively)
-            .safeAreaInset(edge: .bottom) {
-                if let backendTargetLabel {
-                    BackendTargetLabel(text: backendTargetLabel).padding(.bottom, 8)
-                }
-            }
             .background(Color.phSurface)
             .navigationTitle(model.data.title)
         }
@@ -179,9 +173,6 @@ struct SignInScreen: View {
 }
 
 extension EnvironmentValues {
-    /// The backend this build targets, shown on entry screens in non-release
-    /// builds; nil hides it.
-    @Entry var backendTargetLabel: String?
     /// True when the user was signed out because access ended, so the
     /// sign-in screen shows `session_ended_message`.
     @Entry var sessionEndedNotice: Bool = false

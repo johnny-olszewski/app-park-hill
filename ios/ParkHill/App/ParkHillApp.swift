@@ -3,7 +3,6 @@ import SwiftUI
 
 @main
 struct ParkHillApp: App {
-    private let environment = ServiceBinding.environment
     /// Debug builds: the dev tools pill and menu. Release builds: nothing.
     private let devTools: AppDevTools
     @State private var coordinator: AppCoordinator
@@ -25,7 +24,7 @@ struct ParkHillApp: App {
 
     var body: some Scene {
         WindowGroup {
-            devTools.attach(to: AppRootView(coordinator: coordinator, environment: environment))
+            devTools.attach(to: AppRootView(coordinator: coordinator))
         }
     }
 }

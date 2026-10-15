@@ -1,36 +1,27 @@
 import Foundation
 
 /// Mock `BackendService`: answers from contract fixtures and makes no network
-/// calls. The entry is the persona picker (`auth.sign_in.mock`); `get_screen`
-/// reads `get_screen.<key>.json`; `whoami` reads the signed-in persona's
-/// `whoami.json`.
+/// calls. The entry is the recorded `get_entry.json` (the production
+/// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `whoami` reads
+/// the signed-in persona's `whoami.json`.
 struct MockBackendService: BackendService {
     private let fixtures: FixtureStore
     private let personaState: MockPersonaState
-    private let entry: ScreenEnvelope?
 
     init(environment: AppEnvironment) {
-        self.init(
-            fixtures: .bundled,
-            personaState: .shared,
-            entry: try? PersonaPickerData.fromDataset(at: PersonaPickerData.bundledDatasetURL).envelope
-        )
+        self.init(fixtures: .bundled, personaState: .shared)
     }
 
-    /// With no `entry`, `getEntry` reads `get_entry.json`.
-    init(fixtures: FixtureStore, personaState: MockPersonaState, entry: ScreenEnvelope? = nil) {
+    init(fixtures: FixtureStore, personaState: MockPersonaState) {
         self.fixtures = fixtures
         self.personaState = personaState
-        self.entry = entry
     }
 
     func getEntry(locale: String) async throws(BackendError) -> ScreenEnvelope {
-        if let entry { return entry }
-        return try decode("get_entry", missing: .server)
+        try decode("get_entry", missing: .server)
     }
 
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
-        if let entry, key == entry.key { return entry }
         return try decode("get_screen.\(key)", missing: .unknownScreen)
     }
 

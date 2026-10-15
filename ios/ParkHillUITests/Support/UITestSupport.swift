@@ -31,6 +31,37 @@ extension XCUIApplication {
         XCTAssertTrue(buttons["devTools.done"].waitForExistence(timeout: 5), "the dev tools menu did not open")
     }
 
+    /// Taps a button in the open dev tools menu, scrolling down to it first.
+    func tapInDevToolsMenu(_ identifier: String) {
+        let button = buttons[identifier]
+        for _ in 0..<4 where !(button.exists && button.isHittable) {
+            swipeUp()
+        }
+        button.tap()
+    }
+
+    /// Closes the dev tools menu and waits for it to go.
+    func closeDevToolsMenu() {
+        buttons["devTools.done"].tap()
+        XCTAssertTrue(buttons["devTools.done"].waitForNonExistence(timeout: 5), "the dev tools menu did not close")
+    }
+
+    /// The sign-in screen's email field, which every build shows when signed out.
+    var signInEmailField: XCUIElement {
+        textFields["signIn.email"]
+    }
+
+    /// Types any credentials and submits. In Mock the armed result decides
+    /// what happens, not the credentials.
+    func submitAnyCredentials() {
+        signInEmailField.tap()
+        signInEmailField.typeText("tester@example.com")
+        let password = secureTextFields["signIn.password"]
+        password.tap()
+        password.typeText("anything")
+        buttons["signIn.submit"].tap()
+    }
+
     /// Dismisses the system's offer to save a password, if it appears.
     func dismissSavePasswordPrompt() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")

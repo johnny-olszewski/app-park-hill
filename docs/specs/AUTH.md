@@ -61,10 +61,9 @@ Sign-out succeeds locally even if the revoke call fails (no network).
 
 | Key | Where it comes from | Purpose |
 |---|---|---|
-| `auth.sign_in` | `get_entry`, `get_screen` | Real sign-in |
-| `auth.sign_in.mock` | Mock backend service only | Persona picker |
+| `auth.sign_in` | `get_entry`, `get_screen` | Sign-in, in every configuration including Mock |
 
-Naming rule: lowercase, dot separated. A key ending in `.mock` is registered only in the Mock configuration and is never returned by the real backend.
+Naming rule: lowercase, dot separated. A key ending in `.mock` is registered only in the Mock configuration and is never returned by the real backend. Sign-in has none: Mock shows the production `auth.sign_in` (5.4).
 
 ### 5.2 `get_entry(p_locale text)`
 
@@ -88,20 +87,16 @@ Callable by `anon`. Returns a screen envelope:
 }
 ```
 
-`secondary_actions` is empty now. It exists so "Forgot password" or "Create account" can be enabled from the backend once clients support those actions.
+`secondary_actions` is empty now. It is reserved for entries the backend enables, such as "Forgot password", "Create account" or a future demo entry, once clients support those actions. It is never used for mock or debug features; those live in the dev tools menu (EP-06).
 
-### 5.4 `auth.sign_in.mock` data
+### 5.4 Sign-in in the Mock configuration
 
-```json
-{
-  "title": "Mock sign in",
-  "personas": [
-    { "id": "attendee", "display_name": "Attendee", "description": "Signed-in user with default access" }
-  ]
-}
-```
+Mock shows the production `auth.sign_in` from the recorded `get_entry` response. What the next sign-in does is chosen in the dev tools menu (EP-06), not by the credentials typed:
 
-Personas come from `/contract/seed/dataset.json`.
+- **Sign in as:** any active persona in `/contract/seed/dataset.json`; default the first.
+- **Next sign-in:** Success (signs in as the chosen persona), a refusal from 5.5 (`invalid_credentials`, `account_disabled`, `too_many_attempts`, `invalid_request`, `unknown`, shown with its recorded message), No connection, or Something went wrong. Default Success. A choice stays until changed for the rest of the launch.
+
+Recorded refusals: `contract/fixtures/sign_in.error.json` (`invalid_credentials`) and `sign_in.error.<code>.json` for the others. `unknown` cannot be triggered on demand, so its file is built from the same message the function sends.
 
 ### 5.5 `sign_in` Edge Function
 
@@ -179,7 +174,7 @@ A separate abstraction from the backend service, selected at build time the same
 | Screen | Configs | Notes |
 |---|---|---|
 | Sign in (`auth.sign_in`) | Mock and Dev registries | Native layout. All text from screen data. Secure password field, platform autofill for credentials |
-| Mock persona picker (`auth.sign_in.mock`) | Mock registry only | Lives in mock-only sources |
+| Mock sign-in tools | Mock dev tools menu only | Persona and next result for `auth.sign_in` (5.4). Live in mock-only sources |
 | Signed-in placeholder | All | Not backend driven. Shows signed-in email and a sign-out button, bundled text. Lives in a `Temporary` folder. Deleted by IOS-008 and AND-008 |
 
 ### 6.3 Config and credentials
@@ -210,10 +205,11 @@ Defined once in `/contract/seed/dataset.json`:
 |---|---|
 | Backend (pgTAP) | `get_entry`, strings fallback, profiles created on account creation |
 | Edge Function tests | Success, wrong password, disabled account, attempt limit, unknown locale falls back to `en`, no password in logs |
+| Recorded refusals | `make fixtures` records every refusal in 5.5 into `contract/fixtures/sign_in.error*.json` without locking any persona; `make data-check` guards them |
 | Integration | Signed-in persona calls `whoami()` and succeeds; signed-out call is refused; after the persona is disabled, its still-unexpired token is refused with `session_ended` |
 | Client unit | Auth services, session restore, renewal refused path, unauthorized response leads to one renewal then sign-out, network errors never sign out, sign-out clears data, error display |
 | UI, Dev against local Supabase, both platforms | Sign in, wrong password shows the backend message, sign out, still signed in after relaunch |
-| UI, Mock, both platforms | Persona picker signs in with no network |
+| UI, Mock, both platforms | Sign in through the mock menu as a chosen persona, one refusal and No connection, with no network |
 
 Client CI runs Mock tests only. Dev UI tests run locally with `make test-dev`.
 

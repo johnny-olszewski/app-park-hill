@@ -5,9 +5,14 @@ import Testing
 struct MockAuthServiceTests {
     private let personaState = MockPersonaState()
     private let userData = TemporaryUserData()
+    private let scenario = MockSignInScenario(persona: "admin")
 
     private func makeService() -> MockAuthService {
-        MockAuthService(personaState: personaState, localData: userData.localData)
+        MockAuthService(personaState: personaState, localData: userData.localData, scenario: scenario, fixtures: .bundled)
+    }
+
+    private func recorded(_ name: String) throws -> SignInFailure {
+        try JSONDecoder().decode(SignInFailure.self, from: TestFixtures.data("\(name).json"))
     }
 
     @Test func startsSignedOut() async {
@@ -30,11 +35,44 @@ struct MockAuthServiceTests {
         #expect(try await backend.getScreen(key: "home", locale: "en").key == "admin")
     }
 
-    @Test func emailSignInUsesThePersonaNamedByTheEmail() async throws {
-        let auth = makeService()
-        let user = try await auth.signIn(email: "attendee@parkhill.test", password: "anything")
-        #expect(user.id == "attendee")
-        #expect(personaState.current == "attendee")
+    @Test func successSignsInAsTheChosenPersonaWhateverIsTyped() async throws {
+        let user = try await makeService().signIn(email: "attendee@parkhill.test", password: "anything")
+        #expect(user.id == "admin")
+        #expect(personaState.current == "admin")
+    }
+
+    @Test(arguments: [
+        (MockSignInResult.invalidCredentials, "sign_in.error"),
+        (.accountDisabled, "sign_in.error.account_disabled"),
+        (.tooManyAttempts, "sign_in.error.too_many_attempts"),
+        (.invalidRequest, "sign_in.error.invalid_request"),
+        (.serverError, "sign_in.error.unknown"),
+    ])
+    func aRefusalThrowsItsRecordedMessage(result: MockSignInResult, fixture: String) async throws {
+        scenario.result = result
+        let expected = try recorded(fixture)
+        await #expect(throws: SignInError.rejected(code: expected.code, message: expected.message)) {
+            _ = try await makeService().signIn(email: "x", password: "y")
+        }
+        #expect(personaState.current == nil)
+    }
+
+    @Test func noConnectionAndSomethingWentWrongAreClientFailures() async {
+        scenario.result = .noConnection
+        await #expect(throws: SignInError.network) { _ = try await makeService().signIn(email: "x", password: "y") }
+        scenario.result = .somethingWentWrong
+        await #expect(throws: SignInError.unexpected) { _ = try await makeService().signIn(email: "x", password: "y") }
+    }
+
+    @Test func theSharedScenarioStartsWithTheFirstActivePersonaAndSuccess() throws {
+        let firstActive = try TestDataset.load().personas.first { $0.state == "active" }?.id
+        #expect(MockSignInScenario.shared.persona == firstActive)
+        #expect(MockSignInScenario.shared.result == .success)
+    }
+
+    @Test func bundledPersonasAreTheActiveOnesInDatasetOrder() throws {
+        let dataset = try TestDataset.load()
+        #expect(MockPersona.bundled.map(\.id) == dataset.personas.filter { $0.state == "active" }.map(\.id))
     }
 
     @Test func signOutClearsThePersonaAndWipesData() async throws {

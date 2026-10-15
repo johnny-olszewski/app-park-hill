@@ -40,7 +40,7 @@ Implemented in this order (guide 7.2). Android tasks are left out until the Andr
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
 | [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
-| [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Draft |
+| [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
 
 ### EP-06.A: Dev tools over the app
 
@@ -68,14 +68,14 @@ Built as a single task (IOS-021) before slices existed.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](../tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Draft |
+| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](../tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Done |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
 | [IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/IOS-021-dev-tools-overlay.md) | IOS-006 | Done |
-| [IOS-022: Show the production sign-in in Mock with persona and result tools](../tasks/IOS-022-mock-sign-in-tools.md) | IOS-021, SUP-021 | Draft |
+| [IOS-022: Show the production sign-in in Mock with persona and result tools](../tasks/IOS-022-mock-sign-in-tools.md) | IOS-021, SUP-021 | Done |
 
 ### Android (AND)
 

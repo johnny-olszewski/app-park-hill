@@ -281,6 +281,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | Slices (7.2): tasks are grouped by the behavior they deliver; one branch and PR per slice, commits still per task, each task verified before the next, the slice's behavior criteria checked by the reviewer. Replaces one task per branch and PR. Behavior criteria live in a Slices section of each epic |
 | 2026-10-15 | Slices are lockstep across platforms and start only when their dependencies are Done. Exception until agents run implementation: Android tasks are left out of slices and Android work waits, while the workflow settles on iOS |
 | 2026-10-15 | Slice sizing (7.2 rule 2): split only where the in-between state is worth having on its own; scaffolding-only slices merge into the next. EP-06.A stands alone because Dev builds use the menu without any mock tools |
+| 2026-10-15 | Mock sign-in (specs/AUTH.md 5.4): the production `auth.sign_in` with the next result chosen in the dev tools menu; `auth.sign_in.mock` removed. Every `sign_in` refusal is recorded; `unknown` is built from its message because it cannot be triggered. `secondary_actions` is reserved for backend-enabled entries, never mock features |
 
 ## 9. Known risks
 

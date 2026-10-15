@@ -22,6 +22,11 @@ if touches '^(backend|contract)/'; then
     fi
 fi
 
+if touches '^ios/'; then
+    echo "pre-push: iOS source checks"
+    "$root/ios/scripts/check_sources.sh" || failed=1
+fi
+
 if [ "$failed" -ne 0 ]; then
     echo "pre-push: checks failed; push stopped. Fix them, or push with --no-verify to let CI decide."
     exit 1

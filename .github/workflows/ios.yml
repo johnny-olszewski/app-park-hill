@@ -1,0 +1,59 @@
+# iOS CI (IOS-004): Mock tests, no build-configuration branching, and no mock
+# or dev tools code in the release build. Mock only; Dev tests run locally
+# (guide 6). Runs on ready PRs only, to stay within the free macOS minutes;
+# reports only, guide 7.1 rule 10 forbids merging red.
+name: iOS
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "ios/**"
+      - "contract/**"
+      - "backend/**"
+      - ".github/workflows/ios.yml"
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: iOS checks
+    if: github.event.pull_request.draft == false
+    runs-on: macos-26
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26.5
+        run: sudo xcode-select -s /Applications/Xcode_26.5.app
+
+      # Same version as ios/Makefile.
+      - name: Install XcodeGen 2.46.0
+        run: |
+          curl -sSL https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip -o "$RUNNER_TEMP/xcodegen.zip"
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+
+      - name: Generate the project
+        run: make project
+
+      - name: No build-configuration branching
+        run: scripts/check_sources.sh
+
+      - name: Mock unit tests
+        run: |
+          xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" \
+            -only-testing:ParkHillTests test
+
+      - name: Build the Dev release
+        run: |
+          xcodebuild -scheme ParkHill-Dev -configuration Dev-Release \
+            -destination "id=$(scripts/simulator.sh)" -derivedDataPath "$RUNNER_TEMP/release" build
+
+      - name: No mock or dev tools code in the release build
+        run: scripts/check_release_binary.sh "$RUNNER_TEMP/release/Build/Products/Dev-Release-iphonesimulator/ParkHill.app"

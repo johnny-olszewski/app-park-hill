@@ -9,11 +9,16 @@ final class DevTools {
     let environment: AppEnvironment
     let tracker = CurrentScreenTracker()
     private(set) var registry = DevToolRegistry()
+    private let session: SessionTracker
     private var window: DevToolsWindow?
     private weak var appWindow: UIWindow?
 
     init(environment: AppEnvironment, services: AppServices) {
         self.environment = environment
+        session = SessionTracker(auth: services.auth)
+        for tool in AppTools.all(environment: environment, tracker: tracker, session: session, auth: services.auth) {
+            registry.registerAppTool(tool)
+        }
     }
 
     var screenTracker: (any ScreenTracker)? { tracker }

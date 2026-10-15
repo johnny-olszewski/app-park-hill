@@ -1,6 +1,6 @@
 # Task Template
 
-Copy this file to `/docs/tasks/<ID>-short-name.md`, where `<ID>` is the next number for the task's platform: `SUP-###` (backend), `IOS-###` or `AND-###`. Set its Epic, add it to that epic's task list in `/docs/epics/`, and add a row to `/docs/BACKLOG.md`. Fill every section. Write "None" instead of deleting a section.
+Copy this file to `/docs/tasks/<ID>-short-name.md`, where `<ID>` is the next number for the task's platform: `SUP-###` (backend), `IOS-###` or `AND-###`. Set its Epic, add it to that epic's task list and to one of its slices in `/docs/epics/` (guide 7.2), and add a row to `/docs/BACKLOG.md`. Fill every section. Write "None" instead of deleting a section.
 
 Writing rules:
 

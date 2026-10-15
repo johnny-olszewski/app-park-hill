@@ -10,7 +10,7 @@
     },
     {
       "id": "admin",
-      "email": "admin@parkhill.test",
+      "email": "admin2@parkhill.test",
       "display_name": "Admin",
       "description": "Will hold the admin role when roles land",
       "state": "active"

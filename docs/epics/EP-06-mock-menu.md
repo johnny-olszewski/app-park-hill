@@ -68,7 +68,7 @@ Built as a single task (IOS-021) before slices existed.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](../tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Draft |
+| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](../tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Done |
 
 ### iOS (IOS)
 

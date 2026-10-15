@@ -187,7 +187,7 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Draft |
+| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Done |
 
 ### iOS (IOS)
 

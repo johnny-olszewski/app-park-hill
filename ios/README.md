@@ -168,9 +168,10 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 Client CI runs Mock only (guide 6), so run the Dev tests locally before merging changes to `/ios`, `/backend` or `/contract`:
 
 ```
-(cd ../backend && supabase start && supabase db reset)
-xcodebuild -scheme ParkHill-Dev -destination "id=$(scripts/simulator.sh)" test
+make test-dev
 ```
+
+It starts and resets local Supabase (Docker must be running), then runs the Dev unit, integration and UI tests on an available iPhone simulator.
 
 ### CI
 
@@ -179,7 +180,7 @@ xcodebuild -scheme ParkHill-Dev -destination "id=$(scripts/simulator.sh)" test
 | Step | Script or command |
 |---|---|
 | No build-configuration branching | `scripts/check_sources.sh` (also run by the pre-push hook) |
-| Mock unit tests | `xcodebuild -scheme ParkHill-Mock … -only-testing:ParkHillTests test` |
+| Mock unit and UI tests | `xcodebuild -scheme ParkHill-Mock … test` |
 | No mock or dev tools code in the release build | Builds `Dev-Release` from clean derived data, then `scripts/check_release_build_log.sh <build log>` (no `Mocks/` or `DevTools/` source compiled) and `scripts/check_release_binary.sh <ParkHill.app>` (no such symbols) |
 
 `scripts/simulator.sh` prints an available iPhone simulator's id, for `-destination "id=…"`.

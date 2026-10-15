@@ -17,7 +17,7 @@ BACKEND_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1k
 // Release ships without dev tools (App.xcconfig). Debug builds show their
 // environment in the dev tools pill (guide 5.2 rule 5).
 DEV_TOOLS_SOURCES[config=Dev-Release] = DevToolsBinding+Disabled.swift
-DEV_TOOLS_EXCLUDED[config=Dev-Release] = */DevTools/*
+DEV_TOOLS_EXCLUDED[config=Dev-Release] =
 
 // Carries the backend keys and Dev's local HTTP exception.
 INFOPLIST_FILE = Config/Dev-Info.plist

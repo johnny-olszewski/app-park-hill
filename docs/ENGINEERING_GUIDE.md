@@ -216,6 +216,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
 9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
+10. **Checks.** CI reports on every ready pull request; draft PRs skip the macOS job. Never merge a PR with a failing or pending check. Branch protection is not available for a private repo on the free plan, so this is a rule, not a setting. `.githooks/pre-push` runs the fast checks before each push; enable it once per clone with `git config core.hooksPath .githooks`.
 
 ### 7.2 Slices
 
@@ -283,6 +284,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | Slice sizing (7.2 rule 2): split only where the in-between state is worth having on its own; scaffolding-only slices merge into the next. EP-06.A stands alone because Dev builds use the menu without any mock tools |
 | 2026-10-15 | Mock sign-in (specs/AUTH.md 5.4): the production `auth.sign_in` with the next result chosen in the dev tools menu; `auth.sign_in.mock` removed. Every `sign_in` refusal is recorded; `unknown` is built from its message because it cannot be triggered. `secondary_actions` is reserved for backend-enabled entries, never mock features |
 | 2026-10-15 | Android exception ended: Android starts through catch-up slices (7.2 rule 3) that mirror the iOS slices' behavior criteria: EP-01.B, EP-01.C, EP-06.C. No new feature slice starts until Android is level. CI (EP-01.A) goes first |
+| 2026-10-15 | CI checks report on PRs and a red or pending check blocks merging by rule (7.1 rule 10), with a pre-push hook for fast local checks. Chosen over GitHub Pro and over a public repo (branch protection needs one of them). The macOS job runs on ready PRs only, to stay within the free Actions minutes |
 
 ## 9. Known risks
 

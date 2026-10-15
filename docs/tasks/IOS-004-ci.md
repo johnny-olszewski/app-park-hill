@@ -14,7 +14,8 @@ Enforce the iOS rules on every PR: tests pass, the app agrees with the contract 
 
 ## Scope
 
-- iOS workflow on a macOS runner, triggered by changes under `/ios`, `/contract` or `/backend`.
+- iOS workflow on a macOS runner, triggered by changes under `/ios`, `/contract` or `/backend` on ready (not draft) PRs.
+- The iOS source checks in the pre-push hook.
 - Release artifact check for mock code; source check for environment branching.
 
 ## Out of scope
@@ -28,9 +29,10 @@ Enforce the iOS rules on every PR: tests pass, the app agrees with the contract 
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | Mock scheme unit tests pass with no backend, including fixture decoding tests | iOS stays in agreement with the contract |
-| AC2 | The job builds the Dev release artifact and fails if any symbol containing `Mock` is present | Mock code can never ship, enforced not trusted |
+| AC2 | The job builds the Dev release artifact and fails if any symbol containing `Mock`, or any dev tools symbol other than `NoDevTools`, is present | Mock and debug code can never ship, enforced not trusted |
 | AC3 | The job fails if Swift source in `/ios` contains `#if` on a build configuration | The no branching rule is enforced |
-| AC4 | The job is required to merge to `main` | iOS cannot regress silently |
+| AC4 | The job reports on every ready PR; a red check blocks merging by rule (guide 7.1 rule 10) | iOS cannot regress silently |
+| AC6 | The pre-push hook runs the iOS source checks (AC3) before a push that changes `/ios` | The cheapest iOS failure is caught before CI |
 | AC5 | `/ios/README.md` lists the Dev integration test command to run locally before merging, since CI runs Mock only | No silent gap in coverage |
 
 ## Technical notes

@@ -15,7 +15,7 @@ Mock and debug options need one home that sits above the production app without 
 ## Scope
 
 - A dev tools window above the app's own window, created once at launch in debug configurations, holding the pill and presenting the menu.
-- The pill: the backend target text (`MOCK · NO NETWORK`, `DEV · <url>`), with an alert icon while any tool reports an armed warning. Long press opens the menu.
+- The pill: the environment name (`MOCK`, `DEV`), centered just below the status bar, with an alert icon while any tool reports an armed warning. Long press opens the menu. The full backend address is in the menu's Build tool.
 - The menu sheet: armed warnings at the top, then the current screen's tools, then app tools.
 - App tools: Build (environment and backend), Current screen (key, and data as formatted JSON on its own page, copyable), Clear cached data (with confirmation), Sign out (when signed in).
 - A screen tracker reported to by `ScreenRegistry` for every screen it resolves.
@@ -33,7 +33,7 @@ Mock and debug options need one home that sits above the production app without 
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | In Mock-Debug and Dev-Debug, the pill shows on every screen, including over the sign-in full-screen cover and over sheets, and does not cover status bar items or navigation titles on iPhone 16 and iPhone SE at default and largest text sizes | One persistent entry point, never in the way |
+| AC1 | In Mock-Debug and Dev-Debug, a pill reading `MOCK` or `DEV` shows centered just below the status bar on every screen, including over the sign-in full-screen cover and over sheets; on iPhone 16 and iPhone SE at default and largest text sizes it covers no status bar item and no control other than itself | One persistent entry point that never blocks the app |
 | AC2 | No file under `ParkHill/Screens/` draws the backend label or references the pill, menu, tracker or tool registry | Production screens are unaware of dev tools |
 | AC3 | Touches anywhere except the pill reach the app; existing Mock and Dev UI tests pass | The overlay never changes app behavior |
 | AC4 | Long-pressing the pill opens the menu; Current screen shows the key and data of the most recently shown backend-driven screen, reported by `ScreenRegistry` | Developers can see what any screen received |
@@ -48,7 +48,7 @@ Mock and debug options need one home that sits above the production app without 
 - Sources: `ParkHill/DevTools/` compiled in Mock-Debug and Dev-Debug only. Binding files `DevToolsBinding+Enabled.swift` (in `DevTools/`) and `DevToolsBinding+Disabled.swift` (outside it), selected with a `DEV_TOOLS` build setting added to `INCLUDED_SOURCE_FILE_NAMES` in `Config/App.xcconfig`, with `DEV_TOOLS[config=Dev-Release] = Disabled` and `*/DevTools/*` excluded there. Verify with `xcodebuild -showBuildSettings` per configuration.
 - `ScreenRegistry` reports through a tracker protocol; the release binding provides one that does nothing.
 - Tools are value types with a title, a view and an optional warning; the registry builds the menu from them.
-- Pill placement near the top follows the design brief; exact position is the implementer's choice within AC1.
+- Pill placement and text were settled during implementation: top center below the status bar, environment name only. It may overlap a centered inline navigation title after scrolling; titles are not tappable, so nothing is blocked.
 - Guide 5.1, 5.2 and 5.5. Design: EP-06 brief.
 
 ## Verification

@@ -212,7 +212,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
-9. **Planning branches.** Changes that only add or revise epics, specs, tasks or the backlog, without implementing a task, use a branch named `plan/` plus the epic file name without `.md`, for example `plan/EP-05-contract-names`. The rules above apply with the epic ID in place of the task ID: commits `[EP-05][<k>/n] <summary>`, PR title `[EP-05] <epic title>`, and the PR template's task link and checklist adapted to the epic. A planning PR sets no task to Done.
+9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
 
 ## 8. Decision log
 
@@ -259,6 +259,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-13 | The signed-out entry is a full-screen cover over the signed-in root (placeholder, then tabs). Sign-in hides it; sign-out and lost access present it. It has no close button: only signing in dismisses it |
 | 2026-10-14 | Planning-only changes use `plan/<epic file name>` branches with the epic ID in commit subjects and the PR title (7.1 rule 9) |
 | 2026-10-14 | EP-05 Contract names: backend function names and screen keys are listed once in `contract/names.json`; generated constants in `contract/generated/` are compiled by both clients; `make data-check` fails on drift. Generated into `/contract` rather than into each client so the backend task stays within one platform |
+| 2026-10-15 | Planning branches (7.1 rule 9) may cover several epics: `plan/<short name>`, commits `[PLAN][<k>/n]`, PR title `[PLAN] <summary>`. Supersedes the 2026-10-14 one-epic-per-plan-branch entry |
 
 ## 9. Known risks
 

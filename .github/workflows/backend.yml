@@ -1,4 +1,4 @@
-# Backend CI (SUP-004): runs the backend against local Supabase on every PR,
+# Backend CI (SUP-004, SUP-007): runs the backend against local Supabase on every PR,
 # draft or ready, that changes /backend or /contract. Reports only; guide 7.1
 # rule 10 forbids merging red.
 name: Backend
@@ -45,3 +45,12 @@ jobs:
 
       - name: Database tests (pgTAP)
         run: supabase test db
+
+      # SUP-007: the sign_in Edge Function, served by the local stack.
+      - name: Edge Function tests
+        run: make test-functions
+
+      # SUP-007: seed and mock fixtures regenerated from the dataset must
+      # match what is committed.
+      - name: Dataset check
+        run: make data-check

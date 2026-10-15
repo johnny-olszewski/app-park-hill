@@ -1,25 +1,29 @@
-<!-- Title: [<TASK-ID>] <task title> -->
+<!-- Title: [<slice ID>] <slice title> (planning PRs: [PLAN] <summary>) -->
 
-## Task
+## Slice
 
-[<TASK-ID>: <task title>](docs/tasks/<TASK-ID>-short-name.md)
+[<slice ID>: <slice title>](docs/epics/<EP-##-name>.md#slices)
 
 ## Summary
 
-<!-- One or two sentences: what this delivers and why. -->
+<!-- One or two sentences: what behavior this delivers and why. -->
 
-## Acceptance criteria
+## Tasks
 
-<!-- Copy each AC from the task and check it once verified. -->
+<!-- One entry per task, in the slice's order: its acceptance criteria and how each was verified. -->
+
+### [<TASK-ID>: <task title>](docs/tasks/<TASK-ID>-short-name.md)
 
 - [ ] AC1:
 
-## Verification
-
-<!-- Commands run and what they showed. -->
-
 ```
 ```
+
+## Behavior acceptance criteria
+
+<!-- Copy the slice's behavior criteria from the epic. The reviewer checks these by using the result. -->
+
+- [ ] 
 
 ## Reviewer notes
 
@@ -29,7 +33,8 @@ None.
 
 ## Checklist
 
-- [ ] Branch is named `task/<task file name>`
-- [ ] Commits follow `[<TASK-ID>][<k>/n]`, each standalone and logical
-- [ ] Task status set to Done in the task file, its epic and `docs/BACKLOG.md`
-- [ ] No work outside the task's Scope
+- [ ] Branch is named `slice/<slice ID>-<short name>`
+- [ ] Each task's commits follow `[<TASK-ID>][<k>/n]`, are standalone and logical, and are not interleaved with another task's
+- [ ] Each task was verified before the next started
+- [ ] Each task, and then the slice, set to Done in its files, the epic and `docs/BACKLOG.md`
+- [ ] No work outside the Scope of the slice's tasks

@@ -2,6 +2,8 @@
 
 Status: v0.2 (planning). This document governs every task. If a task conflicts with this guide, the guide wins until it is changed in its own PR.
 
+**Purpose.** Park Hill is a real app and also a proving ground. Its architecture (backend-driven, natively rendered clients on Supabase) and the way its work is planned and built (agents implementing tasks from these documents, a person reviewing behavior) are meant to transfer to other businesses and use cases. When two designs both work for Park Hill, prefer the one that generalizes and that an agent can follow from the repo alone.
+
 ## 1. Goals
 
 1. **Iteration velocity over release cadence.** Anything that can change without an app release should be able to.
@@ -183,8 +185,8 @@ Rules:
 - **Temporary code** is allowed only when a task says so, and every line carries `TEMPORARY(<epic>): <what removes it>`. The removing task has an AC that a search for the marker finds nothing.
 
 
-1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, exit criteria and its task list. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks`, tagged with its epic and listed in `BACKLOG.md`.
-2. One task, one PR, one reviewer (Johnny). Tasks are sized for a single agent session.
+1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, exit criteria and its task list. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks`, tagged with its epic and listed in `BACKLOG.md`. Tasks are grouped into slices (7.2).
+2. One slice, one PR, one reviewer (Johnny). Tasks are sized for a single agent session; a slice is the few tasks that together deliver one testable change in behavior.
 3. Every task targets one platform, because different developers with different skills may own them. IDs are per platform and sequential: `SUP-###` (backend), `IOS-###`, `AND-###`. iOS and Android tasks for the same behavior are counterparts with matching acceptance criteria. Platform idioms may differ; behavior may not.
 4. An agent that finds ambiguity or a conflict with this guide stops and asks. It does not guess and does not expand scope.
 5. Decisions that change this guide are recorded in section 8 in the same PR.
@@ -193,7 +195,7 @@ Rules:
 
 The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
 
-1. **One branch per task**, created from an up-to-date `main` and named `task/` plus the task file name without `.md`, for example `task/SUP-002-local-supabase`. The `task/` prefix groups task branches; other kinds of branches get their own prefix when needed.
+1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9). Work before 2026-10-15 used one `task/<task file name>` branch per task.
 2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
 3. **Commit message format:**
 
@@ -207,12 +209,25 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
    - Subject: `[<TASK-ID>][<k>/n] <summary>`. `<k>` numbers the task's commits from 1 in order. `n` is always the literal letter `n`. The summary is a few words in the imperative, usually taken from the task's Scope.
    - Body: a blank line, then a short bulleted list of brief details.
    - No mention of tools, assistants or agents, and no co-author or "generated with" trailers.
-4. **One pull request per task.** Title `[<TASK-ID>] <task title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
-5. **Task status:** the branch's last commit sets the task's status to Done in the task file, its epic and `BACKLOG.md`. Merging the PR makes it true. An open PR is how a task shows as in review.
+   - On a slice branch each task keeps its own numbering, and one task's commits are finished before the next task's begin.
+4. **One pull request per slice.** Title `[<slice ID>] <slice title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
+5. **Status:** each task's last commit sets that task to Done in its task file, its epic and `BACKLOG.md`. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `BACKLOG.md`. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
 9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
+
+### 7.2 Slices
+
+A slice is the set of tasks, across platforms, that together deliver one change in behavior a person can check: in the app, or for developers (for example a CI check). It is the unit of implementation, review and acceptance. Tasks stay per platform, so each keeps one owner.
+
+1. **Defined in the epic.** Each epic has a Slices section listing every slice: ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. `BACKLOG.md` lists each epic's slices above its task tables. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice.
+2. **Sizing.** Split a behavior into separate slices only where the state between them is worth having on its own; a slice that only prepares for the next is merged into it.
+3. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
+   - **Exception, in force until agents run implementation:** while Johnny implements by hand, Android tasks are left out of slices and no Android work starts, so the workflow settles on iOS first. Android tasks stay planned in the epic. Ending the exception is a decision log entry.
+4. **Order and checks.** Tasks are implemented in the slice's order. When a task's commits are done, its acceptance criteria are verified and its tests run before the next task starts. After the last task, the slice's behavior criteria are verified by using the result.
+5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria; commits stay per task for reading the code.
+6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
 
 ## 8. Decision log
 
@@ -262,6 +277,10 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-15 | Planning branches (7.1 rule 9) may cover several epics: `plan/<short name>`, commits `[PLAN][<k>/n]`, PR title `[PLAN] <summary>`. Supersedes the 2026-10-14 one-epic-per-plan-branch entry |
 | 2026-10-15 | EP-06 Mock menu: Mock shows the production entry screen from its recorded response; `auth.sign_in.mock` and the persona picker are removed. Mock and debug options live in a menu opened by long-pressing a pill at the top of every screen, drawn once in a debug-only overlay window above everything the app presents, never by screens. Per-screen tools are registered by screen key; the screen registry reports the current screen. In Mock, the menu chooses the persona and the next sign-in result. Future demo mode is a real backend session with a private sandbox per demo and never reuses mock code |
 | 2026-10-15 | The dev tools pill shows only the environment name (`MOCK`, `DEV`), centered just below the status bar; the full backend address moves to the menu's Build tool. Chosen over the full target text (too wide for the top of the screen) and over top-trailing placement (would block toolbar buttons). 5.2 rule 5 updated |
+| 2026-10-15 | Purpose recorded at the top of this guide and in `CLAUDE.md`: Park Hill is also a proving ground for a transferable architecture and agent-driven workflow; prefer designs that generalize |
+| 2026-10-15 | Slices (7.2): tasks are grouped by the behavior they deliver; one branch and PR per slice, commits still per task, each task verified before the next, the slice's behavior criteria checked by the reviewer. Replaces one task per branch and PR. Behavior criteria live in a Slices section of each epic |
+| 2026-10-15 | Slices are lockstep across platforms and start only when their dependencies are Done. Exception until agents run implementation: Android tasks are left out of slices and Android work waits, while the workflow settles on iOS |
+| 2026-10-15 | Slice sizing (7.2 rule 2): split only where the in-between state is worth having on its own; scaffolding-only slices merge into the next. EP-06.A stands alone because Dev builds use the menu without any mock tools |
 
 ## 9. Known risks
 

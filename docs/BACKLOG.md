@@ -64,7 +64,7 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-005: Build the Android auth service with production and mock implementations](tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Draft |
-| [AND-006: Build the Android sign-in flow, mock persona picker and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
+| [AND-006: Build the Android sign-in flow and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
 | [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Draft |
 
 ## [EP-02: Tabs](epics/EP-02-tabs.md)

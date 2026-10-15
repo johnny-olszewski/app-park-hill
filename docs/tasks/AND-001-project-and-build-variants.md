@@ -34,7 +34,7 @@ Android twin of IOS-001. Environments are chosen by the build, Dev can target an
 | AC2 | **Mock intent:** the mock variant makes no network connection and needs no backend. Its manifest does not request `INTERNET`. Stated in `/android/README.md` | The app runs completely independently |
 | AC3 | **Dev intent:** the dev variant's backend URL and anon key come from committed flavor config, defaulting to local Supabase (`http://10.0.2.2:54321`). Stated in `/android/README.md` | Real end to end path, using no hosted project by default |
 | AC4 | If `dev.local.properties` exists (gitignored), its URL and key replace the defaults at build time | Any developer can target any backend without a commit |
-| AC5 | At launch the dev variant logs its target backend URL, and the value is available to show in UI (used from AND-006) | Nobody is surprised by a forgotten override |
+| AC5 | At launch the dev variant logs its target backend URL, and the value is available to show in UI (used by the dev tools pill, AND-021) | Nobody is surprised by a forgotten override |
 | AC6 | `ServiceBinding.kt` exists once in `src/mock` and once in `src/dev`, not in `src/main` | Environment is chosen by the build, not by code |
 | AC7 | `src/main` contains no check of `BuildConfig.FLAVOR`, `BuildConfig.DEBUG` or build type | No branching for variants |
 | AC8 | All mock code lives under `src/mock`. `mockRelease` is disabled by a variant filter. `devRelease` output contains no class with `Mock` in its name | Mock code is compiled out of production builds |

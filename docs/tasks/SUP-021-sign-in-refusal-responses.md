@@ -14,7 +14,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 
 ## Scope
 
-- `backend/scripts/generate_fixtures.py` records `contract/fixtures/sign_in.error.<code>.json` for `account_disabled`, `too_many_attempts` and `invalid_request`, each from a real call to the local `sign_in` function.
+- `backend/scripts/generate_fixtures.py` records `contract/fixtures/sign_in.error.<code>.json` for `account_disabled`, `too_many_attempts` and `invalid_request`, each from a real call to the local `sign_in` function, and `sign_in.error.unknown.json`, built from the `auth.error.unknown` string in the same shape, because that refusal cannot be triggered on demand.
 - `sign_in.error.json` stays as it is: the `invalid_credentials` refusal, already used by client tests.
 - `specs/AUTH.md`:
   - remove `auth.sign_in.mock` (5.1 screen keys, 5.4, 6.2 screens) and describe the Mock sign-in as the production `auth.sign_in` with outcomes chosen in the mock menu
@@ -31,7 +31,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | After `make fixtures`, `contract/fixtures/` holds `sign_in.error.account_disabled.json`, `sign_in.error.too_many_attempts.json` and `sign_in.error.invalid_request.json`, each with the function's real `code` and `message` | Every armed refusal in Mock shows the backend's own text |
+| AC1 | After `make fixtures`, `contract/fixtures/` holds `sign_in.error.account_disabled.json`, `sign_in.error.too_many_attempts.json` and `sign_in.error.invalid_request.json`, each with the function's real `code` and `message`, and `sign_in.error.unknown.json` with code `unknown` and the `auth.error.unknown` string for `en` | Every armed refusal in Mock shows the backend's own text |
 | AC2 | `sign_in.error.json` is unchanged | Existing client tests keep working |
 | AC3 | Generating the responses leaves no persona locked: signing in as every active persona with the local password succeeds right after `make fixtures` | Recording the attempt limit must not break local Dev testing |
 | AC4 | Running `make fixtures` twice produces no diff | Recorded responses are reproducible |
@@ -42,6 +42,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 
 - Refusal triggers: `account_disabled` from the `disabled` persona with the local password; `invalid_request` from a body missing `password`; `too_many_attempts` from repeated failures for an email that has no account, from a client address used only for this, so no persona's count is touched.
 - Use a dedicated `X-Forwarded-For` value per trigger, as `write_sign_in_fixtures` does today.
+- `unknown`: read `auth.error.unknown` for `en` from the strings table (service role) and write `{ "status": "error", "code": "unknown", "message": <string> }`, the shape the function returns (`specs/AUTH.md` 5.5). It is the only refusal file not recorded from a call.
 - Guide sections 4.1 and 6.
 
 ## Verification
@@ -67,4 +68,4 @@ Then sign in as `attendee` and `admin` with the local password: both succeed.
 
 ## Open questions
 
-1. **`unknown` refusal.** It is returned only for unexpected failures and cannot be triggered on demand. Record it by reading `auth.error.unknown` from the strings table into the same shape, or drop "Server error" from the mock menu's results?
+None.

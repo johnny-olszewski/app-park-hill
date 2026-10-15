@@ -61,4 +61,4 @@ cd backend && supabase db reset && supabase test db
 
 ## Open questions
 
-None.
+1. **More than one church.** Should roles, permissions and their assignments carry a church identifier from the start, with Park Hill as the only church for now? Selling to other churches and isolated demo sandboxes (one throwaway church per demo session) both need data scoped per church. Adding the identifier before these tables exist is cheap; adding it after EP-03 and EP-04 ship means migrating every table, rule, permission check and test. Decide before this task starts; SUP-010 and SUP-015 follow the same answer.

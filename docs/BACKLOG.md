@@ -158,6 +158,7 @@ The Status column here mirrors the Status field in each task. Update both in the
 | Task | Depends on | Status |
 |---|---|---|
 | [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006 | Draft |
+| [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Draft |
 
 ### iOS (IOS)
 

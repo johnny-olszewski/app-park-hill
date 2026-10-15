@@ -58,4 +58,4 @@ cd backend && supabase db reset && supabase test db && make data-check
 
 ## Open questions
 
-None.
+1. **More than one church.** Same question as SUP-009: should groups, group types and memberships carry a church identifier from the start, with Park Hill as the only church for now? Follow SUP-009's answer so every table is scoped the same way. Decide before this task starts.

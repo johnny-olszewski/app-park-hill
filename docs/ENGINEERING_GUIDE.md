@@ -212,6 +212,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
+9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
 
 ## 8. Decision log
 
@@ -256,6 +257,10 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 | 2026-10-13 | Sign-in messages: `session_ended_message` and `cannot_connect_message` in an inline box above the fields; backend refusals under the password field in the danger color (wireframe proposal) |
 | 2026-10-13 | While signed in, return to the foreground calls `whoami()` so a disabled account is signed out on its next foreground, until tabs give the app a backend-driven signed-in screen |
 | 2026-10-13 | The signed-out entry is a full-screen cover over the signed-in root (placeholder, then tabs). Sign-in hides it; sign-out and lost access present it. It has no close button: only signing in dismisses it |
+| 2026-10-14 | Planning-only changes use `plan/<epic file name>` branches with the epic ID in commit subjects and the PR title (7.1 rule 9) |
+| 2026-10-14 | EP-05 Contract names: backend function names and screen keys are listed once in `contract/names.json`; generated constants in `contract/generated/` are compiled by both clients; `make data-check` fails on drift. Generated into `/contract` rather than into each client so the backend task stays within one platform |
+| 2026-10-15 | Planning branches (7.1 rule 9) may cover several epics: `plan/<short name>`, commits `[PLAN][<k>/n]`, PR title `[PLAN] <summary>`. Supersedes the 2026-10-14 one-epic-per-plan-branch entry |
+| 2026-10-15 | EP-06 Mock menu: Mock shows the production entry screen from its recorded response; `auth.sign_in.mock` and the persona picker are removed. Mock and debug options live in a menu opened by long-pressing a pill at the top of every screen, drawn once in a debug-only overlay window above everything the app presents, never by screens. Per-screen tools are registered by screen key; the screen registry reports the current screen. In Mock, the menu chooses the persona and the next sign-in result. Future demo mode is a real backend session with a private sandbox per demo and never reuses mock code |
 
 ## 9. Known risks
 

@@ -8,6 +8,12 @@ import SwiftUI
 @MainActor
 struct ScreenRegistry {
     private var factories: [String: (JSONValue) throws -> AnyView] = [:]
+    private let tracker: (any ScreenTracker)?
+
+    /// `tracker` is told when each resolved screen appears and disappears.
+    init(tracker: (any ScreenTracker)? = nil) {
+        self.tracker = tracker
+    }
 
     /// Registers `key`. The screen's data is decoded into `Data` when an
     /// envelope with that key is resolved.
@@ -35,16 +41,36 @@ struct ScreenRegistry {
             return nil
         }
         do {
-            return ResolvedScreen(key: envelope.key, view: try factory(envelope.data))
+            return ResolvedScreen(envelope: envelope, view: tracked(try factory(envelope.data), envelope: envelope))
         } catch {
             Logger.navigation.error("Dropped screen \(envelope.key, privacy: .public): data does not match its model")
             return nil
         }
     }
+
+    private func tracked(_ view: AnyView, envelope: ScreenEnvelope) -> AnyView {
+        guard let tracker else { return view }
+        return AnyView(view.modifier(ScreenTracking(envelope: envelope, tracker: tracker)))
+    }
 }
 
-/// A screen ready to show.
+/// A screen ready to show, with the envelope it was built from.
 struct ResolvedScreen {
-    let key: String
+    let envelope: ScreenEnvelope
     let view: AnyView
+
+    var key: String { envelope.key }
+}
+
+/// Reports one resolved screen's appearance to the tracker.
+private struct ScreenTracking: ViewModifier {
+    let envelope: ScreenEnvelope
+    let tracker: any ScreenTracker
+    @State private var id = UUID()
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear { tracker.screenDidAppear(envelope, id: id) }
+            .onDisappear { tracker.screenDidDisappear(id: id) }
+    }
 }

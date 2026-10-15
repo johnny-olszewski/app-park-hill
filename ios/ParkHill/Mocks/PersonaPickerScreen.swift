@@ -62,7 +62,6 @@ extension PersonaPickerData {
 struct PersonaPickerScreen: View {
     let data: PersonaPickerData
     let auth: MockAuthService
-    @Environment(\.backendTargetLabel) private var backendTargetLabel
 
     var body: some View {
         NavigationStack {
@@ -89,11 +88,6 @@ struct PersonaPickerScreen: View {
             }
             .scrollContentBackground(.hidden)
             .background(Color.phSurface)
-            .safeAreaInset(edge: .bottom) {
-                if let backendTargetLabel {
-                    BackendTargetLabel(text: backendTargetLabel).padding(.bottom, 8)
-                }
-            }
             .navigationTitle(data.title)
         }
     }

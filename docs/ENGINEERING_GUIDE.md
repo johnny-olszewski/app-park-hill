@@ -126,7 +126,7 @@ Rules:
    - Android: product flavors with flavor source sets (`src/mock`, `src/dev`), each providing the binding.
 3. **Mock and debug code never ships.** It lives where release configurations do not compile it, including `.mock` screens. CI proves it on the release artifact.
 4. **Credentials:** any Supabase-backed build needs a URL and key. Committed config files hold the local Supabase values. An optional gitignored override file per developer replaces them. Hosted values come from CI secrets. No hosted key is ever committed.
-5. Every non-release build shows which backend it targets.
+5. Every non-release build shows which environment it targets on every screen (the dev tools pill), with the backend address in the dev tools menu and in the launch log.
 
 ### 5.3 Launch, cache and failure
 
@@ -275,6 +275,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-14 | EP-05 Contract names: backend function names and screen keys are listed once in `contract/names.json`; generated constants in `contract/generated/` are compiled by both clients; `make data-check` fails on drift. Generated into `/contract` rather than into each client so the backend task stays within one platform |
 | 2026-10-15 | Planning branches (7.1 rule 9) may cover several epics: `plan/<short name>`, commits `[PLAN][<k>/n]`, PR title `[PLAN] <summary>`. Supersedes the 2026-10-14 one-epic-per-plan-branch entry |
 | 2026-10-15 | EP-06 Mock menu: Mock shows the production entry screen from its recorded response; `auth.sign_in.mock` and the persona picker are removed. Mock and debug options live in a menu opened by long-pressing a pill at the top of every screen, drawn once in a debug-only overlay window above everything the app presents, never by screens. Per-screen tools are registered by screen key; the screen registry reports the current screen. In Mock, the menu chooses the persona and the next sign-in result. Future demo mode is a real backend session with a private sandbox per demo and never reuses mock code |
+| 2026-10-15 | The dev tools pill shows only the environment name (`MOCK`, `DEV`), centered just below the status bar; the full backend address moves to the menu's Build tool. Chosen over the full target text (too wide for the top of the screen) and over top-trailing placement (would block toolbar buttons). 5.2 rule 5 updated |
 | 2026-10-15 | Purpose recorded at the top of this guide and in `CLAUDE.md`: Park Hill is also a proving ground for a transferable architecture and agent-driven workflow; prefer designs that generalize |
 | 2026-10-15 | Slices (7.2): tasks are grouped by the behavior they deliver; one branch and PR per slice, commits still per task, each task verified before the next, the slice's behavior criteria checked by the reviewer. Replaces one task per branch and PR. Behavior criteria live in a Slices section of each epic |
 | 2026-10-15 | Slices are lockstep across platforms and start only when their dependencies are Done. Exception until agents run implementation: Android tasks are left out of slices and Android work waits, while the workflow settles on iOS |

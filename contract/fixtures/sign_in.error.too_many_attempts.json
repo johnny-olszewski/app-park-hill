@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "too_many_attempts",
+  "message": "Too many sign-in attempts. Wait a few minutes and try again."
+}

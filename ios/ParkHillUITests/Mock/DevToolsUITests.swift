@@ -11,15 +11,14 @@ final class DevToolsUITests: XCTestCase {
         app.launchSignedOut(entry: app.signInEmailField)
 
         app.openDevToolsMenu()
-        app.buttons["devTools.currentScreen"].tap()
+        app.tapInDevToolsMenu("devTools.currentScreen")
         let key = app.staticTexts["devTools.currentScreen.key"]
         XCTAssertTrue(key.waitForExistence(timeout: 5))
         XCTAssertEqual(key.label, "auth.sign_in")
         XCTAssertTrue(app.staticTexts["devTools.currentScreen.data"].exists)
 
         app.navigationBars["Current screen"].buttons.element(boundBy: 0).tap()
-        app.buttons["devTools.done"].tap()
-        XCTAssertTrue(app.buttons["devTools.done"].waitForNonExistence(timeout: 5))
+        app.closeDevToolsMenu()
 
         app.submitAnyCredentials()
         app.dismissSavePasswordPrompt()
@@ -35,7 +34,7 @@ final class DevToolsUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["placeholder.user"].waitForExistence(timeout: 5))
 
         app.openDevToolsMenu()
-        app.buttons["devTools.signOut"].tap()
+        app.tapInDevToolsMenu("devTools.signOut")
         XCTAssertTrue(app.signInEmailField.waitForExistence(timeout: 5))
     }
 }

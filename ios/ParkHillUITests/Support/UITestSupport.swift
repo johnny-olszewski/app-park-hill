@@ -31,6 +31,21 @@ extension XCUIApplication {
         XCTAssertTrue(buttons["devTools.done"].waitForExistence(timeout: 5), "the dev tools menu did not open")
     }
 
+    /// Taps a button in the open dev tools menu, scrolling down to it first.
+    func tapInDevToolsMenu(_ identifier: String) {
+        let button = buttons[identifier]
+        for _ in 0..<4 where !(button.exists && button.isHittable) {
+            swipeUp()
+        }
+        button.tap()
+    }
+
+    /// Closes the dev tools menu and waits for it to go.
+    func closeDevToolsMenu() {
+        buttons["devTools.done"].tap()
+        XCTAssertTrue(buttons["devTools.done"].waitForNonExistence(timeout: 5), "the dev tools menu did not close")
+    }
+
     /// The sign-in screen's email field, which every build shows when signed out.
     var signInEmailField: XCUIElement {
         textFields["signIn.email"]

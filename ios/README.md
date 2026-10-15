@@ -180,7 +180,7 @@ xcodebuild -scheme ParkHill-Dev -destination "id=$(scripts/simulator.sh)" test
 |---|---|
 | No build-configuration branching | `scripts/check_sources.sh` (also run by the pre-push hook) |
 | Mock unit tests | `xcodebuild -scheme ParkHill-Mock … -only-testing:ParkHillTests test` |
-| No mock or dev tools code in the release build | Builds `Dev-Release`, then `scripts/check_release_binary.sh <ParkHill.app>` |
+| No mock or dev tools code in the release build | Builds `Dev-Release` from clean derived data, then `scripts/check_release_build_log.sh <build log>` (no `Mocks/` or `DevTools/` source compiled) and `scripts/check_release_binary.sh <ParkHill.app>` (no such symbols) |
 
 `scripts/simulator.sh` prints an available iPhone simulator's id, for `-destination "id=…"`.
 

@@ -50,10 +50,14 @@ jobs:
           xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" \
             -only-testing:ParkHillTests test
 
+      # Fresh derived data, so the log lists every compiled source.
       - name: Build the Dev release
         run: |
           xcodebuild -scheme ParkHill-Dev -configuration Dev-Release \
-            -destination "id=$(scripts/simulator.sh)" -derivedDataPath "$RUNNER_TEMP/release" build
+            -destination "id=$(scripts/simulator.sh)" -derivedDataPath "$RUNNER_TEMP/release" build \
+            | tee "$RUNNER_TEMP/release-build.log"
 
       - name: No mock or dev tools code in the release build
-        run: scripts/check_release_binary.sh "$RUNNER_TEMP/release/Build/Products/Dev-Release-iphonesimulator/ParkHill.app"
+        run: |
+          scripts/check_release_build_log.sh "$RUNNER_TEMP/release-build.log"
+          scripts/check_release_binary.sh "$RUNNER_TEMP/release/Build/Products/Dev-Release-iphonesimulator/ParkHill.app"

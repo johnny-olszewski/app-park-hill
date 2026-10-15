@@ -28,7 +28,7 @@ Selection happens at build time (guide 5.2). App code never checks which environ
 
 Mock and Dev install side by side.
 
-**Mock** makes no network connections and needs no backend. Services read the contract fixtures and sign in as a chosen persona. Use it for UI work, previews, demos and UI tests. Mock never ships, so it has no Release configuration.
+**Mock** makes no network connections and needs no backend. Services read the contract fixtures; sign-in is the production screen, with the persona and result chosen in the mock menu. Use it for UI work, previews, demos and UI tests. Mock never ships, so it has no Release configuration.
 
 **Dev** is the real end-to-end path. Its backend URL and anon key come from `Config/Dev.xcconfig` and default to local Supabase at `http://127.0.0.1:54321` (start it from `/backend`). No hosted project is used unless you override it.
 
@@ -50,9 +50,9 @@ BACKEND_ANON_KEY = <anon key>
 | File | Role |
 |---|---|
 | `Config/Base.xcconfig` | Shared by every configuration and target. Holds `PRODUCT_BUNDLE_IDENTIFIER_ROOT`, the only place the bundle identifier root appears |
-| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift` and `DevToolsBinding+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DevToolsBinding+$(DEV_TOOLS).swift` |
+| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift`, `DevToolsBinding+*.swift` and `DevTools+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DEV_TOOLS_SOURCES` (`DevToolsBinding+Enabled.swift` and `DevTools+$(APP_ENVIRONMENT).swift`) |
 | `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/fixtures` |
-| `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig`; `Dev-Release` sets `DEV_TOOLS = Disabled` and excludes `DevTools/` |
+| `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig`; `Dev-Release` sets `DEV_TOOLS_SOURCES = DevToolsBinding+Disabled.swift` and excludes `DevTools/` |
 | `Config/Dev-Info.plist` | Puts the backend values into Info.plist, plus the local HTTP exception (`NSAllowsLocalNetworking`), which exists only in Dev |
 | `ParkHill/Environment/ServiceBinding+Dev.swift` | Dev binding: `AppBackendService = SupabaseBackendService` |
 | `ParkHill/Mocks/ServiceBinding+Mock.swift` | Mock binding: `AppBackendService = MockBackendService` |
@@ -63,7 +63,7 @@ BACKEND_ANON_KEY = <anon key>
 
 For example, QA, reusing the Supabase services with different values:
 
-1. Add `Config/QA.xcconfig`: include `App.xcconfig`, set `APP_ENVIRONMENT = QA`, `APP_ENVIRONMENT_ID = qa`, `APP_DISPLAY_NAME`, `BACKEND_URL`, `BACKEND_ANON_KEY` and `INFOPLIST_FILE = Config/QA-Info.plist`. Leave dev tools out of its release configuration: `DEV_TOOLS[config=QA-Release] = Disabled` and `DEV_TOOLS_EXCLUDED[config=QA-Release] = */DevTools/*`.
+1. Add `Config/QA.xcconfig`: include `App.xcconfig`, set `APP_ENVIRONMENT = QA`, `APP_ENVIRONMENT_ID = qa`, `APP_DISPLAY_NAME`, `BACKEND_URL`, `BACKEND_ANON_KEY` and `INFOPLIST_FILE = Config/QA-Info.plist`. Leave dev tools out of its release configuration: `DEV_TOOLS_SOURCES[config=QA-Release] = DevToolsBinding+Disabled.swift` and `DEV_TOOLS_EXCLUDED[config=QA-Release] = */DevTools/*`. Add `ParkHill/DevTools/DevTools+QA.swift` declaring its tools (none, like `DevTools+Dev.swift`).
 2. Add `Config/QA-Info.plist` with the `BackendURL` and `BackendAnonKey` keys only. No HTTP exception: shipping environments use TLS.
 3. Add `ParkHill/Environment/ServiceBinding+QA.swift`, declaring the environment and service types like the Dev binding.
 4. In `project.yml`, add `QA-Debug: debug` and `QA-Release: release` under `configs`, map them in every `configFiles` section (project, app and tests; QA tests use `Tests-Dev.xcconfig`), and add a `ParkHill-QA` scheme.
@@ -89,7 +89,7 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 | Type | Configurations | Behavior |
 |---|---|---|
 | `SupabaseAuthService` | Dev | Signs in through the backend's `sign_in` function, then hands the session to the shared Supabase client, which stores it in the Keychain and renews it |
-| `MockAuthService` | Mock | `signIn(persona:)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted across launches |
+| `MockAuthService` | Mock | `signIn(email:password:)` gives the result armed in `MockSignInScenario`, whatever was typed: Success signs in as the chosen persona; refusals throw the recorded `sign_in.error*.json` message. `signIn(persona:)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted across launches |
 
 - **Sign-in errors** are `SignInError`: `rejected(code:message:)` carries the backend's text unchanged, plus `network` and `unexpected`.
 - **Staying signed in:** `restoreSession()` treats a stored session as signed in when offline; a refused renewal signs out with reason `sessionEnded`.
@@ -113,11 +113,11 @@ The cache is one JSON file per locale under `Application Support/Cache/entry/`. 
 
 **Signed in:** the coordinator follows `AuthService.stateChanges()`. Launch with a stored session goes straight to the signed-in destination (the temporary placeholder in `ParkHill/Temporary/`, deleted by IOS-008); signing out, or access ending, returns to the entry screen, with `session_ended_message` shown when access ended. Returning to the foreground while signed in calls `whoami()`, so a disabled account is signed out on its next foreground.
 
-**Entry by configuration:** Dev shows `auth.sign_in` from `get_entry`. Mock shows the persona picker (`auth.sign_in.mock`), built from the active personas in the bundled `contract/seed/dataset.json`; it exists only in mock sources.
+**Entry by configuration:** Dev shows `auth.sign_in` from `get_entry`. Mock shows the same `auth.sign_in`, from the recorded `get_entry.json`; the mock menu decides what signing in does (Dev tools, Mock tools).
 
 **Environment on screen:** debug builds show `MOCK` or `DEV` in the dev tools pill on every screen; the full backend address is in the menu's Build tool. Release builds show nothing. Screens never draw it themselves.
 
-**Adding a screen:** add its data model and view under `ParkHill/Screens/`, then register its key in `ScreenRegistry+Shared.swift`. Mock-only screens (`.mock` keys) register in `ParkHill/Mocks/ScreenRegistry+Mock.swift`. Each binding builds the registry from the screen sets its configuration includes. Views never create other screens or change navigation; coordinators do.
+**Adding a screen:** add its data model and view under `ParkHill/Screens/`, then register its key in `ScreenRegistry+Shared.swift`. A Mock-only screen (a `.mock` key) would register from the Mock binding in `ParkHill/Mocks/`; there are none today. Each binding builds the registry from the screen sets its configuration includes. Views never create other screens or change navigation; coordinators do.
 
 ## Dev tools
 
@@ -134,6 +134,14 @@ The menu shows, in order:
 **Current screen:** `ScreenRegistry` reports every screen it resolves to a `ScreenTracker` when it appears and disappears. The dev tools tracker treats the newest visible one as current. Screens never reference the tracker; release builds pass none.
 
 **Adding a tool:** build a `DevTool` (an id, a section title, optional `warning`, and the rows as a view) and register it on `DevTools.registry`: `register(_:forScreen:)` for one screen key, or `registerAppTool(_:)` for every screen. A tool that arms a non-normal result returns its warning text from `warning` while armed. Keep tools under `ParkHill/DevTools/` (all debug builds) or `ParkHill/Mocks/` (Mock only), never under `ParkHill/Screens/`.
+
+**Environment tools:** each debug environment adds its own tools in `DevTools+<environment>.swift`, selected by `DEV_TOOLS_SOURCES`: `ParkHill/Mocks/DevTools+Mock.swift` and `ParkHill/DevTools/DevTools+Dev.swift` (none).
+
+**Mock tools** (`ParkHill/Mocks/MockSignInTools.swift`, specs/AUTH.md 5.4):
+
+- On sign-in, **Sign in as** (the active personas in the bundled dataset; default the first) and **Next sign-in** (Success, each `sign_in` refusal, No connection, Something went wrong; default Success). Choices last until changed for the launch; any credentials then give that result.
+- While a result other than Success is armed, the pill shows an alert icon and the menu opens with "Next sign-in will fail: <result>".
+- When signed in, **Switch persona** signs in as another persona directly.
 
 **Release builds:** `Dev-Release` compiles `NoDevTools` instead: no window, no pill, no tracking, and no file from `DevTools/`. Check a release binary with `nm` for `DevTools` symbols: only `NoDevTools` may appear.
 
@@ -153,7 +161,7 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 | `ParkHillTests/Services/`, `Auth/`, `Navigation/`, top level | Mock and Dev | Nothing. Supabase services are tested against a stubbed transport and in-memory session storage |
 | `ParkHillTests/Mocks/` | Mock | Nothing |
 | `ParkHillTests/DevTools/` | Mock and Dev-Debug | Nothing |
-| `ParkHillUITests/Mock/` | Mock | Nothing. UI tests for the persona picker and the dev tools pill and menu |
+| `ParkHillUITests/Mock/` | Mock | Nothing. UI tests for the dev tools pill and menu, and sign-in through the mock menu |
 | `ParkHillUITests/Dev/` | Dev | Local Supabase, reset recently: each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it |
 | `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset`. Persona credentials come from the bundled `contract/seed/dataset.json` |
 

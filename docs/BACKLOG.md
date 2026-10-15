@@ -8,6 +8,8 @@ Each task targets one platform: `SUP` (backend), `IOS`, `AND`, numbered sequenti
 
 The Status column here mirrors the Status field in each task. Update both in the same change.
 
+Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table groups its tasks by the behavior they deliver. Epics planned before slices existed are divided into slices when their next work is planned.
+
 ## [EP-01: Foundation and authentication](epics/EP-01-foundation-and-auth.md)
 
 ### Milestone A: foundation
@@ -173,6 +175,13 @@ The Status column here mirrors the Status field in each task. Update both in the
 | [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-006 | Draft |
 
 ## [EP-06: Mock menu](epics/EP-06-mock-menu.md)
+
+### Slices
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-06.A](epics/EP-06-mock-menu.md#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | In review |
+| [EP-06.B](epics/EP-06-mock-menu.md#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Draft |
 
 ### Backend (SUP)
 

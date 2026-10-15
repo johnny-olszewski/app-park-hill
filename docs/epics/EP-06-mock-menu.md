@@ -33,6 +33,35 @@ The Mock build shows the production app, starting with the real sign-in screen, 
 2. No screen draws the backend label; the pill is drawn once, above everything the app presents.
 3. Release builds on both platforms contain no dev tools or mock symbols, proven on the release artifact.
 
+## Slices
+
+Implemented in this order (guide 7.2). Android tasks are left out until the Android exception ends (guide 7.2 rule 2); they stay listed under Tasks.
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | In review |
+| [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Draft |
+
+### EP-06.A: Dev tools over the app
+
+Built as a single task (IOS-021) before slices existed.
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | In the Mock and Dev debug builds, a `MOCK` or `DEV` pill shows at the top of every screen, including sign-in; the release build shows none |
+| B2 | Long-pressing the pill opens a menu showing the build's backend, the current screen's key and data, and Sign out when signed in |
+| B3 | With the menu closed, every tap outside the pill works as before |
+
+### EP-06.B: Mock testers sign in through the menu
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | The Mock build opens on the production sign-in screen; there is no persona list screen |
+| B2 | In the menu, choose Admin and Success, close it, type anything and tap Sign in: signed in as Admin |
+| B3 | Arm Too many attempts: the pill shows an alert icon and the menu says "Next sign-in will fail: Too many attempts"; signing in shows the backend's too-many-attempts message under the password field |
+| B4 | Arm No connection: signing in shows the can't-connect message box above the fields |
+| B5 | Signed in, Switch persona to Attendee: now signed in as Attendee |
+
 ## Tasks
 
 ### Backend (SUP)

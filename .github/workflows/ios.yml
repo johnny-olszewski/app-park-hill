@@ -1,4 +1,4 @@
-# iOS CI (IOS-004): Mock tests, no build-configuration branching, and no mock
+# iOS CI (IOS-004, IOS-007): Mock unit and UI tests, no build-configuration branching, and no mock
 # or dev tools code in the release build. Mock only; Dev tests run locally
 # (guide 6). Runs on ready PRs only, to stay within the free macOS minutes;
 # reports only, guide 7.1 rule 10 forbids merging red.
@@ -45,10 +45,8 @@ jobs:
       - name: No build-configuration branching
         run: scripts/check_sources.sh
 
-      - name: Mock unit tests
-        run: |
-          xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" \
-            -only-testing:ParkHillTests test
+      - name: Mock unit and UI tests
+        run: xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
 
       # Fresh derived data, so the log lists every compiled source.
       - name: Build the Dev release

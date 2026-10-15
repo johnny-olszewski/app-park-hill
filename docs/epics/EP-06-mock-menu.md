@@ -35,12 +35,13 @@ The Mock build shows the production app, starting with the real sign-in screen, 
 
 ## Slices
 
-Implemented in this order (guide 7.2). Android tasks are left out until the Android exception ends (guide 7.2 rule 3); they stay listed under Tasks.
+Implemented in this order (guide 7.2). EP-06.C brings Android level with EP-06.A and EP-06.B (catch-up, guide 7.2 rule 3).
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
 | [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
+| [EP-06.C](#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Draft |
 
 ### EP-06.A: Dev tools over the app
 
@@ -61,6 +62,10 @@ Built as a single task (IOS-021) before slices existed.
 | B3 | Arm Too many attempts: the pill shows an alert icon and the menu says "Next sign-in will fail: Too many attempts"; signing in shows the backend's too-many-attempts message under the password field |
 | B4 | Arm No connection: signing in shows the can't-connect message box above the fields |
 | B5 | Signed in, Switch persona to Attendee: now signed in as Attendee |
+
+### EP-06.C: Android dev tools and Mock sign-in
+
+Catch-up: EP-06.A B1 to B3 and EP-06.B B1 to B5, checked on Android.
 
 ## Tasks
 

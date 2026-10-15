@@ -38,6 +38,43 @@ A person with an account can sign in, stay signed in and sign out on iOS and And
 3. `specs/AUTH.md` matches what was built.
 4. Open questions in EP-01 tasks are resolved and recorded in the guide's decision log.
 
+## Slices
+
+Implemented in this order (guide 7.2). Tasks Done before slices existed (SUP-001 to SUP-003, SUP-005, SUP-006, IOS-001 to IOS-003, IOS-005, IOS-006) have no slice. EP-01.B and EP-01.C are Android catch-up slices (guide 7.2 rule 3) mirroring that iOS work.
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-01.A](#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Draft |
+| [EP-01.B](#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Draft |
+| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
+
+### EP-01.A: Every PR is checked automatically
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | A PR that breaks a pgTAP test, an Edge Function test or `make data-check` fails its required checks and cannot merge |
+| B2 | A PR that breaks an iOS Mock unit or UI test, puts mock or dev tools code in the release build, or adds `#if` on a build configuration fails its required checks and cannot merge |
+| B3 | A change under `/backend` or `/contract` also runs the iOS checks |
+| B4 | `make test-dev` in `/ios` runs the Dev integration and UI tests against freshly reset local Supabase |
+
+### EP-01.B: Android launches to the backend-driven entry
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | Android `mockDebug` and `devDebug` install side by side and launch from a clean checkout with no extra files |
+| B2 | `devDebug` with local Supabase shows the sign-in screen's title from the backend; changing it in the database shows after relaunch |
+| B3 | `mockDebug` with no backend shows the recorded entry; when the entry cannot be fetched it shows the last good copy, or the error screen with a working retry |
+| B4 | A PR that breaks an Android Mock unit test, puts mock code in the release build or branches on the build variant fails its required checks and cannot merge |
+
+### EP-01.C: Android sign-in matches iOS
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | Dev: signing in as a seeded persona works; a wrong password shows the backend's message; relaunching stays signed in; signing out returns to sign-in |
+| B2 | Dev: disabling the signed-in persona returns the app to sign-in with the session-ended message on its next backend request |
+| B3 | Mock: the production sign-in screen shows; any credentials sign in as the first active persona, with no network |
+| B4 | Android Mock UI tests run on every PR; `make test-dev` in `/android` runs the Dev UI tests |
+
 ## Milestones and tasks
 
 ### Milestone A: foundation

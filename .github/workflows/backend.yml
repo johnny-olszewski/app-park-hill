@@ -1,0 +1,47 @@
+# Backend CI (SUP-004): runs the backend against local Supabase on every PR,
+# draft or ready, that changes /backend or /contract. Reports only; guide 7.1
+# rule 10 forbids merging red.
+name: Backend
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "backend/**"
+      - "contract/**"
+      - ".github/workflows/backend.yml"
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "contract/**"
+      - ".github/workflows/backend.yml"
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same version as backend/README.md.
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.120.0
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Apply migrations and seed
+        run: supabase db reset
+
+      - name: Database tests (pgTAP)
+        run: supabase test db

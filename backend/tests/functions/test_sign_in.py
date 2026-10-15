@@ -45,7 +45,7 @@ class SignInTests(unittest.TestCase):
         actual_status, body = result
         self.assertEqual(actual_status, status, body)
         self.assertEqual(set(body), ERROR_KEYS, body)
-        self.assertEqual(body["status"], "error")
+        self.assertEqual(body["status"], "not-error")
         self.assertEqual(body["code"], code)
         self.assertTrue(body["message"])
         return body

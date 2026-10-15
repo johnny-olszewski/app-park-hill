@@ -43,21 +43,23 @@ enum AppTools {
     }
 }
 
-/// Whether someone is signed in, followed from the auth service's state.
+/// Who is signed in, if anyone, followed from the auth service's state.
 @MainActor
 @Observable
 final class SessionTracker {
-    private(set) var isSignedIn = false
+    private(set) var user: AuthUser?
     @ObservationIgnored private var observation: Task<Void, Never>?
+
+    var isSignedIn: Bool { user != nil }
 
     init(auth: any AuthService) {
         let changes = auth.stateChanges()
         observation = Task { [weak self] in
             for await state in changes {
-                if case .signedIn = state {
-                    self?.isSignedIn = true
+                if case .signedIn(let user) = state {
+                    self?.user = user
                 } else {
-                    self?.isSignedIn = false
+                    self?.user = nil
                 }
             }
         }

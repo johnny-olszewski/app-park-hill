@@ -43,7 +43,6 @@ struct DevToolsPill: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.caption2)
                     .foregroundStyle(Color.devToolsWarning)
-                    .accessibilityIdentifier("devTools.pill.armed")
             }
         }
         .padding(.horizontal, 10)
@@ -55,6 +54,7 @@ struct DevToolsPill: View {
         // navigation bar's controls.
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .accessibilityElement(children: .combine)
+        .accessibilityValue(isArmed ? "Failure armed" : "")
         .accessibilityIdentifier("devTools.pill")
     }
 }

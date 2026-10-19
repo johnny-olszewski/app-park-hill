@@ -1,3 +1,5 @@
 package app.parkhill
 
-val temporaryFlavor = BuildConfig.FLAVOR
+class MockLeak {
+    val value = 1
+}

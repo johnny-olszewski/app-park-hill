@@ -18,3 +18,11 @@ Backend-driven, natively rendered app for iOS (SwiftUI) and Android (Kotlin, Com
 | `/android` | Kotlin + Compose app |
 | `/docs` | Guide, template, backlog, epics, specs, tasks |
 | `/.github` | GitHub Actions workflows |
+
+## Checks
+
+CI runs on every ready pull request; never merge a PR with a failing or pending check (guide 7.1 rule 10). Enable the pre-push hook once per clone, so the fast checks run before each push:
+
+```
+git config core.hooksPath .githooks
+```

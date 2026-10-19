@@ -26,4 +26,5 @@ Follow `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2. In short:
 - Each task's last commit sets it to Done in the task file, its epic and `docs/BACKLOG.md`. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `docs/BACKLOG.md`.
 - Open one PR per slice, titled `[<slice ID>] <slice title>`, with the body from `.github/pull_request_template.md`.
 - Planning-only changes use `plan/` branches (guide 7.1 rule 9).
+- Never merge a PR with a failing or pending check (guide 7.1 rule 10). Enable the pre-push hook once per clone: `git config core.hooksPath .githooks`.
 - Never mention Claude, AI, assistants or agents in commits, PRs or review comments. No `Co-Authored-By` or "Generated with" lines.

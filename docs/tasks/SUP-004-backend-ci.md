@@ -6,7 +6,7 @@
 | Epic | EP-01 |
 | Depends on | SUP-003 |
 | Paired with | None |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 
@@ -16,7 +16,7 @@ Make the backend contract machine-enforced on every PR, using local Supabase so 
 
 - Backend workflow triggered on pull requests touching `/backend` or `/contract`.
 - Local Supabase started inside the job.
-- Repo-wide: branch protection on `main`, pinned Supabase CLI version.
+- Repo-wide: the never-merge-red rule (guide 7.1 rule 10), a pre-push hook for fast local checks, pinned Supabase CLI version.
 
 ## Out of scope
 
@@ -32,7 +32,8 @@ Make the backend contract machine-enforced on every PR, using local Supabase so 
 | AC2 | The job runs on any change under `/backend` or `/contract` | Contract changes are always tested |
 | AC3 | A change under `/backend` or `/contract` also triggers the iOS and Android jobs once they exist (IOS-004, AND-004) | Clients are validated against contract changes |
 | AC4 | The Supabase CLI version in CI matches the version pinned in `/backend/README.md` | Local and CI behave the same |
-| AC5 | `main` is protected: all CI jobs required to merge | Tasks cannot be marked done with failing checks |
+| AC5 | Every CI job reports its result on the PR, and the guide forbids merging a PR with a failing or pending check (7.1 rule 10) | Tasks cannot be marked done with failing checks, without paid branch protection |
+| AC6 | `.githooks/pre-push`, enabled with `git config core.hooksPath .githooks`, runs `supabase test db` before a push that changes `/backend` or `/contract` when local Supabase is running, and says it skipped them when it is not | Cheap failures are caught before CI |
 
 ## Technical notes
 

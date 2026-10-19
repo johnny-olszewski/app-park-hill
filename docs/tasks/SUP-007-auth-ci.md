@@ -6,7 +6,7 @@
 | Epic | EP-01 |
 | Depends on | SUP-004, SUP-006 |
 | Paired with | None |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 
@@ -27,7 +27,7 @@ Make the sign-in rules and the single dataset (seed and mock fixtures) machine-e
 |---|---|---|
 | AC1 | The backend job serves Edge Functions and runs the `sign_in` tests (SUP-006) | Sign-in rules are enforced on every change |
 | AC2 | `make data-check` runs on every PR touching `/contract` or `/backend` and fails on any difference | Seed and mock data cannot drift |
-| AC3 | Both checks are required to merge | Auth stays green |
+| AC3 | Both checks report on the PR; a red check blocks merging by rule (guide 7.1 rule 10) | Auth stays green |
 
 ## Technical notes
 

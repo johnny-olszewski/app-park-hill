@@ -25,7 +25,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-01.A](epics/EP-01-foundation-and-auth.md#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Draft |
+| [EP-01.A](epics/EP-01-foundation-and-auth.md#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Done |
 | [EP-01.B](epics/EP-01-foundation-and-auth.md#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Draft |
 | [EP-01.C](epics/EP-01-foundation-and-auth.md#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
 
@@ -39,7 +39,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | [SUP-001: Create the monorepo scaffold](tasks/SUP-001-monorepo-scaffold.md) | None | Done |
 | [SUP-002: Set up the local Supabase backend project](tasks/SUP-002-local-supabase.md) | SUP-001 | Done |
 | [SUP-003: Define the screen contract and implement get_entry and get_screen](tasks/SUP-003-screen-contract.md) | SUP-002 | Done |
-| [SUP-004: Add backend CI on GitHub Actions against local Supabase](tasks/SUP-004-backend-ci.md) | SUP-003 | Draft |
+| [SUP-004: Add backend CI on GitHub Actions against local Supabase](tasks/SUP-004-backend-ci.md) | SUP-003 | Done |
 
 #### iOS (IOS)
 
@@ -48,7 +48,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | [IOS-001: Create the iOS project with Mock and Dev build configurations](tasks/IOS-001-project-and-build-configs.md) | SUP-001 | Done |
 | [IOS-002: Build the iOS backend service layer with production and mock implementations](tasks/IOS-002-backend-service-and-mock.md) | SUP-003, IOS-001 | Done |
 | [IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry](tasks/IOS-003-root-coordinator-and-registry.md) | IOS-002 | Done |
-| [IOS-004: Add iOS CI on GitHub Actions](tasks/IOS-004-ci.md) | IOS-003, SUP-004 | Draft |
+| [IOS-004: Add iOS CI on GitHub Actions](tasks/IOS-004-ci.md) | IOS-003, SUP-004 | Done |
 
 #### Android (AND)
 
@@ -67,7 +67,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 |---|---|---|
 | [SUP-005: Add profiles, seeded personas and a signed-in check function](tasks/SUP-005-profiles-and-personas.md) | SUP-003 | Done |
 | [SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting](tasks/SUP-006-sign-in-function.md) | SUP-005 | Done |
-| [SUP-007: Extend backend CI for auth: Edge Function tests and dataset check](tasks/SUP-007-auth-ci.md) | SUP-004, SUP-006 | Draft |
+| [SUP-007: Extend backend CI for auth: Edge Function tests and dataset check](tasks/SUP-007-auth-ci.md) | SUP-004, SUP-006 | Done |
 
 #### iOS (IOS)
 
@@ -75,7 +75,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 |---|---|---|
 | [IOS-005: Build the iOS auth service with production and mock implementations](tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Done |
 | [IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder](tasks/IOS-006-sign-in-flow.md) | IOS-003, IOS-005 | Done |
-| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Draft |
+| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Done |
 
 #### Android (AND)
 

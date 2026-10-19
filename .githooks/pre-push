@@ -1,0 +1,33 @@
+#!/bin/sh
+# Fast checks before a push (guide 7.1 rule 10). CI stays the source of truth.
+# Enable once per clone: git config core.hooksPath .githooks
+# Skip in an emergency with: git push --no-verify
+
+root=$(git rev-parse --show-toplevel)
+base=$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD)
+changed=$(git diff --name-only "$base" HEAD; git diff --name-only HEAD)
+
+touches() {
+    echo "$changed" | grep -qE "$1"
+}
+
+failed=0
+
+if touches '^(backend|contract)/'; then
+    if (cd "$root/backend" && supabase status >/dev/null 2>&1); then
+        echo "pre-push: backend database tests"
+        (cd "$root/backend" && supabase test db) || failed=1
+    else
+        echo "pre-push: local Supabase is not running; skipped the backend tests (CI runs them)"
+    fi
+fi
+
+if touches '^ios/'; then
+    echo "pre-push: iOS source checks"
+    "$root/ios/scripts/check_sources.sh" || failed=1
+fi
+
+if [ "$failed" -ne 0 ]; then
+    echo "pre-push: checks failed; push stopped. Fix them, or push with --no-verify to let CI decide."
+    exit 1
+fi

@@ -165,7 +165,25 @@ xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhon
 | `ParkHillUITests/Dev/` | Dev | Local Supabase, reset recently: each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it |
 | `ParkHillTests/Integration/` | Dev | The configured backend running: `cd backend && supabase start && supabase db reset`. Persona credentials come from the bundled `contract/seed/dataset.json` |
 
-Client CI runs Mock only (guide 6), so run the Dev tests locally before merging changes to `/ios`, `/backend` or `/contract`.
+Client CI runs Mock only (guide 6), so run the Dev tests locally before merging changes to `/ios`, `/backend` or `/contract`:
+
+```
+make test-dev
+```
+
+It starts and resets local Supabase (Docker must be running), then runs the Dev unit, integration and UI tests on an available iPhone simulator.
+
+### CI
+
+`.github/workflows/ios.yml` runs on ready (not draft) PRs that change `/ios`, `/contract` or `/backend`, on `macos-26` with Xcode 26.5 and XcodeGen 2.46.0:
+
+| Step | Script or command |
+|---|---|
+| No build-configuration branching | `scripts/check_sources.sh` (also run by the pre-push hook) |
+| Mock unit and UI tests | `xcodebuild -scheme ParkHill-Mock … test` |
+| No mock or dev tools code in the release build | Builds `Dev-Release` from clean derived data, then `scripts/check_release_build_log.sh <build log>` (no `Mocks/` or `DevTools/` source compiled) and `scripts/check_release_binary.sh <ParkHill.app>` (no such symbols) |
+
+`scripts/simulator.sh` prints an available iPhone simulator's id, for `-destination "id=…"`.
 
 ## Rules
 

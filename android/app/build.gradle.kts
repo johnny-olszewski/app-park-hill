@@ -62,6 +62,12 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    sourceSets {
+        // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
+        getByName("mock").assets.srcDir("../../contract/fixtures")
+        getByName("test").resources.srcDir("../../contract/fixtures")
+    }
 }
 
 // Mock never ships, so it has no release variant (guide 5.2 rule 3).
@@ -81,6 +87,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.postgrest)
+    implementation(libs.ktor.client.okhttp)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp.mockwebserver)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

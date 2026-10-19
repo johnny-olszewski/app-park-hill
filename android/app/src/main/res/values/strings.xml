@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Client-owned text, only for when the backend cannot be reached (guide 2). -->
+<resources>
+    <string name="launch_error_title">We can\'t reach Park Hill right now.</string>
+    <string name="launch_error_message">Check your connection and try again.</string>
+    <string name="launch_error_retry">Try again</string>
+</resources>

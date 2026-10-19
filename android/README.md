@@ -53,8 +53,25 @@ For example QA, reusing the Supabase services with different values:
 
 The root `app.parkhill.placeholder` is defined once, as `appIdRoot` in `gradle.properties`; flavors append `.mock` and `.dev`. **Replace it before the first store upload** (guide decision log). The Kotlin namespace is `app.parkhill` and does not change with it.
 
+## Services
+
+All backend data goes through `BackendService` (`services/backend`). Screens and coordinators depend on it, never on Supabase types; only `services/supabase` imports supabase-kt.
+
+| Type | Flavor | Behavior |
+|---|---|---|
+| `SupabaseBackendService` | dev | Calls `get_entry` and `get_screen` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
+| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/fixtures`: `get_entry.json`, `get_screen.<key>.json`, preferring `<persona>/<name>.json` for the current persona |
+
+Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
+
 ## Tests
 
 ```
-./gradlew testMockDebugUnitTest
+./gradlew testMockDebugUnitTest testDevDebugUnitTest
 ```
+
+| Source set | Runs in | Needs |
+|---|---|---|
+| `src/test` | Both flavors | Nothing. Decodes every recorded screen response; the Supabase service runs against a local `MockWebServer` |
+| `src/testMock` | mock | Nothing |
+| `src/androidTestDev` | dev, on a device or emulator | Local Supabase running: `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |

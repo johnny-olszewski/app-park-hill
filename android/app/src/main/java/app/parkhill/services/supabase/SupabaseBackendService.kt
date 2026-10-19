@@ -1,0 +1,70 @@
+package app.parkhill.services.supabase
+
+import android.content.Context
+import app.parkhill.environment.AppEnvironment
+import app.parkhill.services.backend.BackendError
+import app.parkhill.services.backend.BackendService
+import app.parkhill.services.backend.ContractJson
+import app.parkhill.services.backend.ScreenEnvelope
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.exceptions.HttpRequestException
+import io.github.jan.supabase.exceptions.RestException
+import io.github.jan.supabase.exceptions.UnauthorizedRestException
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.rpc
+import java.io.IOException
+import kotlinx.coroutines.CancellationException
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+
+/** Production [BackendService]: calls the backend's RPC functions through the shared client. */
+class SupabaseBackendService(private val client: SupabaseClient) : BackendService {
+    constructor(context: Context, environment: AppEnvironment) : this(SupabaseClientProvider.client(environment))
+
+    override suspend fun getEntry(locale: String): ScreenEnvelope =
+        call("get_entry", JsonObject(mapOf("p_locale" to JsonPrimitive(locale))))
+
+    override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope =
+        call(
+            "get_screen",
+            JsonObject(mapOf("p_key" to JsonPrimitive(key), "p_locale" to JsonPrimitive(locale), "p_params" to params)),
+        )
+
+    private suspend fun call(function: String, params: JsonObject): ScreenEnvelope {
+        val body = try {
+            client.postgrest.rpc(function, params).data
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            throw map(error)
+        }
+        return try {
+            ContractJson.decodeFromString(ScreenEnvelope.serializer(), body)
+        } catch (error: SerializationException) {
+            throw BackendError.Decoding
+        } catch (error: IllegalArgumentException) {
+            throw BackendError.Decoding
+        }
+    }
+
+    companion object {
+        /**
+         * Maps SDK and transport errors to [BackendError]. Error identity
+         * comes from the PostgREST `message` (contract/README.md, Errors).
+         */
+        fun map(error: Exception): BackendError = when (error) {
+            is BackendError -> error
+            is UnauthorizedRestException -> BackendError.Unauthorized
+            is RestException -> when {
+                error.error == "unknown_screen" -> BackendError.UnknownScreen
+                error.error == "session_ended" -> BackendError.Unauthorized
+                error.statusCode == 401 -> BackendError.Unauthorized
+                else -> BackendError.Server
+            }
+            is HttpRequestException, is IOException -> BackendError.Network
+            is SerializationException -> BackendError.Decoding
+            else -> BackendError.Server
+        }
+    }
+}

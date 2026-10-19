@@ -2,6 +2,9 @@
 package app.parkhill.environment
 
 import app.parkhill.BuildConfig
+import app.parkhill.services.supabase.SupabaseBackendService
+
+typealias AppBackendService = SupabaseBackendService
 
 object ServiceBinding {
     /** Local Supabase by default; dev.local.properties overrides it (README). */

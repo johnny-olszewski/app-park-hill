@@ -91,3 +91,21 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out wi
 | `src/test` | Both flavors | Nothing. Decodes every recorded screen response; the Supabase service runs against a local `MockWebServer` |
 | `src/testMock` | mock | Nothing |
 | `src/androidTestDev` | dev, on a device or emulator | Local Supabase running: `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
+
+Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
+
+```
+make test-dev
+```
+
+It starts and resets local Supabase (Docker must be running), then runs `connectedDevDebugAndroidTest`.
+
+### CI
+
+`.github/workflows/android.yml` runs on PRs that change `/android`, `/contract` or `/backend`, on `ubuntu-latest` with JDK 17:
+
+| Step | Script or command |
+|---|---|
+| No build-variant branching | `scripts/check_sources.sh`: no `BuildConfig.FLAVOR`, `DEBUG` or `BUILD_TYPE` in `src/main` (also run by the pre-push hook) |
+| Unit tests | `./gradlew testMockDebugUnitTest testDevDebugUnitTest` |
+| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no contract fixtures in assets |

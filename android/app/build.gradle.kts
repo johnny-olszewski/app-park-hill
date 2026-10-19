@@ -63,6 +63,11 @@ android {
         jvmTarget = "17"
     }
 
+    testOptions {
+        // android.util.Log and friends return defaults in JVM unit tests.
+        unitTests.isReturnDefaultValues = true
+    }
+
     sourceSets {
         // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
         getByName("mock").assets.srcDir("../../contract/fixtures")
@@ -85,6 +90,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.supabase.bom))

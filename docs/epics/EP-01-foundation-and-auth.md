@@ -105,7 +105,7 @@ The app launches on both platforms, in Mock and Dev, to a backend-driven entry s
 |---|---|---|
 | [AND-001: Create the Android project with Mock and Dev build variants](../tasks/AND-001-project-and-build-variants.md) | SUP-001 | Done |
 | [AND-002: Build the Android backend service layer with production and mock implementations](../tasks/AND-002-backend-service-and-mock.md) | SUP-003, AND-001 | Done |
-| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](../tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Draft |
+| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](../tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Done |
 | [AND-004: Add Android CI on GitHub Actions](../tasks/AND-004-ci.md) | AND-003, SUP-004 | Draft |
 
 ### Milestone B: authentication

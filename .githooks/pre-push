@@ -27,6 +27,11 @@ if touches '^ios/'; then
     "$root/ios/scripts/check_sources.sh" || failed=1
 fi
 
+if touches '^android/'; then
+    echo "pre-push: Android source checks"
+    "$root/android/scripts/check_sources.sh" || failed=1
+fi
+
 if [ "$failed" -ne 0 ]; then
     echo "pre-push: checks failed; push stopped. Fix them, or push with --no-verify to let CI decide."
     exit 1

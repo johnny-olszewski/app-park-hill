@@ -124,7 +124,7 @@ Client CI runs Mock only (guide 6), so run the dev tests locally before merging 
 make test-dev
 ```
 
-It starts and resets local Supabase (Docker must be running), then runs `connectedDevDebugAndroidTest`.
+It starts and resets local Supabase (Docker must be running), then runs `connectedDevDebugAndroidTest`: the integration tests and the dev UI tests (sign in, wrong password message, sign out, still signed in after relaunch).
 
 ### CI
 
@@ -134,4 +134,5 @@ It starts and resets local Supabase (Docker must be running), then runs `connect
 |---|---|
 | No build-variant branching | `scripts/check_sources.sh`: no `BuildConfig.FLAVOR`, `DEBUG` or `BUILD_TYPE` in `src/main` (also run by the pre-push hook) |
 | Unit tests | `./gradlew testMockDebugUnitTest testDevDebugUnitTest` |
+| Mock UI tests | A second job runs `connectedMockDebugAndroidTest` on an API 34 emulator |
 | No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no contract fixtures in assets |

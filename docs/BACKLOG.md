@@ -83,7 +83,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 |---|---|---|
 | [AND-005: Build the Android auth service with production and mock implementations](tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Done |
 | [AND-006: Build the Android sign-in flow and signed-in placeholder](tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Done |
-| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Draft |
+| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Done |
 
 ## [EP-02: Tabs](epics/EP-02-tabs.md)
 

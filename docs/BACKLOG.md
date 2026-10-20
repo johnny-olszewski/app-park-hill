@@ -104,6 +104,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-008: Build the Android backend-fed tab shell and remove the placeholder](tasks/AND-008-tab-shell.md) | AND-006, SUP-008 | Draft (revisit after EP-01) |
+| [AND-023: Animate the Android entry in and out like iOS](tasks/AND-023-entry-transitions.md) | AND-008 | Draft |
 
 ## [EP-03: Community](epics/EP-03-community.md)
 

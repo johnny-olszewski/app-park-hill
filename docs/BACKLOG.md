@@ -26,7 +26,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
 | [EP-01.A](epics/EP-01-foundation-and-auth.md#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Done |
-| [EP-01.B](epics/EP-01-foundation-and-auth.md#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Draft |
+| [EP-01.B](epics/EP-01-foundation-and-auth.md#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Done |
 | [EP-01.C](epics/EP-01-foundation-and-auth.md#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
 
 
@@ -54,10 +54,10 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-001: Create the Android project with Mock and Dev build variants](tasks/AND-001-project-and-build-variants.md) | SUP-001 | Draft |
-| [AND-002: Build the Android backend service layer with production and mock implementations](tasks/AND-002-backend-service-and-mock.md) | SUP-003, AND-001 | Draft |
-| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Draft |
-| [AND-004: Add Android CI on GitHub Actions](tasks/AND-004-ci.md) | AND-003, SUP-004 | Draft |
+| [AND-001: Create the Android project with Mock and Dev build variants](tasks/AND-001-project-and-build-variants.md) | SUP-001 | Done |
+| [AND-002: Build the Android backend service layer with production and mock implementations](tasks/AND-002-backend-service-and-mock.md) | SUP-003, AND-001 | Done |
+| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Done |
+| [AND-004: Add Android CI on GitHub Actions](tasks/AND-004-ci.md) | AND-003, SUP-004 | Done |
 
 ### Milestone B: authentication
 

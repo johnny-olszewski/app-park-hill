@@ -1,0 +1,47 @@
+# Android CI (AND-004): Mock unit tests, no build-variant branching, and no
+# mock code in the release build. Mock only; Dev tests run locally (guide 6).
+# Reports only; guide 7.1 rule 10 forbids merging red.
+name: Android
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "android/**"
+      - "contract/**"
+      - "backend/**"
+      - ".github/workflows/android.yml"
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: No build-variant branching
+        run: scripts/check_sources.sh
+
+      - name: Unit tests (mock and dev)
+        run: ./gradlew --console=plain testMockDebugUnitTest testDevDebugUnitTest
+
+      - name: Build the dev variants
+        run: ./gradlew --console=plain assembleDevDebug assembleDevRelease
+
+      - name: No mock code in the release build
+        run: scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk

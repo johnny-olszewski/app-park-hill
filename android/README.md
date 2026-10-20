@@ -65,6 +65,21 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
 
+### Auth
+
+Sign-in, session and sign-out go through `AuthService` (`services/auth`), declared by each binding as `AppAuthService`.
+
+| Type | Flavor | Behavior |
+|---|---|---|
+| `SupabaseAuthService` | dev | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
+| `MockAuthService` | mock | Any credentials sign in as the first active persona in the bundled `contract/seed/dataset.json`; `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
+
+- **Session storage:** `EncryptedSessionManager` stores the session in `filesDir/Session/`, encrypted with an AES-GCM key held in the Android Keystore. Never plain `SharedPreferences`.
+- **Sign-in errors** are `SignInError`: `Rejected(code, message)` with the backend's text unchanged, plus `Network` and `Unexpected`.
+- **Staying signed in:** `restoreSession()` treats a stored session as signed in when offline; a refused renewal signs out with reason `SessionEnded`.
+- **Unauthorized rule:** `AppServices.backend` wraps the backend service in `SessionRenewingBackendService`: one renewal and one retry, then the session ends. Network failures never sign anyone out.
+- **Sign-out** revokes the session when online and always deletes it, `filesDir/Cache/` and `filesDir/UserFiles/`, even offline.
+
 ## Screens and launch
 
 `ParkHillApplication` builds the services and `AppCoordinator` once per process and starts launch; `MainActivity` shows `AppRoot`, which renders the coordinator's entry state: loading, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error.
@@ -91,6 +106,7 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out wi
 |---|---|---|
 | `src/test` | Both flavors | Nothing. Decodes every recorded screen response; the Supabase service runs against a local `MockWebServer` |
 | `src/testMock` | mock | Nothing |
+| `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher |
 | `src/androidTestDev` | dev, on a device or emulator | Local Supabase running: `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:

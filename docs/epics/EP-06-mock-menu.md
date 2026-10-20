@@ -86,5 +86,5 @@ Catch-up: EP-06.A B1 to B3 and EP-06.B B1 to B5, checked on Android.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/AND-021-dev-tools-overlay.md) | AND-006 | Draft |
+| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/AND-021-dev-tools-overlay.md) | AND-006 | Done |
 | [AND-022: Show the production sign-in in Mock with persona and result tools](../tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Draft |

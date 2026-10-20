@@ -82,7 +82,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 
 ## Screens and launch
 
-`ParkHillApplication` builds the services and `AppCoordinator` once per process and starts launch; `MainActivity` shows `AppRoot`, which renders the coordinator's entry state: loading, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error.
+`ParkHillApplication` builds the services and `AppCoordinator` once per process and starts launch; `MainActivity` shows `AppRoot`. Launch restores the session: signed in shows the signed-in destination (the temporary placeholder in `temporary/`, deleted by AND-008), signed out shows the entry: loading, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. The coordinator follows `AuthService.state`: signing in shows the destination; signing out, or access ending, returns to the entry, with `session_ended_message` when access ended. Returning to the foreground while signed in calls `whoami()`, so a disabled account is signed out on its next foreground.
 
 | Situation | Shows |
 |---|---|
@@ -93,6 +93,14 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 | Return to the foreground | Refetch; a failure keeps the screen showing |
 
 The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out will delete `filesDir/Cache/` (AND-005).
+
+**Entry by flavor:** both show `auth.sign_in` from `get_entry`. In mock, any credentials sign in as the first active persona; choosing the persona and result comes with the mock menu (AND-022).
+
+**Sign-in errors:** backend refusals show under the password field in the danger color; `cannot_connect_message` and `session_ended_message` show in a box above the fields.
+
+## Design
+
+`design/Theme.kt` holds the Park Hill tokens from the wireframes, matching iOS: colors with light and dark values, the serif used for headings, 14dp shapes, and primary and secondary buttons and field colors on Material components (guide 5.5). Headings use the system serif until the brand fonts are bundled.
 
 **Adding a screen:** add its `@Serializable` data model and composable under `screens/`, then register its key in `navigation/SharedScreens.kt`. Each flavor's `ServiceBinding.makeScreenRegistry` builds the registry from the screen sets it includes; a mock-only screen would register there in `src/mock`. Composables never create other screens or navigate; coordinators do.
 
@@ -106,8 +114,9 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out wi
 |---|---|---|
 | `src/test` | Both flavors | Nothing. Decodes every recorded screen response; the Supabase service runs against a local `MockWebServer` |
 | `src/testMock` | mock | Nothing |
-| `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher |
-| `src/androidTestDev` | dev, on a device or emulator | Local Supabase running: `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
+| `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
+| `src/androidTestMock` | mock, on a device or emulator | Nothing. Sign-in with any credentials |
+| `src/androidTestDev` | dev, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
 

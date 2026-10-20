@@ -22,7 +22,7 @@ import kotlinx.serialization.json.JsonPrimitive
 
 /** Production [BackendService]: calls the backend's RPC functions through the shared client. */
 class SupabaseBackendService(private val client: SupabaseClient) : BackendService {
-    constructor(context: Context, environment: AppEnvironment) : this(SupabaseClientProvider.client(environment))
+    constructor(context: Context, environment: AppEnvironment) : this(SupabaseClientProvider.shared(context, environment).client)
 
     override suspend fun getEntry(locale: String): ScreenEnvelope =
         call("get_entry", JsonObject(mapOf("p_locale" to JsonPrimitive(locale))))

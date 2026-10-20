@@ -70,8 +70,9 @@ android {
 
     sourceSets {
         // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
-        getByName("mock").assets.srcDir("../../contract/fixtures")
-        getByName("test").resources.srcDir("../../contract/fixtures")
+        getByName("mock").assets.srcDirs("../../contract/fixtures", "../../contract/seed")
+        getByName("test").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
+        getByName("androidTest").resources.srcDir("../../contract/seed")
     }
 }
 
@@ -96,6 +97,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.supabase.bom))
     implementation(libs.supabase.postgrest)
+    implementation(libs.supabase.auth)
     implementation(libs.ktor.client.okhttp)
 
     testImplementation(libs.junit)

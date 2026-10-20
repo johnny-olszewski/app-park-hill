@@ -1,11 +1,18 @@
 package app.parkhill.devtools
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +37,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.isSystemInDarkTheme
 import app.parkhill.design.ParkHill
+import kotlinx.coroutines.launch
 
 /** The overlay's content: the pill, centered just below the status bar, and the menu it opens on a long press. */
 @Composable
@@ -91,55 +100,81 @@ fun DevToolsPill(name: String, isArmed: Boolean, modifier: Modifier = Modifier) 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DevToolsMenu(devTools: DevTools, onClose: () -> Unit) {
-    var shownPage by remember { mutableStateOf<Pair<String, @Composable () -> Unit>?>(null) }
+    var shownPage by remember { mutableStateOf<MenuPage?>(null) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
+    // Slides the sheet down before removing it, as swiping it away does.
+    val dismiss: () -> Unit = {
+        coroutineScope.launch { sheetState.hide() }.invokeOnCompletion { onClose() }
+    }
     val scope = remember {
         object : DevToolScope {
             override fun showPage(title: String, page: @Composable () -> Unit) {
-                shownPage = title to page
+                shownPage = MenuPage(title, page)
             }
 
-            override fun closeMenu() = onClose()
+            override fun closeMenu() = dismiss()
         }
     }
     ModalBottomSheet(
         onDismissRequest = onClose,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = sheetState,
         containerColor = ParkHill.colors.surface,
     ) {
-        val shown = shownPage
-        Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (shown != null) {
-                BackHandler { shownPage = null }
-                TextButton(onClick = { shownPage = null }, modifier = Modifier.testTag("devTools.back")) { Text("Back", color = ParkHill.colors.ink) }
-            }
-            Text(
-                shown?.first ?: "${devTools.environment.name} menu",
-                color = ParkHill.colors.ink,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
-            )
-            TextButton(onClick = onClose, modifier = Modifier.testTag("devTools.done")) { Text("Done", color = ParkHill.colors.ink) }
-        }
-        if (shown != null) {
-            Box(Modifier.padding(horizontal = 20.dp).navigationBarsPadding()) { shown.second() }
-            return@ModalBottomSheet
-        }
-        val registry = devTools.registry
-        val warnings = registry.warnings
-        val tools = registry.tools(devTools.tracker.current?.key) + registry.appTools
-        LazyColumn(Modifier.fillMaxWidth().padding(horizontal = 20.dp).testTag("devTools.menu")) {
-            items(warnings) { warning ->
-                Row(Modifier.padding(vertical = 8.dp).testTag("devTools.warning"), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Warning, contentDescription = null, tint = devToolsWarning(), modifier = Modifier.size(16.dp))
-                    Text(warning, color = devToolsWarning(), modifier = Modifier.padding(start = 8.dp))
+        if (shownPage != null) BackHandler { shownPage = null }
+        // A page pushes in from the right and pops back, like a navigation stack.
+        AnimatedContent(
+            targetState = shownPage,
+            transitionSpec = {
+                val forward = targetState != null
+                (slideInHorizontally { if (forward) it else -it / 3 } + fadeIn())
+                    .togetherWith(slideOutHorizontally { if (forward) -it / 3 else it } + fadeOut())
+            },
+            label = "devToolsMenuPage",
+        ) { page ->
+            Column {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    if (page != null) {
+                        TextButton(onClick = { shownPage = null }, modifier = Modifier.testTag("devTools.back")) { Text("Back", color = ParkHill.colors.ink) }
+                    }
+                    Text(
+                        page?.title ?: "${devTools.environment.name} menu",
+                        color = ParkHill.colors.ink,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f).padding(horizontal = 12.dp),
+                    )
+                    TextButton(onClick = dismiss, modifier = Modifier.testTag("devTools.done")) { Text("Done", color = ParkHill.colors.ink) }
+                }
+                if (page != null) {
+                    Box(Modifier.padding(horizontal = 20.dp).navigationBarsPadding()) { page.content() }
+                } else {
+                    MenuList(devTools, scope)
                 }
             }
-            items(tools, key = { it.id }) { tool ->
-                Text(tool.title.uppercase(), style = ParkHill.label, color = ParkHill.colors.inkMuted, modifier = Modifier.padding(top = 16.dp))
-                tool.content(scope)
-            }
-            item { Box(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) }
         }
+    }
+}
+
+/** A page shown in place of the menu list, such as Current screen. */
+private class MenuPage(val title: String, val content: @Composable () -> Unit)
+
+@Composable
+private fun MenuList(devTools: DevTools, scope: DevToolScope) {
+    val registry = devTools.registry
+    val warnings = registry.warnings
+    val tools = registry.tools(devTools.tracker.current?.key) + registry.appTools
+    LazyColumn(Modifier.fillMaxWidth().padding(horizontal = 20.dp).testTag("devTools.menu")) {
+        items(warnings) { warning ->
+            Row(Modifier.padding(vertical = 8.dp).testTag("devTools.warning"), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Filled.Warning, contentDescription = null, tint = devToolsWarning(), modifier = Modifier.size(16.dp))
+                Text(warning, color = devToolsWarning(), modifier = Modifier.padding(start = 8.dp))
+            }
+        }
+        items(tools, key = { it.id }) { tool ->
+            Text(tool.title.uppercase(), style = ParkHill.label, color = ParkHill.colors.inkMuted, modifier = Modifier.padding(top = 16.dp))
+            tool.content(scope)
+        }
+        item { Box(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) }
     }
 }
 

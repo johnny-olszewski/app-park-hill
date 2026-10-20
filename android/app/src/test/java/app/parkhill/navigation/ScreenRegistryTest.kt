@@ -1,5 +1,6 @@
 package app.parkhill.navigation
 
+import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
 import java.io.File
@@ -14,7 +15,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ScreenRegistryTest {
-    private fun registry() = ScreenRegistry().apply { registerSharedScreens() }
+    private fun registry() = ScreenRegistry().apply { registerSharedScreens(FakeAuthService()) }
 
     @Test
     fun sharedScreensIncludeSignIn() {
@@ -37,7 +38,7 @@ class ScreenRegistryTest {
 
     @Test
     fun dropsDataThatDoesNotMatchTheModel() {
-        assertNull(registry().resolve(ScreenEnvelope("auth.sign_in", JsonObject(mapOf("title" to JsonObject(emptyMap()))))))
+        assertNull(registry().resolve(ScreenEnvelope("auth.sign_in", JsonObject(mapOf("title" to JsonPrimitive("Sign in"))))))
     }
 
     @Serializable
@@ -54,7 +55,7 @@ class ScreenRegistryTest {
     @Test
     fun aKeyCannotBeRegisteredTwice() {
         val registry = registry()
-        assertThrows(IllegalArgumentException::class.java) { registry.registerSharedScreens() }
+        assertThrows(IllegalArgumentException::class.java) { registry.registerSharedScreens(FakeAuthService()) }
     }
 
     @Test

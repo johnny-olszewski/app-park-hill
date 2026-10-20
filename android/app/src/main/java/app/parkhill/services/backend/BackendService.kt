@@ -13,6 +13,9 @@ interface BackendService {
 
     /** One screen, for refresh and for screens reached by navigation. */
     suspend fun getScreen(key: String, locale: String, params: JsonObject = JsonObject(emptyMap())): ScreenEnvelope
+
+    /** The signed-in caller's profile; refused when not signed in or no longer active. */
+    suspend fun whoami(): Profile
 }
 
 /** The small set of failures callers react to, never SDK errors. */

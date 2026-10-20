@@ -46,7 +46,7 @@ Implemented in this order (guide 7.2). Tasks Done before slices existed (SUP-001
 |---|---|---|---|---|
 | [EP-01.A](#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Done |
 | [EP-01.B](#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Done |
-| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
+| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Done |
 
 ### EP-01.A: Every PR is checked automatically
 
@@ -132,6 +132,6 @@ Sign in with a seeded account (Dev) or a persona (Mock), stay signed in and sign
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-005: Build the Android auth service with production and mock implementations](../tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Draft |
-| [AND-006: Build the Android sign-in flow and signed-in placeholder](../tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Draft |
-| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](../tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Draft |
+| [AND-005: Build the Android auth service with production and mock implementations](../tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Done |
+| [AND-006: Build the Android sign-in flow and signed-in placeholder](../tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Done |
+| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](../tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Done |

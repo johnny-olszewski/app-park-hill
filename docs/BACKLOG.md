@@ -220,4 +220,4 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](tasks/AND-021-dev-tools-overlay.md) | AND-006 | Done |
-| [AND-022: Show the production sign-in in Mock with persona and result tools](tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Draft |
+| [AND-022: Show the production sign-in in Mock with persona and result tools](tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Done |

@@ -72,7 +72,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 | Type | Flavor | Behavior |
 |---|---|---|
 | `SupabaseAuthService` | dev | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
-| `MockAuthService` | mock | Any credentials sign in as the first active persona in the bundled `contract/seed/dataset.json`; `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
+| `MockAuthService` | mock | Any credentials give the result armed in its `MockSignInScenario` (Mock sign-in, below); `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
 
 - **Session storage:** `EncryptedSessionManager` stores the session in `filesDir/Session/`, encrypted with an AES-GCM key held in the Android Keystore. Never plain `SharedPreferences`.
 - **Sign-in errors** are `SignInError`: `Rejected(code, message)` with the backend's text unchanged, plus `Network` and `Unexpected`.
@@ -94,7 +94,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 
 The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out will delete `filesDir/Cache/` (AND-005).
 
-**Entry by flavor:** both show `auth.sign_in` from `get_entry`. In mock, any credentials sign in as the first active persona; choosing the persona and result comes with the mock menu (AND-022).
+**Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 
 **Sign-in errors:** backend refusals show under the password field in the danger color; `cannot_connect_message` and `session_ended_message` show in a box above the fields.
 
@@ -133,6 +133,15 @@ registry.register(
 
 It shows only while that screen is current. Read state the tool changes from Compose snapshot state, so the menu and pill update. Production screens never reference dev tools.
 
+### Mock sign-in
+
+The mock build adds tools in `src/mockDebug` (specs/AUTH.md 5.4). On sign-in, the menu offers:
+
+- **Sign in as:** the active personas in the bundled `contract/seed/dataset.json`, first one by default. The disabled persona is reached through Account disabled.
+- **Next sign-in:** Success (default), the five recorded refusals (`sign_in.error*.json`, shown under the password field with the backend's text), No connection and Something went wrong (both show `cannot_connect_message`).
+
+Any email and password then give the armed result. While a result other than Success is armed, the pill shows an alert icon and the menu starts with "Next sign-in will fail: <result>". Choices last until changed or the app is relaunched. While signed in, **Switch persona** (on every screen) signs in as another persona without signing out.
+
 ## Tests
 
 ```
@@ -145,7 +154,7 @@ It shows only while that screen is current. Read state the tool changes from Com
 | `src/testDebug` | Both debug variants | Nothing. Dev tools registry, current screen and JSON formatting |
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
-| `src/androidTestMock` | mock, on a device or emulator | Nothing. Sign-in with any credentials; the dev tools pill and menu |
+| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu |
 | `src/androidTestDev` | dev, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:

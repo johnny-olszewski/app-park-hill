@@ -4,4 +4,8 @@
     <string name="launch_error_title">We can\'t reach Park Hill right now.</string>
     <string name="launch_error_message">Check your connection and try again.</string>
     <string name="launch_error_retry">Try again</string>
+    <!-- TEMPORARY(EP-02): removed with the signed-in placeholder by AND-008. -->
+    <string name="placeholder_signed_in_as">Signed in as</string>
+    <!-- TEMPORARY(EP-02): removed with the signed-in placeholder by AND-008. -->
+    <string name="placeholder_sign_out">Sign out</string>
 </resources>

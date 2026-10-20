@@ -30,8 +30,10 @@ class ParkHillApplication : Application() {
         val services = AppServices(this, environment)
         coordinator = AppCoordinator(
             backend = services.backend,
+            auth = services.auth,
             registry = ServiceBinding.makeScreenRegistry(services),
             cache = EntryCache.standard(filesDir),
+            scope = scope,
             locale = { AppLocale.current() },
         )
         scope.launch { coordinator.start() }

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import kotlinx.serialization.json.Json
@@ -35,6 +36,12 @@ fun ComposeTestRule.await(tag: String) {
 fun ComposeTestRule.openDevToolsMenu() {
     onNodeWithTag("devTools.pill").performTouchInput { longClick() }
     await("devTools.done")
+}
+
+/** Taps the menu row tagged `tag`, scrolling the menu to it first. */
+fun ComposeTestRule.tapInDevToolsMenu(tag: String) {
+    onNodeWithTag("devTools.menu").performScrollToNode(hasTestTag(tag))
+    onNodeWithTag(tag).performClick()
 }
 
 /** Closes the dev tools menu with Done and waits for it to go. */

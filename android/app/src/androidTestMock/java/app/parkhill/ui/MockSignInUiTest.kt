@@ -19,6 +19,7 @@ class MockSignInUiTest {
     @Test
     fun anyCredentialsSignInAsTheFirstPersonaThenSignOut() {
         compose.awaitSignedOut()
+        compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
 
         compose.await("placeholder.user")

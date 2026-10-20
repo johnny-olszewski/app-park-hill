@@ -23,12 +23,13 @@ class DevToolsUiTest {
         compose.awaitSignedOut()
 
         compose.openDevToolsMenu()
-        compose.onNodeWithTag("devTools.currentScreen").performClick()
+        compose.tapInDevToolsMenu("devTools.currentScreen")
         compose.await("devTools.currentScreen.key")
         compose.onNodeWithTag("devTools.currentScreen.key").assertTextEquals("auth.sign_in")
         compose.onNodeWithTag("devTools.currentScreen.data").assertExists()
         compose.closeDevToolsMenu()
 
+        compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
         compose.await("placeholder.user")
         compose.onNodeWithTag("devTools.pill").assertExists()
@@ -37,11 +38,12 @@ class DevToolsUiTest {
     @Test
     fun menuSignsOut() {
         compose.awaitSignedOut()
+        compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
         compose.await("placeholder.user")
 
         compose.openDevToolsMenu()
-        compose.onNodeWithTag("devTools.signOut").performClick()
+        compose.tapInDevToolsMenu("devTools.signOut")
         compose.await("signIn.email")
     }
 }

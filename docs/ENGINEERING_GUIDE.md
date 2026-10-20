@@ -285,6 +285,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | Mock sign-in (specs/AUTH.md 5.4): the production `auth.sign_in` with the next result chosen in the dev tools menu; `auth.sign_in.mock` removed. Every `sign_in` refusal is recorded; `unknown` is built from its message because it cannot be triggered. `secondary_actions` is reserved for backend-enabled entries, never mock features |
 | 2026-10-15 | Android exception ended: Android starts through catch-up slices (7.2 rule 3) that mirror the iOS slices' behavior criteria: EP-01.B, EP-01.C, EP-06.C. No new feature slice starts until Android is level. CI (EP-01.A) goes first |
 | 2026-10-15 | CI checks report on PRs and a red or pending check blocks merging by rule (7.1 rule 10), with a pre-push hook for fast local checks. Chosen over GitHub Pro and over a public repo (branch protection needs one of them). The macOS job runs on ready PRs only, to stay within the free Actions minutes |
+| 2026-10-20 | Android dev tools pill lives over the activity's content, added by debug-only lifecycle callbacks. Dialogs and bottom sheets, which are separate windows, cover it while open. Chosen over re-attaching a pill to every window (relies on Android internals) and a system overlay (each tester grants a permission) |
 
 ## 9. Known risks
 

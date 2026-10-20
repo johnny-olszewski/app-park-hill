@@ -72,7 +72,7 @@ android {
         // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
         getByName("mock").assets.srcDirs("../../contract/fixtures", "../../contract/seed")
         getByName("test").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
-        getByName("androidTest").resources.srcDir("../../contract/seed")
+        getByName("androidTest").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
     }
 }
 
@@ -104,6 +104,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.okhttp.mockwebserver)
 
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)

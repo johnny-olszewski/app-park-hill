@@ -16,8 +16,21 @@ class FakeAuthService(var renewal: SessionRenewal = SessionRenewal.Renewed) : Au
         _state.value = state
     }
 
-    override suspend fun restoreSession() = _state.value
-    override suspend fun signIn(email: String, password: String) = AuthUser("u", email).also { _state.value = AuthState.SignedIn(it) }
+    /** What `restoreSession` reports; defaults to the current state. */
+    var restored: AuthState? = null
+
+    /** Thrown by `signIn` instead of succeeding, when set. */
+    var signInFailure: SignInError? = null
+    var signIns = 0
+        private set
+
+    override suspend fun restoreSession() = (restored ?: _state.value).also { _state.value = it }
+
+    override suspend fun signIn(email: String, password: String): AuthUser {
+        signIns += 1
+        signInFailure?.let { throw it }
+        return AuthUser("u", email).also { _state.value = AuthState.SignedIn(it) }
+    }
     override suspend fun signOut() {
         _state.value = AuthState.SignedOut(SignOutReason.UserRequest)
     }

@@ -14,7 +14,7 @@ class AppCoordinatorTest {
     private val backend = StubBackendService { StubBackendService.signIn() }
     private val cache = EntryCache(Files.createTempDirectory("entry").toFile())
 
-    private fun coordinator() = AppCoordinator(backend, ScreenRegistry().apply { registerSharedScreens() }, cache, { "en" })
+    private fun coordinator() = AppCoordinator(backend, ScreenRegistry().apply { registerSharedScreens(app.parkhill.services.auth.FakeAuthService()) }, cache, { "en" })
 
     private fun AppCoordinator.shownTitle(): String? =
         ((entry.value as? EntryState.Screen)?.screen?.envelope?.data?.get("title") as? kotlinx.serialization.json.JsonPrimitive)?.content

@@ -16,5 +16,5 @@ object ServiceBinding {
 
     /** The screens this flavor registers. */
     fun makeScreenRegistry(services: AppServices): ScreenRegistry =
-        ScreenRegistry().apply { registerSharedScreens() }
+        ScreenRegistry().apply { registerSharedScreens(services.auth) }
 }

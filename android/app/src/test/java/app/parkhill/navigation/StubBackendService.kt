@@ -28,7 +28,18 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     }
 
     companion object {
-        fun signIn(title: String = "Sign in") =
-            ScreenEnvelope("auth.sign_in", JsonObject(mapOf("title" to JsonPrimitive(title))))
+        fun signIn(title: String = "Sign in") = ScreenEnvelope(
+            "auth.sign_in",
+            JsonObject(
+                mapOf(
+                    "title" to JsonPrimitive(title),
+                    "email_label" to JsonPrimitive("Email"),
+                    "password_label" to JsonPrimitive("Password"),
+                    "submit_label" to JsonPrimitive("Sign in"),
+                    "cannot_connect_message" to JsonPrimitive("Can't connect."),
+                    "session_ended_message" to JsonPrimitive("You've been signed out."),
+                ),
+            ),
+        )
     }
 }

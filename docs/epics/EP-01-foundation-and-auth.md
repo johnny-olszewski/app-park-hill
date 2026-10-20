@@ -46,7 +46,7 @@ Implemented in this order (guide 7.2). Tasks Done before slices existed (SUP-001
 |---|---|---|---|---|
 | [EP-01.A](#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Done |
 | [EP-01.B](#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Done |
-| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Draft |
+| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Done |
 
 ### EP-01.A: Every PR is checked automatically
 

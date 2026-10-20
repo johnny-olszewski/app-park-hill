@@ -200,7 +200,7 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 |---|---|---|---|---|
 | [EP-06.A](epics/EP-06-mock-menu.md#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](epics/EP-06-mock-menu.md#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
-| [EP-06.C](epics/EP-06-mock-menu.md#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Draft |
+| [EP-06.C](epics/EP-06-mock-menu.md#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Done |
 
 ### Backend (SUP)
 

@@ -25,10 +25,10 @@ Close the auth checkpoint on Android with sign-in flows verified on every PR aga
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | Mock UI tests (any credentials sign in; sign-in errors from fixtures) run on every PR | Flows verified without a backend |
+| AC1 | Mock UI tests (any credentials sign in and sign out) run on every PR; sign-in errors in Mock come with the mock menu (AND-022) | Flows verified without a backend |
 | AC2 | `make test-dev` runs the Dev UI tests (sign in, wrong password message, sign out, still signed in after relaunch) against local Supabase seeded from the dataset | The real path is one command away |
 | AC3 | The README and pull request template say when to run `make test-dev` (changes under the app, `/backend` or `/contract`) | No silent gap in coverage |
-| AC4 | The Mock UI test job is required to merge | Checkpoint stays green |
+| AC4 | The Mock UI test job reports on the PR; a red check blocks merging by rule (guide 7.1 rule 10) | Checkpoint stays green |
 
 ## Technical notes
 

@@ -4,7 +4,8 @@ Kotlin and Jetpack Compose app, min SDK 26, with `mock` and `dev` product flavor
 
 ## Requirements
 
-- JDK 17. Android Studio's bundled runtime works: `export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"`.
+- JDK 17 or 21. Gradle 8.11 does not run on newer Java, and recent Android Studio bundles Java 25, so do not use its bundled runtime. A JetBrains Runtime 21 works, for example `export JAVA_HOME=~/Library/Java/JavaVirtualMachines/jbr-21.0.11/Contents/Home`.
+- In Android Studio, set Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK to that JDK 17 or 21.
 - Android SDK with platform 35 (`local.properties` with `sdk.dir=...`, or `ANDROID_HOME`). `local.properties` is gitignored.
 - Gradle comes from the wrapper (`./gradlew`, Gradle 8.11.1, checksum pinned).
 

@@ -1,6 +1,7 @@
 package app.parkhill.navigation
 
 import app.parkhill.services.backend.BackendService
+import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ScreenEnvelope
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -16,6 +17,15 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     }
 
     override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope = entry()
+
+    var profile: () -> Profile = { Profile("u", "User") }
+    var whoamiCalls = 0
+        private set
+
+    override suspend fun whoami(): Profile {
+        whoamiCalls += 1
+        return profile()
+    }
 
     companion object {
         fun signIn(title: String = "Sign in") =

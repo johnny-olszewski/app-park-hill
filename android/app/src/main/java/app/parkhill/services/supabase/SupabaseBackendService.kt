@@ -4,6 +4,7 @@ import android.content.Context
 import app.parkhill.environment.AppEnvironment
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
+import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
 import io.github.jan.supabase.SupabaseClient
@@ -14,6 +15,7 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.rpc
 import java.io.IOException
 import kotlinx.coroutines.CancellationException
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -31,7 +33,12 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
             JsonObject(mapOf("p_key" to JsonPrimitive(key), "p_locale" to JsonPrimitive(locale), "p_params" to params)),
         )
 
-    private suspend fun call(function: String, params: JsonObject): ScreenEnvelope {
+    override suspend fun whoami(): Profile = call("whoami", JsonObject(emptyMap()), Profile.serializer())
+
+    private suspend fun call(function: String, params: JsonObject): ScreenEnvelope =
+        call(function, params, ScreenEnvelope.serializer())
+
+    private suspend fun <T> call(function: String, params: JsonObject, serializer: KSerializer<T>): T {
         val body = try {
             client.postgrest.rpc(function, params).data
         } catch (error: CancellationException) {
@@ -40,7 +47,7 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
             throw map(error)
         }
         return try {
-            ContractJson.decodeFromString(ScreenEnvelope.serializer(), body)
+            ContractJson.decodeFromString(serializer, body)
         } catch (error: SerializationException) {
             throw BackendError.Decoding
         } catch (error: IllegalArgumentException) {

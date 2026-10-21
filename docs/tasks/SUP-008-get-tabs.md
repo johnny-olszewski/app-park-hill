@@ -31,7 +31,7 @@ Make the backend the source of the signed-in app's tabs. Changing a tab's title,
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | `get_tabs('en')` as a signed-in persona returns `version` and `tabs` in order, each with `id`, `title`, `icon_key` and `screen: {key, data}`, matching the fixture | One call gives a client the whole shell |
+| AC1 | `get_tabs('en')` as a signed-in persona returns `tabs` in order, each with `id`, `title`, `icon_key` and `screen: {key, data}`, matching the fixture | One call gives a client the whole shell |
 | AC2 | `get_tabs` as `anon` is refused with the documented signed-in error | Tabs are for signed-in users only |
 | AC3 | Titles are resolved for the locale with `en` fallback | Strings are backend content |
 | AC4 | Changing `enabled`, `sort_order` or a title string changes the next response with no other change | Tabs are remotely driven |

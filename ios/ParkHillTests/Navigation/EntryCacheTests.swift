@@ -36,3 +36,20 @@ struct EntryCacheTests {
         #expect(AppLocale.current(preferredLanguages: []) == "en")
     }
 }
+
+struct TabsCacheTests {
+    private let cache = TabsCache(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
+
+    @Test func savedTabsLoadBackForTheirLocale() throws {
+        defer { try? FileManager.default.removeItem(at: cache.directory) }
+        let tabs = TabsResponse.tabs(("home", "home.root"), ("community", "community.home"))
+        try cache.save(tabs, locale: "en")
+        #expect(cache.load(locale: "en") == tabs)
+        #expect(cache.load(locale: "es") == nil)
+    }
+
+    @Test func standardCacheLivesUnderTheDeletableCacheDirectory() {
+        #expect(TabsCache.standard.directory.path.hasPrefix(CacheDirectory.url.path))
+        #expect(TabsCache.standard.directory != EntryCache.standard.directory)
+    }
+}

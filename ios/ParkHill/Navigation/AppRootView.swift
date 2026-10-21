@@ -21,14 +21,14 @@ struct AppRootView: View {
             }
     }
 
-    /// The signed-in destination (tabs from IOS-008), or a plain surface while
-    /// launching or behind the entry cover.
+    /// The signed-in shell of tabs, or a plain surface while launching or
+    /// behind the entry cover.
     @ViewBuilder
     private var root: some View {
-        if let user = coordinator.signedInUser {
-            SignedInPlaceholderView(user: user) { // TEMPORARY(EP-02): remove with IOS-008
-                Task { await coordinator.signOut() } // TEMPORARY(EP-02): remove with IOS-008
-            } // TEMPORARY(EP-02): remove with IOS-008
+        if let shell = coordinator.shell {
+            SignedInShellView(shell: shell) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                Task { await coordinator.signOut() } // TEMPORARY(EP-04): remove with IOS-015/AND-015
+            } // TEMPORARY(EP-04): remove with IOS-015/AND-015
         } else {
             ZStack {
                 Color.phSurface.ignoresSafeArea()

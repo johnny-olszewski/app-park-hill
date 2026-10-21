@@ -2,8 +2,8 @@ import Observation
 import OSLog
 import SwiftUI
 
-/// Owns launch and the app's root (guide 5.1, 5.3). The signed-in destination
-/// is the root; the signed-out entry screen is presented over it as a
+/// Owns launch and the app's root (guide 5.1, 5.3). The signed-in shell of
+/// tabs is the root; the signed-out entry screen is presented over it as a
 /// full-screen cover, shown and hidden by the auth state stream.
 @MainActor
 @Observable
@@ -17,9 +17,11 @@ final class AppCoordinator {
 
     /// True until the stored session has been checked at launch.
     private(set) var isLaunching = true
-    /// The signed-in user the root shows, or nil when there is none. Kept
-    /// while the entry cover animates in, then cleared.
+    /// The signed-in user, or nil when there is none. Kept while the entry
+    /// cover animates in, then cleared.
     private(set) var signedInUser: AuthUser?
+    /// The signed-in user's tabs, created at sign-in and dropped with the user.
+    private(set) var shell: ShellCoordinator?
     /// Whether the entry cover is presented.
     private(set) var isEntryPresented = false
     private(set) var entry: EntryState = .loading
@@ -30,6 +32,7 @@ final class AppCoordinator {
     private let auth: any AuthService
     private let registry: ScreenRegistry
     private let cache: EntryCache
+    private let tabsCache: TabsCache
     private let locale: () -> String
     private var wasInBackground = false
     private var authObservation: Task<Void, Never>?
@@ -39,12 +42,14 @@ final class AppCoordinator {
         auth: any AuthService,
         registry: ScreenRegistry,
         cache: EntryCache,
+        tabsCache: TabsCache = .standard,
         locale: @escaping () -> String = { AppLocale.current() }
     ) {
         self.backend = backend
         self.auth = auth
         self.registry = registry
         self.cache = cache
+        self.tabsCache = tabsCache
         self.locale = locale
     }
 
@@ -54,7 +59,9 @@ final class AppCoordinator {
         switch await auth.restoreSession() {
         case .signedIn(let user):
             signedInUser = user
+            let shell = makeShell()
             isLaunching = false
+            await shell.load()
         case .signedOut(let reason):
             signOutReason = reason
             // On a cold start the cover is simply there; it does not slide in.
@@ -84,12 +91,13 @@ final class AppCoordinator {
     func entryDidAppear() {
         if isEntryPresented {
             signedInUser = nil
+            shell = nil
         }
     }
 
     /// Return to the foreground refetches (guide 5.3 rule 6). Signed in, the
-    /// request also checks the session is still active, so a disabled account
-    /// is signed out on its next foreground (specs/AUTH.md 4.3).
+    /// tabs request also checks the session is still active, so a disabled
+    /// account is signed out on its next foreground (specs/AUTH.md 4.3).
     func scenePhaseChanged(to phase: ScenePhase) async {
         switch phase {
         case .background:
@@ -98,8 +106,8 @@ final class AppCoordinator {
             wasInBackground = false
             if isEntryPresented {
                 await loadEntry()
-            } else if signedInUser != nil {
-                _ = try? await backend.whoami()
+            } else if let shell {
+                await shell.load()
             }
         default:
             break
@@ -109,10 +117,16 @@ final class AppCoordinator {
     func handle(_ authState: AuthState) async {
         switch authState {
         case .signedIn(let user):
-            // The destination is in place under the cover before it hides.
+            // The shell is in place under the cover before it hides. A new
+            // user (such as a mock persona switch) gets a new shell.
             signOutReason = nil
+            let isNewUser = user != signedInUser || shell == nil
             signedInUser = user
+            let shell = isNewUser ? makeShell() : shell
             isEntryPresented = false
+            if isNewUser {
+                await shell?.load()
+            }
         case .signedOut(let reason):
             guard !isEntryPresented, !isLaunching else { return }
             signOutReason = reason
@@ -120,6 +134,12 @@ final class AppCoordinator {
             isEntryPresented = true
             await loadEntry()
         }
+    }
+
+    private func makeShell() -> ShellCoordinator {
+        let shell = ShellCoordinator(backend: backend, registry: registry, cache: tabsCache, locale: locale)
+        self.shell = shell
+        return shell
     }
 
     private func observeAuth() {

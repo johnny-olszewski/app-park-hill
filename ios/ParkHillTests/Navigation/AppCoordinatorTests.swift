@@ -6,11 +6,12 @@ import Testing
 @MainActor
 struct AppCoordinatorTests {
     private let cache = EntryCache(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
+    private let tabsCache = TabsCache(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
 
     private func makeCoordinator(_ backend: StubBackendService, auth: StubAuthService = StubAuthService()) -> AppCoordinator {
         var registry = ScreenRegistry()
         registry.registerSharedScreens(auth: auth)
-        return AppCoordinator(backend: backend, auth: auth, registry: registry, cache: cache, locale: { "en" })
+        return AppCoordinator(backend: backend, auth: auth, registry: registry, cache: cache, tabsCache: tabsCache, locale: { "en" })
     }
 
     /// The entry screen key, when the entry cover is presented and shows one.
@@ -140,13 +141,17 @@ struct AppCoordinatorTests {
 
     private let attendee = AuthUser(id: "u1", email: "attendee@parkhill.test")
 
-    @Test func launchWithASessionGoesStraightToSignedInWithoutGetEntry() async {
+    private let tabs = TabsResponse.tabs(("home", "home.root"), ("community", "community.home"))
+
+    @Test func launchWithASessionGoesStraightToTheTabsWithoutGetEntry() async {
         let backend = StubBackendService(entry: .success(.signIn()))
+        backend.enqueueTabs(.success(tabs))
         let coordinator = makeCoordinator(backend, auth: StubAuthService(restore: .signedIn(attendee)))
 
         await coordinator.start()
 
         #expect(coordinator.signedInUser == attendee)
+        #expect(coordinator.shell?.tabs.map(\.id) == ["home", "community"])
         #expect(!coordinator.isEntryPresented)
         #expect(!coordinator.isLaunching)
         #expect(backend.entryCalls.isEmpty)
@@ -163,14 +168,17 @@ struct AppCoordinatorTests {
         #expect(coordinator.signedInUser == nil)
     }
 
-    @Test func signingInSwitchesToSignedIn() async {
+    @Test func signingInShowsTheTabs() async {
         let auth = StubAuthService()
-        let coordinator = makeCoordinator(StubBackendService(entry: .success(.signIn())), auth: auth)
+        let backend = StubBackendService(entry: .success(.signIn()))
+        backend.enqueueTabs(.success(tabs))
+        let coordinator = makeCoordinator(backend, auth: auth)
         await coordinator.start()
 
         await coordinator.handle(.signedIn(attendee))
 
         #expect(coordinator.signedInUser == attendee)
+        #expect(coordinator.shell?.state == .tabs)
         #expect(!coordinator.isEntryPresented, "the cover hides over the signed-in root")
         #expect(coordinator.signOutReason == nil)
     }
@@ -190,6 +198,7 @@ struct AppCoordinatorTests {
 
         coordinator.entryDidAppear()
         #expect(coordinator.signedInUser == nil, "cleared once the cover covers it")
+        #expect(coordinator.shell == nil, "the tabs go with the user")
     }
 
     @Test func entryAppearingWhileSignedInKeepsTheUser() async {
@@ -225,15 +234,31 @@ struct AppCoordinatorTests {
         #expect(auth.signOuts == 1)
     }
 
-    @Test func foregroundWhileSignedInChecksTheSessionWithWhoami() async {
+    @Test func foregroundWhileSignedInRefreshesTheTabs() async {
         let backend = StubBackendService(entry: .success(.signIn()))
+        backend.enqueueTabs(.success(tabs))
         let coordinator = makeCoordinator(backend, auth: StubAuthService(restore: .signedIn(attendee)))
         await coordinator.start()
 
         await coordinator.scenePhaseChanged(to: .background)
         await coordinator.scenePhaseChanged(to: .active)
 
-        #expect(backend.whoamiCalls == 1)
+        #expect(backend.tabsCalls == ["en", "en"], "get_tabs also checks the session is still active")
         #expect(backend.entryCalls.isEmpty)
+    }
+
+    @Test func aDifferentUserGetsNewTabsAndTheSameUserKeepsThem() async {
+        let backend = StubBackendService(entry: .success(.signIn()))
+        backend.enqueueTabs(.success(tabs))
+        let coordinator = makeCoordinator(backend, auth: StubAuthService(restore: .signedIn(attendee)))
+        await coordinator.start()
+        let first = coordinator.shell
+
+        await coordinator.handle(.signedIn(attendee))
+        #expect(coordinator.shell === first)
+
+        await coordinator.handle(.signedIn(AuthUser(id: "u2", email: nil)))
+        #expect(coordinator.shell !== first)
+        #expect(backend.tabsCalls.count == 2)
     }
 }

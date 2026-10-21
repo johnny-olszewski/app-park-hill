@@ -3,6 +3,7 @@ package app.parkhill.mocks
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.services.backend.TabsResponse
 import java.io.File
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
@@ -25,6 +26,21 @@ class MockBackendServiceTest {
     fun getScreenReadsTheScreenFixture() = runTest {
         val service = MockBackendService(FixtureStore.directory(bundled), MockPersonaState())
         assertEquals(expected("get_screen.auth.sign_in.json"), service.getScreen("auth.sign_in", "en"))
+    }
+
+    @Test
+    fun getTabsReturnsTheSignedInPersonasTabs() = runTest {
+        val persona = MockPersonaState()
+        val service = MockBackendService(FixtureStore.directory(bundled), persona)
+        try {
+            service.getTabs("en")
+            fail("expected Unauthorized before signing in")
+        } catch (error: BackendError) {
+            assertEquals(BackendError.Unauthorized, error)
+        }
+        persona.current = "attendee"
+        val expected = ContractJson.decodeFromString(TabsResponse.serializer(), File(bundled, "attendee/get_tabs.json").readText())
+        assertEquals(expected, service.getTabs("en"))
     }
 
     @Test

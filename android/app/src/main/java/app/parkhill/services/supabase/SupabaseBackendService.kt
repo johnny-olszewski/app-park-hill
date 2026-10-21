@@ -7,6 +7,7 @@ import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.services.backend.TabsResponse
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.exceptions.HttpRequestException
 import io.github.jan.supabase.exceptions.RestException
@@ -32,6 +33,9 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
             "get_screen",
             JsonObject(mapOf("p_key" to JsonPrimitive(key), "p_locale" to JsonPrimitive(locale), "p_params" to params)),
         )
+
+    override suspend fun getTabs(locale: String): TabsResponse =
+        call("get_tabs", JsonObject(mapOf("p_locale" to JsonPrimitive(locale))), TabsResponse.serializer())
 
     override suspend fun whoami(): Profile = call("whoami", JsonObject(emptyMap()), Profile.serializer())
 

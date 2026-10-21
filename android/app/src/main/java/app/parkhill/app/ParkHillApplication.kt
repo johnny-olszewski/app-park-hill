@@ -6,6 +6,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import app.parkhill.cache.EntryCache
+import app.parkhill.devtools.AppDevTools
 import app.parkhill.environment.ServiceBinding
 import app.parkhill.navigation.AppCoordinator
 import kotlinx.coroutines.CoroutineScope
@@ -28,10 +29,12 @@ class ParkHillApplication : Application() {
         val environment = ServiceBinding.environment
         Log.i("ParkHill", "Environment ${environment.name}, backend ${environment.backendLabel}")
         val services = AppServices(this, environment)
+        val devTools = AppDevTools(this, services)
+        devTools.install()
         coordinator = AppCoordinator(
             backend = services.backend,
             auth = services.auth,
-            registry = ServiceBinding.makeScreenRegistry(services),
+            registry = ServiceBinding.makeScreenRegistry(services, devTools.screenTracker),
             cache = EntryCache.standard(filesDir),
             scope = scope,
             locale = { AppLocale.current() },

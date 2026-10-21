@@ -6,7 +6,7 @@
 | Epic | EP-06 |
 | Depends on | AND-021, SUP-021 |
 | Paired with | IOS-022 |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 
@@ -14,13 +14,12 @@ Android twin of IOS-022. Mock testers see the production sign-in screen and sign
 
 ## Scope
 
-- The mock backend service returns the recorded `get_entry.json` (`auth.sign_in`); remove the entry substitution.
-- Remove the persona picker screen, its data model, `auth.sign_in.mock` and its registration.
+- The mock backend service already returns the recorded `get_entry.json` and Android has no persona picker (AND-006); nothing to remove.
 - A mock scenario state in `src/mock` holding the chosen persona and next result.
 - Sign-in tools registered for `auth.sign_in` in the mock flavor: "Sign in as" (active personas from the bundled dataset, default first) and "Next sign-in" (the same eight results as IOS-022; default Success).
 - The mock auth service returns the armed result: Success signs in as the chosen persona; refusals return the recorded response's code and message; No connection and Something went wrong return the network and unexpected errors.
 - App tool "Switch persona" in the mock flavor while signed in.
-- Replace the persona picker UI tests with mock sign-in UI tests.
+- Mock sign-in UI tests through the pill and menu.
 - `android/README.md` updated.
 
 ## Out of scope
@@ -39,7 +38,7 @@ Android twin of IOS-022. Mock testers see the production sign-in screen and sign
 | AC5 | Choices stay until changed within a launch; while a result other than Success is armed, the pill shows an alert icon and the menu shows "Next sign-in will fail: <result>" | Nobody forgets a failure is armed |
 | AC6 | "Switch persona" while signed in changes the signed-in persona and the screens shown | Personas can be compared without signing out |
 | AC7 | Mock UI tests cover Success as a chosen persona, one refusal and No connection, through the pill and menu | The flow stays working |
-| AC8 | `android/README.md` describes Mock sign-in through the menu and no longer mentions the persona picker | Docs match the app |
+| AC8 | `android/README.md` describes Mock sign-in through the menu | Docs match the app |
 
 ## Technical notes
 

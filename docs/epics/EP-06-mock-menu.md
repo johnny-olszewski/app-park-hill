@@ -41,7 +41,7 @@ Implemented in this order (guide 7.2). EP-06.C brings Android level with EP-06.A
 |---|---|---|---|---|
 | [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
 | [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
-| [EP-06.C](#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Draft |
+| [EP-06.C](#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Done |
 
 ### EP-06.A: Dev tools over the app
 
@@ -86,5 +86,5 @@ Catch-up: EP-06.A B1 to B3 and EP-06.B B1 to B5, checked on Android.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/AND-021-dev-tools-overlay.md) | AND-006 | Draft |
-| [AND-022: Show the production sign-in in Mock with persona and result tools](../tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Draft |
+| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/AND-021-dev-tools-overlay.md) | AND-006 | Done |
+| [AND-022: Show the production sign-in in Mock with persona and result tools](../tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Done |

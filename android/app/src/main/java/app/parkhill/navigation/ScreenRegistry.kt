@@ -2,8 +2,10 @@ package app.parkhill.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
+import java.util.concurrent.atomic.AtomicLong
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
@@ -13,8 +15,9 @@ import kotlinx.serialization.json.JsonObject
  * created: coordinators resolve envelopes here, composables never build
  * screens. Each flavor's binding decides which screen sets are registered.
  */
-class ScreenRegistry {
+class ScreenRegistry(private val tracker: ScreenTracker? = null) {
     private val factories = mutableMapOf<String, (JsonObject) -> (@Composable () -> Unit)>()
+    private val nextId = AtomicLong()
 
     /** Registers `key`; its data is decoded with `serializer` when an envelope is resolved. */
     fun <Data> register(key: String, serializer: KSerializer<Data>, screen: @Composable (Data) -> Unit) {
@@ -38,13 +41,26 @@ class ScreenRegistry {
             return null
         }
         return try {
-            ResolvedScreen(envelope, factory(envelope.data))
+            ResolvedScreen(envelope, tracked(factory(envelope.data), envelope))
         } catch (error: SerializationException) {
             Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
             null
         } catch (error: IllegalArgumentException) {
             Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
             null
+        }
+    }
+
+    /** Reports the screen's appearance to the tracker, when there is one. */
+    private fun tracked(content: @Composable () -> Unit, envelope: ScreenEnvelope): @Composable () -> Unit {
+        val tracker = tracker ?: return content
+        val id = nextId.incrementAndGet()
+        return {
+            DisposableEffect(id) {
+                tracker.screenDidAppear(envelope, id)
+                onDispose { tracker.screenDidDisappear(id) }
+            }
+            content()
         }
     }
 

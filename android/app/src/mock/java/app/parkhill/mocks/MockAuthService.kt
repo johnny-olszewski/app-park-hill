@@ -7,27 +7,32 @@ import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.AuthUser
 import app.parkhill.services.auth.LocalUserData
 import app.parkhill.services.auth.SessionRenewal
+import app.parkhill.services.auth.SignInError
 import app.parkhill.services.auth.SignOutReason
+import app.parkhill.services.backend.ContractJson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Mock [AuthService]: signs in as a persona with no network. The persona is
  * shared with [MockBackendService], which then returns that persona's
- * fixtures. Any credentials sign in as the first active persona; choosing the
- * persona and result comes with the mock menu (AND-022). Not persisted: a
- * relaunch starts signed out.
+ * fixtures. Any credentials give the result armed in [scenario], chosen in
+ * the mock menu. Not persisted: a relaunch starts signed out.
  */
 class MockAuthService(
     private val personaState: MockPersonaState,
     private val localData: LocalUserData,
-    private val defaultPersona: () -> String,
+    val scenario: MockSignInScenario,
+    private val fixtures: FixtureStore,
 ) : AuthService {
-    constructor(context: Context, environment: AppEnvironment) : this(
+    constructor(context: Context, @Suppress("UNUSED_PARAMETER") environment: AppEnvironment) : this(
         MockPersonaState.shared,
         LocalUserData.standard(context.filesDir),
-        { MockPersona.bundled(context).first().id },
+        MockSignInScenario(MockPersona.bundled(context)),
+        FixtureStore.assets(context),
     )
 
     private val _state = MutableStateFlow<AuthState>(
@@ -43,8 +48,22 @@ class MockAuthService(
 
     override suspend fun restoreSession(): AuthState = _state.value
 
-    /** Signs in as the default persona, whatever was typed. */
-    override suspend fun signIn(email: String, password: String): AuthUser = signIn(defaultPersona())
+    /** Gives the armed result, whatever was typed: the chosen persona, a recorded refusal, or a client-side failure. */
+    override suspend fun signIn(email: String, password: String): AuthUser {
+        val result = scenario.result
+        result.refusalFixture?.let { throw refusal(it) }
+        return when (result) {
+            MockSignInResult.NoConnection -> throw SignInError.Network
+            MockSignInResult.SomethingWentWrong -> throw SignInError.Unexpected
+            else -> signIn(scenario.persona)
+        }
+    }
+
+    /** The backend's recorded refusal, with its code and message unchanged. */
+    private fun refusal(fixture: String): SignInError.Rejected {
+        val body = ContractJson.parseToJsonElement(checkNotNull(fixtures.text(fixture, persona = null)) { "$fixture not bundled" }).jsonObject
+        return SignInError.Rejected(body.getValue("code").jsonPrimitive.content, body.getValue("message").jsonPrimitive.content)
+    }
 
     override suspend fun signOut() {
         personaState.current = null

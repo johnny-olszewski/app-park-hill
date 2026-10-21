@@ -38,7 +38,7 @@ Implemented in this order (guide 7.2). One slice: the backend alone, or one plat
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-02.A](#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Draft |
+| [EP-02.A](#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Done |
 
 ### EP-02.A: Signed-in people see the backend's tabs
 

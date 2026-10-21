@@ -93,7 +93,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-02.A](epics/EP-02-tabs.md#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Draft |
+| [EP-02.A](epics/EP-02-tabs.md#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Done |
 
 ### Backend (SUP)
 

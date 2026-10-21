@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Draft (revisit after EP-01) |
+| Status | Draft |
 | Spec | None yet |
 | Previous epic | [EP-01: Foundation and authentication](EP-01-foundation-and-auth.md) |
 
@@ -38,17 +38,17 @@ After sign-in, people see the tabs the backend sends, each with its own navigati
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-008: Implement get_tabs for signed-in users](../tasks/SUP-008-get-tabs.md) | SUP-005 | Draft (revisit after EP-01) |
+| [SUP-008: Implement get_tabs for signed-in users](../tasks/SUP-008-get-tabs.md) | SUP-005 | Draft |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](../tasks/IOS-008-tab-shell.md) | IOS-006, SUP-008 | Draft (revisit after EP-01) |
+| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](../tasks/IOS-008-tab-shell.md) | IOS-006, IOS-021, SUP-008 | Draft |
 
 ### Android (AND)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-008: Build the Android backend-fed tab shell and remove the placeholder](../tasks/AND-008-tab-shell.md) | AND-006, SUP-008 | Draft (revisit after EP-01) |
+| [AND-008: Build the Android backend-fed tab shell and remove the placeholder](../tasks/AND-008-tab-shell.md) | AND-006, AND-021, SUP-008 | Draft |
 | [AND-023: Animate the Android entry in and out like iOS](../tasks/AND-023-entry-transitions.md) | AND-008 | Draft |

@@ -4,9 +4,9 @@
 |---|---|
 | Area | ios |
 | Epic | EP-02 |
-| Depends on | IOS-006, SUP-008 |
+| Depends on | IOS-006, IOS-021, SUP-008 |
 | Paired with | AND-008 |
-| Status | Draft (revisit after EP-01) |
+| Status | Draft |
 
 ## Intent
 
@@ -21,6 +21,7 @@ After sign-in, show the tabs the backend sends, on empty pages, with one navigat
 - Tabs cache per locale; foreground refresh.
 - Temporary "Sign out" button in the Home tab root's toolbar, hardcoded in the client (not backend driven), with a bundled label. Every line of it is marked with the comment `TEMPORARY(EP-04): remove with IOS-015/AND-015`.
 - Delete the `Temporary` placeholder.
+- Dev tools (EP-06): the screen tracker follows the selected tab, so Current screen shows the selected tab's screen. The Session tool shows the signed-in user's id (tag `devTools.session.user`). UI tests that checked the placeholder's user check this instead.
 
 ## Out of scope
 
@@ -32,7 +33,7 @@ After sign-in, show the tabs the backend sends, on empty pages, with one navigat
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | After sign-in in Dev, tab titles, order and count match `get_tabs`; changing them in the database shows after relaunch or foreground, no rebuild | Tabs are fed from the backend |
-| AC2 | In Mock, the chosen persona's tabs fixture is shown with no backend | Standalone app works per persona |
+| AC2 | In Mock, the signed-in persona's `get_tabs` fixture is shown with no backend | Standalone app works per persona |
 | AC3 | Each tab shows its empty root screen | Navigable shell, no content |
 | AC4 | Each tab keeps its own stack; a test pushes in one tab, switches away and back, and the stack is intact | Coordinator infrastructure is proven |
 | AC5 | A tab with an unregistered screen key is dropped and logged; if none survive, the error screen shows | Backend can ship ahead of the client |
@@ -43,11 +44,13 @@ After sign-in, show the tabs the backend sends, on empty pages, with one navigat
 | AC10 | Unit tests for coordinators, registry and cache; UI test signs in and switches tabs | Verified |
 | AC11 | A fresh launch selects the first tab in backend order; returning to a running app keeps the current tab | The landing tab is set by backend order |
 | AC12 | At most five tabs are shown; if more ever arrive, the first five in backend order are shown and the rest are logged | Five-tab maximum on both platforms; the backend enforces it, the client guards it |
+| AC13 | In debug builds, the dev tools menu's Current screen shows the selected tab's root screen, and Session shows the signed-in user's id; the Mock and Dev UI tests that checked the placeholder check it there | Dev tools keep working with tabs, and tests no longer need the placeholder |
 
 ## Technical notes
 
 - Guide 5.1 and 5.3. Behavior matches AND-008.
 - Tabs use the system tab bar (`TabView`), styled with brand color and type only (guide 5.5).
+- The tabs cache lives under the cache directory sign-out already deletes, so AC8's clearing needs no extra code.
 
 ## Verification
 

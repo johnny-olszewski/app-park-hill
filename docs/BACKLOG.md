@@ -16,8 +16,10 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 2. [EP-01.B](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, launch and CI
 3. [EP-01.C](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, sign-in
 4. [EP-06.C](epics/EP-06-mock-menu.md#slices): Android catch-up, dev tools and Mock sign-in
+5. [EP-02.A](epics/EP-02-tabs.md#slices): tabs after sign-in, on every platform
+6. EP-05: contract names (slices planned when its work is next)
 
-Android is then level; new feature slices (EP-05, EP-02 onward) include every platform.
+Android is level after EP-06.C; new feature slices include every platform.
 
 ## [EP-01: Foundation and authentication](epics/EP-01-foundation-and-auth.md)
 
@@ -87,23 +89,30 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 
 ## [EP-02: Tabs](epics/EP-02-tabs.md)
 
+### Slices
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-02.A](epics/EP-02-tabs.md#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Draft |
+
 ### Backend (SUP)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-008: Implement get_tabs for signed-in users](tasks/SUP-008-get-tabs.md) | SUP-005 | Draft (revisit after EP-01) |
+| [SUP-008: Implement get_tabs for signed-in users](tasks/SUP-008-get-tabs.md) | SUP-005 | Draft |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](tasks/IOS-008-tab-shell.md) | IOS-006, SUP-008 | Draft (revisit after EP-01) |
+| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](tasks/IOS-008-tab-shell.md) | IOS-006, IOS-021, SUP-008 | Draft |
 
 ### Android (AND)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-008: Build the Android backend-fed tab shell and remove the placeholder](tasks/AND-008-tab-shell.md) | AND-006, SUP-008 | Draft (revisit after EP-01) |
+| [AND-008: Build the Android backend-fed tab shell and remove the placeholder](tasks/AND-008-tab-shell.md) | AND-006, AND-021, SUP-008 | Draft |
+| [AND-023: Animate the Android entry in and out like iOS](tasks/AND-023-entry-transitions.md) | AND-008 | Draft |
 
 ## [EP-03: Community](epics/EP-03-community.md)
 

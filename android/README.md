@@ -72,7 +72,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 | Type | Flavor | Behavior |
 |---|---|---|
 | `SupabaseAuthService` | dev | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
-| `MockAuthService` | mock | Any credentials sign in as the first active persona in the bundled `contract/seed/dataset.json`; `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
+| `MockAuthService` | mock | Any credentials give the result armed in its `MockSignInScenario` (Mock sign-in, below); `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
 
 - **Session storage:** `EncryptedSessionManager` stores the session in `filesDir/Session/`, encrypted with an AES-GCM key held in the Android Keystore. Never plain `SharedPreferences`.
 - **Sign-in errors** are `SignInError`: `Rejected(code, message)` with the backend's text unchanged, plus `Network` and `Unexpected`.
@@ -94,7 +94,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 
 The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out will delete `filesDir/Cache/` (AND-005).
 
-**Entry by flavor:** both show `auth.sign_in` from `get_entry`. In mock, any credentials sign in as the first active persona; choosing the persona and result comes with the mock menu (AND-022).
+**Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 
 **Sign-in errors:** backend refusals show under the password field in the danger color; `cannot_connect_message` and `session_ended_message` show in a box above the fields.
 
@@ -103,6 +103,44 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out wi
 `design/Theme.kt` holds the Park Hill tokens from the wireframes, matching iOS: colors with light and dark values, the serif used for headings, 14dp shapes, and primary and secondary buttons and field colors on Material components (guide 5.5). Headings use the system serif until the brand fonts are bundled.
 
 **Adding a screen:** add its `@Serializable` data model and composable under `screens/`, then register its key in `navigation/SharedScreens.kt`. Each flavor's `ServiceBinding.makeScreenRegistry` builds the registry from the screen sets it includes; a mock-only screen would register there in `src/mock`. Composables never create other screens or navigate; coordinators do.
+
+## Dev tools
+
+Debug builds (`mockDebug`, `devDebug`) show a pill with the environment name (`MOCK`, `DEV`) centered below the status bar on every screen. Long-press it to open the menu, a bottom sheet with:
+
+1. Armed warnings, when a tool has armed something other than the normal result. The pill then shows an alert icon.
+2. The current screen's tools, if any registered for its key.
+3. App tools: Build (environment and backend), Screen (current screen key; tap for its data as JSON, copyable), Data (clear `filesDir/Cache/`, after confirming) and Session (Sign out when signed in).
+
+| Source set | Holds |
+|---|---|
+| `src/debug/.../devtools` | `DevTools` (`typealias AppDevTools`), the overlay, pill and menu, `CurrentScreenTracker`, `DevToolRegistry` and `AppTools` |
+| `src/release/.../devtools` | `NoDevTools`: no tracker, nothing drawn. Release builds compile no other dev tools class (`scripts/check_release_apk.sh`) |
+| `src/mockDebug`, `src/devDebug` | `registerEnvironmentTools`: each environment's own tools |
+
+`ParkHillApplication` creates `AppDevTools` and installs it: activity lifecycle callbacks add the overlay to each activity's window, above its content. Only the pill takes touches. Dialogs and bottom sheets are separate windows and cover the pill while open (guide decision log). `ScreenRegistry` reports every resolved screen to the `ScreenTracker` it is given; the newest one showing is the current screen.
+
+**Adding a screen tool:** in the source set for the variants that should have it, register it in that environment's `registerEnvironmentTools`:
+
+```kotlin
+registry.register(
+    DevTool(id = "events.feed", title = "Feed", warningText = { if (failing) "Feed will fail" else null }) {
+        ToolActionRow("Fail next load") { failing = true }
+    },
+    forScreen = "events.feed",
+)
+```
+
+It shows only while that screen is current. Read state the tool changes from Compose snapshot state, so the menu and pill update. Production screens never reference dev tools.
+
+### Mock sign-in
+
+The mock build adds tools in `src/mockDebug` (specs/AUTH.md 5.4). On sign-in, the menu offers:
+
+- **Sign in as:** the active personas in the bundled `contract/seed/dataset.json`, first one by default. The disabled persona is reached through Account disabled.
+- **Next sign-in:** Success (default), the five recorded refusals (`sign_in.error*.json`, shown under the password field with the backend's text), No connection and Something went wrong (both show `cannot_connect_message`).
+
+Any email and password then give the armed result. While a result other than Success is armed, the pill shows an alert icon and the menu starts with "Next sign-in will fail: <result>". Choices last until changed or the app is relaunched. While signed in, **Switch persona** (on every screen) signs in as another persona without signing out.
 
 ## Tests
 
@@ -113,9 +151,10 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out wi
 | Source set | Runs in | Needs |
 |---|---|---|
 | `src/test` | Both flavors | Nothing. Decodes every recorded screen response; the Supabase service runs against a local `MockWebServer` |
+| `src/testDebug` | Both debug variants | Nothing. Dev tools registry, current screen and JSON formatting |
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
-| `src/androidTestMock` | mock, on a device or emulator | Nothing. Sign-in with any credentials |
+| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu |
 | `src/androidTestDev` | dev, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
@@ -135,4 +174,4 @@ It starts and resets local Supabase (Docker must be running), then runs `connect
 | No build-variant branching | `scripts/check_sources.sh`: no `BuildConfig.FLAVOR`, `DEBUG` or `BUILD_TYPE` in `src/main` (also run by the pre-push hook) |
 | Unit tests | `./gradlew testMockDebugUnitTest testDevDebugUnitTest` |
 | Mock UI tests | A second job runs `connectedMockDebugAndroidTest` on an API 34 emulator |
-| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no contract fixtures in assets |
+| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no dev tools class except `NoDevTools`, no contract fixtures in assets |

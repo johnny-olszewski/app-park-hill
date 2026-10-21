@@ -2,6 +2,7 @@ package app.parkhill.navigation
 
 import android.util.Log
 import app.parkhill.cache.EntryCache
+import app.parkhill.cache.TabsCache
 import app.parkhill.services.auth.AuthService
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.AuthUser
@@ -29,6 +30,8 @@ data class AppState(
     val isLaunching: Boolean = true,
     /** The signed-in user, or null when there is none. */
     val signedInUser: AuthUser? = null,
+    /** The signed-in user's tabs, created at sign-in and dropped with the user. */
+    val shell: ShellCoordinator? = null,
     /** Whether the signed-out entry is showing. */
     val isEntryPresented: Boolean = false,
     val entry: EntryState = EntryState.Loading,
@@ -37,8 +40,8 @@ data class AppState(
 )
 
 /**
- * Owns launch and the app's root (guide 5.1, 5.3): the signed-in destination,
- * or the signed-out entry, followed from the auth state. Composables collect
+ * Owns launch and the app's root (guide 5.1, 5.3): the signed-in shell of
+ * tabs, or the signed-out entry, followed from the auth state. Composables collect
  * [state]; they never navigate.
  */
 class AppCoordinator(
@@ -48,6 +51,7 @@ class AppCoordinator(
     private val cache: EntryCache,
     private val scope: CoroutineScope,
     private val locale: () -> String,
+    private val tabsCache: TabsCache,
 ) {
     private val _state = MutableStateFlow(AppState())
     val state: StateFlow<AppState> = _state.asStateFlow()
@@ -58,7 +62,11 @@ class AppCoordinator(
     /** Launch: restore the session (specs/AUTH.md 4.1), then follow the auth state. */
     suspend fun start() {
         when (val restored = auth.restoreSession()) {
-            is AuthState.SignedIn -> _state.update { it.copy(isLaunching = false, signedInUser = restored.user) }
+            is AuthState.SignedIn -> {
+                val shell = makeShell()
+                _state.update { it.copy(isLaunching = false, signedInUser = restored.user, shell = shell) }
+                shell.load()
+            }
             is AuthState.SignedOut -> {
                 _state.update { it.copy(isLaunching = false, isEntryPresented = true, signOutReason = restored.reason) }
                 loadEntry()
@@ -83,8 +91,8 @@ class AppCoordinator(
 
     /**
      * Return to the foreground refetches (guide 5.3 rule 6). Signed in, the
-     * request also checks the session is still active, so a disabled account
-     * is signed out on its next foreground (specs/AUTH.md 4.3).
+     * tabs request also checks the session is still active, so a disabled
+     * account is signed out on its next foreground (specs/AUTH.md 4.3).
      */
     suspend fun movedToForeground() {
         if (!wasInBackground) return
@@ -92,31 +100,40 @@ class AppCoordinator(
         val current = _state.value
         when {
             current.isEntryPresented -> loadEntry()
-            current.signedInUser != null -> try {
-                backend.whoami()
-            } catch (error: CancellationException) {
-                throw error
-            } catch (_: Exception) {
-                // Refusals end the session through the auth state; anything else waits for the next request.
-            }
+            current.shell != null -> current.shell.load()
         }
     }
 
     suspend fun handle(authState: AuthState) {
         when (authState) {
-            is AuthState.SignedIn -> _state.update {
-                it.copy(signOutReason = null, signedInUser = authState.user, isEntryPresented = false)
+            is AuthState.SignedIn -> {
+                // A new user (such as a mock persona switch) gets a new shell.
+                val current = _state.value
+                val isNewUser = authState.user != current.signedInUser || current.shell == null
+                val shell = if (isNewUser) makeShell() else current.shell
+                _state.update {
+                    it.copy(signOutReason = null, signedInUser = authState.user, shell = shell, isEntryPresented = false)
+                }
+                if (isNewUser) shell?.load()
             }
             is AuthState.SignedOut -> {
                 val current = _state.value
                 if (current.isEntryPresented || current.isLaunching) return
                 _state.update {
-                    it.copy(signedInUser = null, isEntryPresented = true, entry = EntryState.Loading, signOutReason = authState.reason)
+                    it.copy(
+                        signedInUser = null,
+                        shell = null,
+                        isEntryPresented = true,
+                        entry = EntryState.Loading,
+                        signOutReason = authState.reason,
+                    )
                 }
                 loadEntry()
             }
         }
     }
+
+    private fun makeShell() = ShellCoordinator(backend, registry, tabsCache, locale)
 
     private fun observeAuth() {
         authObservation?.cancel()

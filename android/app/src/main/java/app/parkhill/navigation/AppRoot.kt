@@ -16,28 +16,26 @@ import app.parkhill.design.ParkHill
 import app.parkhill.screens.auth.LocalSessionEndedNotice
 import app.parkhill.screens.launch.LaunchErrorScreen
 import app.parkhill.services.auth.SignOutReason
-import app.parkhill.temporary.SignedInPlaceholder // TEMPORARY(EP-02): remove with AND-008
 import kotlinx.coroutines.launch
 
 /**
- * The app's root: the signed-in destination (tabs from AND-008), or the
- * signed-out entry while signed out: loading, the backend's entry screen or
- * the launch error.
+ * The app's root: the signed-in shell of tabs, or the signed-out entry while
+ * signed out: loading, the backend's entry screen or the launch error.
  */
 @Composable
 fun AppRoot(coordinator: AppCoordinator) {
     val state by coordinator.state.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    val user = state.signedInUser
+    val shell = state.shell
     Box(Modifier.fillMaxSize().background(ParkHill.colors.surface)) {
         when {
             state.isLaunching -> Loading()
             state.isEntryPresented -> CompositionLocalProvider(LocalSessionEndedNotice provides (state.signOutReason == SignOutReason.SessionEnded)) {
                 Entry(state.entry, retry = { scope.launch { coordinator.retry() } })
             }
-            user != null -> SignedInPlaceholder(user) { // TEMPORARY(EP-02): remove with AND-008
-                scope.launch { coordinator.signOut() } // TEMPORARY(EP-02): remove with AND-008
-            } // TEMPORARY(EP-02): remove with AND-008
+            shell != null -> SignedInShell(shell) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                scope.launch { coordinator.signOut() } // TEMPORARY(EP-04): remove with IOS-015/AND-015
+            } // TEMPORARY(EP-04): remove with IOS-015/AND-015
         }
     }
 }

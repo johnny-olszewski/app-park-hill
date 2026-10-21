@@ -1,6 +1,7 @@
 package app.parkhill.navigation
 
 import app.parkhill.cache.EntryCache
+import app.parkhill.cache.TabsCache
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.AuthUser
 import app.parkhill.services.auth.FakeAuthService
@@ -15,18 +16,23 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AppCoordinatorTest {
-    private val backend = StubBackendService { StubBackendService.signIn() }
+    private val backend = StubBackendService { StubBackendService.signIn() }.apply {
+        tabs = { StubBackendService.tabs("home" to "home.root", "community" to "community.home") }
+    }
+    private val tabsCache = TabsCache(Files.createTempDirectory("tabs").toFile())
     private val auth = FakeAuthService()
     private val cache = EntryCache(Files.createTempDirectory("entry").toFile())
     private val user = AuthUser("u", "a@b.c")
 
     private fun TestScope.coordinator() = AppCoordinator(
-        backend, auth, ScreenRegistry().apply { registerSharedScreens(auth) }, cache, backgroundScope, { "en" },
+        backend, auth, ScreenRegistry().apply { registerSharedScreens(auth) }, cache, backgroundScope, { "en" }, tabsCache,
     )
 
     private fun AppCoordinator.shownTitle(): String? =
@@ -43,21 +49,23 @@ class AppCoordinatorTest {
     }
 
     @Test
-    fun aStoredSessionGoesStraightToTheSignedInDestination() = runTest(UnconfinedTestDispatcher()) {
+    fun aStoredSessionGoesStraightToTheTabs() = runTest(UnconfinedTestDispatcher()) {
         auth.restored = AuthState.SignedIn(user)
         val coordinator = coordinator()
         coordinator.start()
         assertEquals(user, coordinator.state.value.signedInUser)
+        assertEquals(listOf("home", "community"), coordinator.state.value.shell?.tabs?.map { it.id })
         assertFalse(coordinator.state.value.isEntryPresented)
         assertEquals(0, backend.entryCalls)
     }
 
     @Test
-    fun signingInHidesTheEntry() = runTest(UnconfinedTestDispatcher()) {
+    fun signingInShowsTheTabs() = runTest(UnconfinedTestDispatcher()) {
         val coordinator = coordinator()
         coordinator.start()
         auth.signIn("a@b.c", "secret")
         assertEquals("a@b.c", coordinator.state.value.signedInUser?.email)
+        assertEquals(ShellState.Tabs, coordinator.state.value.shell?.state)
         assertFalse(coordinator.state.value.isEntryPresented)
     }
 
@@ -69,6 +77,7 @@ class AppCoordinatorTest {
         coordinator.signOut()
         assertTrue(coordinator.state.value.isEntryPresented)
         assertNull(coordinator.state.value.signedInUser)
+        assertNull("the tabs go with the user", coordinator.state.value.shell)
         assertEquals(SignOutReason.UserRequest, coordinator.state.value.signOutReason)
         assertEquals("Sign in", coordinator.shownTitle())
     }
@@ -84,14 +93,29 @@ class AppCoordinatorTest {
     }
 
     @Test
-    fun returningToTheForegroundSignedInChecksTheSession() = runTest(UnconfinedTestDispatcher()) {
+    fun returningToTheForegroundSignedInRefreshesTheTabs() = runTest(UnconfinedTestDispatcher()) {
         auth.restored = AuthState.SignedIn(user)
         val coordinator = coordinator()
         coordinator.start()
         coordinator.movedToBackground()
         coordinator.movedToForeground()
-        assertEquals(1, backend.whoamiCalls)
+        assertEquals("get_tabs also checks the session is still active", listOf("en", "en"), backend.tabsCalls)
         assertEquals(0, backend.entryCalls)
+    }
+
+    @Test
+    fun aDifferentUserGetsNewTabsAndTheSameUserKeepsThem() = runTest(UnconfinedTestDispatcher()) {
+        auth.restored = AuthState.SignedIn(user)
+        val coordinator = coordinator()
+        coordinator.start()
+        val first = coordinator.state.value.shell
+
+        coordinator.handle(AuthState.SignedIn(user))
+        assertSame(first, coordinator.state.value.shell)
+
+        coordinator.handle(AuthState.SignedIn(AuthUser("u2", null)))
+        assertNotSame(first, coordinator.state.value.shell)
+        assertEquals(2, backend.tabsCalls.size)
     }
 
     @Test

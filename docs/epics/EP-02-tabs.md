@@ -57,7 +57,7 @@ Implemented in this order (guide 7.2). One slice: the backend alone, or one plat
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-008: Implement get_tabs for signed-in users](../tasks/SUP-008-get-tabs.md) | SUP-005 | Draft |
+| [SUP-008: Implement get_tabs for signed-in users](../tasks/SUP-008-get-tabs.md) | SUP-005 | Done |
 
 ### iOS (IOS)
 

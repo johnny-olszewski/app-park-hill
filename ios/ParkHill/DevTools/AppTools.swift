@@ -25,7 +25,14 @@ enum AppTools {
                 ClearCachedDataButton(directory: CacheDirectory.url)
             },
             DevTool(id: "app.session", title: "Session") {
-                if session.isSignedIn {
+                if let user = session.user {
+                    HStack {
+                        Text("Signed in as")
+                        Spacer()
+                        Text(user.email ?? user.id)
+                            .foregroundStyle(Color.phInkMuted)
+                            .accessibilityIdentifier("devTools.session.user")
+                    }
                     SignOutButton(auth: auth)
                 } else {
                     Text("Not signed in").foregroundStyle(Color.phInkMuted)

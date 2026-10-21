@@ -60,8 +60,8 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 
 | Type | Flavor | Behavior |
 |---|---|---|
-| `SupabaseBackendService` | dev | Calls `get_entry` and `get_screen` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
-| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/fixtures`: `get_entry.json`, `get_screen.<key>.json`, preferring `<persona>/<name>.json` for the current persona |
+| `SupabaseBackendService` | dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
+| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/fixtures`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
 
@@ -82,7 +82,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 
 ## Screens and launch
 
-`ParkHillApplication` builds the services and `AppCoordinator` once per process and starts launch; `MainActivity` shows `AppRoot`. Launch restores the session: signed in shows the signed-in destination (the temporary placeholder in `temporary/`, deleted by AND-008), signed out shows the entry: loading, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. The coordinator follows `AuthService.state`: signing in shows the destination; signing out, or access ending, returns to the entry, with `session_ended_message` when access ended. Returning to the foreground while signed in calls `whoami()`, so a disabled account is signed out on its next foreground.
+`ParkHillApplication` builds the services and `AppCoordinator` once per process and starts launch; `MainActivity` shows `AppRoot`. Launch restores the session: signed in shows the tabs, signed out shows the entry: loading, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. The coordinator follows `AuthService.state`: signing in shows the tabs; signing out, or access ending, returns to the entry, with `session_ended_message` when access ended. A new signed-in user gets a new `ShellCoordinator`.
 
 | Situation | Shows |
 |---|---|
@@ -92,7 +92,20 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 | `get_entry` returns a key this build does not register | Error screen, even with a cache (guide 5.3 rule 5); logged |
 | Return to the foreground | Refetch; a failure keeps the screen showing |
 
-The cache is one JSON file per locale under `filesDir/Cache/entry/`; sign-out will delete `filesDir/Cache/` (AND-005).
+The cache is one JSON file per locale under `filesDir/Cache/entry/` (`LocaleCache`; the tabs use `Cache/tabs/`). Sign-out deletes `filesDir/Cache/` (AND-005).
+
+**Tabs:** `ShellCoordinator` fetches `get_tabs` and shows the tabs in the Material navigation bar (`SignedInShell`), each in its own `TabCoordinator` with a stack and a sheet, kept while switching tabs. Only the selected tab is composed; each tab's saveable state is kept. Returning to the foreground fetches the tabs again; the request also checks the session, so a disabled account is signed out on its next foreground.
+
+| Situation | Shows |
+|---|---|
+| `get_tabs` succeeds | Up to five tabs in backend order, first selected on a fresh shell; cached for the locale |
+| A tab's root screen key is not registered | That tab is dropped and logged; if none is left, the error screen |
+| More than five tabs | The first five; the rest logged |
+| `get_tabs` fails, cached tabs exist | The cached tabs |
+| `get_tabs` fails, no cache | Error screen with retry |
+| Foreground refetch | Tabs update; unchanged tabs keep their stacks and the selected tab stays |
+
+Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables for `tab.home` and `tab.community`, and a fallback for any other key. Home's top app bar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
 
 **Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 

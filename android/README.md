@@ -107,6 +107,8 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/` (`LocaleCach
 
 Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables for `tab.home` and `tab.community`, and a fallback for any other key. Home's top app bar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
 
+**Transitions:** `AppRoot` moves the entry like the iOS full-screen cover: after sign-in it slides down to reveal the tabs, and on sign-out or access ending it slides back up over them. Launch and changes inside the entry cross-fade. With animations off (developer options) every change is instant. Screens know nothing about it.
+
 **Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 
 **Sign-in errors:** backend refusals show under the password field in the danger color; `cannot_connect_message` and `session_ended_message` show in a box above the fields.

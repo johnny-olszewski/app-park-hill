@@ -16,8 +16,10 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 2. [EP-01.B](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, launch and CI
 3. [EP-01.C](epics/EP-01-foundation-and-auth.md#slices): Android catch-up, sign-in
 4. [EP-06.C](epics/EP-06-mock-menu.md#slices): Android catch-up, dev tools and Mock sign-in
+5. [EP-02.A](epics/EP-02-tabs.md#slices): tabs after sign-in, on every platform
+6. EP-05: contract names (slices planned when its work is next)
 
-Android is then level; new feature slices (EP-05, EP-02 onward) include every platform.
+Android is level after EP-06.C; new feature slices include every platform.
 
 ## [EP-01: Foundation and authentication](epics/EP-01-foundation-and-auth.md)
 
@@ -86,6 +88,12 @@ Android is then level; new feature slices (EP-05, EP-02 onward) include every pl
 | [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Done |
 
 ## [EP-02: Tabs](epics/EP-02-tabs.md)
+
+### Slices
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-02.A](epics/EP-02-tabs.md#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Draft |
 
 ### Backend (SUP)
 

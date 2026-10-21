@@ -32,6 +32,25 @@ After sign-in, people see the tabs the backend sends, each with its own navigati
 2. The temporary signed-in placeholder is deleted on both platforms.
 3. Sign-out is a temporary hardcoded Home toolbar button marked `TEMPORARY(EP-04)`, removed by EP-04. Tab icons are placeholders until design delivers artwork.
 
+## Slices
+
+Implemented in this order (guide 7.2). One slice: the backend alone, or one platform's shell alone, is not worth having on its own (rule 2).
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-02.A](#ep-02a-signed-in-people-see-the-backends-tabs) | Signed-in people see the backend's tabs on iOS and Android | SUP-008, IOS-008, AND-008, AND-023 | EP-06.C | Draft |
+
+### EP-02.A: Signed-in people see the backend's tabs
+
+| # | Behavior acceptance criterion |
+|---|---|
+| B1 | On iOS and Android, in Mock and Dev, signing in shows Home and Community tabs in backend order, each on an empty page, with the first tab selected; the placeholder screen is gone |
+| B2 | In Dev, renaming, reordering or disabling a tab in the database shows on both apps after relaunch or returning to the app, with no rebuild |
+| B3 | After one signed-in launch, relaunching with no connection still shows the tabs |
+| B4 | Home's Sign out button signs out and returns to sign-in on both apps |
+| B5 | In debug builds, the dev tools menu's Current screen shows the selected tab's screen and changes when switching tabs |
+| B6 | On Android, signing in slides the sign-in screen away and signing out slides it back up, as on iOS |
+
 ## Tasks
 
 ### Backend (SUP)

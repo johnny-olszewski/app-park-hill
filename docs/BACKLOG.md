@@ -105,7 +105,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](tasks/IOS-008-tab-shell.md) | IOS-006, IOS-021, SUP-008 | Draft |
+| [IOS-008: Build the iOS backend-fed tab shell and remove the placeholder](tasks/IOS-008-tab-shell.md) | IOS-006, IOS-021, SUP-008 | Done |
 
 ### Android (AND)
 

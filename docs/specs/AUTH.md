@@ -27,7 +27,7 @@ A person with an existing account signs in with email and password, stays signed
 ### 4.1 Launch
 
 1. Client checks for a stored session.
-2. **Session present:** renew if needed, then show the signed-in destination (the placeholder for now; tabs later).
+2. **Session present:** renew if needed, then show the signed-in destination (the tabs, EP-02).
 3. **No session:** call `get_entry(p_locale)` and render the returned screen envelope through the screen registry. Today it always returns `auth.sign_in`.
 4. **`get_entry` fails:** use the last good entry envelope cached for the locale. With no cache, show the retry error screen (bundled strings).
 

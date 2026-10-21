@@ -41,6 +41,21 @@ struct SupabaseAuthIntegrationTests {
         #expect(await makeService().0.restoreSession() == .signedOut(nil))
     }
 
+    @Test func signedInTabsMatchTheFixtureAndSignedOutIsRefused() async throws {
+        defer { userData.remove() }
+        let attendee = dataset.persona("attendee")
+        let client = SupabaseClientProvider.makeClient(environment: ServiceBinding.environment, authStorageKey: storageKey)
+        let auth = SupabaseAuthService(client: client, localData: userData.localData)
+        let backend = SupabaseBackendService(client: client)
+
+        await #expect(throws: BackendError.unauthorized) { _ = try await backend.getTabs(locale: "en") }
+
+        _ = try await auth.signIn(email: attendee.email, password: dataset.localPassword)
+        let fixture = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data("attendee/get_tabs.json"))
+        #expect(try await backend.getTabs(locale: "en") == fixture)
+        await auth.signOut()
+    }
+
     @Test func unknownEmailIsRejectedWithTheBackendsMessage() async {
         let (auth, _) = makeService()
         do {

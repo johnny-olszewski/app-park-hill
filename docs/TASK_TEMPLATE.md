@@ -7,7 +7,7 @@ Writing rules:
 - A task fits one agent session and one PR. If it needs more than about 8 acceptance criteria, split it.
 - Every acceptance criterion is checkable by a command, a test, or a specific observation. Each one states its intent, so the implementer knows what must stay true if the approach changes.
 - A task targets exactly one platform, so a developer with that platform's skills can own it end to end. Work spanning platforms is split into one task per platform.
-- When iOS and Android implement the same behavior, their tasks are counterparts: acceptance criteria match; only the technical notes differ. Link them with "Paired with".
+- When iOS and Android implement the same behavior, their tasks are counterparts: acceptance criteria match; only the technical notes differ. Link them with "Paired with". Include behavior a system component gives one platform for free, such as transitions and gestures (guide 5.5 rule 5).
 - Name exact paths and commands. Do not leave choices to the implementer unless the task says "implementer's choice".
 
 ---

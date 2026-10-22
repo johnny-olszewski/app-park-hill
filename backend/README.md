@@ -11,6 +11,7 @@ This instance is **disposable**. It is safe to reset at any time, and it never h
 - Docker, running
 - Supabase CLI **2.120.0**, the version CI uses. Check with `supabase --version`.
 - Python 3.10 or later (standard library only), for the data generators
+- `psql`, for the name check in `make data-check`
 
 ## Commands
 
@@ -27,6 +28,7 @@ Run from `/backend`.
 | Stop and delete local data | `supabase stop --no-backup` |
 | Regenerate `seed.sql` from the dataset | `make seed` |
 | Reset, then regenerate contract fixtures from the live backend | `make fixtures` |
+| Regenerate the client name constants from `contract/names.json` | `make names` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
 | Run the Edge Function tests (stack running) | `make test-functions` |
 
@@ -92,6 +94,12 @@ Shared local password: `parkhill-local`.
 3. Commit the dataset and the generated files together.
 
 Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, fixture folders) and fails if anything differs from what is committed.
+
+### Contract names
+
+`/contract/names.json` is the one place backend function names and screen keys clients use are written. `make names` generates `ContractNames.swift` and `ContractNames.kt` in `/contract/generated`, which both apps compile. Adding a client-called function or a backend screen: add its name to `names.json`, run `make names`, and commit both with the migration.
+
+`make data-check` also runs `scripts/check_names.py` against the reset database. It fails when a listed RPC function is not in `public` or not executable by `anon` or `authenticated`, when a listed Edge Function has no folder in `supabase/functions/`, or when the screen keys in `names.json` and the `screens` table differ in either direction.
 
 ## Rules
 

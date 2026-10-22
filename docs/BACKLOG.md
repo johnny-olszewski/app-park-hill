@@ -201,7 +201,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-008 | Draft |
+| [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-008 | Done |
 
 ### Android (AND)
 

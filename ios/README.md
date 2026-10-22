@@ -80,6 +80,10 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 | `SupabaseBackendService` | Dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the shared client from `SupabaseClientProvider`, with the standard request headers |
 | `MockBackendService` | Mock | Reads the bundled fixtures: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
+### Contract names
+
+Backend function names and screen keys come from `/contract/generated/ContractNames.swift` (`RPCFunction`, `EdgeFunction`, `ScreenKey`), generated from `/contract/names.json` and compiled into the app in every configuration by `project.yml`. Never write a backend function name or screen key as a string literal in `ParkHill/`, and never edit or copy the generated file: edit `names.json`, run `make names` in `/backend`, then `make project`. Tests may use literals to assert wire values.
+
 The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/` (and by the Dev-only integration tests). Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
 
 ### Auth
@@ -205,3 +209,4 @@ It starts and resets local Supabase (Docker must be running), then runs the Dev 
 - Dev tools code lives under `ParkHill/DevTools/`. It is compiled only in debug configurations and never in any Release configuration.
 - Only the service layer imports the Supabase SDK or builds requests.
 - Edit `project.yml` and the xcconfigs, never the generated project.
+- Backend function names and screen keys come from the generated `ContractNames.swift`, never string literals.

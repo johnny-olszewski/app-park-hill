@@ -195,7 +195,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 | Task | Depends on | Status |
 |---|---|---|
 | [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006, SUP-008 | Done |
-| [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Draft |
+| [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Done |
 
 ### iOS (IOS)
 

@@ -29,6 +29,7 @@ Run from `/backend`.
 | Regenerate `seed.sql` from the dataset | `make seed` |
 | Reset, then regenerate contract fixtures from the live backend | `make fixtures` |
 | Regenerate the client name constants from `contract/names.json` | `make names` |
+| Regenerate the client screen models from `contract/screens` | `make models` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
 | Run the Edge Function tests (stack running) | `make test-functions` |
 
@@ -100,6 +101,12 @@ Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the
 `/contract/names.json` is the one place backend function names and screen keys clients use are written. `make names` generates `ContractNames.swift` and `ContractNames.kt` in `/contract/generated`, which both apps compile. Adding a client-called function or a backend screen: add its name to `names.json`, run `make names`, and commit both with the migration.
 
 `make data-check` also runs `scripts/check_names.py` against the reset database. It fails when a listed RPC function is not in `public` or not executable by `anon` or `authenticated`, when a listed Edge Function has no folder in `supabase/functions/`, or when the screen keys in `names.json` and the `screens` table differ in either direction.
+
+### Screen data descriptions
+
+`/contract/screens/<key>.schema.json` describes each backend screen's data once (`contract/README.md`, Screen data). `make models` generates the Swift and Kotlin model for each into `/contract/generated`. Adding or changing a screen's data: change its migration and its description together, run `make fixtures` and `make models`, and commit everything.
+
+`make data-check` also runs `scripts/check_models.py` after regenerating the fixtures. It fails when a screen key in `names.json` has no description (or a description has no key), and when any recorded screen envelope in `/contract/fixtures`, including each tab's `screen` in `get_tabs`, is missing a required field, has a field its description lacks, or has a value of the wrong type. It names the fixture, the field and the problem.
 
 ## Rules
 

@@ -73,6 +73,9 @@ android {
         getByName("mock").assets.srcDirs("../../contract/fixtures", "../../contract/seed")
         getByName("test").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
         getByName("androidTest").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
+        // Backend function names and screen keys, generated from contract/names.json.
+        // Every variant compiles them; Gradle ignores the Swift file beside them.
+        getByName("main").java.srcDirs("../../contract/generated")
     }
 }
 

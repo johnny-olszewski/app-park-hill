@@ -77,4 +77,4 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-020: Use the generated contract names in the Android app](../tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Draft |
+| [AND-020: Use the generated contract names in the Android app](../tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Done |

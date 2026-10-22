@@ -207,7 +207,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Draft |
+| [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Done |
 
 ## [EP-06: Mock menu](epics/EP-06-mock-menu.md)
 

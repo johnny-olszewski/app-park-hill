@@ -65,6 +65,10 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
 
+### Contract names
+
+Backend function names and screen keys come from `/contract/generated/ContractNames.kt` (`RpcFunction`, `EdgeFunction`, `ScreenKey`, package `app.parkhill.contract`), generated from `/contract/names.json`. The `main` source set compiles it in place for every variant. Never write a backend function name or screen key as a string literal in `app/src`, and never edit or copy the generated file: edit `names.json` and run `make names` in `/backend`. Tests may use literals to assert wire values; mock fixture file names such as `sign_in.error.account_disabled` stay as text.
+
 ### Auth
 
 Sign-in, session and sign-out go through `AuthService` (`services/auth`), declared by each binding as `AppAuthService`.

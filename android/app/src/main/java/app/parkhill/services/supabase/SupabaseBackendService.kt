@@ -1,6 +1,7 @@
 package app.parkhill.services.supabase
 
 import android.content.Context
+import app.parkhill.contract.RpcFunction
 import app.parkhill.environment.AppEnvironment
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
@@ -26,25 +27,25 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
     constructor(context: Context, environment: AppEnvironment) : this(SupabaseClientProvider.shared(context, environment).client)
 
     override suspend fun getEntry(locale: String): ScreenEnvelope =
-        call("get_entry", JsonObject(mapOf("p_locale" to JsonPrimitive(locale))))
+        call(RpcFunction.getEntry, JsonObject(mapOf("p_locale" to JsonPrimitive(locale))))
 
     override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope =
         call(
-            "get_screen",
+            RpcFunction.getScreen,
             JsonObject(mapOf("p_key" to JsonPrimitive(key), "p_locale" to JsonPrimitive(locale), "p_params" to params)),
         )
 
     override suspend fun getTabs(locale: String): TabsResponse =
-        call("get_tabs", JsonObject(mapOf("p_locale" to JsonPrimitive(locale))), TabsResponse.serializer())
+        call(RpcFunction.getTabs, JsonObject(mapOf("p_locale" to JsonPrimitive(locale))), TabsResponse.serializer())
 
-    override suspend fun whoami(): Profile = call("whoami", JsonObject(emptyMap()), Profile.serializer())
+    override suspend fun whoami(): Profile = call(RpcFunction.whoami, JsonObject(emptyMap()), Profile.serializer())
 
-    private suspend fun call(function: String, params: JsonObject): ScreenEnvelope =
+    private suspend fun call(function: RpcFunction, params: JsonObject): ScreenEnvelope =
         call(function, params, ScreenEnvelope.serializer())
 
-    private suspend fun <T> call(function: String, params: JsonObject, serializer: KSerializer<T>): T {
+    private suspend fun <T> call(function: RpcFunction, params: JsonObject, serializer: KSerializer<T>): T {
         val body = try {
-            client.postgrest.rpc(function, params).data
+            client.postgrest.rpc(function.value, params).data
         } catch (error: CancellationException) {
             throw error
         } catch (error: Exception) {

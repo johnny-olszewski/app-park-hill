@@ -3,6 +3,7 @@ package app.parkhill.navigation
 import android.util.Log
 import app.parkhill.cache.EntryCache
 import app.parkhill.cache.TabsCache
+import app.parkhill.contract.RpcFunction
 import app.parkhill.services.auth.AuthService
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.AuthUser
@@ -147,7 +148,7 @@ class AppCoordinator(
         } catch (error: CancellationException) {
             throw error
         } catch (error: Exception) {
-            Log.e(TAG, "get_entry failed: $error")
+            Log.e(TAG, "${RpcFunction.getEntry.value} failed: $error")
             showFallback(locale)
             return
         }

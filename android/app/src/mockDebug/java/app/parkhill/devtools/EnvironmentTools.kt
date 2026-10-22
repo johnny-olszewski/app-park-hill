@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.sp
 import app.parkhill.app.AppServices
+import app.parkhill.contract.ScreenKey
 import app.parkhill.design.ParkHill
 import app.parkhill.mocks.MockPersona
 import app.parkhill.mocks.MockSignInResult
@@ -61,7 +62,7 @@ fun DevTools.registerEnvironmentTools(services: AppServices) {
     )
 }
 
-private const val SIGN_IN_SCREEN = "auth.sign_in"
+private const val SIGN_IN_SCREEN = ScreenKey.authSignIn
 
 /** One row per persona, with a checkmark on the selected one. */
 @Composable

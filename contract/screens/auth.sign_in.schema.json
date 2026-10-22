@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SignInScreenData",
+  "description": "`auth.sign_in` data (specs/AUTH.md 5.3). Every word on the screen.",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "email_label": { "type": "string" },
+    "password_label": { "type": "string" },
+    "submit_label": { "type": "string" },
+    "cannot_connect_message": { "type": "string" },
+    "session_ended_message": { "type": "string" },
+    "secondary_actions": {
+      "description": "Not supported yet; entries are ignored (specs/AUTH.md 5.3).",
+      "type": "array",
+      "items": {}
+    }
+  },
+  "required": [
+    "title",
+    "email_label",
+    "password_label",
+    "submit_label",
+    "cannot_connect_message",
+    "session_ended_message",
+    "secondary_actions"
+  ],
+  "additionalProperties": false
+}

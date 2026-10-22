@@ -20,7 +20,7 @@ Run these together:
 
 Apply the first rule that matches. Do not use judgment beyond these.
 
-1. **Open slice PR** (`slice/...` branch): it is in review. Next step: wait for its checks and the review. Never merge a red or pending check (guide 7.1 rule 10).
+1. **Open slice PR** (`slice/...` branch): it is in review. Next step: wait for its checks, including the automated review; once they have all finished, `/address-review <PR>` if there are comments or failures, otherwise the reviewer checks the behavior criteria. Never merge a red or pending check (guide 7.1 rule 10).
 2. **Slice in progress**: a local or remote `slice/...` branch with commits beyond `origin/main` and no open PR. Next step: finish it with `/implement-slice <ID>`.
 3. **Open planning PR** (`plan/...`): it must merge before the slices it plans start.
 4. Otherwise, the **first slice in the backlog's Slice order** that is not Done and whose "Depends on" slices are all Done. Next step: `/implement-slice <ID>`.

@@ -6,7 +6,7 @@
 | Epic | EP-05 |
 | Depends on | SUP-019, AND-008 |
 | Paired with | IOS-020 |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 

@@ -18,21 +18,21 @@ struct MockBackendService: BackendService {
     }
 
     func getEntry(locale: String) async throws(BackendError) -> ScreenEnvelope {
-        try decode("get_entry", missing: .server)
+        try decode(RPCFunction.getEntry.rawValue, missing: .server)
     }
 
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
-        return try decode("get_screen.\(key)", missing: .unknownScreen)
+        return try decode("\(RPCFunction.getScreen.rawValue).\(key)", missing: .unknownScreen)
     }
 
     func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
         guard personaState.current != nil else { throw .unauthorized }
-        return try decode("get_tabs", missing: .server)
+        return try decode(RPCFunction.getTabs.rawValue, missing: .server)
     }
 
     func whoami() async throws(BackendError) -> Profile {
         guard personaState.current != nil else { throw .unauthorized }
-        return try decode("whoami", missing: .server)
+        return try decode(RPCFunction.whoami.rawValue, missing: .server)
     }
 
     private func decode<Response: Decodable>(_ name: String, missing: BackendError) throws(BackendError) -> Response {

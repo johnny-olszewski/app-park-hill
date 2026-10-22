@@ -15,6 +15,10 @@ The one shape for any screen's content, wherever it comes from:
 
 Text resolves per string: a string missing in the requested locale uses its `en` value.
 
+## Names
+
+`names.json` is the only hand-written list of the backend function names (RPC and Edge Functions) clients call and the screen keys the backend returns. `make names` in `/backend` generates the client constants in `generated/` (`ContractNames.swift`, `ContractNames.kt`); never edit them by hand. `make data-check` fails when the list and the backend disagree, or when `generated/` differs from what `make names` produces. Mock-only keys (`.mock`) are not listed; they stay in client mock sources.
+
 ## Screen keys
 
 Lowercase and dot separated. A key ending in `.mock` is registered only in the Mock configuration and is never returned by the real backend.

@@ -29,6 +29,18 @@ class LocalSupabase:
         self.api_url = status["API_URL"].rstrip("/")
         self.anon_key = status["ANON_KEY"]
         self.service_key = status["SERVICE_ROLE_KEY"]
+        self.db_url = status["DB_URL"]
+
+    def sql(self, query: str) -> list[list[str]]:
+        """Runs a read-only query as the database owner through psql; returns rows of text fields."""
+        result = subprocess.run(
+            ["psql", self.db_url, "--no-psqlrc", "--tuples-only", "--no-align", "--field-separator=\t",
+             "--set=ON_ERROR_STOP=1", "--command", query],
+            capture_output=True, text=True,
+        )
+        if result.returncode != 0:
+            raise SystemExit(f"psql failed: {result.stderr.strip()}")
+        return [line.split("\t") for line in result.stdout.splitlines() if line]
 
     def request(self, method: str, path: str, body=None, token: str | None = None, service: bool = False,
                 headers: dict | None = None):

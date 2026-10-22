@@ -187,27 +187,27 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
-| [EP-05.A](epics/EP-05-contract-names.md#ep-05a-a-misspelled-name-fails-the-build-or-the-data-check) | A misspelled backend function name or screen key fails the build or `make data-check` on every platform | SUP-019, IOS-020, AND-020 | EP-02.A | Draft |
+| [EP-05.A](epics/EP-05-contract-names.md#ep-05a-a-misspelled-name-fails-the-build-or-the-data-check) | A misspelled backend function name or screen key fails the build or `make data-check` on every platform | SUP-019, IOS-020, AND-020 | EP-02.A | Done |
 | [EP-05.B](epics/EP-05-contract-names.md#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Draft |
 
 ### Backend (SUP)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006, SUP-008 | Draft |
+| [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006, SUP-008 | Done |
 | [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Draft |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-008 | Draft |
+| [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-008 | Done |
 
 ### Android (AND)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Draft |
+| [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Done |
 
 ## [EP-06: Mock menu](epics/EP-06-mock-menu.md)
 

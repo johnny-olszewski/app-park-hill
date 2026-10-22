@@ -1,0 +1,5 @@
+{
+  "rpc_functions": ["get_entry", "get_screen", "get_tabs", "whoami"],
+  "edge_functions": ["sign_in"],
+  "screen_keys": ["auth.sign_in", "home.root", "community.home"]
+}

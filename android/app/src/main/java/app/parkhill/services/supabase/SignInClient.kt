@@ -1,5 +1,6 @@
 package app.parkhill.services.supabase
 
+import app.parkhill.contract.EdgeFunction
 import app.parkhill.environment.BackendTarget
 import app.parkhill.services.auth.SignInError
 import app.parkhill.services.auth.SignInFailure
@@ -22,7 +23,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class SignInClient(private val backend: BackendTarget, private val http: OkHttpClient) {
     suspend fun signIn(request: SignInRequest): SignInSuccess = withContext(Dispatchers.IO) {
         val call = Request.Builder()
-            .url("${backend.url}/functions/v1/sign_in")
+            .url("${backend.url}/functions/v1/${EdgeFunction.signIn.value}")
             .header("apikey", backend.anonKey)
             .header("Authorization", "Bearer ${backend.anonKey}")
             .post(ContractJson.encodeToString(SignInRequest.serializer(), request).toRequestBody(JSON))

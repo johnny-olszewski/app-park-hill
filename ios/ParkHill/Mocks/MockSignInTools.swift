@@ -34,7 +34,7 @@ final class MockSignInChoices {
 /// signed in, everywhere.
 @MainActor
 enum MockSignInTools {
-    static let signInScreenKey = "auth.sign_in"
+    static let signInScreenKey = ScreenKey.authSignIn
 
     static func register(in registry: inout DevToolRegistry, choices: MockSignInChoices, session: SessionTracker, auth: MockAuthService) {
         registry.register(DevTool(id: "mock.signIn.persona", title: "Sign in as") {

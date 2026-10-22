@@ -1,6 +1,7 @@
 package app.parkhill.mocks
 
 import android.content.Context
+import app.parkhill.contract.RpcFunction
 import app.parkhill.environment.AppEnvironment
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
@@ -25,19 +26,19 @@ class MockBackendService(
     constructor(context: Context, environment: AppEnvironment) : this(FixtureStore.assets(context), MockPersonaState.shared)
 
     override suspend fun getEntry(locale: String): ScreenEnvelope =
-        decode("get_entry", missing = BackendError.Server)
+        decode(RpcFunction.getEntry.value, missing = BackendError.Server)
 
     override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope =
-        decode("get_screen.$key", missing = BackendError.UnknownScreen)
+        decode("${RpcFunction.getScreen.value}.$key", missing = BackendError.UnknownScreen)
 
     override suspend fun getTabs(locale: String): TabsResponse {
         if (personaState.current == null) throw BackendError.Unauthorized
-        return decode("get_tabs", missing = BackendError.Server, TabsResponse.serializer())
+        return decode(RpcFunction.getTabs.value, missing = BackendError.Server, TabsResponse.serializer())
     }
 
     override suspend fun whoami(): Profile {
         if (personaState.current == null) throw BackendError.Unauthorized
-        return decode("whoami", missing = BackendError.Server, Profile.serializer())
+        return decode(RpcFunction.whoami.value, missing = BackendError.Server, Profile.serializer())
     }
 
     private fun decode(name: String, missing: BackendError): ScreenEnvelope =

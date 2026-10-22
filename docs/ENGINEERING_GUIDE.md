@@ -87,6 +87,7 @@ Contract rules:
 4. One screen key maps to exactly one data model. Every variant of a screen is expressible in that one model, except mock variants, which have their own key.
 5. Unknown locale falls back to `en`.
 6. `/contract/fixtures` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
+7. Every backend function a client calls and every backend screen key is listed once in `contract/names.json`. Clients use the constants generated from it into `contract/generated/`, never string literals; `make data-check` fails when the list and the backend disagree.
 
 ### 4.2 Standard request headers
 
@@ -297,6 +298,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-21 | Behavior a system component provides on one platform is a written acceptance criterion in both paired tasks (5.5 rule 5). Found when Android's entry swapped instantly while iOS's cover slid (AND-023) |
 | 2026-10-22 | Sessions start with `/status` and implement with `/implement-slice`, project skills in `.claude/skills/` that follow this guide. Repeatable steps are scripts in `/scripts` (marking Done, checking every commit), not instructions, so they work the same in every session |
 | 2026-10-22 | Automated PR review (7.1 rule 11): a GitHub Actions reviewer (`anthropics/claude-code-action`) reviews each PR once when ready, and again on `@claude review`, against this guide and the PR's slice or plan, labelling each comment Must-fix or Suggestion. The PR's session fixes must-fix comments and failing checks, applies suggestions in separate commits for the reviewer to verify, and asks first about guide or Scope changes. The reviewer's bot comments are exempt from the no-mention rule (7.1 rule 3); anything posted under a person's account is not. Chosen over reviewing every push (repeats itself and loops with the fixes), Copilot code review (cannot review against this guide) and hosted review apps (paid for private repos). The prompt is a repo skill, so its general part transfers to other repos |
+| 2026-10-22 | Contract names (SUP-019): `contract/names.json` lists every client-called RPC and Edge Function and every backend screen key; `make names` generates `ContractNames.swift` and `ContractNames.kt` (package `app.parkhill.contract`) into `contract/generated/`; `make data-check` checks the list against the database both ways for screens and fails on drift. Contract rule 7 added to 4.1 |
 
 ## 9. Known risks
 

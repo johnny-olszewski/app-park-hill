@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import app.parkhill.cache.TabsCache
+import app.parkhill.contract.RpcFunction
 import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.TabsResponse
 import kotlinx.coroutines.CancellationException
@@ -42,7 +43,7 @@ class ShellCoordinator(
         } catch (error: CancellationException) {
             throw error
         } catch (error: Exception) {
-            Log.e(TAG, "get_tabs failed: $error")
+            Log.e(TAG, "${RpcFunction.getTabs.value} failed: $error")
             showFallback(locale)
             return
         }

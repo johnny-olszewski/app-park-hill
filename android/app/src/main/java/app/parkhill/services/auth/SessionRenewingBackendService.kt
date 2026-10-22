@@ -4,6 +4,7 @@ import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.services.backend.TabsResponse
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -20,6 +21,8 @@ class SessionRenewingBackendService(
 
     override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope =
         withRenewal { base.getScreen(key, locale, params) }
+
+    override suspend fun getTabs(locale: String): TabsResponse = withRenewal { base.getTabs(locale) }
 
     override suspend fun whoami(): Profile = withRenewal { base.whoami() }
 

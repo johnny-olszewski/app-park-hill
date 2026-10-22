@@ -22,6 +22,10 @@ Lowercase and dot separated. A key ending in `.mock` is registered only in the M
 | Key | Returned by | Data | Fixture |
 |---|---|---|---|
 | `auth.sign_in` | `get_entry`, `get_screen` | `specs/AUTH.md` 5.3 | `fixtures/get_screen.auth.sign_in.json` |
+| `home.root` | `get_tabs`, `get_screen`; signed in only | `{}` until Home has content | `fixtures/<persona>/get_screen.home.root.json` |
+| `community.home` | `get_tabs`, `get_screen`; signed in only | `{}` until EP-03 | `fixtures/<persona>/get_screen.community.home.json` |
+
+A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.
 
 ## Entry points
 
@@ -31,7 +35,7 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 |---|---|---|
 | `get_entry(p_locale)` | Signed out (`anon`) | The signed-out entry screen envelope. Today always `auth.sign_in` |
 | `get_screen(p_key, p_locale, p_params)` | Depends on the screen | One screen envelope. Used for refresh and for screens reached by navigation |
-| `get_tabs(p_locale)` | Signed in only | Tabs in order, each with its root screen envelope embedded (SUP-008) |
+| `get_tabs(p_locale)` | Signed in only | The enabled tabs in order, at most five: `{ "tabs": [ { "id", "title", "icon_key", "screen": <envelope> } ] }`. `title` is resolved for the locale; `icon_key` names a bundled client asset |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 ### `sign_in` Edge Function
@@ -97,6 +101,7 @@ Generated from the real backend by `make fixtures` in `/backend`, from the perso
 | `fixtures/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
 | `fixtures/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
 | `fixtures/<persona>/whoami.json` | `whoami()` signed in as an active persona |
+| `fixtures/<persona>/get_tabs.json` | `get_tabs('en')` signed in as an active persona |
 | `fixtures/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
 | `fixtures/sign_in.error.json` | `sign_in` with a wrong password |
 

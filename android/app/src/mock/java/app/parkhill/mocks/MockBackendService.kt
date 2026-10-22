@@ -7,6 +7,7 @@ import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.services.backend.TabsResponse
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
@@ -14,8 +15,8 @@ import kotlinx.serialization.json.JsonObject
 /**
  * Mock [BackendService]: answers from contract fixtures and makes no network
  * calls. The entry is the recorded `get_entry.json`; `getScreen` reads
- * `get_screen.<key>.json`, preferring the current persona's copy; `whoami` reads the
- * signed-in persona's `whoami.json`.
+ * `get_screen.<key>.json`, preferring the current persona's copy; `getTabs`
+ * and `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
  */
 class MockBackendService(
     private val fixtures: FixtureStore,
@@ -28,6 +29,11 @@ class MockBackendService(
 
     override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope =
         decode("get_screen.$key", missing = BackendError.UnknownScreen)
+
+    override suspend fun getTabs(locale: String): TabsResponse {
+        if (personaState.current == null) throw BackendError.Unauthorized
+        return decode("get_tabs", missing = BackendError.Server, TabsResponse.serializer())
+    }
 
     override suspend fun whoami(): Profile {
         if (personaState.current == null) throw BackendError.Unauthorized

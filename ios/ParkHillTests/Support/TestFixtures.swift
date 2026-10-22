@@ -22,10 +22,13 @@ enum TestFixtures {
             .sorted()
     }
 
-    /// Fixtures of screen responses (`get_entry`, `get_screen`, `get_tabs`), in
-    /// any persona folder. Other fixtures, such as `sign_in.*.json`, have their
-    /// own models.
+    /// Fixtures of screen responses (`get_entry`, `get_screen`), in any persona
+    /// folder. Other fixtures, such as `get_tabs.json` and `sign_in.*.json`,
+    /// have their own models.
     static func screenEnvelopePaths() -> [String] {
-        allJSONPaths().filter { ($0 as NSString).lastPathComponent.hasPrefix("get_") }
+        allJSONPaths().filter {
+            let name = ($0 as NSString).lastPathComponent
+            return name == "get_entry.json" || name.hasPrefix("get_screen.")
+        }
     }
 }

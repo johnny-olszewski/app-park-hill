@@ -1,0 +1,22 @@
+{
+  "tabs": [
+    {
+      "id": "home",
+      "title": "Home",
+      "screen": {
+        "key": "home.root",
+        "data": {}
+      },
+      "icon_key": "tab.home"
+    },
+    {
+      "id": "community",
+      "title": "Community",
+      "screen": {
+        "key": "community.home",
+        "data": {}
+      },
+      "icon_key": "tab.community"
+    }
+  ]
+}

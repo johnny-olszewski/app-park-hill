@@ -4,6 +4,7 @@ import app.parkhill.BuildConfig
 import app.parkhill.environment.AppEnvironment
 import app.parkhill.environment.BackendTarget
 import app.parkhill.services.backend.BackendError
+import java.io.File
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -20,6 +21,7 @@ import org.junit.Test
 /** The real client against a local HTTP server: requests, headers and error mapping. */
 class SupabaseBackendServiceTest {
     private val server = MockWebServer()
+    private val fixtures = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
     private lateinit var service: SupabaseBackendService
 
     @Before
@@ -74,6 +76,17 @@ class SupabaseBackendServiceTest {
             Json.parseToJsonElement("""{"p_key": "auth.sign_in", "p_locale": "en", "p_params": {"id": "7"}}"""),
             Json.parseToJsonElement(request.body.readUtf8()),
         )
+    }
+
+    @Test
+    fun getTabsSendsTheLocaleAndDecodesTheTabs() = runTest {
+        respond(200, File(fixtures, "attendee/get_tabs.json").readText())
+        val response = service.getTabs("en")
+        val request = server.takeRequest()
+        assertEquals("/rest/v1/rpc/get_tabs", request.requestUrl?.encodedPath)
+        assertEquals(JsonObject(mapOf("p_locale" to JsonPrimitive("en"))), Json.parseToJsonElement(request.body.readUtf8()))
+        assertEquals(listOf("home", "community"), response.tabs.map { it.id })
+        assertEquals("tab.home", response.tabs.first().iconKey)
     }
 
     @Test

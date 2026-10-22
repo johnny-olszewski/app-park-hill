@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,8 +33,7 @@ class MockSignInMenuUiTest {
 
         compose.signIn("anyone@example.com", "anything")
 
-        compose.await("placeholder.user")
-        compose.onNodeWithTag("placeholder.user").assertTextEquals("admin")
+        assertEquals("admin", compose.signedInUser())
     }
 
     @Test
@@ -67,13 +67,13 @@ class MockSignInMenuUiTest {
         compose.awaitSignedOut()
         compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
-        compose.await("placeholder.user")
+        assertEquals("attendee", compose.signedInUser())
 
         compose.openDevToolsMenu()
         compose.tapInDevToolsMenu("mockPersona.admin")
         compose.closeDevToolsMenu()
 
-        compose.onNodeWithTag("placeholder.user").assertTextEquals("admin")
+        assertEquals("admin", compose.signedInUser())
     }
 
     private fun recordedMessage(fixture: String, field: String = "message"): String {

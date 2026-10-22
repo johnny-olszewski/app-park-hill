@@ -73,8 +73,12 @@ object AppTools {
             ClearCachedDataRow(cacheDirectory)
         },
         DevTool(id = "app.session", title = "Session") {
-            val state by auth.state.collectAsState()
-            if (state is AuthState.SignedIn) {
+            val user = (auth.state.collectAsState().value as? AuthState.SignedIn)?.user
+            if (user != null) {
+                Row(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
+                    Text("Signed in as", color = ParkHill.colors.ink, modifier = Modifier.weight(1f))
+                    Text(user.email ?: user.id, color = ParkHill.colors.inkMuted, modifier = Modifier.testTag("devTools.session.user"))
+                }
                 ToolActionRow("Sign out", Modifier.testTag("devTools.signOut"), destructive = true) {
                     closeMenu()
                     scope.launch { auth.signOut() }

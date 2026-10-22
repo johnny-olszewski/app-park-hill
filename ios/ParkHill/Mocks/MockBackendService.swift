@@ -2,8 +2,8 @@ import Foundation
 
 /// Mock `BackendService`: answers from contract fixtures and makes no network
 /// calls. The entry is the recorded `get_entry.json` (the production
-/// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `whoami` reads
-/// the signed-in persona's `whoami.json`.
+/// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `get_tabs` and
+/// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
 struct MockBackendService: BackendService {
     private let fixtures: FixtureStore
     private let personaState: MockPersonaState
@@ -23,6 +23,11 @@ struct MockBackendService: BackendService {
 
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
         return try decode("get_screen.\(key)", missing: .unknownScreen)
+    }
+
+    func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
+        guard personaState.current != nil else { throw .unauthorized }
+        return try decode("get_tabs", missing: .server)
     }
 
     func whoami() async throws(BackendError) -> Profile {

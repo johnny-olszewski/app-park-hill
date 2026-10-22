@@ -22,7 +22,7 @@ final class DevToolsUITests: XCTestCase {
 
         app.submitAnyCredentials()
         app.dismissSavePasswordPrompt()
-        XCTAssertTrue(app.staticTexts["placeholder.user"].waitForExistence(timeout: 5), "touches reach the app under the pill's window")
+        XCTAssertEqual(app.signedInUser(), "attendee", "touches reach the app under the pill's window")
         XCTAssertTrue(app.devToolsPill.exists, "the pill stays after signing in")
     }
 
@@ -31,7 +31,7 @@ final class DevToolsUITests: XCTestCase {
         app.launchSignedOut(entry: app.signInEmailField)
         app.submitAnyCredentials()
         app.dismissSavePasswordPrompt()
-        XCTAssertTrue(app.staticTexts["placeholder.user"].waitForExistence(timeout: 5))
+        XCTAssertNotNil(app.signedInUser())
 
         app.openDevToolsMenu()
         app.tapInDevToolsMenu("devTools.signOut")

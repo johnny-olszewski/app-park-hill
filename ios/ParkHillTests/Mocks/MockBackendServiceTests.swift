@@ -21,6 +21,15 @@ struct MockBackendServiceTests {
         #expect(try await service.whoami().displayName == "Attendee")
     }
 
+    @Test func getTabsReturnsTheSignedInPersonasTabs() async throws {
+        let personaState = MockPersonaState()
+        let service = MockBackendService(fixtures: .bundled, personaState: personaState)
+        await #expect(throws: BackendError.unauthorized) { _ = try await service.getTabs(locale: "en") }
+        personaState.current = "attendee"
+        let expected = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data("attendee/get_tabs.json"))
+        #expect(try await service.getTabs(locale: "en") == expected)
+    }
+
     @Test func getScreenReadsTheScreenFixture() async throws {
         let service = MockBackendService(environment: .mock)
         #expect(try await service.getScreen(key: "auth.sign_in", locale: "en") == expected("get_screen.auth.sign_in.json"))

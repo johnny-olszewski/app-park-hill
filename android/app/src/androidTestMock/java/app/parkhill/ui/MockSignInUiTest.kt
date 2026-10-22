@@ -1,11 +1,9 @@
 package app.parkhill.ui
 
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.parkhill.app.MainActivity
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,10 +20,8 @@ class MockSignInUiTest {
         compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
 
-        compose.await("placeholder.user")
-        compose.onNodeWithTag("placeholder.user").assertTextEquals("attendee")
+        assertEquals("attendee", compose.signedInUser())
 
-        compose.onNodeWithTag("placeholder.signOut").performClick()
-        compose.await("signIn.email")
+        compose.signOutThroughDevTools()
     }
 }

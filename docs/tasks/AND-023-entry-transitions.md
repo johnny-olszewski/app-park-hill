@@ -6,7 +6,7 @@
 | Epic | EP-02 |
 | Depends on | AND-008 |
 | Paired with | None (iOS already has this: its entry is a full-screen cover) |
-| Status | Draft |
+| Status | Done |
 
 ## Intent
 

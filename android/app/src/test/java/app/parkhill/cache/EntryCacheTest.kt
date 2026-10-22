@@ -32,3 +32,22 @@ class EntryCacheTest {
         assertNull(EntryCache(directory).load("en"))
     }
 }
+
+class TabsCacheTest {
+    @Test
+    fun savesAndLoadsTabsPerLocale() {
+        val cache = TabsCache(Files.createTempDirectory("tabs").toFile())
+        val tabs = StubBackendService.tabs("home" to "home.root", "community" to "community.home")
+        cache.save(tabs, "en")
+        assertEquals(tabs, cache.load("en"))
+        assertNull(cache.load("es"))
+    }
+
+    @Test
+    fun theStandardCacheLivesUnderTheDeletableCacheDirectory() {
+        val filesDir = Files.createTempDirectory("files").toFile()
+        val tabs = StubBackendService.tabs("home" to "home.root")
+        TabsCache.standard(filesDir).save(tabs, "en")
+        assertEquals(tabs, TabsCache(java.io.File(EntryCache.cacheDirectory(filesDir), "tabs")).load("en"))
+    }
+}

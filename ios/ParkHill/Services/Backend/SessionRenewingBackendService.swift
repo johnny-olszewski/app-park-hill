@@ -21,6 +21,10 @@ struct SessionRenewingBackendService: BackendService {
         }
     }
 
+    func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
+        try await withRenewal { () async throws(BackendError) in try await base.getTabs(locale: locale) }
+    }
+
     func whoami() async throws(BackendError) -> Profile {
         try await withRenewal { () async throws(BackendError) in try await base.whoami() }
     }

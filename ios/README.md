@@ -77,8 +77,8 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 
 | Type | Configurations | Behavior |
 |---|---|---|
-| `SupabaseBackendService` | Dev | Calls `get_entry` and `get_screen` through the shared client from `SupabaseClientProvider`, with the standard request headers |
-| `MockBackendService` | Mock | Reads the bundled fixtures: `get_entry.json`, `get_screen.<key>.json`, preferring `<persona>/<name>.json` for the current persona |
+| `SupabaseBackendService` | Dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the shared client from `SupabaseClientProvider`, with the standard request headers |
+| `MockBackendService` | Mock | Reads the bundled fixtures: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/` (and by the Dev-only integration tests). Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
 
@@ -99,7 +99,7 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 
 ## Screens and launch
 
-`AppCoordinator` (`ParkHill/Navigation/`) owns launch and the root. The root is the signed-in destination (tabs from IOS-008); the signed-out entry is a full-screen cover over it, holding a loading indicator, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. Signing in hides the cover to reveal the destination; signing out or access ending presents it again, and the destination is cleared once the cover is up. A cold start that is signed out shows the cover without animation. On return to the foreground the entry is fetched again.
+`AppCoordinator` (`ParkHill/Navigation/`) owns launch and the root. The root is the signed-in shell of tabs; the signed-out entry is a full-screen cover over it, holding a loading indicator, the backend's entry screen (resolved through `ScreenRegistry`) or the launch error. Signing in hides the cover to reveal the destination; signing out or access ending presents it again, and the destination is cleared once the cover is up. A cold start that is signed out shows the cover without animation. On return to the foreground the entry is fetched again.
 
 | Situation | Shows |
 |---|---|
@@ -109,9 +109,22 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 | `get_entry` returns a key this build does not register | Error screen, even with a cache (guide 5.3 rule 5); logged |
 | Foreground refetch fails | The screen already showing |
 
-The cache is one JSON file per locale under `Application Support/Cache/entry/`. Sign-out deletes `Application Support/Cache/` (IOS-005).
+The cache is one JSON file per locale under `Application Support/Cache/entry/` (`LocaleCache`; the tabs use `Cache/tabs/`). Sign-out deletes `Application Support/Cache/` (IOS-005).
 
-**Signed in:** the coordinator follows `AuthService.stateChanges()`. Launch with a stored session goes straight to the signed-in destination (the temporary placeholder in `ParkHill/Temporary/`, deleted by IOS-008); signing out, or access ending, returns to the entry screen, with `session_ended_message` shown when access ended. Returning to the foreground while signed in calls `whoami()`, so a disabled account is signed out on its next foreground.
+**Signed in:** the coordinator follows `AuthService.stateChanges()`. Launch with a stored session goes straight to the tabs; signing out, or access ending, returns to the entry screen, with `session_ended_message` shown when access ended. A new signed-in user gets a new `ShellCoordinator`.
+
+**Tabs:** `ShellCoordinator` fetches `get_tabs` and shows the tabs in the system tab bar (`SignedInShellView`), each in its own `TabCoordinator` with a navigation stack and a sheet, kept while switching tabs. Returning to the foreground fetches the tabs again; the request also checks the session, so a disabled account is signed out on its next foreground.
+
+| Situation | Shows |
+|---|---|
+| `get_tabs` succeeds | Up to five tabs in backend order, first selected on a fresh shell; cached for the locale |
+| A tab's root screen key is not registered | That tab is dropped and logged; if none is left, the error screen |
+| More than five tabs | The first five; the rest logged |
+| `get_tabs` fails, cached tabs exist | The cached tabs |
+| `get_tabs` fails, no cache | Error screen with retry |
+| Foreground refetch | Tabs update; unchanged tabs keep their stacks and the selected tab stays |
+
+Tab icons come from `AssetProvider` (`ParkHill/Design/`): bundled placeholder symbols for `tab.home` and `tab.community`, and a fallback for any other key. Home's toolbar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
 
 **Entry by configuration:** Dev shows `auth.sign_in` from `get_entry`. Mock shows the same `auth.sign_in`, from the recorded `get_entry.json`; the mock menu decides what signing in does (Dev tools, Mock tools).
 

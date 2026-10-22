@@ -48,6 +48,16 @@ struct FixtureDecodingTests {
         }
     }
 
+    @Test func tabsFixturesDecodeIntoTabs() throws {
+        let paths = TestFixtures.allJSONPaths().filter { $0.hasSuffix("/get_tabs.json") }
+        #expect(!paths.isEmpty)
+        for path in paths {
+            let response = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data(path))
+            #expect(!response.tabs.isEmpty)
+            #expect(response.tabs.allSatisfy { !$0.title.isEmpty && !$0.iconKey.isEmpty })
+        }
+    }
+
     @Test func unknownFieldsAreIgnored() throws {
         let json = #"{"key": "auth.sign_in", "data": {"title": "Sign in"}, "toolbar": [], "future_field": {"x": 1}}"#
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: Data(json.utf8))

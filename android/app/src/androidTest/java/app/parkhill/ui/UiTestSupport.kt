@@ -1,5 +1,7 @@
 package app.parkhill.ui
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.ComposeTimeoutException
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
@@ -17,14 +19,42 @@ import kotlinx.serialization.json.jsonPrimitive
 
 private const val TIMEOUT = 15_000L
 
-/** Waits for the signed-out entry; signs out first when a previous test left a session. */
+/** A signed-out launch shows sign-in well within this; longer means a session was restored. */
+private const val SIGNED_OUT_TIMEOUT = 8_000L
+
+/**
+ * Waits for the signed-out entry; signs out through the dev tools menu first
+ * when a previous test left a session.
+ */
 @OptIn(ExperimentalTestApi::class)
 fun ComposeTestRule.awaitSignedOut() {
-    waitUntilAtLeastOneExists(hasTestTag("signIn.email") or hasTestTag("placeholder.signOut"), TIMEOUT)
-    if (onAllNodes(hasTestTag("placeholder.signOut")).fetchSemanticsNodes().isNotEmpty()) {
-        onNodeWithTag("placeholder.signOut").performClick()
+    try {
+        waitUntilAtLeastOneExists(hasTestTag("signIn.email"), SIGNED_OUT_TIMEOUT)
+    } catch (_: ComposeTimeoutException) {
+        signOutThroughDevTools()
     }
-    waitUntilAtLeastOneExists(hasTestTag("signIn.email"), TIMEOUT)
+}
+
+/**
+ * Waits for sign-in to finish, then reads who is signed in from the dev tools
+ * menu's Session tool: the email, or the mock persona's id. UI tests read
+ * identity there, never from production screens.
+ */
+@OptIn(ExperimentalTestApi::class)
+fun ComposeTestRule.signedInUser(): String {
+    waitUntilDoesNotExist(hasTestTag("signIn.email"), TIMEOUT)
+    openDevToolsMenu()
+    onNodeWithTag("devTools.menu").performScrollToNode(hasTestTag("devTools.session.user"))
+    val user = onNodeWithTag("devTools.session.user").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString { it.text }
+    closeDevToolsMenu()
+    return user
+}
+
+/** Signs out through the dev tools menu and waits for sign-in. */
+fun ComposeTestRule.signOutThroughDevTools() {
+    openDevToolsMenu()
+    tapInDevToolsMenu("devTools.signOut")
+    await("signIn.email")
 }
 
 @OptIn(ExperimentalTestApi::class)

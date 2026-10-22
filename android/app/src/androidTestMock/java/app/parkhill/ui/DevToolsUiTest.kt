@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.parkhill.app.MainActivity
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,7 +32,7 @@ class DevToolsUiTest {
 
         compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
-        compose.await("placeholder.user")
+        assertEquals("touches reach the app under the overlay", "attendee", compose.signedInUser())
         compose.onNodeWithTag("devTools.pill").assertExists()
     }
 
@@ -40,7 +41,7 @@ class DevToolsUiTest {
         compose.awaitSignedOut()
         compose.armMockSignIn()
         compose.signIn("anyone@example.com", "anything")
-        compose.await("placeholder.user")
+        compose.signedInUser()
 
         compose.openDevToolsMenu()
         compose.tapInDevToolsMenu("devTools.signOut")

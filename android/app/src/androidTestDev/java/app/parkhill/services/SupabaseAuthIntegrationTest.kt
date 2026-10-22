@@ -6,6 +6,8 @@ import app.parkhill.environment.ServiceBinding
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.LocalUserData
 import app.parkhill.services.backend.BackendError
+import app.parkhill.services.backend.ContractJson
+import app.parkhill.services.backend.TabsResponse
 import app.parkhill.services.supabase.EncryptedSessionManager
 import app.parkhill.services.supabase.KeystoreSessionCipher
 import app.parkhill.services.supabase.SignInClient
@@ -68,5 +70,21 @@ class SupabaseAuthIntegrationTest {
         } catch (error: BackendError) {
             assertEquals(BackendError.Unauthorized, error)
         }
+    }
+
+    @Test
+    fun signedInTabsMatchTheFixtureAndSignedOutIsRefused() = runBlocking {
+        val stack = Stack(context, environment, File(context.cacheDir, "integration/tabs-session.bin").apply { delete() })
+        try {
+            stack.backend.getTabs("en")
+            fail("expected Unauthorized before signing in")
+        } catch (error: BackendError) {
+            assertEquals(BackendError.Unauthorized, error)
+        }
+
+        stack.auth.signIn(attendeeEmail, password)
+        val fixture = checkNotNull(javaClass.classLoader?.getResourceAsStream("attendee/get_tabs.json")).bufferedReader().readText()
+        assertEquals(ContractJson.decodeFromString(TabsResponse.serializer(), fixture), stack.backend.getTabs("en"))
+        stack.auth.signOut()
     }
 }

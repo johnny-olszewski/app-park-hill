@@ -22,9 +22,7 @@ final class MockSignInUITests: XCTestCase {
         choose("mockSignIn.persona.admin")
         app.submitAnyCredentials()
         app.dismissSavePasswordPrompt()
-        let user = app.staticTexts["placeholder.user"]
-        XCTAssertTrue(user.waitForExistence(timeout: 5))
-        XCTAssertEqual(user.label, "admin")
+        XCTAssertEqual(app.signedInUser(), "admin")
     }
 
     func testAnArmedRefusalShowsItsRecordedMessage() throws {
@@ -56,18 +54,9 @@ final class MockSignInUITests: XCTestCase {
     func testSwitchesPersonaWhileSignedIn() {
         app.submitAnyCredentials()
         app.dismissSavePasswordPrompt()
-        let user = app.staticTexts["placeholder.user"]
-        XCTAssertTrue(user.waitForExistence(timeout: 5))
-        XCTAssertEqual(user.label, "attendee")
+        XCTAssertEqual(app.signedInUser(), "attendee")
 
         choose("mockPersona.admin")
-        XCTAssertTrue(user.waitForLabel("admin", timeout: 5), "now signed in as admin")
-    }
-}
-
-private extension XCUIElement {
-    func waitForLabel(_ label: String, timeout: TimeInterval) -> Bool {
-        let expectation = XCTNSPredicateExpectation(predicate: NSPredicate(format: "label == %@", label), object: self)
-        return XCTWaiter.wait(for: [expectation], timeout: timeout) == .completed
+        XCTAssertEqual(app.signedInUser(), "admin", "now signed in as admin")
     }
 }

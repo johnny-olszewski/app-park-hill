@@ -28,16 +28,14 @@ final class SignInUITests: XCTestCase {
 
         signIn(email: email, password: try UITestData.localPassword())
         app.dismissSavePasswordPrompt()
-        let user = app.staticTexts["placeholder.user"]
-        XCTAssertTrue(user.waitForExistence(timeout: 10))
-        XCTAssertEqual(user.label, email)
+        XCTAssertEqual(app.signedInUser(), email)
 
         app.terminate()
         app.launch()
-        XCTAssertTrue(user.waitForExistence(timeout: 10), "still signed in after relaunch")
+        XCTAssertTrue(app.devToolsPill.waitForExistence(timeout: 10))
+        XCTAssertEqual(app.signedInUser(), email, "still signed in after relaunch")
 
-        app.buttons["placeholder.signOut"].tap()
-        XCTAssertTrue(emailField.waitForExistence(timeout: 10))
+        app.signOutThroughDevTools()
 
         app.terminate()
         app.launch()

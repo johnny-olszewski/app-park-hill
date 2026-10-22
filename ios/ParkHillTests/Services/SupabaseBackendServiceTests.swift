@@ -54,6 +54,19 @@ struct SupabaseBackendServiceTests {
         ])
     }
 
+    @Test func getTabsSendsTheLocaleAndDecodesTheTabs() async throws {
+        let fixture = try String(decoding: TestFixtures.data("attendee/get_tabs.json"), as: UTF8.self)
+        StubURLProtocol.stub(.http(status: 200, body: fixture))
+
+        let response = try await makeService().getTabs(locale: "en")
+
+        let request = try #require(StubURLProtocol.requests.last)
+        #expect(request.url?.path == "/rest/v1/rpc/get_tabs")
+        #expect(try body(of: request) == ["p_locale": .string("en")])
+        #expect(response.tabs.map(\.id) == ["home", "community"])
+        #expect(response.tabs.first?.iconKey == "tab.home")
+    }
+
     @Test func standardHeadersFallBackToEnglish() {
         #expect(StandardHeaders.make(environment: Self.environment, preferredLanguages: ["fr-CA", "en"])["Accept-Language"] == "fr-CA")
         #expect(StandardHeaders.make(environment: Self.environment, preferredLanguages: [])["Accept-Language"] == "en")

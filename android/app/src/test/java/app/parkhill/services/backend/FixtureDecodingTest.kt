@@ -23,6 +23,17 @@ class FixtureDecodingTest {
     }
 
     @Test
+    fun everyTabsFixtureDecodes() {
+        val files = root.walkTopDown().filter { it.isFile && it.name == "get_tabs.json" }.toList()
+        assertTrue("no tabs fixtures found", files.isNotEmpty())
+        for (file in files) {
+            val response = ContractJson.decodeFromString(TabsResponse.serializer(), file.readText())
+            assertTrue("${file.path} has no tabs", response.tabs.isNotEmpty())
+            assertTrue(response.tabs.all { it.title.isNotEmpty() && it.iconKey.isNotEmpty() })
+        }
+    }
+
+    @Test
     fun theEntryIsSignIn() {
         val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), File(root, "get_entry.json").readText())
         assertEquals("auth.sign_in", envelope.key)

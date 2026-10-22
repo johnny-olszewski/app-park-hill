@@ -22,6 +22,10 @@ struct SupabaseBackendService: BackendService {
         try await call("get_screen", params: ScreenParams(p_key: key, p_locale: locale, p_params: params))
     }
 
+    func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
+        try await call("get_tabs", params: EntryParams(p_locale: locale))
+    }
+
     func whoami() async throws(BackendError) -> Profile {
         try await call("whoami", params: NoParams())
     }

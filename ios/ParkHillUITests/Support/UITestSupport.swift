@@ -1,22 +1,36 @@
 import XCTest
 
 extension XCUIApplication {
-    /// Launches and waits for the signed-out entry or the signed-in
-    /// placeholder; signs out first when a previous run left a session.
+    /// Launches and waits for the signed-out entry; signs out through the dev
+    /// tools menu first when a previous run left a session.
     func launchSignedOut(entry: XCUIElement) {
         launch()
-        let signOut = buttons["placeholder.signOut"]
-        let deadline = Date().addingTimeInterval(15)
-        while Date() < deadline {
-            if entry.exists { return }
-            if signOut.exists {
-                signOut.tap()
-                XCTAssertTrue(entry.waitForExistence(timeout: 10), "sign-out did not return to the entry screen")
-                return
-            }
-            RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+        if entry.waitForExistence(timeout: 10) { return }
+        openDevToolsMenu()
+        tapInDevToolsMenu("devTools.signOut")
+        XCTAssertTrue(entry.waitForExistence(timeout: 10), "neither the entry screen nor a signed-in session to sign out of")
+    }
+
+    /// Waits for sign-in to finish, then reads who is signed in from the dev
+    /// tools menu's Session tool: the email, or the mock persona's id. UI tests
+    /// read identity there, never from production screens.
+    func signedInUser(timeout: TimeInterval = 10) -> String? {
+        guard signInEmailField.waitForNonExistence(timeout: timeout) else { return nil }
+        openDevToolsMenu()
+        let user = staticTexts["devTools.session.user"]
+        for _ in 0..<4 where !(user.exists && user.isHittable) {
+            swipeUp()
         }
-        XCTFail("neither the entry screen nor the signed-in placeholder appeared")
+        let label = user.exists ? user.label : nil
+        closeDevToolsMenu()
+        return label
+    }
+
+    /// Signs out through the dev tools menu and waits for sign-in.
+    func signOutThroughDevTools() {
+        openDevToolsMenu()
+        tapInDevToolsMenu("devTools.signOut")
+        XCTAssertTrue(signInEmailField.waitForExistence(timeout: 10), "sign-out did not return to sign-in")
     }
 
     /// The dev tools pill at the top of every screen (debug builds).

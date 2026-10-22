@@ -3,6 +3,7 @@ package app.parkhill.navigation
 import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.backend.ContractJson
 import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.services.backend.TabsResponse
 import java.io.File
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
@@ -20,6 +21,19 @@ class ScreenRegistryTest {
     @Test
     fun sharedScreensIncludeSignIn() {
         assertTrue(registry().isRegistered("auth.sign_in"))
+    }
+
+    @Test
+    fun everyRecordedTabRootResolves() {
+        val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
+        val files = root.walkTopDown().filter { it.isFile && it.name == "get_tabs.json" }.toList()
+        assertTrue(files.isNotEmpty())
+        for (file in files) {
+            val response = ContractJson.decodeFromString(TabsResponse.serializer(), file.readText())
+            for (tab in response.tabs) {
+                assertNotNull("${file.path}: ${tab.screen.key}", registry().resolve(tab.screen))
+            }
+        }
     }
 
     @Test

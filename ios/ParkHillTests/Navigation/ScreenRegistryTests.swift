@@ -45,6 +45,15 @@ struct ScreenRegistryTests {
         #expect(makeRegistry().resolve(envelope) != nil)
     }
 
+    @Test func everyRecordedTabRootResolves() throws {
+        for path in TestFixtures.allJSONPaths().filter({ $0.hasSuffix("/get_tabs.json") }) {
+            let response = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data(path))
+            for tab in response.tabs {
+                #expect(makeRegistry().resolve(tab.screen) != nil, "\(path): \(tab.screen.key)")
+            }
+        }
+    }
+
     @Test func keepsTheEnvelopeItWasBuiltFrom() throws {
         let envelope = ScreenEnvelope.signIn()
         let screen = try #require(makeRegistry().resolve(envelope))

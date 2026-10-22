@@ -6,6 +6,7 @@ Layout:
   get_entry.json, get_screen.<key>.json            signed out
   <persona>/get_screen.<key>.json                  signed in as an active persona
   <persona>/whoami.json                            whoami() as that persona
+  <persona>/get_tabs.json                          get_tabs() as that persona
   sign_in.ok.json, sign_in.error.json              the sign_in Edge Function
   sign_in.error.<code>.json                        each other sign_in refusal
 A screen a caller may not see (any 4xx) gets no file for that caller.
@@ -137,6 +138,10 @@ def main() -> None:
         print(f"{persona['id']}:")
         token = supabase.sign_in(persona["email"], data["local_password"])
         capture(root / persona["id"] / "whoami.json", lambda token=token: supabase.rpc("whoami", {}, token=token))
+        capture(
+            root / persona["id"] / "get_tabs.json",
+            lambda token=token: supabase.rpc("get_tabs", {"p_locale": LOCALE}, token=token),
+        )
         for key in keys:
             capture(
                 root / persona["id"] / f"get_screen.{key}.json",

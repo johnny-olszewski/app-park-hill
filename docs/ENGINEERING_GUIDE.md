@@ -168,6 +168,7 @@ Rules:
 2. Brand shows through color, type and spacing applied to system components, not through custom chrome.
 3. A custom component needs a decision log entry saying why no system component fits.
 4. Specs and tasks describe behavior and name the platform pattern for each client. Where they say "match IOS-###" or "match AND-###", that means behavior, not appearance.
+5. Behavior a system component provides for free is still written down. When one platform gets a behavior from a system component (a presentation's animation, a gesture, content kept in place during a transition), the paired tasks state it as an acceptance criterion on both platforms, so the platform without it builds it explicitly. Example: the iOS full-screen cover slides the entry in and out; Android needed AND-023 to match.
 
 ## 6. Testing
 
@@ -286,6 +287,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | Android exception ended: Android starts through catch-up slices (7.2 rule 3) that mirror the iOS slices' behavior criteria: EP-01.B, EP-01.C, EP-06.C. No new feature slice starts until Android is level. CI (EP-01.A) goes first |
 | 2026-10-15 | CI checks report on PRs and a red or pending check blocks merging by rule (7.1 rule 10), with a pre-push hook for fast local checks. Chosen over GitHub Pro and over a public repo (branch protection needs one of them). The macOS job runs on ready PRs only, to stay within the free Actions minutes |
 | 2026-10-20 | Android dev tools pill lives over the activity's content, added by debug-only lifecycle callbacks. Dialogs and bottom sheets, which are separate windows, cover it while open. Chosen over re-attaching a pill to every window (relies on Android internals) and a system overlay (each tester grants a permission) |
+| 2026-10-21 | Behavior a system component provides on one platform is a written acceptance criterion in both paired tasks (5.5 rule 5). Found when Android's entry swapped instantly while iOS's cover slid (AND-023) |
 
 ## 9. Known risks
 

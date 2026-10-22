@@ -29,6 +29,7 @@ fixtures: seed
 data-check: fixtures names models
 	$(PYTHON) scripts/check_personas.py
 	$(PYTHON) scripts/check_names.py
+	$(PYTHON) scripts/check_models.py
 	@if [ -n "$$(git status --porcelain -- $(GENERATED))" ]; then \
 		git status --short -- $(GENERATED); \
 		git --no-pager diff --stat -- $(GENERATED); \

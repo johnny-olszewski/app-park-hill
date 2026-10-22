@@ -3,7 +3,7 @@
 # contract/names.json. Never edit generated files by hand.
 
 PYTHON ?= python3
-GENERATED := supabase/seed.sql ../contract/fixtures
+GENERATED := supabase/seed.sql ../contract/fixtures ../contract/generated
 
 .PHONY: seed fixtures names data-check test-functions
 
@@ -21,12 +21,13 @@ fixtures: seed
 	$(PYTHON) scripts/generate_fixtures.py
 
 ## Regenerate everything and fail if it differs from what is committed
-data-check: fixtures
+data-check: fixtures names
 	$(PYTHON) scripts/check_personas.py
+	$(PYTHON) scripts/check_names.py
 	@if [ -n "$$(git status --porcelain -- $(GENERATED))" ]; then \
 		git status --short -- $(GENERATED); \
 		git --no-pager diff --stat -- $(GENERATED); \
-		echo "Generated data differs from the committed files. Run 'make fixtures' and commit the result."; \
+		echo "Generated data differs from the committed files. Run 'make fixtures' and 'make names', and commit the result."; \
 		exit 1; \
 	fi
 	@echo "Generated data matches the dataset."

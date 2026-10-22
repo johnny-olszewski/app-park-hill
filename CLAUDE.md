@@ -2,7 +2,7 @@
 
 Park Hill is a real app and a proving ground for a transferable architecture and an agent-driven way of working (`docs/ENGINEERING_GUIDE.md`, Purpose). When two approaches both work, prefer the one that generalizes and that the next agent can follow from the repo alone.
 
-Start a session with `/status`: where the work stands and the next step. Implement a slice with `/implement-slice <ID>`. Both skills live in `.claude/skills/`.
+Start a session with `/status`: where the work stands and the next step. Implement a slice with `/implement-slice <ID>`. Act on a PR's review with `/address-review <PR>` once its checks have finished. Both skills live in `.claude/skills/`.
 
 Before changing anything:
 
@@ -29,4 +29,5 @@ Follow `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2. In short:
 - Open one PR per slice, titled `[<slice ID>] <slice title>`, with the body from `.github/pull_request_template.md`.
 - Planning-only changes use `plan/` branches (guide 7.1 rule 9).
 - Never merge a PR with a failing or pending check (guide 7.1 rule 10). Enable the pre-push hook once per clone: `git config core.hooksPath .githooks`.
-- Never mention Claude, AI, assistants or agents in commits, PRs or review comments. No `Co-Authored-By` or "Generated with" lines.
+- Never mention Claude, AI, assistants or agents in commits, PRs or anything posted under a person's account, including replies to review comments. No `Co-Authored-By` or "Generated with" lines. Only the automated reviewer's own bot comments are exempt (guide 7.1 rule 11).
+- Every PR gets one automated review when ready; fix must-fix comments, apply suggestions in separate commits for the reviewer to verify, and ask first about guide or Scope changes (guide 7.1 rule 11).

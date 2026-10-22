@@ -4,7 +4,7 @@
 |---|---|
 | Area | ios |
 | Epic | EP-05 |
-| Depends on | SUP-019, IOS-006 |
+| Depends on | SUP-019, IOS-008 |
 | Paired with | AND-020 |
 | Status | Draft |
 
@@ -19,12 +19,14 @@ Replace the hand-typed backend function names and screen keys in the iOS app wit
   - `ParkHill/Services/Supabase/SupabaseBackendService.swift`
   - `ParkHill/Services/Supabase/SupabaseAuthService.swift`
   - `ParkHill/Mocks/MockBackendService.swift` (response file names)
+  - `ParkHill/Mocks/MockSignInTools.swift` (`auth.sign_in`, a real backend key)
   - `ParkHill/Navigation/ScreenRegistry+Shared.swift`
+  - the failure logs in `ParkHill/Navigation/AppCoordinator.swift` and `ShellCoordinator.swift`
 - Update `ios/README.md`.
 
 ## Out of scope
 
-- Mock-only keys such as `auth.sign_in.mock` in `PersonaPickerScreen.swift`: they stay as literals in mock sources (guide 5.2 rule 3).
+- Mock fixture file names that are not a bare function name or screen key, such as `sign_in.error.account_disabled` in `MockSignInScenario.swift`: they name recorded responses and stay as literals in mock sources.
 - Test sources: tests may keep literals, since asserting the exact wire value is part of their job.
 - Generating or changing `names.json` (SUP-019).
 
@@ -33,7 +35,7 @@ Replace the hand-typed backend function names and screen keys in the iOS app wit
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | `ContractNames.swift` compiles into the app in Mock-Debug, Dev-Debug and Dev-Release, and is never copied into `ios/` | One generated source, available to every configuration |
-| AC2 | No file under `ParkHill/` outside `ParkHill/Mocks/` contains a backend function name or backend screen key as a string literal | Every real call goes through a generated constant |
+| AC2 | No file under `ParkHill/` contains a backend function name or backend screen key as a string literal, except the fixture file names in Out of scope | Every real call goes through a generated constant |
 | AC3 | The Mock and Supabase backend services name each function with the same `RPCFunction` case | Mock and Dev cannot disagree on a name |
 | AC4 | Renaming a case in `ContractNames.swift` by hand makes the app fail to compile | A typo is a build error, not a runtime failure |
 | AC5 | All existing Mock and Dev unit, integration and UI tests pass unchanged | Behavior is unchanged; only where names come from |
@@ -51,7 +53,7 @@ Replace the hand-typed backend function names and screen keys in the iOS app wit
 ```
 cd ios
 make project
-grep -rnE '"(get_entry|get_screen|whoami|sign_in|auth\.sign_in)"' ParkHill --exclude-dir=Mocks   # no output
+grep -rnE '"(get_entry|get_screen|get_tabs|whoami|sign_in|auth\.sign_in|home\.root|community\.home)' ParkHill   # only MockSignInScenario's fixture names
 xcodebuild -scheme ParkHill-Mock -destination 'platform=iOS Simulator,name=iPhone 16' test
 xcodebuild -scheme ParkHill-Dev  -destination 'platform=iOS Simulator,name=iPhone 16' test
 ```

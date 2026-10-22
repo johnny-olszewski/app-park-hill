@@ -4,7 +4,7 @@
 |---|---|
 | Area | contract, backend |
 | Epic | EP-05 |
-| Depends on | SUP-006 |
+| Depends on | SUP-006, SUP-008 |
 | Paired with | None |
 | Status | Draft |
 
@@ -15,9 +15,9 @@ Backend function names and screen keys are typed by hand as strings in the backe
 ## Scope
 
 - Add `contract/names.json`, the one hand-written list of:
-  - RPC functions clients call: `get_entry`, `get_screen`, `whoami`
+  - RPC functions clients call: `get_entry`, `get_screen`, `get_tabs`, `whoami`
   - Edge Functions clients call: `sign_in`
-  - Screen keys the backend returns: `auth.sign_in`
+  - Screen keys the backend returns: `auth.sign_in`, `home.root`, `community.home`
 - Add `backend/scripts/generate_names.py`, which writes:
   - `contract/generated/ContractNames.swift`
   - `contract/generated/ContractNames.kt`
@@ -31,8 +31,7 @@ Backend function names and screen keys are typed by hand as strings in the backe
 - Using the generated constants in the iOS app (IOS-020) and the Android app (AND-020).
 - Mock-only screen keys (`.mock`). They exist only in client mock sources and must not appear in a file that release builds compile (guide 5.2 rule 3).
 - Function parameter names (`p_locale`, `p_key`, `p_params`) and response field names. Possible follow-up task.
-- Functions that do not exist yet (`get_tabs` and later). Each future task adds its own names here in the same PR.
-- Running the check in CI. That arrives through `make data-check` in SUP-007.
+- Functions that do not exist yet. Each future task adds its own names here in the same PR.
 
 ## Acceptance criteria
 
@@ -43,7 +42,7 @@ Backend function names and screen keys are typed by hand as strings in the backe
 | AC3 | `check_names.py` fails when an RPC function in `names.json` does not exist in the local database's `public` schema, or exists but is not executable by `anon` or `authenticated` | A misspelled or unreachable function is caught before any client calls it |
 | AC4 | `check_names.py` fails when an Edge Function in `names.json` has no folder in `backend/supabase/functions/` | Same guarantee for Edge Functions |
 | AC5 | `check_names.py` fails when a screen key is in `names.json` but not in the `screens` table, or in the `screens` table but not in `names.json` | Adding a screen without listing it, or listing one that does not exist, is caught |
-| AC6 | `make data-check` runs generation and the check, and fails if `contract/generated/` differs from what is committed | Drift fails the same command that already guards seed and fixtures |
+| AC6 | `make data-check` runs generation and the check, and fails if `contract/generated/` differs from what is committed; backend CI runs it on every PR (SUP-007) | Drift fails the same command that already guards seed and fixtures |
 | AC7 | The guide's 4.1 states that every client-called function and backend screen key is listed in `contract/names.json`, and section 8 records the decision | The rule outlives this task |
 
 ## Technical notes
@@ -53,14 +52,14 @@ Backend function names and screen keys are typed by hand as strings in the backe
 
   ```json
   {
-    "rpc_functions": ["get_entry", "get_screen", "whoami"],
+    "rpc_functions": ["get_entry", "get_screen", "get_tabs", "whoami"],
     "edge_functions": ["sign_in"],
-    "screen_keys": ["auth.sign_in"]
+    "screen_keys": ["auth.sign_in", "home.root", "community.home"]
   }
   ```
 
 - Generated Swift (`ContractNames.swift`): `enum RPCFunction: String` and `enum EdgeFunction: String` with one case per name; `enum ScreenKey` with one `static let` per key (screen keys stay `String` because the registry takes keys from backend payloads). Case names are the lower camel case form of the name: `get_entry` becomes `getEntry`, `auth.sign_in` becomes `authSignIn`.
-- Generated Kotlin (`ContractNames.kt`): the same three groups as `enum class RpcFunction(val value: String)`, `enum class EdgeFunction(val value: String)` and `object ScreenKey` with `const val`. Package `app.parkhill.placeholder.contract`, under the placeholder root that is replaced before the first store upload (guide section 8).
+- Generated Kotlin (`ContractNames.kt`): the same three groups as `enum class RpcFunction(val value: String)`, `enum class EdgeFunction(val value: String)` and `object ScreenKey` with `const val`. Package `app.parkhill.contract`, under the app's Kotlin namespace `app.parkhill` (not the placeholder application ID).
 - Generated files live in `contract/generated/`, next to the dataset and fixtures; each client compiles its file from there (IOS-020, AND-020) and never copies it.
 - AC3: read the function list and privileges from the local database (`postgresql://postgres:postgres@127.0.0.1:54322/postgres`, Supabase CLI default). Mechanism is implementer's choice.
 - `data-check`'s drift check covers `contract/generated` alongside the existing generated paths.

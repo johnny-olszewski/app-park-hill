@@ -10,10 +10,6 @@ on:
   issue_comment:
     types: [created]
 
-concurrency:
-  group: review-${{ github.event.pull_request.number || github.event.issue.number }}
-  cancel-in-progress: true
-
 jobs:
   review:
     name: PR review
@@ -22,6 +18,11 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request &&
        github.event.comment.author_association == 'OWNER' &&
        startsWith(github.event.comment.body, '@claude review'))
+    # Job level, not workflow level: every PR comment, including the reviewer's
+    # own, starts a run of this workflow. Skipped runs must not cancel a review.
+    concurrency:
+      group: review-${{ github.event.pull_request.number || github.event.issue.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

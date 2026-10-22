@@ -1,14 +1,19 @@
 # Generated data: seed.sql and contract fixtures come from
-# contract/seed/dataset.json. Never edit generated files by hand.
+# contract/seed/dataset.json; client name constants come from
+# contract/names.json. Never edit generated files by hand.
 
 PYTHON ?= python3
 GENERATED := supabase/seed.sql ../contract/fixtures
 
-.PHONY: seed fixtures data-check test-functions
+.PHONY: seed fixtures names data-check test-functions
 
 ## Generate supabase/seed.sql from the dataset
 seed:
 	$(PYTHON) scripts/generate_seed.py
+
+## Generate the client name constants in contract/generated from names.json
+names:
+	$(PYTHON) scripts/generate_names.py
 
 ## Reset local Supabase from migrations and seed, then regenerate fixtures
 fixtures: seed

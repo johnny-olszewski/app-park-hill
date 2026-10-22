@@ -59,7 +59,7 @@ final class SupabaseAuthService: AuthService {
         let success: SignInSuccess
         do {
             success = try await client.functions.invoke(
-                "sign_in",
+                EdgeFunction.signIn.rawValue,
                 options: FunctionInvokeOptions(body: SignInRequest(email: email, password: password, locale: locale()))
             )
         } catch {

@@ -158,7 +158,7 @@ final class AppCoordinator {
         do {
             envelope = try await backend.getEntry(locale: locale)
         } catch {
-            Logger.navigation.error("get_entry failed: \(String(describing: error), privacy: .public)")
+            Logger.navigation.error("\(RPCFunction.getEntry.rawValue, privacy: .public) failed: \(String(describing: error), privacy: .public)")
             showFallback(locale: locale)
             return
         }

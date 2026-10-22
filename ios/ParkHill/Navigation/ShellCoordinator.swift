@@ -41,7 +41,7 @@ final class ShellCoordinator {
         do {
             response = try await backend.getTabs(locale: locale)
         } catch {
-            Logger.navigation.error("get_tabs failed: \(String(describing: error), privacy: .public)")
+            Logger.navigation.error("\(RPCFunction.getTabs.rawValue, privacy: .public) failed: \(String(describing: error), privacy: .public)")
             showFallback(locale: locale)
             return
         }

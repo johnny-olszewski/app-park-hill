@@ -15,28 +15,28 @@ struct SupabaseBackendService: BackendService {
     }
 
     func getEntry(locale: String) async throws(BackendError) -> ScreenEnvelope {
-        try await call("get_entry", params: EntryParams(p_locale: locale))
+        try await call(.getEntry, params: EntryParams(p_locale: locale))
     }
 
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
-        try await call("get_screen", params: ScreenParams(p_key: key, p_locale: locale, p_params: params))
+        try await call(.getScreen, params: ScreenParams(p_key: key, p_locale: locale, p_params: params))
     }
 
     func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
-        try await call("get_tabs", params: EntryParams(p_locale: locale))
+        try await call(.getTabs, params: EntryParams(p_locale: locale))
     }
 
     func whoami() async throws(BackendError) -> Profile {
-        try await call("whoami", params: NoParams())
+        try await call(.whoami, params: NoParams())
     }
 
     private func call<Response: Decodable>(
-        _ function: String,
+        _ function: RPCFunction,
         params: some Encodable & Sendable
     ) async throws(BackendError) -> Response {
         let data: Data
         do {
-            data = try await client.rpc(function, params: params).execute().data
+            data = try await client.rpc(function.rawValue, params: params).execute().data
         } catch {
             throw Self.map(error)
         }

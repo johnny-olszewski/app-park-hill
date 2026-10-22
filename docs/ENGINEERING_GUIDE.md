@@ -41,6 +41,8 @@ Monorepo.
 /android     Kotlin + Compose app
 /docs        This guide, the task template, the backlog, epics, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
+/.claude     Project skills for agent sessions (/status, /implement-slice)
+/scripts     Workflow scripts: mark_done.py, check_commits.sh
 ```
 
 A contract change lands in one PR: migration, fixture, and both client models together.
@@ -288,6 +290,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-15 | CI checks report on PRs and a red or pending check blocks merging by rule (7.1 rule 10), with a pre-push hook for fast local checks. Chosen over GitHub Pro and over a public repo (branch protection needs one of them). The macOS job runs on ready PRs only, to stay within the free Actions minutes |
 | 2026-10-20 | Android dev tools pill lives over the activity's content, added by debug-only lifecycle callbacks. Dialogs and bottom sheets, which are separate windows, cover it while open. Chosen over re-attaching a pill to every window (relies on Android internals) and a system overlay (each tester grants a permission) |
 | 2026-10-21 | Behavior a system component provides on one platform is a written acceptance criterion in both paired tasks (5.5 rule 5). Found when Android's entry swapped instantly while iOS's cover slid (AND-023) |
+| 2026-10-22 | Sessions start with `/status` and implement with `/implement-slice`, project skills in `.claude/skills/` that follow this guide. Repeatable steps are scripts in `/scripts` (marking Done, checking every commit), not instructions, so they work the same in every session |
 
 ## 9. Known risks
 

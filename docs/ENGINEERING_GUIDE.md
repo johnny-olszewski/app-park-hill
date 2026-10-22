@@ -41,7 +41,7 @@ Monorepo.
 /android     Kotlin + Compose app
 /docs        This guide, the task template, the backlog, epics, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
-/.claude     Project skills for agent sessions (/status, /implement-slice)
+/.claude     Project skills for agent sessions (/status, /implement-slice, /review-pr, /address-review)
 /scripts     Workflow scripts: mark_done.py, check_commits.sh
 ```
 
@@ -211,7 +211,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 
    - Subject: `[<TASK-ID>][<k>/n] <summary>`. `<k>` numbers the task's commits from 1 in order. `n` is always the literal letter `n`. The summary is a few words in the imperative, usually taken from the task's Scope.
    - Body: a blank line, then a short bulleted list of brief details.
-   - No mention of tools, assistants or agents, and no co-author or "generated with" trailers.
+   - No mention of tools, assistants or agents, and no co-author or "generated with" trailers. The same holds for everything posted under a person's account (PR bodies, replies); only the automated reviewer's own comments, from its bot account, are exempt (rule 11).
    - On a slice branch each task keeps its own numbering, and one task's commits are finished before the next task's begin.
 4. **One pull request per slice.** Title `[<slice ID>] <slice title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
 5. **Status:** each task's last commit sets that task to Done in its task file, its epic and `BACKLOG.md`. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `BACKLOG.md`. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
@@ -220,6 +220,11 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
 9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
 10. **Checks.** CI reports on every ready pull request; draft PRs skip the macOS job. Never merge a PR with a failing or pending check. Branch protection is not available for a private repo on the free plan, so this is a rule, not a setting. `.githooks/pre-push` runs the fast checks before each push; enable it once per clone with `git config core.hooksPath .githooks`.
+
+11. **Automated review and fixes.** `.github/workflows/review.yml` reviews every PR once when it is opened ready or marked ready, following `.claude/skills/review-pr/SKILL.md`: the guide's rules for every PR, plus the slice or plan for `slice/` and `plan/` branches. It posts inline comments, each starting **Must-fix** (breaks a guide rule, an acceptance criterion, the Scope, or is a bug) or **Suggestion**, and one summary comment. It never approves, pushes or merges. The repository owner asks for a re-review by commenting `@claude review`; a re-review checks whether earlier comments were addressed and does not repeat them.
+    - When every check has finished, including the review, the session that opened the PR acts on it with `/address-review`: must-fix comments and failing checks are fixed and pushed; suggestions are applied in separate, later commits and listed in a **Suggestions to verify** comment for the reviewer, who reverts any they reject with a new commit. A comment asking to change this guide or to go beyond the Scope waits for the reviewer's decision, whatever its severity.
+    - The fix commits follow rule 7. The reviewer still checks the behavior criteria and merges.
+    - Setup, once per repository: install the Claude GitHub app and add the `CLAUDE_CODE_OAUTH_TOKEN` secret from `claude setup-token`.
 
 ### 7.2 Slices
 
@@ -291,6 +296,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-20 | Android dev tools pill lives over the activity's content, added by debug-only lifecycle callbacks. Dialogs and bottom sheets, which are separate windows, cover it while open. Chosen over re-attaching a pill to every window (relies on Android internals) and a system overlay (each tester grants a permission) |
 | 2026-10-21 | Behavior a system component provides on one platform is a written acceptance criterion in both paired tasks (5.5 rule 5). Found when Android's entry swapped instantly while iOS's cover slid (AND-023) |
 | 2026-10-22 | Sessions start with `/status` and implement with `/implement-slice`, project skills in `.claude/skills/` that follow this guide. Repeatable steps are scripts in `/scripts` (marking Done, checking every commit), not instructions, so they work the same in every session |
+| 2026-10-22 | Automated PR review (7.1 rule 11): a GitHub Actions reviewer (`anthropics/claude-code-action`) reviews each PR once when ready, and again on `@claude review`, against this guide and the PR's slice or plan, labelling each comment Must-fix or Suggestion. The PR's session fixes must-fix comments and failing checks, applies suggestions in separate commits for the reviewer to verify, and asks first about guide or Scope changes. The reviewer's bot comments are exempt from the no-mention rule (7.1 rule 3); anything posted under a person's account is not. Chosen over reviewing every push (repeats itself and loops with the fixes), Copilot code review (cannot review against this guide) and hosted review apps (paid for private repos). The prompt is a repo skill, so its general part transfers to other repos |
 
 ## 9. Known risks
 

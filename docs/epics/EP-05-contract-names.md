@@ -37,7 +37,7 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
 | [EP-05.A](#ep-05a-a-misspelled-name-fails-the-build-or-the-data-check) | A misspelled backend function name or screen key fails the build or `make data-check` on every platform | SUP-019, IOS-020, AND-020 | EP-02.A | Done |
-| [EP-05.B](#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Draft |
+| [EP-05.B](#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Done |
 
 ### EP-05.A: A misspelled name fails the build or the data check
 

@@ -56,8 +56,11 @@ Practices that kept slices clean:
 
 ## 5. Finish the slice
 
-1. Verify every behavior criterion (B1…) by using the apps, in Mock and Dev.
+1. Verify every behavior criterion (B1…) by using the apps, in Mock and Dev, and record each one while verifying it (guide 7.2 rule 4):
+   - In the apps: boot the simulator and the emulator, then `scripts/record.sh start <ID> <B#-build-what> ios` and `... android`, show the behavior on both, then `scripts/record.sh stop`. One recording per criterion and build, short and showing only that criterion.
+   - For developers: `scripts/record.sh terminal <ID> <B#-what> "<commands>"`, showing the failure and the passing run where the criterion is about a check failing.
+   - Check every criterion has its recordings in `recordings/<ID>/`. Do not link them in the PR; tell the user the folder.
 2. Last commit on the branch: `[<ID>] Mark <ID> done`, using `scripts/mark_done.py <ID>`.
 3. Push, then open one PR titled `[<ID>] <slice title>` with the body from `.github/pull_request_template.md`: each task with how each criterion was verified, then the behavior criteria as an unchecked list for the reviewer, then reviewer notes (decisions, deviations, follow-ups).
-4. Tell the user the PR link, what changed, what was verified, and any decisions made. CI must be green before merging, never red or pending (guide 7.1 rule 10).
+4. Tell the user the PR link, what changed, what was verified, where the recordings are, and any decisions made. CI must be green before merging, never red or pending (guide 7.1 rule 10).
 5. Watch the PR: if this session can be notified of its checks and review comments (for example the desktop app's PR monitor, with addressing comments and fixing checks turned on), turn that on. When every check has finished, including the automated review, run `/address-review <PR>` (guide 7.1 rule 11).

@@ -4,7 +4,7 @@
 |---|---|
 | Area | android |
 | Epic | EP-04 |
-| Depends on | AND-010, SUP-017 |
+| Depends on | AND-026, SUP-017 |
 | Paired with | IOS-017 |
 | Status | Draft |
 
@@ -19,7 +19,7 @@ Let people browse groups, the directory, or both from one place, with the segmen
 
 ## Out of scope
 
-- Group browsing itself (from AND-010).
+- Group browsing itself (from AND-026).
 
 ## Acceptance criteria
 

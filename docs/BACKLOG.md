@@ -19,6 +19,13 @@ Work is implemented and reviewed by slice (guide 7.2): each epic's Slices table 
 5. [EP-02.A](epics/EP-02-tabs.md#slices): tabs after sign-in, on every platform
 6. [EP-05.A](epics/EP-05-contract-names.md#slices): contract names on every platform
 7. [EP-05.B](epics/EP-05-contract-names.md#slices): screen data described once and checked
+8. [EP-05.C](epics/EP-05-contract-names.md#slices): the apps decode screens with the generated models
+9. [EP-05.D](epics/EP-05-contract-names.md#slices): every response described once and checked
+10. [EP-03.A](epics/EP-03-community.md#slices): each person's Community tab shows their own groups
+11. [EP-03.B](epics/EP-03-community.md#slices): staff browse all groups
+12. [EP-03.C](epics/EP-03-community.md#slices): members leave and leaders swipe to remove
+13. [EP-03.D](epics/EP-03-community.md#slices): leaders edit their group in one pass
+14. [EP-03.E](epics/EP-03-community.md#slices): staff create and delete groups
 
 Android is level after EP-06.C; new feature slices include every platform.
 
@@ -117,38 +124,55 @@ Android is level after EP-06.C; new feature slices include every platform.
 
 ## [EP-03: Community](epics/EP-03-community.md)
 
+### Slices
+
+| Slice | Behavior | Tasks, in order | Depends on | Status |
+|---|---|---|---|---|
+| [EP-03.A](epics/EP-03-community.md#ep-03a-each-persons-community-tab-shows-their-own-groups) | Signed-in people see exactly their own groups on the Community tab, on iOS and Android | SUP-009, SUP-010, SUP-011, SUP-012, IOS-009, IOS-011, IOS-010, AND-009, AND-011, AND-010 | EP-05.D | Draft |
+| [EP-03.B](epics/EP-03-community.md#ep-03b-staff-browse-all-groups) | Staff open every group from a Browse button, with search | SUP-023, IOS-025, AND-026 | EP-03.A | Draft |
+| [EP-03.C](epics/EP-03-community.md#ep-03c-members-leave-and-leaders-swipe-to-remove) | Members leave a group and leaders remove members with one confirmed tap, and nobody stays on a group they lost | SUP-014, IOS-026, AND-027 | EP-03.B | Draft |
+| [EP-03.D](epics/EP-03-community.md#ep-03d-leaders-edit-their-group-in-one-pass) | Leaders edit details and members, and staff change leaders, saved all at once or not at all | SUP-013, SUP-024, IOS-012, IOS-013, AND-012, AND-013 | EP-03.C | Draft |
+| [EP-03.E](epics/EP-03-community.md#ep-03e-staff-create-and-delete-groups) | Staff create groups from Browse and delete (archive) them from edit mode | SUP-025, IOS-027, AND-028 | EP-03.D | Draft |
+
 ### Backend (SUP)
 
 | Task | Depends on | Status |
 |---|---|---|
 | [SUP-009: Add data-driven roles, permissions and the permission check](tasks/SUP-009-roles-and-permissions.md) | SUP-005 | Draft |
 | [SUP-010: Add the groups schema, server-side rules and group personas](tasks/SUP-010-groups-schema-and-seed.md) | SUP-009 | Draft |
-| [SUP-011: Extend the screen contract with toolbar, actions and shared group types](tasks/SUP-011-toolbar-actions-and-shared-types.md) | SUP-003 | Draft |
-| [SUP-012: Build the Community screens: home, browse and group detail](tasks/SUP-012-community-screens.md) | SUP-008, SUP-010, SUP-011 | Draft |
-| [SUP-013: Build the people picker and create-group screens](tasks/SUP-013-picker-and-create-screens.md) | SUP-012 | Draft |
-| [SUP-014: Build the group operations with permission checks and all-or-nothing saves](tasks/SUP-014-group-operations.md) | SUP-010, SUP-011 | Draft |
+| [SUP-011: Describe actions and the shared group types in the contract](tasks/SUP-011-actions-and-shared-types.md) | SUP-022 | Draft |
+| [SUP-012: Build Community home and group detail for each person](tasks/SUP-012-community-screens.md) | SUP-008, SUP-010, SUP-011 | Draft |
+| [SUP-023: Build Browse all groups and the screen toolbar](tasks/SUP-023-browse-and-toolbar.md) | SUP-012 | Draft |
+| [SUP-014: Add call actions, leaving a group and removing a member](tasks/SUP-014-leave-and-remove.md) | SUP-012 | Draft |
+| [SUP-013: Build the people picker screen](tasks/SUP-013-people-picker.md) | SUP-014 | Draft |
+| [SUP-024: Send group edit capabilities and save every change at once](tasks/SUP-024-group-edit-and-batch-save.md) | SUP-013 | Draft |
+| [SUP-025: Build group create and delete for staff](tasks/SUP-025-create-and-delete-groups.md) | SUP-024 | Draft |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [IOS-009: Build iOS toolbar, action handling and shared screen behavior](tasks/IOS-009-actions-toolbar-and-screen-infrastructure.md) | IOS-008, SUP-011 | Draft |
-| [IOS-010: Build the iOS Community home and Browse all groups screens](tasks/IOS-010-community-home-and-browse.md) | IOS-009, SUP-012 | Draft |
-| [IOS-011: Build the iOS group detail view and screen](tasks/IOS-011-group-detail.md) | IOS-010, SUP-012, SUP-014 | Draft |
-| [IOS-012: Build the iOS people picker and create-group form](tasks/IOS-012-people-picker-and-create-group.md) | IOS-009, SUP-013 | Draft |
-| [IOS-013: Build iOS group edit mode with batched changes](tasks/IOS-013-group-edit-mode.md) | IOS-011, IOS-012, SUP-014 | Draft |
-| [IOS-014: Add iOS Community UI tests per persona against local Supabase (local)](tasks/IOS-014-community-ui-tests-per-persona.md) | IOS-013, SUP-014 | Draft |
+| [IOS-009: Open backend screens by push, with refresh and a per-screen cache on iOS](tasks/IOS-009-push-refresh-and-screen-cache.md) | IOS-024, SUP-011 | Draft |
+| [IOS-011: Build the iOS group detail view and screen](tasks/IOS-011-group-detail.md) | IOS-009, SUP-012 | Draft |
+| [IOS-010: Build the iOS Community home for every state](tasks/IOS-010-community-home.md) | IOS-011, SUP-012 | Draft |
+| [IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups](tasks/IOS-025-toolbar-and-browse.md) | IOS-010, SUP-023 | Draft |
+| [IOS-026: Handle call actions and lost access, and add leave and swipe to remove on iOS](tasks/IOS-026-leave-remove-and-lost-access.md) | IOS-025, SUP-014 | Draft |
+| [IOS-012: Build the iOS sheet presentation and people picker](tasks/IOS-012-people-picker.md) | IOS-026, SUP-013 | Draft |
+| [IOS-013: Build iOS group edit mode with batched changes](tasks/IOS-013-group-edit-mode.md) | IOS-012, SUP-024 | Draft |
+| [IOS-027: Build iOS group create and delete](tasks/IOS-027-create-and-delete-groups.md) | IOS-013, SUP-025 | Draft |
 
 ### Android (AND)
 
 | Task | Depends on | Status |
 |---|---|---|
-| [AND-009: Build Android toolbar, action handling and shared screen behavior](tasks/AND-009-actions-toolbar-and-screen-infrastructure.md) | AND-008, SUP-011 | Draft |
-| [AND-010: Build the Android Community home and Browse all groups screens](tasks/AND-010-community-home-and-browse.md) | AND-009, SUP-012 | Draft |
-| [AND-011: Build the Android group detail view and screen](tasks/AND-011-group-detail.md) | AND-010, SUP-012, SUP-014 | Draft |
-| [AND-012: Build the Android people picker and create-group form](tasks/AND-012-people-picker-and-create-group.md) | AND-009, SUP-013 | Draft |
-| [AND-013: Build Android group edit mode with batched changes](tasks/AND-013-group-edit-mode.md) | AND-011, AND-012, SUP-014 | Draft |
-| [AND-014: Add Android Community UI tests per persona against local Supabase (local)](tasks/AND-014-community-ui-tests-per-persona.md) | AND-013, SUP-014 | Draft |
+| [AND-009: Open backend screens by push, with refresh and a per-screen cache on Android](tasks/AND-009-push-refresh-and-screen-cache.md) | AND-025, SUP-011 | Draft |
+| [AND-011: Build the Android group detail view and screen](tasks/AND-011-group-detail.md) | AND-009, SUP-012 | Draft |
+| [AND-010: Build the Android Community home for every state](tasks/AND-010-community-home.md) | AND-011, SUP-012 | Draft |
+| [AND-026: Build the Android toolbar, full-screen cover and Browse all groups](tasks/AND-026-toolbar-and-browse.md) | AND-010, SUP-023 | Draft |
+| [AND-027: Handle call actions and lost access, and add leave and swipe to remove on Android](tasks/AND-027-leave-remove-and-lost-access.md) | AND-026, SUP-014 | Draft |
+| [AND-012: Build the Android sheet presentation and people picker](tasks/AND-012-people-picker.md) | AND-027, SUP-013 | Draft |
+| [AND-013: Build Android group edit mode with batched changes](tasks/AND-013-group-edit-mode.md) | AND-012, SUP-024 | Draft |
+| [AND-028: Build Android group create and delete](tasks/AND-028-create-and-delete-groups.md) | AND-013, SUP-025 | Draft |
 
 ## [EP-04: People and roles](epics/EP-04-people-and-roles.md)
 
@@ -158,7 +182,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 |---|---|---|
 | [SUP-015: Extend profiles with phone, photo and directory visibility](tasks/SUP-015-people-profiles-and-visibility.md) | SUP-010 | Draft |
 | [SUP-016: Build the person detail screen and the account toolbar item](tasks/SUP-016-person-screen-and-account-item.md) | SUP-012, SUP-015 | Draft |
-| [SUP-017: Add the directory part to Browse and the browse button rule](tasks/SUP-017-directory-in-browse.md) | SUP-015, SUP-016 | Draft |
+| [SUP-017: Add the directory part to Browse and the browse button rule](tasks/SUP-017-directory-in-browse.md) | SUP-015, SUP-016, SUP-023 | Draft |
 | [SUP-018: Build profile and role saving with all-or-nothing batches](tasks/SUP-018-profile-and-role-operations.md) | SUP-015 | Draft |
 
 ### iOS (IOS)
@@ -167,7 +191,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 |---|---|---|
 | [IOS-015: Build the iOS person detail screen and account entry](tasks/IOS-015-person-detail.md) | IOS-011, SUP-016 | Draft |
 | [IOS-016: Build iOS profile edit mode with photo upload](tasks/IOS-016-profile-edit-mode.md) | IOS-015, SUP-018 | Draft |
-| [IOS-017: Add the iOS directory and segmented control to Browse](tasks/IOS-017-browse-segments-and-directory.md) | IOS-010, SUP-017 | Draft |
+| [IOS-017: Add the iOS directory and segmented control to Browse](tasks/IOS-017-browse-segments-and-directory.md) | IOS-025, SUP-017 | Draft |
 | [IOS-018: Build the iOS Edit roles half sheet](tasks/IOS-018-edit-roles-sheet.md) | IOS-015, SUP-018 | Draft |
 | [IOS-019: Add iOS people and directory UI tests per persona against local Supabase (local)](tasks/IOS-019-people-ui-tests-per-persona.md) | IOS-016, IOS-017, IOS-018, SUP-018 | Draft |
 
@@ -177,7 +201,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 |---|---|---|
 | [AND-015: Build the Android person detail screen and account entry](tasks/AND-015-person-detail.md) | AND-011, SUP-016 | Draft |
 | [AND-016: Build Android profile edit mode with photo upload](tasks/AND-016-profile-edit-mode.md) | AND-015, SUP-018 | Draft |
-| [AND-017: Add the Android directory and segmented control to Browse](tasks/AND-017-browse-segments-and-directory.md) | AND-010, SUP-017 | Draft |
+| [AND-017: Add the Android directory and segmented control to Browse](tasks/AND-017-browse-segments-and-directory.md) | AND-026, SUP-017 | Draft |
 | [AND-018: Build the Android Edit roles half sheet](tasks/AND-018-edit-roles-sheet.md) | AND-015, SUP-018 | Draft |
 | [AND-019: Add Android people and directory UI tests per persona against local Supabase (local)](tasks/AND-019-people-ui-tests-per-persona.md) | AND-016, AND-017, AND-018, SUP-018 | Draft |
 
@@ -189,6 +213,8 @@ Android is level after EP-06.C; new feature slices include every platform.
 |---|---|---|---|---|
 | [EP-05.A](epics/EP-05-contract-names.md#ep-05a-a-misspelled-name-fails-the-build-or-the-data-check) | A misspelled backend function name or screen key fails the build or `make data-check` on every platform | SUP-019, IOS-020, AND-020 | EP-02.A | Done |
 | [EP-05.B](epics/EP-05-contract-names.md#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Draft |
+| [EP-05.C](epics/EP-05-contract-names.md#ep-05c-the-apps-decode-screens-with-the-generated-models) | Both apps decode every screen with the generated models, and no screen model is written by hand | IOS-023, AND-024 | EP-05.B | Draft |
+| [EP-05.D](epics/EP-05-contract-names.md#ep-05d-every-response-is-described-once-and-checked) | Every response a client decodes is described once, checked by `make data-check`, and decoded with generated types in both apps | SUP-022, IOS-024, AND-025 | EP-05.C | Draft |
 
 ### Backend (SUP)
 
@@ -196,18 +222,23 @@ Android is level after EP-06.C; new feature slices include every platform.
 |---|---|---|
 | [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006, SUP-008 | Done |
 | [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Draft |
+| [SUP-022: Describe the non-screen responses and the screen envelope once](tasks/SUP-022-response-descriptions.md) | SUP-020 | Draft |
 
 ### iOS (IOS)
 
 | Task | Depends on | Status |
 |---|---|---|
 | [IOS-020: Use the generated contract names in the iOS app](tasks/IOS-020-contract-names.md) | SUP-019, IOS-008 | Done |
+| [IOS-023: Decode screens with the generated models in the iOS app](tasks/IOS-023-generated-screen-models.md) | SUP-020 | Draft |
+| [IOS-024: Decode every backend response with the generated types in the iOS app](tasks/IOS-024-generated-response-types.md) | SUP-022, IOS-023 | Draft |
 
 ### Android (AND)
 
 | Task | Depends on | Status |
 |---|---|---|
 | [AND-020: Use the generated contract names in the Android app](tasks/AND-020-contract-names.md) | SUP-019, AND-008 | Done |
+| [AND-024: Decode screens with the generated models in the Android app](tasks/AND-024-generated-screen-models.md) | SUP-020 | Draft |
+| [AND-025: Decode every backend response with the generated types in the Android app](tasks/AND-025-generated-response-types.md) | SUP-022, AND-024 | Draft |
 
 ## [EP-06: Mock menu](epics/EP-06-mock-menu.md)
 

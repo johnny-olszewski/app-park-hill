@@ -42,7 +42,7 @@ Monorepo.
 /docs        This guide, the task template, the backlog, epics, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
 /.claude     Project skills for agent sessions (/status, /implement-slice, /review-pr, /address-review)
-/scripts     Workflow scripts: mark_done.py, check_commits.sh
+/scripts     Workflow scripts: mark_done.py, check_commits.sh, record.sh
 ```
 
 A contract change lands in one PR: migration, fixture, and both client models together.
@@ -54,6 +54,7 @@ A contract change lands in one PR: migration, fixture, and both client models to
 - All schema changes are migrations. Nothing is configured by hand in a dashboard.
 - **App configuration is migration data; seed is test data.** Screens, strings and tabs go in migrations so they reach hosted projects. `seed.sql` holds only test accounts and test content, and never reaches a hosted project.
 - Backend tests are pgTAP; Edge Functions have their own tests.
+- **Organization scoping.** Every table that holds an organization's data (roles and their assignments, groups, memberships, and later tables like them) has a nullable `org_id uuid` column. It is null in every row while Park Hill is the only organization, and nothing reads it yet. When a second organization or a demo sandbox arrives, an `orgs` table, a foreign key and checks are added without migrating the shape of existing tables.
 
 ### 4.1 Contract
 
@@ -236,7 +237,8 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 3. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
    - **Catch-up slices.** A platform that falls behind gets catch-up slices: only its own tasks, with the behavior criteria of the slices they mirror. No new slice starts until every platform has caught up. Android was held back this way until 2026-10-15 while the workflow settled on iOS, and catches up through EP-01.B, EP-01.C and EP-06.C.
 4. **Order and checks.** Tasks are implemented in the slice's order. When a task's commits are done, its acceptance criteria are verified and its tests run before the next task starts. After the last task, the slice's behavior criteria are verified by using the result.
-5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria; commits stay per task for reading the code.
+   - **Recordings.** Each behavior criterion is recorded while it is verified, with `scripts/record.sh`: behavior in the apps as a screen recording on iOS and on Android, in each build the criterion names (Mock when it names none); behavior for developers (a check, a command) as a terminal transcript. Recordings go in the gitignored `recordings/<slice ID>/` folder, named by criterion, and stay on the implementer's machine for the reviewer; PRs do not link them. Planning PRs have none.
+5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria, with the recordings to hand; commits stay per task for reading the code.
 6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
 
 ## 8. Decision log
@@ -299,6 +301,8 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-22 | Sessions start with `/status` and implement with `/implement-slice`, project skills in `.claude/skills/` that follow this guide. Repeatable steps are scripts in `/scripts` (marking Done, checking every commit), not instructions, so they work the same in every session |
 | 2026-10-22 | Automated PR review (7.1 rule 11): a GitHub Actions reviewer (`anthropics/claude-code-action`) reviews each PR once when ready, and again on `@claude review`, against this guide and the PR's slice or plan, labelling each comment Must-fix or Suggestion. The PR's session fixes must-fix comments and failing checks, applies suggestions in separate commits for the reviewer to verify, and asks first about guide or Scope changes. The reviewer's bot comments are exempt from the no-mention rule (7.1 rule 3); anything posted under a person's account is not. Chosen over reviewing every push (repeats itself and loops with the fixes), Copilot code review (cannot review against this guide) and hosted review apps (paid for private repos). The prompt is a repo skill, so its general part transfers to other repos |
 | 2026-10-22 | Contract names (SUP-019): `contract/names.json` lists every client-called RPC and Edge Function and every backend screen key; `make names` generates `ContractNames.swift` and `ContractNames.kt` (package `app.parkhill.contract`) into `contract/generated/`; `make data-check` checks the list against the database both ways for screens and fails on drift. Contract rule 7 added to 4.1 |
+| 2026-10-23 | Recordings (7.2 rule 4): every slice's behavior criteria are recorded while they are verified, as iOS and Android screen recordings for app behavior and terminal transcripts for developer behavior, with `scripts/record.sh`, into the gitignored `recordings/<slice ID>/`. They stay local and are not linked from PRs. Earlier slices recorded ad hoc and #29 dropped it; written down so every session does it. Chosen over uploading to PRs (`gh` cannot attach files) and committing them (repository size) |
+| 2026-10-23 | Organization scoping (4): tables holding an organization's data get a nullable `org_id`, null for every row for now. Chosen over a required church identifier from the start (an `orgs` table and checks with only one organization) and over adding it later (migrating every table, rule and test after EP-03 and EP-04). Resolves the SUP-009 and SUP-010 open question |
 
 ## 9. Known risks
 

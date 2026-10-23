@@ -1,12 +1,15 @@
-# IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally
+---
+type: task
+id: IOS-007
+title: "Run iOS auth UI tests: Mock in CI, Dev locally"
+area: ios, ci
+epic: EP-01
+depends_on: [IOS-004, IOS-006]
+paired_with: [AND-007]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios, ci |
-| Epic | EP-01 |
-| Depends on | IOS-004, IOS-006 |
-| Paired with | AND-007 |
-| Status | Done |
+# IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally
 
 ## Intent
 

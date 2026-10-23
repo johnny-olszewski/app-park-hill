@@ -1,12 +1,15 @@
-# SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting
+---
+type: task
+id: SUP-006
+title: "Build the sign_in Edge Function with backend-decided errors and attempt limiting"
+area: backend, contract
+epic: EP-01
+depends_on: [SUP-005]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-01 |
-| Depends on | SUP-005 |
-| Paired with | None |
-| Status | Done |
+# SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting
 
 ## Intent
 

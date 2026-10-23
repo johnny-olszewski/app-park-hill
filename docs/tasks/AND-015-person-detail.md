@@ -1,12 +1,15 @@
-# AND-015: Build the Android person detail screen and account entry
+---
+type: task
+id: AND-015
+title: "Build the Android person detail screen and account entry"
+area: android
+epic: EP-04
+depends_on: [AND-011, SUP-016]
+paired_with: [IOS-015]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-04 |
-| Depends on | AND-011, SUP-016 |
-| Paired with | IOS-015 |
-| Status | Draft |
+# AND-015: Build the Android person detail screen and account entry
 
 ## Intent
 

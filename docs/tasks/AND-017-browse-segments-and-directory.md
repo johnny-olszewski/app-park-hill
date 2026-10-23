@@ -1,12 +1,15 @@
-# AND-017: Add the Android directory and segmented control to Browse
+---
+type: task
+id: AND-017
+title: "Add the Android directory and segmented control to Browse"
+area: android
+epic: EP-04
+depends_on: [AND-026, SUP-017]
+paired_with: [IOS-017]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-04 |
-| Depends on | AND-026, SUP-017 |
-| Paired with | IOS-017 |
-| Status | Draft |
+# AND-017: Add the Android directory and segmented control to Browse
 
 ## Intent
 

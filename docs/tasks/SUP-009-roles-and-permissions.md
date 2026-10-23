@@ -1,12 +1,15 @@
-# SUP-009: Add data-driven roles, permissions and the permission check
+---
+type: task
+id: SUP-009
+title: "Add data-driven roles, permissions and the permission check"
+area: backend
+epic: EP-03
+depends_on: [SUP-005]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-03 |
-| Depends on | SUP-005 |
-| Paired with | None |
-| Status | Draft |
+# SUP-009: Add data-driven roles, permissions and the permission check
 
 ## Intent
 

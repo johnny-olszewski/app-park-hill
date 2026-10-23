@@ -1,12 +1,15 @@
-# SUP-015: Extend profiles with phone, photo and directory visibility
+---
+type: task
+id: SUP-015
+title: "Extend profiles with phone, photo and directory visibility"
+area: backend
+epic: EP-04
+depends_on: [SUP-010]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-04 |
-| Depends on | SUP-010 |
-| Paired with | None |
-| Status | Draft |
+# SUP-015: Extend profiles with phone, photo and directory visibility
 
 ## Intent
 

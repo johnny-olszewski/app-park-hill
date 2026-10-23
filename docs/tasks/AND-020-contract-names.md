@@ -1,12 +1,15 @@
-# AND-020: Use the generated contract names in the Android app
+---
+type: task
+id: AND-020
+title: "Use the generated contract names in the Android app"
+area: android
+epic: EP-05
+depends_on: [SUP-019, AND-008]
+paired_with: [IOS-020]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-05 |
-| Depends on | SUP-019, AND-008 |
-| Paired with | IOS-020 |
-| Status | Done |
+# AND-020: Use the generated contract names in the Android app
 
 ## Intent
 

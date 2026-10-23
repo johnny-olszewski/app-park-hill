@@ -1,12 +1,15 @@
-# AND-022: Show the production sign-in in Mock with persona and result tools
+---
+type: task
+id: AND-022
+title: "Show the production sign-in in Mock with persona and result tools"
+area: android
+epic: EP-06
+depends_on: [AND-021, SUP-021]
+paired_with: [IOS-022]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-06 |
-| Depends on | AND-021, SUP-021 |
-| Paired with | IOS-022 |
-| Status | Done |
+# AND-022: Show the production sign-in in Mock with persona and result tools
 
 ## Intent
 

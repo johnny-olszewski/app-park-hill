@@ -1,12 +1,15 @@
-# SUP-013: Build the people picker screen
+---
+type: task
+id: SUP-013
+title: "Build the people picker screen"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-014]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-014 |
-| Paired with | None |
-| Status | Draft |
+# SUP-013: Build the people picker screen
 
 ## Intent
 

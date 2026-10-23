@@ -1,12 +1,15 @@
-# IOS-027: Build iOS group create and delete
+---
+type: task
+id: IOS-027
+title: "Build iOS group create and delete"
+area: ios
+epic: EP-03
+depends_on: [IOS-013, SUP-025]
+paired_with: [AND-028]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-013, SUP-025 |
-| Paired with | AND-028 |
-| Status | Draft |
+# IOS-027: Build iOS group create and delete
 
 ## Intent
 

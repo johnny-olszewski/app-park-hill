@@ -1,12 +1,15 @@
-# AND-003: Build the Android root coordinator, screen registry and backend-driven entry
+---
+type: task
+id: AND-003
+title: "Build the Android root coordinator, screen registry and backend-driven entry"
+area: android
+epic: EP-01
+depends_on: [AND-002]
+paired_with: [IOS-003]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | AND-002 |
-| Paired with | IOS-003 |
-| Status | Done |
+# AND-003: Build the Android root coordinator, screen registry and backend-driven entry
 
 ## Intent
 

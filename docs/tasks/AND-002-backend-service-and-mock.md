@@ -1,12 +1,15 @@
-# AND-002: Build the Android backend service layer with production and mock implementations
+---
+type: task
+id: AND-002
+title: "Build the Android backend service layer with production and mock implementations"
+area: android
+epic: EP-01
+depends_on: [SUP-003, AND-001]
+paired_with: [IOS-002]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | SUP-003, AND-001 |
-| Paired with | IOS-002 |
-| Status | Done |
+# AND-002: Build the Android backend service layer with production and mock implementations
 
 ## Intent
 

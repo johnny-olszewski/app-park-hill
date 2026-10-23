@@ -1,12 +1,15 @@
-# SUP-025: Build group create and delete for staff
+---
+type: task
+id: SUP-025
+title: "Build group create and delete for staff"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-024]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-024 |
-| Paired with | None |
-| Status | Draft |
+# SUP-025: Build group create and delete for staff
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# IOS-017: Add the iOS directory and segmented control to Browse
+---
+type: task
+id: IOS-017
+title: "Add the iOS directory and segmented control to Browse"
+area: ios
+epic: EP-04
+depends_on: [IOS-025, SUP-017]
+paired_with: [AND-017]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-04 |
-| Depends on | IOS-025, SUP-017 |
-| Paired with | AND-017 |
-| Status | Draft |
+# IOS-017: Add the iOS directory and segmented control to Browse
 
 ## Intent
 

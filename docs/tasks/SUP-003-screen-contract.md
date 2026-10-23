@@ -1,12 +1,15 @@
-# SUP-003: Define the screen contract and implement get_entry and get_screen
+---
+type: task
+id: SUP-003
+title: "Define the screen contract and implement get_entry and get_screen"
+area: backend, contract
+epic: EP-01
+depends_on: [SUP-002]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-01 |
-| Depends on | SUP-002 |
-| Paired with | None |
-| Status | Done |
+# SUP-003: Define the screen contract and implement get_entry and get_screen
 
 ## Intent
 

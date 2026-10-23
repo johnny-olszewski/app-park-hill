@@ -1,12 +1,15 @@
-# IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry
+---
+type: task
+id: IOS-003
+title: "Build the iOS root coordinator, screen registry and backend-driven entry"
+area: ios
+epic: EP-01
+depends_on: [IOS-002]
+paired_with: [AND-003]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | IOS-002 |
-| Paired with | AND-003 |
-| Status | Done |
+# IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry
 
 ## Intent
 

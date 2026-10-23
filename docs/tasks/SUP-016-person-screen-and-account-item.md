@@ -1,12 +1,15 @@
-# SUP-016: Build the person detail screen and the account toolbar item
+---
+type: task
+id: SUP-016
+title: "Build the person detail screen and the account toolbar item"
+area: backend
+epic: EP-04
+depends_on: [SUP-012, SUP-015]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-04 |
-| Depends on | SUP-012, SUP-015 |
-| Paired with | None |
-| Status | Draft |
+# SUP-016: Build the person detail screen and the account toolbar item
 
 ## Intent
 

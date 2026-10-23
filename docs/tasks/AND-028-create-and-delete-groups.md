@@ -1,12 +1,15 @@
-# AND-028: Build Android group create and delete
+---
+type: task
+id: AND-028
+title: "Build Android group create and delete"
+area: android
+epic: EP-03
+depends_on: [AND-013, SUP-025]
+paired_with: [IOS-027]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-013, SUP-025 |
-| Paired with | IOS-027 |
-| Status | Draft |
+# AND-028: Build Android group create and delete
 
 ## Intent
 

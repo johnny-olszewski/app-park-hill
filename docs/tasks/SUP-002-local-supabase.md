@@ -1,12 +1,15 @@
-# SUP-002: Set up the local Supabase backend project
+---
+type: task
+id: SUP-002
+title: "Set up the local Supabase backend project"
+area: backend
+epic: EP-01
+depends_on: [SUP-001]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-01 |
-| Depends on | SUP-001 |
-| Paired with | None |
-| Status | Done |
+# SUP-002: Set up the local Supabase backend project
 
 ## Intent
 

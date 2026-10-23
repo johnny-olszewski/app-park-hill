@@ -1,12 +1,15 @@
-# IOS-004: Add iOS CI on GitHub Actions
+---
+type: task
+id: IOS-004
+title: "Add iOS CI on GitHub Actions"
+area: ios, ci
+epic: EP-01
+depends_on: [IOS-003, SUP-004]
+paired_with: [AND-004]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios, ci |
-| Epic | EP-01 |
-| Depends on | IOS-003, SUP-004 |
-| Paired with | AND-004 |
-| Status | Done |
+# IOS-004: Add iOS CI on GitHub Actions
 
 ## Intent
 

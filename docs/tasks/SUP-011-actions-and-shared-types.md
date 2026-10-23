@@ -1,12 +1,15 @@
-# SUP-011: Describe actions and the shared group types in the contract
+---
+type: task
+id: SUP-011
+title: "Describe actions and the shared group types in the contract"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-022]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-022 |
-| Paired with | None |
-| Status | Draft |
+# SUP-011: Describe actions and the shared group types in the contract
 
 ## Intent
 

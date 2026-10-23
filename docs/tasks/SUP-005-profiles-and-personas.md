@@ -1,12 +1,15 @@
-# SUP-005: Add profiles, seeded personas and a signed-in check function
+---
+type: task
+id: SUP-005
+title: "Add profiles, seeded personas and a signed-in check function"
+area: backend, contract
+epic: EP-01
+depends_on: [SUP-003]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-01 |
-| Depends on | SUP-003 |
-| Paired with | None |
-| Status | Done |
+# SUP-005: Add profiles, seeded personas and a signed-in check function
 
 ## Intent
 

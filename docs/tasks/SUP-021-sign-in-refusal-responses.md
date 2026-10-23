@@ -1,12 +1,15 @@
-# SUP-021: Record every sign-in refusal and update the auth spec for the mock menu
+---
+type: task
+id: SUP-021
+title: "Record every sign-in refusal and update the auth spec for the mock menu"
+area: backend, contract
+epic: EP-06
+depends_on: [SUP-006]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-06 |
-| Depends on | SUP-006 |
-| Paired with | None |
-| Status | Done |
+# SUP-021: Record every sign-in refusal and update the auth spec for the mock menu
 
 ## Intent
 

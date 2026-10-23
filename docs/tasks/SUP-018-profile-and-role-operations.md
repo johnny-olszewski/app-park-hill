@@ -1,12 +1,15 @@
-# SUP-018: Build profile and role saving with all-or-nothing batches
+---
+type: task
+id: SUP-018
+title: "Build profile and role saving with all-or-nothing batches"
+area: backend
+epic: EP-04
+depends_on: [SUP-015]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-04 |
-| Depends on | SUP-015 |
-| Paired with | None |
-| Status | Draft |
+# SUP-018: Build profile and role saving with all-or-nothing batches
 
 ## Intent
 

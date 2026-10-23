@@ -1,12 +1,15 @@
-# IOS-015: Build the iOS person detail screen and account entry
+---
+type: task
+id: IOS-015
+title: "Build the iOS person detail screen and account entry"
+area: ios
+epic: EP-04
+depends_on: [IOS-011, SUP-016]
+paired_with: [AND-015]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-04 |
-| Depends on | IOS-011, SUP-016 |
-| Paired with | AND-015 |
-| Status | Draft |
+# IOS-015: Build the iOS person detail screen and account entry
 
 ## Intent
 

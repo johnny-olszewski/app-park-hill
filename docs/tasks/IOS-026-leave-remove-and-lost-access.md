@@ -1,12 +1,15 @@
-# IOS-026: Handle call actions and lost access, and add leave and swipe to remove on iOS
+---
+type: task
+id: IOS-026
+title: "Handle call actions and lost access, and add leave and swipe to remove on iOS"
+area: ios
+epic: EP-03
+depends_on: [IOS-025, SUP-014]
+paired_with: [AND-027]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-025, SUP-014 |
-| Paired with | AND-027 |
-| Status | Draft |
+# IOS-026: Handle call actions and lost access, and add leave and swipe to remove on iOS
 
 ## Intent
 

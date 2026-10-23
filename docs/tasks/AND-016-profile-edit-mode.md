@@ -1,12 +1,15 @@
-# AND-016: Build Android profile edit mode with photo upload
+---
+type: task
+id: AND-016
+title: "Build Android profile edit mode with photo upload"
+area: android
+epic: EP-04
+depends_on: [AND-015, SUP-018]
+paired_with: [IOS-016]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-04 |
-| Depends on | AND-015, SUP-018 |
-| Paired with | IOS-016 |
-| Status | Draft |
+# AND-016: Build Android profile edit mode with photo upload
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# AND-009: Open backend screens by push, with refresh and a per-screen cache on Android
+---
+type: task
+id: AND-009
+title: "Open backend screens by push, with refresh and a per-screen cache on Android"
+area: android
+epic: EP-03
+depends_on: [AND-025, SUP-011]
+paired_with: [IOS-009]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-025, SUP-011 |
-| Paired with | IOS-009 |
-| Status | Draft |
+# AND-009: Open backend screens by push, with refresh and a per-screen cache on Android
 
 ## Intent
 

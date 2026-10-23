@@ -1,10 +1,13 @@
-# EP-04: People and roles
+---
+type: epic
+id: EP-04
+title: "People and roles"
+status: Planning
+specs: [specs/PEOPLE.md, specs/ROLES.md]
+depends_on: [EP-03]  # browse, group detail, edit-mode pattern
+---
 
-| Field | Value |
-|---|---|
-| Status | Planning |
-| Specs | [specs/PEOPLE.md](../specs/PEOPLE.md), [specs/ROLES.md](../specs/ROLES.md) |
-| Depends on | [EP-03: Community](EP-03-community.md) (browse, group detail, edit-mode pattern) |
+# EP-04: People and roles
 
 ## Goal
 
@@ -39,31 +42,4 @@ Every person has one detail screen that is their profile and how others see them
 
 ## Tasks
 
-### Backend (SUP)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [SUP-015: Extend profiles with phone, photo and directory visibility](../tasks/SUP-015-people-profiles-and-visibility.md) | SUP-010 | Draft |
-| [SUP-016: Build the person detail screen and the account toolbar item](../tasks/SUP-016-person-screen-and-account-item.md) | SUP-012, SUP-015 | Draft |
-| [SUP-017: Add the directory part to Browse and the browse button rule](../tasks/SUP-017-directory-in-browse.md) | SUP-015, SUP-016, SUP-023 | Draft |
-| [SUP-018: Build profile and role saving with all-or-nothing batches](../tasks/SUP-018-profile-and-role-operations.md) | SUP-015 | Draft |
-
-### iOS (IOS)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [IOS-015: Build the iOS person detail screen and account entry](../tasks/IOS-015-person-detail.md) | IOS-011, SUP-016 | Draft |
-| [IOS-016: Build iOS profile edit mode with photo upload](../tasks/IOS-016-profile-edit-mode.md) | IOS-015, SUP-018 | Draft |
-| [IOS-017: Add the iOS directory and segmented control to Browse](../tasks/IOS-017-browse-segments-and-directory.md) | IOS-025, SUP-017 | Draft |
-| [IOS-018: Build the iOS Edit roles half sheet](../tasks/IOS-018-edit-roles-sheet.md) | IOS-015, SUP-018 | Draft |
-| [IOS-019: Add iOS people and directory UI tests per persona against local Supabase (local)](../tasks/IOS-019-people-ui-tests-per-persona.md) | IOS-016, IOS-017, IOS-018, SUP-018 | Draft |
-
-### Android (AND)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [AND-015: Build the Android person detail screen and account entry](../tasks/AND-015-person-detail.md) | AND-011, SUP-016 | Draft |
-| [AND-016: Build Android profile edit mode with photo upload](../tasks/AND-016-profile-edit-mode.md) | AND-015, SUP-018 | Draft |
-| [AND-017: Add the Android directory and segmented control to Browse](../tasks/AND-017-browse-segments-and-directory.md) | AND-026, SUP-017 | Draft |
-| [AND-018: Build the Android Edit roles half sheet](../tasks/AND-018-edit-roles-sheet.md) | AND-015, SUP-018 | Draft |
-| [AND-019: Add Android people and directory UI tests per persona against local Supabase (local)](../tasks/AND-019-people-ui-tests-per-persona.md) | AND-016, AND-017, AND-018, SUP-018 | Draft |
+Every file in `docs/tasks/` with `epic: EP-04`. `docs/backlog.base` lists them with their status.

@@ -1,10 +1,13 @@
-# EP-01: Foundation and authentication
+---
+type: epic
+id: EP-01
+title: "Foundation and authentication"
+status: Planning
+specs: [specs/AUTH.md]
+depends_on: []
+---
 
-| Field | Value |
-|---|---|
-| Status | Planning |
-| Spec | [specs/AUTH.md](../specs/AUTH.md) |
-| Next epic | [EP-02: Tabs](EP-02-tabs.md) |
+# EP-01: Foundation and authentication
 
 ## Goal
 
@@ -42,38 +45,9 @@ A person with an account can sign in, stay signed in and sign out on iOS and And
 
 Implemented in this order (guide 7.2). Tasks Done before slices existed (SUP-001 to SUP-003, SUP-005, SUP-006, IOS-001 to IOS-003, IOS-005, IOS-006) have no slice. EP-01.B and EP-01.C are Android catch-up slices (guide 7.2 rule 3) mirroring that iOS work.
 
-| Slice | Behavior | Tasks, in order | Depends on | Status |
-|---|---|---|---|---|
-| [EP-01.A](#ep-01a-every-pr-is-checked-automatically) | Every PR runs the backend and iOS checks automatically | SUP-004, SUP-007, IOS-004, IOS-007 | None | Done |
-| [EP-01.B](#ep-01b-android-launches-to-the-backend-driven-entry) | Android launches to the backend-driven entry, with CI (catch-up) | AND-001, AND-002, AND-003, AND-004 | EP-01.A | Done |
-| [EP-01.C](#ep-01c-android-sign-in-matches-ios) | Android sign-in matches iOS (catch-up) | AND-005, AND-006, AND-007 | EP-01.B | Done |
-
-### EP-01.A: Every PR is checked automatically
-
-| # | Behavior acceptance criterion |
-|---|---|
-| B1 | A PR that breaks a pgTAP test, an Edge Function test or `make data-check` fails its required checks and cannot merge |
-| B2 | A PR that breaks an iOS Mock unit or UI test, puts mock or dev tools code in the release build, or adds `#if` on a build configuration fails its required checks and cannot merge |
-| B3 | A change under `/backend` or `/contract` also runs the iOS checks |
-| B4 | `make test-dev` in `/ios` runs the Dev integration and UI tests against freshly reset local Supabase |
-
-### EP-01.B: Android launches to the backend-driven entry
-
-| # | Behavior acceptance criterion |
-|---|---|
-| B1 | Android `mockDebug` and `devDebug` install side by side and launch from a clean checkout with no extra files |
-| B2 | `devDebug` with local Supabase shows the sign-in screen's title from the backend; changing it in the database shows after relaunch |
-| B3 | `mockDebug` with no backend shows the recorded entry; when the entry cannot be fetched it shows the last good copy, or the error screen with a working retry |
-| B4 | A PR that breaks an Android Mock unit test, puts mock code in the release build or branches on the build variant fails its required checks and cannot merge |
-
-### EP-01.C: Android sign-in matches iOS
-
-| # | Behavior acceptance criterion |
-|---|---|
-| B1 | Dev: signing in as a seeded persona works; a wrong password shows the backend's message; relaunching stays signed in; signing out returns to sign-in |
-| B2 | Dev: disabling the signed-in persona returns the app to sign-in with the session-ended message on its next backend request |
-| B3 | Mock: the production sign-in screen shows; any credentials sign in as the first active persona, with no network |
-| B4 | Android Mock UI tests run on every PR; `make test-dev` in `/android` runs the Dev UI tests |
+- [EP-01.A: Every PR is checked automatically](../slices/EP-01.A-every-pr-is-checked-automatically.md)
+- [EP-01.B: Android launches to the backend-driven entry](../slices/EP-01.B-android-launches-to-the-backend-driven-entry.md)
+- [EP-01.C: Android sign-in matches iOS](../slices/EP-01.C-android-sign-in-matches-ios.md)
 
 ## Milestones and tasks
 
@@ -81,57 +55,10 @@ Implemented in this order (guide 7.2). Tasks Done before slices existed (SUP-001
 
 The app launches on both platforms, in Mock and Dev, to a backend-driven entry screen. CI enforces the contract and the no-mock-in-release rule.
 
-#### Backend (SUP)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [SUP-001: Create the monorepo scaffold](../tasks/SUP-001-monorepo-scaffold.md) | None | Done |
-| [SUP-002: Set up the local Supabase backend project](../tasks/SUP-002-local-supabase.md) | SUP-001 | Done |
-| [SUP-003: Define the screen contract and implement get_entry and get_screen](../tasks/SUP-003-screen-contract.md) | SUP-002 | Done |
-| [SUP-004: Add backend CI on GitHub Actions against local Supabase](../tasks/SUP-004-backend-ci.md) | SUP-003 | Done |
-
-#### iOS (IOS)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [IOS-001: Create the iOS project with Mock and Dev build configurations](../tasks/IOS-001-project-and-build-configs.md) | SUP-001 | Done |
-| [IOS-002: Build the iOS backend service layer with production and mock implementations](../tasks/IOS-002-backend-service-and-mock.md) | SUP-003, IOS-001 | Done |
-| [IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry](../tasks/IOS-003-root-coordinator-and-registry.md) | IOS-002 | Done |
-| [IOS-004: Add iOS CI on GitHub Actions](../tasks/IOS-004-ci.md) | IOS-003, SUP-004 | Done |
-
-#### Android (AND)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [AND-001: Create the Android project with Mock and Dev build variants](../tasks/AND-001-project-and-build-variants.md) | SUP-001 | Done |
-| [AND-002: Build the Android backend service layer with production and mock implementations](../tasks/AND-002-backend-service-and-mock.md) | SUP-003, AND-001 | Done |
-| [AND-003: Build the Android root coordinator, screen registry and backend-driven entry](../tasks/AND-003-root-coordinator-and-registry.md) | AND-002 | Done |
-| [AND-004: Add Android CI on GitHub Actions](../tasks/AND-004-ci.md) | AND-003, SUP-004 | Done |
+Tasks: [SUP-001](../tasks/SUP-001-monorepo-scaffold.md), [SUP-002](../tasks/SUP-002-local-supabase.md), [SUP-003](../tasks/SUP-003-screen-contract.md), [SUP-004](../tasks/SUP-004-backend-ci.md), [IOS-001](../tasks/IOS-001-project-and-build-configs.md), [IOS-002](../tasks/IOS-002-backend-service-and-mock.md), [IOS-003](../tasks/IOS-003-root-coordinator-and-registry.md), [IOS-004](../tasks/IOS-004-ci.md), [AND-001](../tasks/AND-001-project-and-build-variants.md), [AND-002](../tasks/AND-002-backend-service-and-mock.md), [AND-003](../tasks/AND-003-root-coordinator-and-registry.md), [AND-004](../tasks/AND-004-ci.md).
 
 ### Milestone B: authentication
 
 Sign in with a seeded account (Dev) or a persona (Mock), stay signed in and sign out, with all sign-in text and errors from the backend.
 
-#### Backend (SUP)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [SUP-005: Add profiles, seeded personas and a signed-in check function](../tasks/SUP-005-profiles-and-personas.md) | SUP-003 | Done |
-| [SUP-006: Build the sign_in Edge Function with backend-decided errors and attempt limiting](../tasks/SUP-006-sign-in-function.md) | SUP-005 | Done |
-| [SUP-007: Extend backend CI for auth: Edge Function tests and dataset check](../tasks/SUP-007-auth-ci.md) | SUP-004, SUP-006 | Done |
-
-#### iOS (IOS)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [IOS-005: Build the iOS auth service with production and mock implementations](../tasks/IOS-005-auth-service.md) | IOS-002, SUP-006 | Done |
-| [IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder](../tasks/IOS-006-sign-in-flow.md) | IOS-003, IOS-005 | Done |
-| [IOS-007: Run iOS auth UI tests: Mock in CI, Dev locally](../tasks/IOS-007-auth-ui-tests-ci.md) | IOS-004, IOS-006 | Done |
-
-#### Android (AND)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [AND-005: Build the Android auth service with production and mock implementations](../tasks/AND-005-auth-service.md) | AND-002, SUP-006 | Done |
-| [AND-006: Build the Android sign-in flow and signed-in placeholder](../tasks/AND-006-sign-in-flow.md) | AND-003, AND-005 | Done |
-| [AND-007: Run Android auth UI tests: Mock in CI, Dev locally](../tasks/AND-007-auth-ui-tests-ci.md) | AND-004, AND-006 | Done |
+Tasks: [SUP-005](../tasks/SUP-005-profiles-and-personas.md), [SUP-006](../tasks/SUP-006-sign-in-function.md), [SUP-007](../tasks/SUP-007-auth-ci.md), [IOS-005](../tasks/IOS-005-auth-service.md), [IOS-006](../tasks/IOS-006-sign-in-flow.md), [IOS-007](../tasks/IOS-007-auth-ui-tests-ci.md), [AND-005](../tasks/AND-005-auth-service.md), [AND-006](../tasks/AND-006-sign-in-flow.md), [AND-007](../tasks/AND-007-auth-ui-tests-ci.md).

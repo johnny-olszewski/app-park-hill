@@ -1,12 +1,15 @@
-# AND-008: Build the Android backend-fed tab shell and remove the placeholder
+---
+type: task
+id: AND-008
+title: "Build the Android backend-fed tab shell and remove the placeholder"
+area: android
+epic: EP-02
+depends_on: [AND-006, AND-021, SUP-008]
+paired_with: [IOS-008]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-02 |
-| Depends on | AND-006, AND-021, SUP-008 |
-| Paired with | IOS-008 |
-| Status | Done |
+# AND-008: Build the Android backend-fed tab shell and remove the placeholder
 
 ## Intent
 

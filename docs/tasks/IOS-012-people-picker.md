@@ -1,12 +1,15 @@
-# IOS-012: Build the iOS sheet presentation and people picker
+---
+type: task
+id: IOS-012
+title: "Build the iOS sheet presentation and people picker"
+area: ios
+epic: EP-03
+depends_on: [IOS-026, SUP-013]
+paired_with: [AND-012]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-026, SUP-013 |
-| Paired with | AND-012 |
-| Status | Draft |
+# IOS-012: Build the iOS sheet presentation and people picker
 
 ## Intent
 

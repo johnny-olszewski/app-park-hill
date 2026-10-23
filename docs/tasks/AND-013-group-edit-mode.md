@@ -1,12 +1,15 @@
-# AND-013: Build Android group edit mode with batched changes
+---
+type: task
+id: AND-013
+title: "Build Android group edit mode with batched changes"
+area: android
+epic: EP-03
+depends_on: [AND-012, SUP-024]
+paired_with: [IOS-013]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-012, SUP-024 |
-| Paired with | IOS-013 |
-| Status | Draft |
+# AND-013: Build Android group edit mode with batched changes
 
 ## Intent
 

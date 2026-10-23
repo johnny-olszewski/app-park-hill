@@ -1,12 +1,15 @@
-# SUP-008: Implement get_tabs for signed-in users
+---
+type: task
+id: SUP-008
+title: "Implement get_tabs for signed-in users"
+area: backend, contract
+epic: EP-02
+depends_on: [SUP-005]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-02 |
-| Depends on | SUP-005 |
-| Paired with | None |
-| Status | Done |
+# SUP-008: Implement get_tabs for signed-in users
 
 ## Intent
 

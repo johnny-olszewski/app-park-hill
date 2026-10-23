@@ -1,12 +1,15 @@
-# SUP-024: Send group edit capabilities and save every change at once
+---
+type: task
+id: SUP-024
+title: "Send group edit capabilities and save every change at once"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-013]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-013 |
-| Paired with | None |
-| Status | Draft |
+# SUP-024: Send group edit capabilities and save every change at once
 
 ## Intent
 

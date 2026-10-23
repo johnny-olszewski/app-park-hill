@@ -1,12 +1,15 @@
-# AND-005: Build the Android auth service with production and mock implementations
+---
+type: task
+id: AND-005
+title: "Build the Android auth service with production and mock implementations"
+area: android
+epic: EP-01
+depends_on: [AND-002, SUP-006]
+paired_with: [IOS-005]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | AND-002, SUP-006 |
-| Paired with | IOS-005 |
-| Status | Done |
+# AND-005: Build the Android auth service with production and mock implementations
 
 ## Intent
 

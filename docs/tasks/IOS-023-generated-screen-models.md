@@ -1,12 +1,15 @@
-# IOS-023: Decode screens with the generated models in the iOS app
+---
+type: task
+id: IOS-023
+title: "Decode screens with the generated models in the iOS app"
+area: ios
+epic: EP-05
+depends_on: [SUP-020]
+paired_with: [AND-024]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-05 |
-| Depends on | SUP-020 |
-| Paired with | AND-024 |
-| Status | Draft |
+# IOS-023: Decode screens with the generated models in the iOS app
 
 ## Intent
 

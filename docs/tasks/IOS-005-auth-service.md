@@ -1,12 +1,15 @@
-# IOS-005: Build the iOS auth service with production and mock implementations
+---
+type: task
+id: IOS-005
+title: "Build the iOS auth service with production and mock implementations"
+area: ios
+epic: EP-01
+depends_on: [IOS-002, SUP-006]
+paired_with: [AND-005]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | IOS-002, SUP-006 |
-| Paired with | AND-005 |
-| Status | Done |
+# IOS-005: Build the iOS auth service with production and mock implementations
 
 ## Intent
 

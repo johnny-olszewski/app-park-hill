@@ -1,12 +1,15 @@
-# IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups
+---
+type: task
+id: IOS-025
+title: "Build the iOS toolbar, full-screen cover and Browse all groups"
+area: ios
+epic: EP-03
+depends_on: [IOS-010, SUP-023]
+paired_with: [AND-026]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-010, SUP-023 |
-| Paired with | AND-026 |
-| Status | Draft |
+# IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups
 
 ## Intent
 

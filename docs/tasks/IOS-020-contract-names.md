@@ -1,12 +1,15 @@
-# IOS-020: Use the generated contract names in the iOS app
+---
+type: task
+id: IOS-020
+title: "Use the generated contract names in the iOS app"
+area: ios
+epic: EP-05
+depends_on: [SUP-019, IOS-008]
+paired_with: [AND-020]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-05 |
-| Depends on | SUP-019, IOS-008 |
-| Paired with | AND-020 |
-| Status | Done |
+# IOS-020: Use the generated contract names in the iOS app
 
 ## Intent
 

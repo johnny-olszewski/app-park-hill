@@ -1,12 +1,15 @@
-# SUP-022: Describe the non-screen responses and the screen envelope once
+---
+type: task
+id: SUP-022
+title: "Describe the non-screen responses and the screen envelope once"
+area: contract, backend
+epic: EP-05
+depends_on: [SUP-020]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-05 |
-| Depends on | SUP-020 |
-| Paired with | None |
-| Status | Draft |
+# SUP-022: Describe the non-screen responses and the screen envelope once
 
 ## Intent
 

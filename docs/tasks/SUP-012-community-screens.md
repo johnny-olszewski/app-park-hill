@@ -1,12 +1,15 @@
-# SUP-012: Build Community home and group detail for each person
+---
+type: task
+id: SUP-012
+title: "Build Community home and group detail for each person"
+area: backend
+epic: EP-03
+depends_on: [SUP-008, SUP-010, SUP-011]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-03 |
-| Depends on | SUP-008, SUP-010, SUP-011 |
-| Paired with | None |
-| Status | Draft |
+# SUP-012: Build Community home and group detail for each person
 
 ## Intent
 

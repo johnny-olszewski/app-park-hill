@@ -1,12 +1,15 @@
-# SUP-023: Build Browse all groups and the screen toolbar
+---
+type: task
+id: SUP-023
+title: "Build Browse all groups and the screen toolbar"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-012]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-012 |
-| Paired with | None |
-| Status | Draft |
+# SUP-023: Build Browse all groups and the screen toolbar
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# AND-004: Add Android CI on GitHub Actions
+---
+type: task
+id: AND-004
+title: "Add Android CI on GitHub Actions"
+area: android, ci
+epic: EP-01
+depends_on: [AND-003, SUP-004]
+paired_with: [IOS-004]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android, ci |
-| Epic | EP-01 |
-| Depends on | AND-003, SUP-004 |
-| Paired with | IOS-004 |
-| Status | Done |
+# AND-004: Add Android CI on GitHub Actions
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# SUP-019: Define backend function names and screen keys once and generate client constants from them
+---
+type: task
+id: SUP-019
+title: "Define backend function names and screen keys once and generate client constants from them"
+area: contract, backend
+epic: EP-05
+depends_on: [SUP-006, SUP-008]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-05 |
-| Depends on | SUP-006, SUP-008 |
-| Paired with | None |
-| Status | Done |
+# SUP-019: Define backend function names and screen keys once and generate client constants from them
 
 ## Intent
 

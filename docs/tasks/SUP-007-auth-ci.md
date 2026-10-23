@@ -1,12 +1,15 @@
-# SUP-007: Extend backend CI for auth: Edge Function tests and dataset check
+---
+type: task
+id: SUP-007
+title: "Extend backend CI for auth: Edge Function tests and dataset check"
+area: backend, ci
+epic: EP-01
+depends_on: [SUP-004, SUP-006]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, ci |
-| Epic | EP-01 |
-| Depends on | SUP-004, SUP-006 |
-| Paired with | None |
-| Status | Done |
+# SUP-007: Extend backend CI for auth: Edge Function tests and dataset check
 
 ## Intent
 

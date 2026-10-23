@@ -1,11 +1,14 @@
-# EP-06: Mock menu
+---
+type: epic
+id: EP-06
+title: "Mock menu"
+status: Draft
+specs: [specs/AUTH.md]  # updated by SUP-021
+design: https://claude.ai/artifact/2UqQWahHZ5j7r8xMvwjtPe
+depends_on: []
+---
 
-| Field | Value |
-|---|---|
-| Status | Draft |
-| Spec | `specs/AUTH.md` (updated by SUP-021) |
-| Design | [Park Hill Mock Menu brief](https://claude.ai/artifact/2UqQWahHZ5j7r8xMvwjtPe) |
-| Previous epic | [EP-05: Contract names](EP-05-contract-names.md) |
+# EP-06: Mock menu
 
 ## Goal
 
@@ -37,54 +40,10 @@ The Mock build shows the production app, starting with the real sign-in screen, 
 
 Implemented in this order (guide 7.2). EP-06.C brings Android level with EP-06.A and EP-06.B (catch-up, guide 7.2 rule 3).
 
-| Slice | Behavior | Tasks, in order | Depends on | Status |
-|---|---|---|---|---|
-| [EP-06.A](#ep-06a-dev-tools-over-the-app) | Debug builds show a pill on every screen that opens a dev tools menu | IOS-021 | None | Done |
-| [EP-06.B](#ep-06b-mock-testers-sign-in-through-the-menu) | Mock testers sign in through the menu, as any persona, with any result | SUP-021, IOS-022 | EP-06.A | Done |
-| [EP-06.C](#ep-06c-android-dev-tools-and-mock-sign-in) | Android dev tools and Mock sign-in through the menu (catch-up) | AND-021, AND-022 | EP-06.B, EP-01.C | Done |
-
-### EP-06.A: Dev tools over the app
-
-Built as a single task (IOS-021) before slices existed.
-
-| # | Behavior acceptance criterion |
-|---|---|
-| B1 | In the Mock and Dev debug builds, a `MOCK` or `DEV` pill shows at the top of every screen, including sign-in; the release build shows none |
-| B2 | Long-pressing the pill opens a menu showing the build's backend, the current screen's key and data, and Sign out when signed in |
-| B3 | With the menu closed, every tap outside the pill works as before |
-
-### EP-06.B: Mock testers sign in through the menu
-
-| # | Behavior acceptance criterion |
-|---|---|
-| B1 | The Mock build opens on the production sign-in screen; there is no persona list screen |
-| B2 | In the menu, choose Admin and Success, close it, type anything and tap Sign in: signed in as Admin |
-| B3 | Arm Too many attempts: the pill shows an alert icon and the menu says "Next sign-in will fail: Too many attempts"; signing in shows the backend's too-many-attempts message under the password field |
-| B4 | Arm No connection: signing in shows the can't-connect message box above the fields |
-| B5 | Signed in, Switch persona to Attendee: now signed in as Attendee |
-
-### EP-06.C: Android dev tools and Mock sign-in
-
-Catch-up: EP-06.A B1 to B3 and EP-06.B B1 to B5, checked on Android.
+- [EP-06.A: Dev tools over the app](../slices/EP-06.A-dev-tools-over-the-app.md)
+- [EP-06.B: Mock testers sign in through the menu](../slices/EP-06.B-mock-testers-sign-in-through-the-menu.md)
+- [EP-06.C: Android dev tools and Mock sign-in](../slices/EP-06.C-android-dev-tools-and-mock-sign-in.md)
 
 ## Tasks
 
-### Backend (SUP)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [SUP-021: Record every sign-in refusal and update the auth spec for the mock menu](../tasks/SUP-021-sign-in-refusal-responses.md) | SUP-006 | Done |
-
-### iOS (IOS)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/IOS-021-dev-tools-overlay.md) | IOS-006 | Done |
-| [IOS-022: Show the production sign-in in Mock with persona and result tools](../tasks/IOS-022-mock-sign-in-tools.md) | IOS-021, SUP-021 | Done |
-
-### Android (AND)
-
-| Task | Depends on | Status |
-|---|---|---|
-| [AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry](../tasks/AND-021-dev-tools-overlay.md) | AND-006 | Done |
-| [AND-022: Show the production sign-in in Mock with persona and result tools](../tasks/AND-022-mock-sign-in-tools.md) | AND-021, SUP-021 | Done |
+Every file in `docs/tasks/` with `epic: EP-06`. `docs/backlog.base` lists them with their status.

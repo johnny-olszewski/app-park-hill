@@ -1,12 +1,15 @@
-# AND-011: Build the Android group detail view and screen
+---
+type: task
+id: AND-011
+title: "Build the Android group detail view and screen"
+area: android
+epic: EP-03
+depends_on: [AND-009, SUP-012]
+paired_with: [IOS-011]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-009, SUP-012 |
-| Paired with | IOS-011 |
-| Status | Draft |
+# AND-011: Build the Android group detail view and screen
 
 ## Intent
 

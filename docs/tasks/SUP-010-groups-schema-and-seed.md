@@ -1,12 +1,15 @@
-# SUP-010: Add the groups schema, server-side rules and group personas
+---
+type: task
+id: SUP-010
+title: "Add the groups schema, server-side rules and group personas"
+area: backend
+epic: EP-03
+depends_on: [SUP-009]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-03 |
-| Depends on | SUP-009 |
-| Paired with | None |
-| Status | Draft |
+# SUP-010: Add the groups schema, server-side rules and group personas
 
 ## Intent
 

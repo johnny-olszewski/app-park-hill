@@ -1,12 +1,15 @@
-# AND-012: Build the Android sheet presentation and people picker
+---
+type: task
+id: AND-012
+title: "Build the Android sheet presentation and people picker"
+area: android
+epic: EP-03
+depends_on: [AND-027, SUP-013]
+paired_with: [IOS-012]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-027, SUP-013 |
-| Paired with | IOS-012 |
-| Status | Draft |
+# AND-012: Build the Android sheet presentation and people picker
 
 ## Intent
 

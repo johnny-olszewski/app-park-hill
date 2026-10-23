@@ -1,12 +1,15 @@
-# IOS-013: Build iOS group edit mode with batched changes
+---
+type: task
+id: IOS-013
+title: "Build iOS group edit mode with batched changes"
+area: ios
+epic: EP-03
+depends_on: [IOS-012, SUP-024]
+paired_with: [AND-013]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-012, SUP-024 |
-| Paired with | AND-013 |
-| Status | Draft |
+# IOS-013: Build iOS group edit mode with batched changes
 
 ## Intent
 

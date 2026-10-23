@@ -1,12 +1,15 @@
-# IOS-019: Add iOS people and directory UI tests per persona against local Supabase (local)
+---
+type: task
+id: IOS-019
+title: "Add iOS people and directory UI tests per persona against local Supabase (local)"
+area: ios
+epic: EP-04
+depends_on: [IOS-016, IOS-017, IOS-018, SUP-018]
+paired_with: [AND-019]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-04 |
-| Depends on | IOS-016, IOS-017, IOS-018, SUP-018 |
-| Paired with | AND-019 |
-| Status | Draft |
+# IOS-019: Add iOS people and directory UI tests per persona against local Supabase (local)
 
 ## Intent
 

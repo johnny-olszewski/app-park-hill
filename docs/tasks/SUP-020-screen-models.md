@@ -1,12 +1,15 @@
-# SUP-020: Choose and prove how screen data models are defined once and generated for both clients
+---
+type: task
+id: SUP-020
+title: "Choose and prove how screen data models are defined once and generated for both clients"
+area: contract, backend
+epic: EP-05
+depends_on: [SUP-019]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-05 |
-| Depends on | SUP-019 |
-| Paired with | None |
-| Status | Done |
+# SUP-020: Choose and prove how screen data models are defined once and generated for both clients
 
 ## Intent
 

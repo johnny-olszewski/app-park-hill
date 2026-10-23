@@ -1,12 +1,15 @@
-# IOS-008: Build the iOS backend-fed tab shell and remove the placeholder
+---
+type: task
+id: IOS-008
+title: "Build the iOS backend-fed tab shell and remove the placeholder"
+area: ios
+epic: EP-02
+depends_on: [IOS-006, IOS-021, SUP-008]
+paired_with: [AND-008]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-02 |
-| Depends on | IOS-006, IOS-021, SUP-008 |
-| Paired with | AND-008 |
-| Status | Done |
+# IOS-008: Build the iOS backend-fed tab shell and remove the placeholder
 
 ## Intent
 

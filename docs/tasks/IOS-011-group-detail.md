@@ -1,12 +1,15 @@
-# IOS-011: Build the iOS group detail view and screen
+---
+type: task
+id: IOS-011
+title: "Build the iOS group detail view and screen"
+area: ios
+epic: EP-03
+depends_on: [IOS-009, SUP-012]
+paired_with: [AND-011]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-009, SUP-012 |
-| Paired with | AND-011 |
-| Status | Draft |
+# IOS-011: Build the iOS group detail view and screen
 
 ## Intent
 

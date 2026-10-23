@@ -1,12 +1,15 @@
-# AND-025: Decode every backend response with the generated types in the Android app
+---
+type: task
+id: AND-025
+title: "Decode every backend response with the generated types in the Android app"
+area: android
+epic: EP-05
+depends_on: [SUP-022, AND-024]
+paired_with: [IOS-024]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-05 |
-| Depends on | SUP-022, AND-024 |
-| Paired with | IOS-024 |
-| Status | Draft |
+# AND-025: Decode every backend response with the generated types in the Android app
 
 ## Intent
 

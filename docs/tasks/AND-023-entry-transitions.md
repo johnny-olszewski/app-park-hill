@@ -1,12 +1,15 @@
-# AND-023: Animate the Android entry in and out like iOS
+---
+type: task
+id: AND-023
+title: "Animate the Android entry in and out like iOS"
+area: android
+epic: EP-02
+depends_on: [AND-008]
+paired_with: []  # iOS already has this: its entry is a full-screen cover
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-02 |
-| Depends on | AND-008 |
-| Paired with | None (iOS already has this: its entry is a full-screen cover) |
-| Status | Done |
+# AND-023: Animate the Android entry in and out like iOS
 
 ## Intent
 

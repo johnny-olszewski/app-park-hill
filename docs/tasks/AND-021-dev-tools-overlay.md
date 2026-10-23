@@ -1,12 +1,15 @@
-# AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry
+---
+type: task
+id: AND-021
+title: "Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry"
+area: android
+epic: EP-06
+depends_on: [AND-006]
+paired_with: [IOS-021]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-06 |
-| Depends on | AND-006 |
-| Paired with | IOS-021 |
-| Status | Done |
+# AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry
 
 ## Intent
 

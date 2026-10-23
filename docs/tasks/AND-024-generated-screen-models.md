@@ -1,12 +1,15 @@
-# AND-024: Decode screens with the generated models in the Android app
+---
+type: task
+id: AND-024
+title: "Decode screens with the generated models in the Android app"
+area: android
+epic: EP-05
+depends_on: [SUP-020]
+paired_with: [IOS-023]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-05 |
-| Depends on | SUP-020 |
-| Paired with | IOS-023 |
-| Status | Draft |
+# AND-024: Decode screens with the generated models in the Android app
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# SUP-017: Add the directory part to Browse and the browse button rule
+---
+type: task
+id: SUP-017
+title: "Add the directory part to Browse and the browse button rule"
+area: backend
+epic: EP-04
+depends_on: [SUP-015, SUP-016, SUP-023]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-04 |
-| Depends on | SUP-015, SUP-016, SUP-023 |
-| Paired with | None |
-| Status | Draft |
+# SUP-017: Add the directory part to Browse and the browse button rule
 
 ## Intent
 

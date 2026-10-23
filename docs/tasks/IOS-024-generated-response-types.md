@@ -1,12 +1,15 @@
-# IOS-024: Decode every backend response with the generated types in the iOS app
+---
+type: task
+id: IOS-024
+title: "Decode every backend response with the generated types in the iOS app"
+area: ios
+epic: EP-05
+depends_on: [SUP-022, IOS-023]
+paired_with: [AND-025]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-05 |
-| Depends on | SUP-022, IOS-023 |
-| Paired with | AND-025 |
-| Status | Draft |
+# IOS-024: Decode every backend response with the generated types in the iOS app
 
 ## Intent
 

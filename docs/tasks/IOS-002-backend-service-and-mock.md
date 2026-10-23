@@ -1,12 +1,15 @@
-# IOS-002: Build the iOS backend service layer with production and mock implementations
+---
+type: task
+id: IOS-002
+title: "Build the iOS backend service layer with production and mock implementations"
+area: ios
+epic: EP-01
+depends_on: [SUP-003, IOS-001]
+paired_with: [AND-002]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | SUP-003, IOS-001 |
-| Paired with | AND-002 |
-| Status | Done |
+# IOS-002: Build the iOS backend service layer with production and mock implementations
 
 ## Intent
 

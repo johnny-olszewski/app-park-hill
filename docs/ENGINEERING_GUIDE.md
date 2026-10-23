@@ -201,7 +201,7 @@ Rules:
 
 The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
 
-1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9). Work before 2026-10-15 used one `task/<task file name>` branch per task.
+1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9; chores: rule 12). Work before 2026-10-15 used one `task/<task file name>` branch per task.
 2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
 3. **Commit message format:**
 
@@ -228,6 +228,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
     - When every check has finished, including the review, the session that opened the PR acts on it with `/address-review`: must-fix comments and failing checks are fixed and pushed; suggestions are applied in separate, later commits and listed in a **Suggestions to verify** comment for the reviewer, who reverts any they reject with a new commit. A comment asking to change this guide or to go beyond the Scope waits for the reviewer's decision, whatever its severity.
     - The fix commits follow rule 7. The reviewer still checks the behavior criteria and merges.
     - Setup, once per repository: install the Claude GitHub app and add the `CLAUDE_CODE_OAUTH_TOKEN` secret from `claude setup-token`.
+12. **Chore branches.** Changes that neither implement a task nor only plan, such as renames, tooling and other housekeeping, use a branch named `chore/` plus a short kebab-case name, for example `chore/housekeeping`. One chore branch and PR may cover several unrelated items, each in its own commits. Commits are `[CHORE][<k>/n] <summary>`, numbered across the branch; the PR title is `[CHORE] <summary>`, and the PR template's slice, task and behavior sections are replaced by one section per item saying how it was verified. A chore changes no behavior a slice should own and sets no task to Done.
 
 ### 7.2 Slices
 
@@ -305,6 +306,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-22 | Screen data descriptions (SUP-020): each backend screen's data is described once in `contract/screens/<key>.schema.json`, a documented subset of JSON Schema; `make models` generates Swift (`Decodable`, `Equatable`) and Kotlin (kotlinx.serialization) models into `contract/generated/`, and `make data-check` validates every recorded screen against its description. A standard-library Python script generates and validates, and refuses keywords outside the subset; keywords are added when a screen first needs them. Chosen over JSON Schema with quicktype (Node, heavier output, no validation), JSON Schema with the `jsonschema` package (first pip dependency) and a format of our own (no tooling, one more format to learn). Comparison in `contract/README.md`. Contract rule 8 added to 4.1 |
 | 2026-10-23 | Recordings (7.2 rule 4): every slice's behavior criteria are recorded while they are verified, as iOS and Android screen recordings for app behavior and terminal transcripts for developer behavior, with `scripts/record.sh`, into the gitignored `recordings/<slice ID>/`. They stay local and are not linked from PRs. Earlier slices recorded ad hoc and #29 dropped it; written down so every session does it. Chosen over uploading to PRs (`gh` cannot attach files) and committing them (repository size) |
 | 2026-10-23 | Organization scoping (4): tables holding an organization's data get a nullable `org_id`, null for every row for now. Chosen over a required church identifier from the start (an `orgs` table and checks with only one organization) and over adding it later (migrating every table, rule and test after EP-03 and EP-04). Resolves the SUP-009 and SUP-010 open question |
+| 2026-10-23 | Chore branches (7.1 rule 12): housekeeping that implements no task and is not planning goes on a `chore/` branch with `[CHORE][<k>/n]` commits, numbered across the branch, and may group several unrelated items. Mirrors planning branches. Chosen over inventing a task for each rename or tooling change (tasks deliver behavior in a slice) |
 
 ## 9. Known risks
 

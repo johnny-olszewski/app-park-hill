@@ -1,4 +1,4 @@
-<!-- Title: [<slice ID>] <slice title> (planning PRs: [PLAN] <summary>) -->
+<!-- Title: [<slice ID>] <slice title> (planning PRs: [PLAN] <summary>; chore PRs: [CHORE] <summary>) -->
 
 ## Slice
 

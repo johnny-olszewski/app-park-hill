@@ -18,6 +18,7 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 |---|---|---|
 | `slice/<ID>-…` | The slice in its epic's Slices section (behavior criteria), every task in it (Scope, Out of scope, acceptance criteria), the spec they reference | The slice checks in section 2 |
 | `plan/…` | Every epic, spec and task the PR changes, and the code those tasks name | The planning checks in section 2 |
+| `chore/…` | Nothing more | Only the general checks, plus guide 7.1 rule 12 |
 | Anything else | Nothing more | Only the general checks |
 
 4. **Re-review.** If this PR already has comments from this reviewer, read them and their replies first. For each, check whether the new commits address it: reply on its thread with what changed, or say why it still stands. Then review only what changed since your last review. Never repeat a comment already made.

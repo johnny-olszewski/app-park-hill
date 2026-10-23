@@ -5,7 +5,7 @@ Backend-driven, natively rendered app for iOS (SwiftUI) and Android (Kotlin, Com
 **All work starts from a task.** Read these before changing anything:
 
 - [Engineering Guide](docs/ENGINEERING_GUIDE.md): the rules every task follows
-- [Backlog](docs/BACKLOG.md): epics and tasks, in order
+- [Backlog](docs/BACKLOG.md): slice order and epics; open `docs/` in Obsidian for status (`backlog.base`)
 - [Task template](docs/TASK_TEMPLATE.md)
 
 ## Layout
@@ -16,7 +16,7 @@ Backend-driven, natively rendered app for iOS (SwiftUI) and Android (Kotlin, Com
 | `/contract` | API contract docs, JSON mock responses and personas |
 | `/ios` | SwiftUI app |
 | `/android` | Kotlin + Compose app |
-| `/docs` | Guide, template, backlog, epics, specs, tasks |
+| `/docs` | Guide, template, backlog, epics, slices, specs, tasks |
 | `/.github` | GitHub Actions workflows |
 
 ## Checks

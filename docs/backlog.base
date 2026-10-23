@@ -1,0 +1,62 @@
+filters:
+  or:
+    - 'note.type == "epic"'
+    - 'note.type == "slice"'
+    - 'note.type == "task"'
+properties:
+  note.depends_on:
+    displayName: Depends on
+  note.paired_with:
+    displayName: Paired with
+views:
+  - type: table
+    name: Slices
+    filters: 'note.type == "slice"'
+    groupBy:
+      property: note.status
+      direction: ASC
+    order:
+      - note.id
+      - note.title
+      - note.epic
+      - note.tasks
+      - note.depends_on
+      - note.status
+  - type: table
+    name: Open tasks
+    filters:
+      and:
+        - 'note.type == "task"'
+        - 'note.status != "Done"'
+    groupBy:
+      property: note.epic
+      direction: ASC
+    order:
+      - note.id
+      - note.title
+      - note.area
+      - note.status
+      - note.depends_on
+      - note.paired_with
+  - type: table
+    name: All tasks
+    filters: 'note.type == "task"'
+    groupBy:
+      property: note.epic
+      direction: ASC
+    order:
+      - note.id
+      - note.title
+      - note.area
+      - note.status
+      - note.depends_on
+      - note.paired_with
+  - type: table
+    name: Epics
+    filters: 'note.type == "epic"'
+    order:
+      - note.id
+      - note.title
+      - note.status
+      - note.specs
+      - note.depends_on

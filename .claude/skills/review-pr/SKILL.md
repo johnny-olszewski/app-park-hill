@@ -16,8 +16,8 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 | Branch | Read | Also check |
 |---|---|---|
-| `slice/<ID>-…` | The slice in its epic's Slices section (behavior criteria), every task in it (Scope, Out of scope, acceptance criteria), the spec they reference | The slice checks in section 2 |
-| `plan/…` | Every epic, spec and task the PR changes, and the code those tasks name | The planning checks in section 2 |
+| `slice/<ID>-…` | The slice file in `docs/slices/` (behavior criteria), every task in it (Scope, Out of scope, acceptance criteria), the spec they reference | The slice checks in section 2 |
+| `plan/…` | Every epic, slice, spec and task the PR changes, and the code those tasks name | The planning checks in section 2 |
 | `chore/…` | Nothing more | Only the general checks, plus guide 7.1 rule 12 |
 | Anything else | Nothing more | Only the general checks |
 
@@ -47,7 +47,7 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 - Tasks match the current code: files, screens, names and tests they mention exist as described.
 - Each task has one platform, acceptance criteria a person can verify, and no open questions left unmarked.
-- Slice tables in the epic and `docs/BACKLOG.md` agree; dependencies exist.
+- Frontmatter follows guide 7.3: every ID in `tasks`, `depends_on` and `paired_with` exists, each task is in exactly one slice's `tasks`, and no status or link is copied into a table.
 - No task or slice is set to Done.
 
 ## 3. Comment

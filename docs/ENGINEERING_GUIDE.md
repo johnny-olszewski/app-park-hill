@@ -39,10 +39,10 @@ Monorepo.
 /contract    API contract docs, JSON mock responses and personas (single source of truth for both clients)
 /ios         SwiftUI app
 /android     Kotlin + Compose app
-/docs        This guide, the task template, the backlog, epics, specs, tasks
+/docs        This guide, the task template, the backlog, epics, slices, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
 /.claude     Project skills for agent sessions (/status, /implement-slice, /review-pr, /address-review)
-/scripts     Workflow scripts: mark_done.py, check_commits.sh, record.sh
+/scripts     Workflow scripts: check_commits.sh, record.sh
 ```
 
 A contract change lands in one PR: migration, mock response, and both client models together.
@@ -191,7 +191,7 @@ Rules:
 - **Temporary code** is allowed only when a task says so, and every line carries `TEMPORARY(<epic>): <what removes it>`. The removing task has an AC that a search for the marker finds nothing.
 
 
-1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, exit criteria and its task list. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks`, tagged with its epic and listed in `BACKLOG.md`. Tasks are grouped into slices (7.2).
+1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, and exit criteria. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks` and tagged with its epic. Tasks are grouped into slices (7.2). How these files record status and links is in 7.3.
 2. One slice, one PR, one reviewer (Johnny). Tasks are sized for a single agent session; a slice is the few tasks that together deliver one testable change in behavior.
 3. Every task targets one platform, because different developers with different skills may own them. IDs are per platform and sequential: `SUP-###` (backend), `IOS-###`, `AND-###`. iOS and Android tasks for the same behavior are counterparts with matching acceptance criteria. Platform idioms may differ; behavior may not.
 4. An agent that finds ambiguity or a conflict with this guide stops and asks. It does not guess and does not expand scope.
@@ -217,11 +217,11 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
    - No mention of tools, assistants or agents, and no co-author or "generated with" trailers. The same holds for everything posted under a person's account (PR bodies, replies); only the automated reviewer's own comments, from its bot account, are exempt (rule 11).
    - On a slice branch each task keeps its own numbering, and one task's commits are finished before the next task's begin.
 4. **One pull request per slice.** Title `[<slice ID>] <slice title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
-5. **Status:** each task's last commit sets that task to Done in its task file, its epic and `BACKLOG.md`. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `BACKLOG.md`. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
+5. **Status:** each task's last commit sets `status: Done` in its task file. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets `status: Done` in the slice file. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
-9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
+9. **Planning branches.** Changes that only add or revise epics, slices, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
 10. **Checks.** CI reports on every ready pull request; draft PRs skip the macOS job. Never merge a PR with a failing or pending check. Branch protection is not available for a private repo on the free plan, so this is a rule, not a setting. `.githooks/pre-push` runs the fast checks before each push; enable it once per clone with `git config core.hooksPath .githooks`.
 
 11. **Automated review and fixes.** `.github/workflows/review.yml` reviews every PR once when it is opened ready or marked ready, following `.claude/skills/review-pr/SKILL.md`: the guide's rules for every PR, plus the slice or plan for `slice/` and `plan/` branches. It posts inline comments, each starting **Must-fix** (breaks a guide rule, an acceptance criterion, the Scope, or is a bug) or **Suggestion**, and one summary comment. It never approves, pushes or merges. The repository owner asks for a re-review by commenting `@claude review`; a re-review checks whether earlier comments were addressed and does not repeat them.
@@ -234,7 +234,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
 
 A slice is the set of tasks, across platforms, that together deliver one change in behavior a person can check: in the app, or for developers (for example a CI check). It is the unit of implementation, review and acceptance. Tasks stay per platform, so each keeps one owner.
 
-1. **Defined in the epic.** Each epic has a Slices section listing every slice: ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. `BACKLOG.md` lists each epic's slices above its task tables. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice. Tasks Done before slices existed (2026-10-15) stay listed in their epic without a slice.
+1. **One file per slice.** Each slice is a file in `/docs/slices` (7.3): ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. Its epic's Slices section links it and explains the order; `BACKLOG.md` holds the order of all slices. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice. Tasks Done before slices existed (2026-10-15) belong to their epic without a slice.
 2. **Sizing.** Split a behavior into separate slices only where the state between them is worth having on its own; a slice that only prepares for the next is merged into it.
 3. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
    - **Catch-up slices.** A platform that falls behind gets catch-up slices: only its own tasks, with the behavior criteria of the slices they mirror. No new slice starts until every platform has caught up. Android was held back this way until 2026-10-15 while the workflow settled on iOS, and catches up through EP-01.B, EP-01.C and EP-06.C.
@@ -242,6 +242,20 @@ A slice is the set of tasks, across platforms, that together deliver one change 
    - **Recordings.** Each behavior criterion is recorded while it is verified, with `scripts/record.sh`: behavior in the apps as a screen recording on iOS and on Android, in each build the criterion names (Mock when it names none); behavior for developers (a check, a command) as a terminal transcript. Recordings go in the gitignored `recordings/<slice ID>/` folder, named by criterion, and stay on the implementer's machine for the reviewer; PRs do not link them. Planning PRs have none.
 5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria, with the recordings to hand; commits stay per task for reading the code.
 6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
+
+### 7.3 Planning docs
+
+Epics, slices and tasks are Markdown files whose structured facts live once, in YAML frontmatter at the top of the file. The prose below it (goal, scope, acceptance criteria) is for reading; the frontmatter is what views and agents rely on.
+
+1. **One place per fact.** A status, a link or a membership is written in exactly one file and never copied into a table elsewhere. Views are built from the frontmatter, not maintained by hand.
+2. **Fields.** Every file has `type` (`epic`, `slice` or `task`), `id`, `title` and `status`. Links are lists of IDs, `[]` when empty, with a `#` comment for any note.
+   - Task: `area`, `epic`, `depends_on`, `paired_with`.
+   - Slice: `epic`, `tasks` (in implementation order), `depends_on`.
+   - Epic: `specs` (paths under `/docs`), `depends_on`, and any other field it needs, such as `design`.
+   A task's slice is the slice whose `tasks` list it; it is not repeated in the task.
+3. **Order.** `BACKLOG.md` holds the order of slices as a numbered list of links, and nothing else that a frontmatter field holds.
+4. **Views.** `docs/backlog.base` is an [Obsidian Bases](https://obsidian.md/help/bases) view of every epic, slice and task by status: open `/docs` as a vault in Obsidian. GitHub shows each file's frontmatter as a table. Agents read the frontmatter directly (`/status`).
+5. **New fields** are added to this list, and for tasks to `TASK_TEMPLATE.md`, in the same change, so every file of a type has the same fields.
 
 ## 8. Decision log
 
@@ -308,6 +322,7 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-23 | Organization scoping (4): tables holding an organization's data get a nullable `org_id`, null for every row for now. Chosen over a required church identifier from the start (an `orgs` table and checks with only one organization) and over adding it later (migrating every table, rule and test after EP-03 and EP-04). Resolves the SUP-009 and SUP-010 open question |
 | 2026-10-23 | Chore branches (7.1 rule 12): housekeeping that implements no task and is not planning goes on a `chore/` branch with `[CHORE][<k>/n]` commits, numbered across the branch, and may group several unrelated items. Mirrors planning branches. Chosen over inventing a task for each rename or tooling change (tasks deliver behavior in a slice) |
 | 2026-10-23 | "Fixtures" are now called mock responses: `contract/fixtures` became `contract/mock_responses`, `make fixtures` became `make mock-responses`, and client types and tests were renamed to match (`MockResponseStore`, `TestMockResponses`). The files are unchanged: recorded backend responses that the mock builds serve, client decoding tests read and `make data-check` keeps faithful. Earlier decision log rows keep the old word |
+| 2026-10-23 | Planning docs (7.3): epics, slices and tasks keep status, links and membership once, in YAML frontmatter; slices moved from epic sections into `/docs/slices`; `BACKLOG.md` keeps only the slice order; `docs/backlog.base` gives an Obsidian view. `scripts/mark_done.py`, which set Done in three tables by regex, is removed: marking Done is one field. Chosen over JSON or YAML data files beside the prose (two files per item that can drift), a generated dashboard (a script to maintain) and GitHub Issues and Projects (the plan would leave the repo) |
 
 ## 9. Known risks
 

@@ -4,54 +4,57 @@
 |---|---|
 | Area | ios |
 | Epic | EP-03 |
-| Depends on | IOS-011, IOS-012, SUP-014 |
+| Depends on | IOS-012, SUP-024 |
 | Paired with | AND-013 |
 | Status | Draft |
 
 ## Intent
 
-Let leaders and staff change a group in one deliberate pass: everything is staged on screen, Done saves it all or nothing, and Cancel undoes it all.
+Leaders update their group in one pass, and staff change who leads it. This task adds edit mode to group detail: every change is staged with no confirmations, Done saves them all at once, and Cancel undoes them all.
 
 ## Scope
 
-- Edit button (platform standard) when the data has any edit capability; Done and Cancel labels from data.
-- Staging: minus (remove), leader toggle (filled or greyed), pending rows from the picker, inline detail fields (text, multiline, day, time).
-- Done sends one `save` with every staged change; Cancel discards all.
-- Errors shown in place under fields and on rows; edit mode stays open on failure.
-- Delete group footer button for staff in edit mode (immediate `call` with confirmation, `dismiss`).
+- The platform-standard Edit button when the data has `edit`; Done and Cancel labels from it.
+- Staging in edit mode, each control only where its capability is sent: a minus button on rows with `remove`; the leader icon as a toggle on rows with `toggle_leader` (filled for leaders, greyed for others); Add member from `add_member`, opening the picker (IOS-012), whose people appear as pending rows; `edit_fields` as inline fields by `kind` (text, multiline, day picker, time picker).
+- Done sends one `save` call with the staged batch (`specs/COMMUNITY.md` 5.4); Cancel discards every staged change.
+- A failed save keeps edit mode open with each `field_errors` message under its field and each `row_errors` message on its row.
+- Dev UI tests in `make test-dev`: `leader` edits details, adds and removes members, and the changes persist after relaunch; `staff` makes someone a leader.
 
 ## Out of scope
 
-- Swipe to remove outside edit mode (from IOS-011).
+- Delete group (EP-03.E). Swipe to remove outside edit mode (IOS-026).
 
 ## Acceptance criteria
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | Edit appears only when the data has an edit capability; each control appears only where its capability is present | The UI follows what each person can do |
-| AC2 | No confirmation is shown for anything staged inside edit mode | Done is the single commit point |
-| AC3 | Done sends exactly the staged changes in one save; Cancel restores the screen as it was | All or nothing from the user's side too |
-| AC4 | A failed save keeps edit mode open with every error shown at its field or row | Problems are fixable in place |
-| AC5 | Delete group confirms, archives and applies the lost-access rule | Safe delete for staff |
-| AC6 | Unit tests cover staging and Cancel; Mock UI tests cover a leader and a staff persona | Verified |
+| AC1 | Edit appears only when the data has `edit`; each control appears only where its capability is sent | The UI follows what each person can do |
+| AC2 | Nothing staged inside edit mode asks for confirmation | Done is the single commit point |
+| AC3 | Done sends exactly the staged changes in one save and leaves edit mode on `ok`; Cancel restores the screen as it was before Edit | All or nothing from the user's side too |
+| AC4 | A failed save keeps edit mode open and shows every error at its field or row, with the staged changes kept | Problems are fixable in place |
+| AC5 | Unit tests cover staging, the batch sent and Cancel; Mock UI tests cover `leader` and `staff`; Dev UI tests cover the flows in Scope against local Supabase | Verified per persona and end to end |
 
 ## Technical notes
 
+- Edit mode uses the system `EditButton` behavior and `editMode` environment; the minus button is the list's delete control.
 - Behavior must match AND-013.
 
 ## Verification
 
 ```
 cd ios
-xcodebuild -scheme ParkHill-Mock -destination 'platform=iOS Simulator,name=iPhone 16' test
+make project
+xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
+make test-dev
 ```
 
 ## Definition of done
 
 - [ ] All acceptance criteria pass
-- [ ] Tests added and passing locally and in CI
-- [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
+- [ ] No environment branching in app code; no mock or debug code reachable from release configurations
+- [ ] Contract changes include fixture and both client models
+- [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 
 ## Open questions

@@ -48,3 +48,6 @@ node_modules/
 
 # Python
 __pycache__/
+
+# Behavior recordings, kept on the implementer's machine (guide 7.2 rule 4)
+recordings/

@@ -19,7 +19,7 @@ Each screen's data model is written by hand on every client (for example `SignIn
   - one description per screen under `contract/screens/`
   - generated Swift and Kotlin models in `contract/generated/`, one file per screen per platform (`SignInScreenData.swift`, `SignInScreenData.kt`), in Kotlin package `app.parkhill.contract`
   - `make models` in `backend/Makefile`, run from `make data-check` with a drift check
-- Validate every recorded screen envelope in `contract/fixtures/` against its screen's description from `make data-check`, including the envelopes embedded in `get_tabs`.
+- Validate every recorded screen envelope in `contract/mock_responses/` against its screen's description from `make data-check`, including the envelopes embedded in `get_tabs`.
 - Update `ENGINEERING_GUIDE.md` 4.1 and add a decision log entry in section 8.
 
 ## Out of scope
@@ -38,7 +38,7 @@ Each screen's data model is written by hand on every client (for example `SignIn
 | AC1 | `contract/README.md` lists each candidate, how it scored against every criterion in Technical notes, and the choice with its reasons | The decision is reviewable and does not need to be re-made |
 | AC2 | `contract/screens/` holds one description per backend screen key in `names.json`, and each is the only hand-written definition of that screen's fields under `/contract` and `/backend/scripts` | One place to define a screen's data |
 | AC3 | `make models` generates one Swift and one Kotlin file per screen in `contract/generated/`, each with the same fields, names and types as that screen's current hand-written model on that platform (`SignInScreenData`, `HomeRootData`, `CommunityHomeData`); running it twice produces no diff | The generated model can replace the hand-written one without behavior change |
-| AC4 | The generated Swift and Kotlin each compile in a scratch build outside the apps and decode `contract/fixtures/get_entry.json`; decoding a copy with an added unknown field also succeeds, and one with a required field removed fails | Generated models keep contract rules 2 (ignore unknown fields) and 4 (one model per key) |
+| AC4 | The generated Swift and Kotlin each compile in a scratch build outside the apps and decode `contract/mock_responses/get_entry.json`; decoding a copy with an added unknown field also succeeds, and one with a required field removed fails | Generated models keep contract rules 2 (ignore unknown fields) and 4 (one model per key) |
 | AC5 | `make data-check` fails when a recorded screen response does not match its description, and when a screen key returned by the backend has no description | The backend cannot drift from the shared definition |
 | AC6 | `make data-check` fails when `contract/generated/` differs from what `make models` produces | Generated models are never edited by hand |
 | AC7 | The guide's 4.1 states that every backend screen key has a data description in `contract/screens/` from which client models are generated, and section 8 records the decision | The rule outlives this task |
@@ -69,7 +69,7 @@ make data-check                                            # passes
 
 Then, one at a time, reverting after each:
 
-1. Remove `title` from the `auth.sign_in` response in its migration's function, `supabase db reset`, `make fixtures`: `make data-check` fails (AC5).
+1. Remove `title` from the `auth.sign_in` response in its migration's function, `supabase db reset`, `make mock-responses`: `make data-check` fails (AC5).
 2. Delete `contract/screens/auth.sign_in.*`: `make data-check` fails naming the undescribed key (AC5).
 3. Hand-edit the generated Swift model: `make data-check` fails on drift (AC6).
 

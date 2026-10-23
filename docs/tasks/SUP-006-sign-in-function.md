@@ -17,7 +17,7 @@ Make sign-in a backend-owned operation: the backend decides whether it succeeded
 - `sign_in` Edge Function per `specs/AUTH.md` 5.5.
 - `auth_attempts` table (hashed email, client address, time, outcome), not readable by clients.
 - Error strings `auth.error.*` in migrations.
-- Fixtures: `/contract/fixtures/sign_in.ok.json`, `sign_in.error.json`.
+- Fixtures: `/contract/mock_responses/sign_in.ok.json`, `sign_in.error.json`.
 - Function tests.
 
 ## Out of scope

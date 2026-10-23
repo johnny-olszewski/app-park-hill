@@ -50,7 +50,7 @@ def main() -> int:
         if profiles.get(user["id"]) != persona["display_name"]:
             problems.append(f"{persona['id']}: profile display name {profiles.get(user['id'])!r} != {persona['display_name']!r}")
 
-    root = dataset.FIXTURES_PATH
+    root = dataset.MOCK_RESPONSES_PATH
     fixture_dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
     active = {p["id"] for p in dataset.active_personas(data)}
     for missing in sorted(active - fixture_dirs):

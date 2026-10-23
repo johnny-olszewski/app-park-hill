@@ -57,7 +57,7 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 | # | Behavior acceptance criterion |
 |---|---|
 | B1 | `contract/README.md` shows the approaches compared, how each scored, and the one chosen |
-| B2 | Removing a field from a screen's response on the backend makes `make data-check` fail after `make fixtures` |
+| B2 | Removing a field from a screen's response on the backend makes `make data-check` fail after `make mock-responses` |
 | B3 | A backend screen key with no description makes `make data-check` fail, naming it |
 | B4 | The generated Swift and Kotlin models for `auth.sign_in` decode its recorded response, and hand-editing a generated model makes `make data-check` fail on drift |
 
@@ -73,7 +73,7 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 
 | # | Behavior acceptance criterion |
 |---|---|
-| B1 | Removing `display_name` from `whoami` on the backend makes `make data-check` fail after `make fixtures`, naming it |
+| B1 | Removing `display_name` from `whoami` on the backend makes `make data-check` fail after `make mock-responses`, naming it |
 | B2 | A fixture with no type in `contract/responses.json` makes `make data-check` fail, naming it |
 | B3 | Searching `ios/` and `android/` finds no hand-written envelope, tabs, profile or sign-in response type |
 | B4 | On iOS and Android, in Mock and Dev, sign-in (success and each refusal), tabs, return to the foreground and sign-out work as before |

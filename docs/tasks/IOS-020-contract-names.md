@@ -44,7 +44,7 @@ Replace the hand-typed backend function names and screen keys in the iOS app wit
 ## Technical notes
 
 - Add `../contract/generated/ContractNames.swift` as a source of the `ParkHill` target in `project.yml`, by file path so the Kotlin file next to it is not added. Run `make project`.
-- `App.xcconfig` excludes only `*/contract/fixtures` and `*/contract/seed`, so the generated file reaches Dev and release builds without xcconfig changes. Confirm with `xcodebuild -showBuildSettings`.
+- `App.xcconfig` excludes only `*/contract/mock_responses` and `*/contract/seed`, so the generated file reaches Dev and release builds without xcconfig changes. Confirm with `xcodebuild -showBuildSettings`.
 - `MockBackendService` builds response file names from the function name: `"get_screen.\(key)"` becomes `"\(RPCFunction.getScreen.rawValue).\(key)"`.
 - Guide 4.1 (contract names rule, added by SUP-019) and 5.2.
 

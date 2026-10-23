@@ -61,7 +61,7 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 | Type | Flavor | Behavior |
 |---|---|---|
 | `SupabaseBackendService` | dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
-| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/fixtures`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
+| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/mock_responses`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
 

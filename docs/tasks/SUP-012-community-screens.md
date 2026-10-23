@@ -20,7 +20,7 @@ Each person's Community tab should show their own groups, decided entirely by th
 - The Community entry in `get_tabs` embeds `community.home` for the caller.
 - All Community screens list only community-type, non-archived groups.
 - Add `community.group` to `contract/names.json`; describe both screens in `contract/screens/` using the SUP-011 types.
-- All strings in migrations; per-persona fixtures generated into `contract/fixtures/<persona>/get_screen.<key>.json`, with `community.group` recorded for one group each persona may open.
+- All strings in migrations; per-persona fixtures generated into `contract/mock_responses/<persona>/get_screen.<key>.json`, with `community.group` recorded for one group each persona may open.
 
 ## Out of scope
 

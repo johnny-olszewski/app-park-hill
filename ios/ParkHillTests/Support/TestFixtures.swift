@@ -5,7 +5,7 @@ enum TestFixtures {
     private final class BundleToken {}
 
     static var root: URL {
-        Bundle(for: BundleToken.self).url(forResource: "fixtures", withExtension: nil)!
+        Bundle(for: BundleToken.self).url(forResource: "mock_responses", withExtension: nil)!
     }
 
     static func data(_ relativePath: String) throws -> Data {

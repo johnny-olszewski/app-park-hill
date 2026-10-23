@@ -1,5 +1,5 @@
-"""Regenerates /contract/fixtures from the real backend. Run with
-`make fixtures`, which resets local Supabase from migrations and the generated
+"""Regenerates /contract/mock_responses from the real backend. Run with
+`make mock-responses`, which resets local Supabase from migrations and the generated
 seed first. Never edit fixtures by hand.
 
 Layout:
@@ -63,13 +63,13 @@ def write_sign_in_fixtures(supabase: LocalSupabase, data: dict) -> None:
     status, error = call("not-the-password")
     if status != 401:
         raise SystemExit(f"sign_in error fixture: expected 401, got {status}: {error}")
-    write(dataset.FIXTURES_PATH / "sign_in.error.json", error)
+    write(dataset.MOCK_RESPONSES_PATH / "sign_in.error.json", error)
 
     status, ok = call(data["local_password"])
     if status != 200:
         raise SystemExit(f"sign_in ok fixture: expected 200, got {status}: {ok}")
     ok["session"].update(access_token="<access_token>", refresh_token="<refresh_token>", expires_at=0)
-    write(dataset.FIXTURES_PATH / "sign_in.ok.json", ok)
+    write(dataset.MOCK_RESPONSES_PATH / "sign_in.ok.json", ok)
 
     write_refusal_fixtures(supabase, data)
 
@@ -86,7 +86,7 @@ def write_refusal_fixtures(supabase: LocalSupabase, data: dict) -> None:
         return error
 
     def write_refusal(error: dict) -> None:
-        write(dataset.FIXTURES_PATH / f"sign_in.error.{error['code']}.json", error)
+        write(dataset.MOCK_RESPONSES_PATH / f"sign_in.error.{error['code']}.json", error)
 
     disabled = next(p for p in data["personas"] if p["state"] == "banned")
     write_refusal(refusal(
@@ -120,7 +120,7 @@ def main() -> None:
     data = dataset.load()
     supabase = LocalSupabase()
     keys = screen_keys(supabase)
-    root = dataset.FIXTURES_PATH
+    root = dataset.MOCK_RESPONSES_PATH
     clear(root)
 
     print("Signed out:")

@@ -17,7 +17,7 @@ Give every account a profile, give tests and the mock the same set of people, an
 - `profiles` table (id = auth user id, display name, created at), created automatically when an account is created.
 - `/contract/seed/dataset.json`: the single source for personas and all seed data (`specs/AUTH.md` 7). Nobody edits `seed.sql` or mock fixtures by hand.
 - `make seed` generates `backend/supabase/seed.sql` from the dataset.
-- `make fixtures` loads the seed into local Supabase, signs in as each persona (and anonymously), calls every screen function and writes `/contract/fixtures/<persona>/`.
+- `make mock-responses` loads the seed into local Supabase, signs in as each persona (and anonymously), calls every screen function and writes `/contract/mock_responses/<persona>/`.
 - `make data-check` regenerates both and fails on any difference from what is committed.
 - `seed.sql`: accounts for each persona with the shared local password; `disabled` is banned.
 - `require_active_user()`: shared check every signed-in function calls first; raises `session_ended` when there is no valid user or the account is disabled.

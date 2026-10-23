@@ -14,7 +14,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 
 ## Scope
 
-- `backend/scripts/generate_fixtures.py` records `contract/fixtures/sign_in.error.<code>.json` for `account_disabled`, `too_many_attempts` and `invalid_request`, each from a real call to the local `sign_in` function, and `sign_in.error.unknown.json`, built from the `auth.error.unknown` string in the same shape, because that refusal cannot be triggered on demand.
+- `backend/scripts/generate_mock_responses.py` records `contract/mock_responses/sign_in.error.<code>.json` for `account_disabled`, `too_many_attempts` and `invalid_request`, each from a real call to the local `sign_in` function, and `sign_in.error.unknown.json`, built from the `auth.error.unknown` string in the same shape, because that refusal cannot be triggered on demand.
 - `sign_in.error.json` stays as it is: the `invalid_credentials` refusal, already used by client tests.
 - `specs/AUTH.md`:
   - remove `auth.sign_in.mock` (5.1 screen keys, 5.4, 6.2 screens) and describe the Mock sign-in as the production `auth.sign_in` with outcomes chosen in the mock menu
@@ -31,10 +31,10 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | After `make fixtures`, `contract/fixtures/` holds `sign_in.error.account_disabled.json`, `sign_in.error.too_many_attempts.json` and `sign_in.error.invalid_request.json`, each with the function's real `code` and `message`, and `sign_in.error.unknown.json` with code `unknown` and the `auth.error.unknown` string for `en` | Every armed refusal in Mock shows the backend's own text |
+| AC1 | After `make mock-responses`, `contract/mock_responses/` holds `sign_in.error.account_disabled.json`, `sign_in.error.too_many_attempts.json` and `sign_in.error.invalid_request.json`, each with the function's real `code` and `message`, and `sign_in.error.unknown.json` with code `unknown` and the `auth.error.unknown` string for `en` | Every armed refusal in Mock shows the backend's own text |
 | AC2 | `sign_in.error.json` is unchanged | Existing client tests keep working |
-| AC3 | Generating the responses leaves no persona locked: signing in as every active persona with the local password succeeds right after `make fixtures` | Recording the attempt limit must not break local Dev testing |
-| AC4 | Running `make fixtures` twice produces no diff | Recorded responses are reproducible |
+| AC3 | Generating the responses leaves no persona locked: signing in as every active persona with the local password succeeds right after `make mock-responses` | Recording the attempt limit must not break local Dev testing |
+| AC4 | Running `make mock-responses` twice produces no diff | Recorded responses are reproducible |
 | AC5 | `make data-check` passes | The new files are guarded like the rest |
 | AC6 | `specs/AUTH.md` no longer mentions `auth.sign_in.mock`, describes the mock menu outcomes, lists the refusal files and reserves `secondary_actions` | The spec matches what clients will build |
 
@@ -50,7 +50,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 ```
 cd backend
 supabase start
-make fixtures && make fixtures && git status --short ../contract/fixtures   # only the new files, no churn
+make mock-responses && make mock-responses && git status --short ../contract/mock_responses   # only the new files, no churn
 make data-check
 make test-functions
 ```

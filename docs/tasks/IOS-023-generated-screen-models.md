@@ -17,7 +17,7 @@ SUP-020 generates each screen's Swift model from its description in `contract/sc
 - Compile the generated screen models in `contract/generated/` (every `.swift` file except `ContractNames.swift`, which is already compiled) in every configuration, through `ios/project.yml`, without copying them.
 - Delete the hand-written `SignInScreenData`, `HomeRootData` and `CommunityHomeData` from `ios/ParkHill/Screens/`; the screen registry and screens use the generated types.
 - Keep `JSONValue` (`ios/ParkHill/Services/Backend/JSONValue.swift`) as the app type the generated models use for any JSON.
-- Decoding tests read `contract/fixtures` and decode with the generated types.
+- Decoding tests read `contract/mock_responses` and decode with the generated types.
 
 ## Out of scope
 
@@ -31,7 +31,7 @@ SUP-020 generates each screen's Swift model from its description in `contract/sc
 | AC1 | `SignInScreenData`, `HomeRootData` and `CommunityHomeData` are each defined only in `contract/generated/`; a search of `ios/` finds no definition of them | One definition per screen model |
 | AC2 | Every configuration (Mock, Dev, Dev-Release) builds with the generated models, and a new `.swift` file that `make models` adds to `contract/generated/` is compiled after `make project` with no edit to `project.yml` | A new screen's model needs no client project change |
 | AC3 | Removing `title` from `contract/screens/auth.sign_in.schema.json` and running `make models` breaks the iOS build at the screen that reads it (then reverted) | The app follows the description, so drift fails the build |
-| AC4 | Decoding tests decode every recorded screen in `contract/fixtures` with its generated type | Generated models match the backend's recorded output |
+| AC4 | Decoding tests decode every recorded screen in `contract/mock_responses` with its generated type | Generated models match the backend's recorded output |
 | AC5 | In Mock and Dev, sign-in (success and each refusal), tabs and sign-out work as before | No behavior change |
 
 ## Technical notes

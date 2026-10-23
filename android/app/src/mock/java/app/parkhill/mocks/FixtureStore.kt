@@ -5,7 +5,7 @@ import java.io.File
 import java.io.FileNotFoundException
 
 /**
- * Reads contract fixtures (`/contract/fixtures`), bundled as the mock flavor's
+ * Reads contract fixtures (`/contract/mock_responses`), bundled as the mock flavor's
  * assets only. A persona's own fixture, in `<persona>/`, wins over the shared
  * one at the root.
  */

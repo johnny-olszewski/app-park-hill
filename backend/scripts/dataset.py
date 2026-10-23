@@ -9,7 +9,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 DATASET_PATH = REPO / "contract" / "seed" / "dataset.json"
 SEED_PATH = REPO / "backend" / "supabase" / "seed.sql"
-FIXTURES_PATH = REPO / "contract" / "fixtures"
+MOCK_RESPONSES_PATH = REPO / "contract" / "mock_responses"
 
 STATES = {"active", "banned"}
 PERSONA_ID = re.compile(r"^[a-z][a-z0-9_]*$")

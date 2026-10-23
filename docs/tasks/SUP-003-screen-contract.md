@@ -18,7 +18,7 @@ Make the backend the source of what a signed-out user sees first, and establish 
 - Functions `get_entry(p_locale)` and `get_screen(p_key, p_locale, p_params)` per guide 4.1.
 - Migration data (not seed): screen `auth.sign_in` and its English strings per `specs/AUTH.md` 5.3.
 - `/contract/README.md` with the envelope, entry points, contract rules and screen key naming rule.
-- `/contract/fixtures/get_entry.json`, `get_screen.auth.sign_in.json`.
+- `/contract/mock_responses/get_entry.json`, `get_screen.auth.sign_in.json`.
 - pgTAP tests.
 
 ## Out of scope

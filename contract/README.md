@@ -139,11 +139,11 @@ A network failure produces no body; clients tell the two apart by whether a resp
 3. Clients drop anything with an unknown screen key and log it. The backend may ship ahead of clients.
 4. One screen key maps to exactly one data model. Every variant of a screen is expressible in that one model, except mock variants, which have their own key.
 5. Unknown locale falls back to `en`.
-6. `/contract/fixtures` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
+6. `/contract/mock_responses` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
 
 ## Fixtures
 
-Generated from the real backend by `make fixtures` in `/backend`, from the personas in `seed/dataset.json`. Never edit them by hand; `make data-check` fails on any drift.
+Generated from the real backend by `make mock-responses` in `/backend`, from the personas in `seed/dataset.json`. Never edit them by hand; `make data-check` fails on any drift.
 
 | Path | Response |
 |---|---|

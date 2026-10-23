@@ -71,7 +71,7 @@ class SignInTests(unittest.TestCase):
         status, body = self.sign_in(attendee["email"], self.data["local_password"])
         self.assertEqual(status, 200, body)
         self.assertEqual(body["status"], "ok")
-        fixture = json.loads((dataset.FIXTURES_PATH / "sign_in.ok.json").read_text())
+        fixture = json.loads((dataset.MOCK_RESPONSES_PATH / "sign_in.ok.json").read_text())
         self.assertEqual(set(body), set(fixture))
         self.assertEqual(set(body["session"]), set(fixture["session"]))
         self.assertEqual(body["session"]["user_id"], dataset.persona_uuid("attendee"))

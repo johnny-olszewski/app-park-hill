@@ -35,8 +35,8 @@ SUP-020 describes each screen's `data`, but the shapes around it (the screen env
 |---|---|---|
 | AC1 | `contract/types/` holds the seven types in Scope; `make models` generates one Swift and one Kotlin file for each, with the same fields, names and types as the clients' current hand-written ones | Generated types can replace the hand-written ones without behavior change |
 | AC2 | A screen or type can reference a shared type with `$ref`; the generator emits the referenced type's name, and the check validates the value against it | Shared types are defined once (needed by EP-03) |
-| AC3 | `make data-check` validates every file in `contract/fixtures` against its type from `responses.json`, and fails when a fixture has no mapping or does not match | Every recorded response is guarded, not only screen data |
-| AC4 | Removing `display_name` from `whoami` in its migration, `supabase db reset`, `make fixtures`: `make data-check` fails naming `whoami` and the field | The backend cannot drift from a non-screen description |
+| AC3 | `make data-check` validates every file in `contract/mock_responses` against its type from `responses.json`, and fails when a fixture has no mapping or does not match | Every recorded response is guarded, not only screen data |
+| AC4 | Removing `display_name` from `whoami` in its migration, `supabase db reset`, `make mock-responses`: `make data-check` fails naming `whoami` and the field | The backend cannot drift from a non-screen description |
 | AC5 | A `$ref` to a missing type, or a type no description or mapping uses, makes `make data-check` fail naming it | No dangling or dead definitions |
 | AC6 | Running `make models` twice produces no diff; hand-editing a generated type makes `make data-check` fail on drift | Generated files are never edited by hand |
 | AC7 | Guide 4.1 rule 8 states that every response a client decodes is described in `/contract` and its client types generated, and section 8 records the decision | The rule outlives this task |

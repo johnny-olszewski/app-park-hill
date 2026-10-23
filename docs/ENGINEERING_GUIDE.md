@@ -87,7 +87,7 @@ Contract rules:
 3. Clients drop anything with an unknown screen key and log it. The backend may ship ahead of clients.
 4. One screen key maps to exactly one data model. Every variant of a screen is expressible in that one model, except mock variants, which have their own key.
 5. Unknown locale falls back to `en`.
-6. `/contract/fixtures` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
+6. `/contract/mock_responses` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
 7. Every backend function a client calls and every backend screen key is listed once in `contract/names.json`. Clients use the constants generated from it into `contract/generated/`, never string literals; `make data-check` fails when the list and the backend disagree.
 8. Every backend screen key has one data description in `contract/screens/`, written in the subset of JSON Schema that `contract/README.md` lists. `make models` generates each screen's Swift and Kotlin model from it into `contract/generated/`; no client model is written by hand. `make data-check` fails when a recorded screen does not match its description, a screen key has no description, or the generated models differ from what is committed.
 
@@ -181,7 +181,7 @@ Rules:
 - Clients: unit tests for decoding (against contract fixtures), services, coordinators and view models. UI tests for flows.
 - **Client CI runs Mock only.** iOS and Android CI never start Supabase. Tests against local Supabase (Dev integration and UI tests) run locally with `make test-dev`, required before merging changes to an app, `/backend` or `/contract`.
 - **Backend CI** runs against local Supabase on Linux and owns correctness of logic and permissions.
-- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make fixtures` generates the per-persona mock fixtures from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
+- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make mock-responses` generates the per-persona mock fixtures from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
 - Mock fixtures are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.
 - CI (GitHub Actions): starts local Supabase, runs backend tests, builds and tests both clients, verifies mock code is absent from release builds.
 - A task is not done until its tests run in CI.

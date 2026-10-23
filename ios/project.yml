@@ -36,7 +36,7 @@ targets:
       - path: ../contract/generated/ContractNames.swift
       # Contract fixtures and the persona dataset, bundled for the mock
       # services. App.xcconfig excludes them from every configuration except Mock.
-      - path: ../contract/fixtures
+      - path: ../contract/mock_responses
         type: folder
         buildPhase: resources
       - path: ../contract/seed
@@ -56,7 +56,7 @@ targets:
     sources:
       - path: ParkHillTests
       # Every configuration's tests decode the fixtures.
-      - path: ../contract/fixtures
+      - path: ../contract/mock_responses
         type: folder
         buildPhase: resources
       # Personas and the local password for integration tests.
@@ -79,7 +79,7 @@ targets:
       - path: ../contract/seed
         type: folder
         buildPhase: resources
-      - path: ../contract/fixtures
+      - path: ../contract/mock_responses
         type: folder
         buildPhase: resources
     dependencies:

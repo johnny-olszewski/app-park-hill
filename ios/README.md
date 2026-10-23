@@ -51,7 +51,7 @@ BACKEND_ANON_KEY = <anon key>
 |---|---|
 | `Config/Base.xcconfig` | Shared by every configuration and target. Holds `PRODUCT_BUNDLE_IDENTIFIER_ROOT`, the only place the bundle identifier root appears |
 | `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift`, `DevToolsBinding+*.swift` and `DevTools+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DEV_TOOLS_SOURCES` (`DevToolsBinding+Enabled.swift` and `DevTools+$(APP_ENVIRONMENT).swift`) |
-| `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/fixtures` |
+| `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/mock_responses` |
 | `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig`; `Dev-Release` sets `DEV_TOOLS_SOURCES = DevToolsBinding+Disabled.swift` and excludes `DevTools/` |
 | `Config/Dev-Info.plist` | Puts the backend values into Info.plist, plus the local HTTP exception (`NSAllowsLocalNetworking`), which exists only in Dev |
 | `ParkHill/Environment/ServiceBinding+Dev.swift` | Dev binding: `AppBackendService = SupabaseBackendService` |

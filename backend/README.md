@@ -27,7 +27,7 @@ Run from `/backend`.
 | Stop the stack (keeps data) | `supabase stop` |
 | Stop and delete local data | `supabase stop --no-backup` |
 | Regenerate `seed.sql` from the dataset | `make seed` |
-| Reset, then regenerate contract fixtures from the live backend | `make fixtures` |
+| Reset, then regenerate contract fixtures from the live backend | `make mock-responses` |
 | Regenerate the client name constants from `contract/names.json` | `make names` |
 | Regenerate the client screen models from `contract/screens` | `make models` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
@@ -89,10 +89,10 @@ Shared local password: `parkhill-local`.
 
 ## Generated data
 
-`/contract/seed/dataset.json` is the single source of personas and seed data. Never edit `supabase/seed.sql` or anything in `/contract/fixtures` by hand:
+`/contract/seed/dataset.json` is the single source of personas and seed data. Never edit `supabase/seed.sql` or anything in `/contract/mock_responses` by hand:
 
 1. Change `dataset.json` (or a migration, for screens and strings).
-2. Run `make fixtures`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/fixtures`.
+2. Run `make mock-responses`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/mock_responses`.
 3. Commit the dataset and the generated files together.
 
 Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, fixture folders) and fails if anything differs from what is committed.
@@ -105,9 +105,9 @@ Fixture layout: `get_entry.json` and `get_screen.<key>.json` at the root are the
 
 ### Screen data descriptions
 
-`/contract/screens/<key>.schema.json` describes each backend screen's data once (`contract/README.md`, Screen data). `make models` generates the Swift and Kotlin model for each into `/contract/generated`. Adding or changing a screen's data: change its migration and its description together, run `make fixtures` and `make models`, and commit everything.
+`/contract/screens/<key>.schema.json` describes each backend screen's data once (`contract/README.md`, Screen data). `make models` generates the Swift and Kotlin model for each into `/contract/generated`. Adding or changing a screen's data: change its migration and its description together, run `make mock-responses` and `make models`, and commit everything.
 
-`make data-check` also runs `scripts/check_models.py` after regenerating the fixtures. It fails when a screen key in `names.json` has no description (or a description has no key), and when any recorded screen envelope in `/contract/fixtures`, including each tab's `screen` in `get_tabs`, is missing a required field, has a field its description lacks, or has a value of the wrong type. It names the fixture, the field and the problem.
+`make data-check` also runs `scripts/check_models.py` after regenerating the fixtures. It fails when a screen key in `names.json` has no description (or a description has no key), and when any recorded screen envelope in `/contract/mock_responses`, including each tab's `screen` in `get_tabs`, is missing a required field, has a field its description lacks, or has a value of the wrong type. It names the fixture, the field and the problem.
 
 ## Rules
 

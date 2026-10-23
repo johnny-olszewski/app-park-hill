@@ -14,7 +14,7 @@ INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait
 // mock sources are excluded, then only this environment's binding is added
 // back. Contract fixtures and the dataset are mock data and excluded too. An environment
 // that needs mocks (Mock) overrides the exclusion.
-EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift DevToolsBinding+*.swift DevTools+*.swift */Mocks/* */contract/fixtures */contract/seed $(DEV_TOOLS_EXCLUDED)
+EXCLUDED_SOURCE_FILE_NAMES = ServiceBinding+*.swift DevToolsBinding+*.swift DevTools+*.swift */Mocks/* */contract/mock_responses */contract/seed $(DEV_TOOLS_EXCLUDED)
 INCLUDED_SOURCE_FILE_NAMES = ServiceBinding+$(APP_ENVIRONMENT).swift $(DEV_TOOLS_SOURCES)
 
 // Dev tools (EP-06): the pill and menu over the app. Every debug configuration

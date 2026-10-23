@@ -79,7 +79,7 @@ def main() -> int:
         return 1
     names.GENERATED_PATH.mkdir(exist_ok=True)
     for path in names.GENERATED_PATH.iterdir():
-        if path.suffix in (".swift", ".kt") and MARKER in path.read_text().splitlines()[0]:
+        if path.suffix in (".swift", ".kt") and MARKER in path.read_text().partition("\n")[0]:
             path.unlink()
     for key, schema in described.items():
         (names.GENERATED_PATH / f"{schema['title']}.swift").write_text(swift(key, schema))

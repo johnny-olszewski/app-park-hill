@@ -1,6 +1,6 @@
 """Checks that personas are consistent everywhere they appear: the dataset is
 valid, local Supabase holds exactly those accounts with the right state and
-profile, and the fixtures have a folder for each active persona and no other.
+profile, and the mock responses have a folder for each active persona and no other.
 Run by `make data-check` after a reset."""
 
 import sys
@@ -51,12 +51,12 @@ def main() -> int:
             problems.append(f"{persona['id']}: profile display name {profiles.get(user['id'])!r} != {persona['display_name']!r}")
 
     root = dataset.MOCK_RESPONSES_PATH
-    fixture_dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
+    response_dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
     active = {p["id"] for p in dataset.active_personas(data)}
-    for missing in sorted(active - fixture_dirs):
-        problems.append(f"fixtures: no folder for active persona {missing}")
-    for extra in sorted(fixture_dirs - active):
-        problems.append(f"fixtures: folder {extra} is not an active persona")
+    for missing in sorted(active - response_dirs):
+        problems.append(f"mock responses: no folder for active persona {missing}")
+    for extra in sorted(response_dirs - active):
+        problems.append(f"mock responses: folder {extra} is not an active persona")
 
     for problem in problems:
         print(problem)

@@ -99,10 +99,10 @@ class DescriptionSubset(unittest.TestCase):
 
 
 class CommittedDescriptions(unittest.TestCase):
-    def test_every_description_loads_and_matches_its_signed_out_fixture(self):
+    def test_every_description_loads_and_matches_its_signed_out_mock_response(self):
         described = screens.load()
-        fixtures = screens.REPO / "contract" / "mock_responses"
-        envelope = json.loads((fixtures / "get_entry.json").read_text())
+        mock_responses = screens.REPO / "contract" / "mock_responses"
+        envelope = json.loads((mock_responses / "get_entry.json").read_text())
         self.assertEqual(screens.problems(described[envelope["key"]], envelope["data"], "get_entry"), [])
 
 

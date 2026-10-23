@@ -78,7 +78,7 @@ final class StubAuthService: AuthService {
 }
 
 /// Builders for auth responses and stored sessions.
-enum AuthFixtures {
+enum AuthMockResponses {
     static let userID = "9f6798b4-9e35-5b41-8207-9290979b50c3"
 
     /// An unsigned JWT whose payload carries `exp`, enough for the client to

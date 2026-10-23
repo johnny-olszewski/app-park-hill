@@ -7,9 +7,9 @@ import Testing
 struct SupabaseBackendIntegrationTests {
     private let service = SupabaseBackendService(environment: ServiceBinding.environment)
 
-    @Test func entryIsTheSignInScreenAndMatchesTheFixture() async throws {
+    @Test func entryIsTheSignInScreenAndMatchesTheMockResponse() async throws {
         let envelope = try await service.getEntry(locale: "en")
-        let fixture = try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data("get_entry.json"))
+        let mockResponse = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))
         #expect(envelope.key == "auth.sign_in")
         #expect(envelope == fixture)
     }

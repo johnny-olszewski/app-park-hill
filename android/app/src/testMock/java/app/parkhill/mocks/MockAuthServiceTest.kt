@@ -25,7 +25,7 @@ class MockAuthServiceTest {
     private val bundled = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
     private val dataset = checkNotNull(javaClass.classLoader?.getResource("dataset.json")).readText()
     private val scenario = MockSignInScenario(MockPersona.active(dataset))
-    private val auth = MockAuthService(persona, LocalUserData.standard(filesDir), scenario, FixtureStore.directory(bundled))
+    private val auth = MockAuthService(persona, LocalUserData.standard(filesDir), scenario, MockResponseStore.directory(bundled))
 
     @Test
     fun startsSignedOut() = runTest {
@@ -49,11 +49,11 @@ class MockAuthServiceTest {
 
     @Test
     fun eachArmedRefusalReturnsItsRecordedCodeAndMessage() = runTest {
-        val refusals = MockSignInResult.entries.filter { it.refusalFixture != null }
+        val refusals = MockSignInResult.entries.filter { it.refusalResponse != null }
         assertEquals(5, refusals.size)
         for (result in refusals) {
             scenario.result = result
-            val recorded = ContractJson.parseToJsonElement(File(bundled, "${result.refusalFixture}.json").readText()).jsonObject
+            val recorded = ContractJson.parseToJsonElement(File(bundled, "${result.refusalResponse}.json").readText()).jsonObject
             try {
                 auth.signIn("anyone@example.com", "anything")
                 fail("expected ${result.name} to refuse")
@@ -80,8 +80,8 @@ class MockAuthServiceTest {
     }
 
     @Test
-    fun aPersonaSignInSwitchesTheBackendToThatPersonasFixtures() = runTest {
-        val backend = MockBackendService(FixtureStore.directory(bundled), persona)
+    fun aPersonaSignInSwitchesTheBackendToThatPersonasMockResponses() = runTest {
+        val backend = MockBackendService(MockResponseStore.directory(bundled), persona)
         try {
             backend.whoami()
             fail("expected Unauthorized before signing in")

@@ -26,13 +26,13 @@ class MockAuthService(
     private val personaState: MockPersonaState,
     private val localData: LocalUserData,
     val scenario: MockSignInScenario,
-    private val fixtures: FixtureStore,
+    private val responses: MockResponseStore,
 ) : AuthService {
     constructor(context: Context, @Suppress("UNUSED_PARAMETER") environment: AppEnvironment) : this(
         MockPersonaState.shared,
         LocalUserData.standard(context.filesDir),
         MockSignInScenario(MockPersona.bundled(context)),
-        FixtureStore.assets(context),
+        MockResponseStore.assets(context),
     )
 
     private val _state = MutableStateFlow<AuthState>(
@@ -51,7 +51,7 @@ class MockAuthService(
     /** Gives the armed result, whatever was typed: the chosen persona, a recorded refusal, or a client-side failure. */
     override suspend fun signIn(email: String, password: String): AuthUser {
         val result = scenario.result
-        result.refusalFixture?.let { throw refusal(it) }
+        result.refusalResponse?.let { throw refusal(it) }
         return when (result) {
             MockSignInResult.NoConnection -> throw SignInError.Network
             MockSignInResult.SomethingWentWrong -> throw SignInError.Unexpected
@@ -60,8 +60,8 @@ class MockAuthService(
     }
 
     /** The backend's recorded refusal, with its code and message unchanged. */
-    private fun refusal(fixture: String): SignInError.Rejected {
-        val body = ContractJson.parseToJsonElement(checkNotNull(fixtures.text(fixture, persona = null)) { "$fixture not bundled" }).jsonObject
+    private fun refusal(mockResponse: String): SignInError.Rejected {
+        val body = ContractJson.parseToJsonElement(checkNotNull(responses.text(mockResponse, persona = null)) { "$mockResponse not bundled" }).jsonObject
         return SignInError.Rejected(body.getValue("code").jsonPrimitive.content, body.getValue("message").jsonPrimitive.content)
     }
 

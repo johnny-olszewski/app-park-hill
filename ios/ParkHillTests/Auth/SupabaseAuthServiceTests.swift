@@ -31,13 +31,13 @@ struct SupabaseAuthServiceTests {
             // An expired token makes the client refresh at once; the refresh
             // returns an expired session, which is what gets stored.
             StubURLProtocol.stub(routes: [
-                "/functions/v1/sign_in": .http(status: 200, body: AuthFixtures.signInBody(expiresIn: -60)),
-                "/auth/v1/token": .http(status: 200, body: AuthFixtures.sessionJSON(expiresIn: -60)),
+                "/functions/v1/sign_in": .http(status: 200, body: AuthMockResponses.signInBody(expiresIn: -60)),
+                "/auth/v1/token": .http(status: 200, body: AuthMockResponses.sessionJSON(expiresIn: -60)),
             ])
         } else {
             StubURLProtocol.stub(routes: [
-                "/functions/v1/sign_in": .http(status: 200, body: AuthFixtures.signInBody()),
-                "/auth/v1/user": .http(status: 200, body: AuthFixtures.userJSON),
+                "/functions/v1/sign_in": .http(status: 200, body: AuthMockResponses.signInBody()),
+                "/auth/v1/user": .http(status: 200, body: AuthMockResponses.userJSON),
             ])
         }
         _ = try await service.signIn(email: "attendee@parkhill.test", password: "pw")
@@ -55,13 +55,13 @@ struct SupabaseAuthServiceTests {
         defer { userData.remove() }
         let service = makeService()
         StubURLProtocol.stub(routes: [
-            "/functions/v1/sign_in": .http(status: 200, body: AuthFixtures.signInBody()),
-            "/auth/v1/user": .http(status: 200, body: AuthFixtures.userJSON),
+            "/functions/v1/sign_in": .http(status: 200, body: AuthMockResponses.signInBody()),
+            "/auth/v1/user": .http(status: 200, body: AuthMockResponses.userJSON),
         ])
 
         let user = try await service.signIn(email: "attendee@parkhill.test", password: "secret")
 
-        #expect(user == AuthUser(id: AuthFixtures.userID, email: "attendee@parkhill.test"))
+        #expect(user == AuthUser(id: AuthMockResponses.userID, email: "attendee@parkhill.test"))
         let request = try #require(StubURLProtocol.requests.first)
         #expect(request.url?.path == "/functions/v1/sign_in")
         #expect(request.value(forHTTPHeaderField: "X-App-Config") == "dev")
@@ -76,11 +76,11 @@ struct SupabaseAuthServiceTests {
     }
 
     @Test func rejectedSignInReturnsTheBackendCodeAndMessageUnchanged() async throws {
-        let fixture = try JSONDecoder().decode(SignInFailure.self, from: TestFixtures.data("sign_in.error.json"))
+        let mockResponse = try JSONDecoder().decode(SignInFailure.self, from: TestMockResponses.data("sign_in.error.json"))
         StubURLProtocol.stub(routes: [
-            "/functions/v1/sign_in": .http(status: 401, body: String(decoding: try TestFixtures.data("sign_in.error.json"), as: UTF8.self)),
+            "/functions/v1/sign_in": .http(status: 401, body: String(decoding: try TestMockResponses.data("sign_in.error.json"), as: UTF8.self)),
         ])
-        await #expect(throws: SignInError.rejected(code: fixture.code, message: fixture.message)) {
+        await #expect(throws: SignInError.rejected(code: mockResponse.code, message: mockResponse.message)) {
             _ = try await makeService().signIn(email: "attendee@parkhill.test", password: "wrong")
         }
         #expect(storage.isEmpty)
@@ -112,14 +112,14 @@ struct SupabaseAuthServiceTests {
         let service = try await signedInService()
         StubURLProtocol.stub(.failure(.notConnectedToInternet))
 
-        #expect(await service.restoreSession() == .signedIn(AuthUser(id: AuthFixtures.userID, email: "attendee@parkhill.test")))
+        #expect(await service.restoreSession() == .signedIn(AuthUser(id: AuthMockResponses.userID, email: "attendee@parkhill.test")))
         #expect(StubURLProtocol.requests.isEmpty)
     }
 
     @Test func restoreRenewsAnExpiredSession() async throws {
         defer { userData.remove() }
         let service = try await signedInService(expired: true)
-        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 200, body: AuthFixtures.sessionJSON(expiresIn: 3600, refreshToken: "refresh-2"))])
+        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 200, body: AuthMockResponses.sessionJSON(expiresIn: 3600, refreshToken: "refresh-2"))])
 
         guard case .signedIn = await service.restoreSession() else {
             Issue.record("expected signed in")
@@ -144,7 +144,7 @@ struct SupabaseAuthServiceTests {
         defer { userData.remove() }
         let service = try await signedInService(expired: true)
         try userData.populate()
-        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 400, body: AuthFixtures.refusedRefreshBody)])
+        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 400, body: AuthMockResponses.refusedRefreshBody)])
 
         #expect(await service.restoreSession() == .signedOut(.sessionEnded))
         #expect(storage.isEmpty)
@@ -156,7 +156,7 @@ struct SupabaseAuthServiceTests {
     @Test func renewalAfterUnauthorizedSucceeds() async throws {
         defer { userData.remove() }
         let service = try await signedInService()
-        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 200, body: AuthFixtures.sessionJSON(expiresIn: 3600, refreshToken: "refresh-2"))])
+        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 200, body: AuthMockResponses.sessionJSON(expiresIn: 3600, refreshToken: "refresh-2"))])
         #expect(await service.renewAfterUnauthorized() == .renewed)
     }
 
@@ -166,7 +166,7 @@ struct SupabaseAuthServiceTests {
         try userData.populate()
         var states = service.stateChanges().makeAsyncIterator()
         _ = await states.next()
-        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 400, body: AuthFixtures.refusedRefreshBody)])
+        StubURLProtocol.stub(routes: ["/auth/v1/token": .http(status: 400, body: AuthMockResponses.refusedRefreshBody)])
 
         #expect(await service.renewAfterUnauthorized() == .refused)
         #expect(await states.next() == .signedOut(.sessionEnded))

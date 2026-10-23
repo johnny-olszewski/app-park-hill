@@ -9,18 +9,18 @@ final class MockAuthService: AuthService {
     private let personaState: MockPersonaState
     private let localData: LocalUserData
     private let scenario: MockSignInScenario
-    private let fixtures: FixtureStore
+    private let responses: MockResponseStore
     private let state = StateBroadcaster<AuthState>(.signedOut(nil))
 
     convenience init(environment: AppEnvironment) {
-        self.init(personaState: .shared, localData: .standard, scenario: .shared, fixtures: .bundled)
+        self.init(personaState: .shared, localData: .standard, scenario: .shared, responses: .bundled)
     }
 
-    init(personaState: MockPersonaState, localData: LocalUserData, scenario: MockSignInScenario, fixtures: FixtureStore) {
+    init(personaState: MockPersonaState, localData: LocalUserData, scenario: MockSignInScenario, responses: MockResponseStore) {
         self.personaState = personaState
         self.localData = localData
         self.scenario = scenario
-        self.fixtures = fixtures
+        self.responses = responses
         if let persona = personaState.current {
             state.send(.signedIn(Self.user(persona: persona)))
         }
@@ -51,8 +51,8 @@ final class MockAuthService: AuthService {
         case .somethingWentWrong:
             throw .unexpected
         case .invalidCredentials, .accountDisabled, .tooManyAttempts, .invalidRequest, .serverError:
-            guard let name = result.refusalFixture,
-                  let data = fixtures.data(named: name, persona: nil),
+            guard let name = result.refusalResponse,
+                  let data = responses.data(named: name, persona: nil),
                   let refusal = try? JSONDecoder().decode(SignInFailure.self, from: data)
             else { throw .unexpected }
             throw .rejected(code: refusal.code, message: refusal.message)

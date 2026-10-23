@@ -5,15 +5,15 @@ import Foundation
 /// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `get_tabs` and
 /// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
 struct MockBackendService: BackendService {
-    private let fixtures: FixtureStore
+    private let responses: MockResponseStore
     private let personaState: MockPersonaState
 
     init(environment: AppEnvironment) {
-        self.init(fixtures: .bundled, personaState: .shared)
+        self.init(responses: .bundled, personaState: .shared)
     }
 
-    init(fixtures: FixtureStore, personaState: MockPersonaState) {
-        self.fixtures = fixtures
+    init(responses: MockResponseStore, personaState: MockPersonaState) {
+        self.responses = responses
         self.personaState = personaState
     }
 
@@ -36,7 +36,7 @@ struct MockBackendService: BackendService {
     }
 
     private func decode<Response: Decodable>(_ name: String, missing: BackendError) throws(BackendError) -> Response {
-        guard let data = fixtures.data(named: name, persona: personaState.current) else {
+        guard let data = responses.data(named: name, persona: personaState.current) else {
             throw missing
         }
         do {

@@ -17,8 +17,8 @@ struct SignInViewModelTests {
         return model
     }
 
-    @Test func screenDataDecodesFromTheFixture() throws {
-        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data("get_entry.json"))
+    @Test func screenDataDecodesFromTheMockResponse() throws {
+        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))
         let decoded = try JSONDecoder().decode(SignInScreenData.self, from: JSONEncoder().encode(envelope.data))
         #expect(decoded.title == "Sign in")
         #expect(!decoded.cannotConnectMessage.isEmpty)

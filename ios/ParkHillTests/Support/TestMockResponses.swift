@@ -1,7 +1,7 @@
 import Foundation
 
 /// Contract fixtures bundled into the test target, in every configuration.
-enum TestFixtures {
+enum TestMockResponses {
     private final class BundleToken {}
 
     static var root: URL {

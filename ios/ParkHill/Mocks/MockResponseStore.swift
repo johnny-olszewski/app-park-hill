@@ -3,15 +3,15 @@ import Foundation
 /// Reads contract fixtures (`/contract/mock_responses`), bundled into the Mock
 /// configuration only. A persona's own fixture, in `<persona>/`, wins over the
 /// shared one at the root.
-struct FixtureStore: Sendable {
+struct MockResponseStore: Sendable {
     let root: URL
 
     /// The fixtures bundled with the app.
-    static var bundled: FixtureStore {
+    static var bundled: MockResponseStore {
         guard let root = Bundle.main.url(forResource: "mock_responses", withExtension: nil) else {
-            preconditionFailure("Contract fixtures are not bundled in this configuration")
+            preconditionFailure("Mock responses are not bundled in this configuration")
         }
-        return FixtureStore(root: root)
+        return MockResponseStore(root: root)
     }
 
     /// The fixture data for `name` (without `.json`), or nil when none exists.

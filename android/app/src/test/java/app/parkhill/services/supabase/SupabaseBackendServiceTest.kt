@@ -21,7 +21,7 @@ import org.junit.Test
 /** The real client against a local HTTP server: requests, headers and error mapping. */
 class SupabaseBackendServiceTest {
     private val server = MockWebServer()
-    private val fixtures = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
+    private val responses = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
     private lateinit var service: SupabaseBackendService
 
     @Before
@@ -80,7 +80,7 @@ class SupabaseBackendServiceTest {
 
     @Test
     fun getTabsSendsTheLocaleAndDecodesTheTabs() = runTest {
-        respond(200, File(fixtures, "attendee/get_tabs.json").readText())
+        respond(200, File(responses, "attendee/get_tabs.json").readText())
         val response = service.getTabs("en")
         val request = server.takeRequest()
         assertEquals("/rest/v1/rpc/get_tabs", request.requestUrl?.encodedPath)

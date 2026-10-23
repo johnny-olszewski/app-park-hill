@@ -22,8 +22,8 @@ struct SupabaseBackendServiceTests {
     // MARK: Requests
 
     @Test func getEntryCallsTheRPCWithStandardHeaders() async throws {
-        let fixture = try String(decoding: TestFixtures.data("get_entry.json"), as: UTF8.self)
-        StubURLProtocol.stub(.http(status: 200, body: fixture))
+        let mockResponse = try String(decoding: TestMockResponses.data("get_entry.json"), as: UTF8.self)
+        StubURLProtocol.stub(.http(status: 200, body: mockResponse))
 
         let envelope = try await makeService().getEntry(locale: "en")
 
@@ -36,12 +36,12 @@ struct SupabaseBackendServiceTests {
         #expect(request.value(forHTTPHeaderField: "Accept-Language") == (Locale.preferredLanguages.first ?? "en"))
         #expect(request.value(forHTTPHeaderField: "apikey") == "test-anon-key")
         #expect(try body(of: request) == ["p_locale": .string("en")])
-        #expect(envelope == (try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data("get_entry.json"))))
+        #expect(envelope == (try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))))
     }
 
     @Test func getScreenSendsKeyLocaleAndParams() async throws {
-        let fixture = try String(decoding: TestFixtures.data("get_screen.auth.sign_in.json"), as: UTF8.self)
-        StubURLProtocol.stub(.http(status: 200, body: fixture))
+        let mockResponse = try String(decoding: TestMockResponses.data("get_screen.auth.sign_in.json"), as: UTF8.self)
+        StubURLProtocol.stub(.http(status: 200, body: mockResponse))
 
         _ = try await makeService().getScreen(key: "auth.sign_in", locale: "es", params: ["id": .string("7")])
 
@@ -55,8 +55,8 @@ struct SupabaseBackendServiceTests {
     }
 
     @Test func getTabsSendsTheLocaleAndDecodesTheTabs() async throws {
-        let fixture = try String(decoding: TestFixtures.data("attendee/get_tabs.json"), as: UTF8.self)
-        StubURLProtocol.stub(.http(status: 200, body: fixture))
+        let mockResponse = try String(decoding: TestMockResponses.data("attendee/get_tabs.json"), as: UTF8.self)
+        StubURLProtocol.stub(.http(status: 200, body: mockResponse))
 
         let response = try await makeService().getTabs(locale: "en")
 

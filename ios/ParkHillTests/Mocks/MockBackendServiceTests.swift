@@ -4,7 +4,7 @@ import Testing
 
 struct MockBackendServiceTests {
     private func expected(_ path: String) throws -> ScreenEnvelope {
-        try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data(path))
+        try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data(path))
     }
 
     @Test func theEntryIsTheRecordedProductionSignIn() async throws {
@@ -15,7 +15,7 @@ struct MockBackendServiceTests {
 
     @Test func whoamiReturnsTheSignedInPersonasProfile() async throws {
         let personaState = MockPersonaState()
-        let service = MockBackendService(fixtures: .bundled, personaState: personaState)
+        let service = MockBackendService(responses: .bundled, personaState: personaState)
         await #expect(throws: BackendError.unauthorized) { _ = try await service.whoami() }
         personaState.current = "attendee"
         #expect(try await service.whoami().displayName == "Attendee")
@@ -23,14 +23,14 @@ struct MockBackendServiceTests {
 
     @Test func getTabsReturnsTheSignedInPersonasTabs() async throws {
         let personaState = MockPersonaState()
-        let service = MockBackendService(fixtures: .bundled, personaState: personaState)
+        let service = MockBackendService(responses: .bundled, personaState: personaState)
         await #expect(throws: BackendError.unauthorized) { _ = try await service.getTabs(locale: "en") }
         personaState.current = "attendee"
-        let expected = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data("attendee/get_tabs.json"))
+        let expected = try JSONDecoder().decode(TabsResponse.self, from: TestMockResponses.data("attendee/get_tabs.json"))
         #expect(try await service.getTabs(locale: "en") == expected)
     }
 
-    @Test func getScreenReadsTheScreenFixture() async throws {
+    @Test func getScreenReadsTheScreenMockResponse() async throws {
         let service = MockBackendService(environment: .mock)
         #expect(try await service.getScreen(key: "auth.sign_in", locale: "en") == expected("get_screen.auth.sign_in.json"))
     }
@@ -42,7 +42,7 @@ struct MockBackendServiceTests {
         }
     }
 
-    @Test func personaFixtureWinsOverTheSharedOne() async throws {
+    @Test func personaMockResponseWinsOverTheSharedOne() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: root.appending(path: "admin"), withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -50,7 +50,7 @@ struct MockBackendServiceTests {
         try Data(#"{"key":"admin","data":{}}"#.utf8).write(to: root.appending(path: "admin/get_entry.json"))
 
         let personaState = MockPersonaState()
-        let service = MockBackendService(fixtures: FixtureStore(root: root), personaState: personaState)
+        let service = MockBackendService(responses: MockResponseStore(root: root), personaState: personaState)
 
         #expect(try await service.getEntry(locale: "en").key == "shared")
         personaState.current = "admin"
@@ -59,13 +59,13 @@ struct MockBackendServiceTests {
         #expect(try await service.getEntry(locale: "en").key == "shared")
     }
 
-    @Test func malformedFixtureThrowsDecoding() async throws {
+    @Test func malformedMockResponseThrowsDecoding() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         try Data(#"{"nope":true}"#.utf8).write(to: root.appending(path: "get_entry.json"))
 
-        let service = MockBackendService(fixtures: FixtureStore(root: root), personaState: MockPersonaState())
+        let service = MockBackendService(responses: MockResponseStore(root: root), personaState: MockPersonaState())
         await #expect(throws: BackendError.decoding) {
             _ = try await service.getEntry(locale: "en")
         }

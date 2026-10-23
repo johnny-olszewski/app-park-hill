@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 /** What the next mock sign-in does (specs/AUTH.md 5.4), chosen in the mock menu. */
-enum class MockSignInResult(val title: String, val refusalFixture: String?) {
+enum class MockSignInResult(val title: String, val refusalResponse: String?) {
     Success("Success", null),
     InvalidCredentials("Wrong email or password", "sign_in.error"),
     AccountDisabled("Account disabled", "sign_in.error.account_disabled"),

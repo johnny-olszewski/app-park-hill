@@ -21,6 +21,7 @@ Make roles and permissions data, not code, so a role's permissions can change wi
 - Every rule checks a permission, never a role name.
 - Rule: the last admin cannot lose the admin role.
 - Personas updated: `admin` holds staff and admin roles.
+- Each table in Scope has a nullable `org_id uuid` column, null in every row (guide 4, organization scoping).
 
 ## Out of scope
 
@@ -39,6 +40,7 @@ Make roles and permissions data, not code, so a role's permissions can change wi
 | AC6 | Clients cannot read or write these tables directly | All access goes through functions |
 | AC7 | pgTAP tests cover AC1 to AC6 | Enforced, not documented |
 | AC8 | No function or policy compares a role name; a code search for role keys outside seed and migrations data finds none | Roles stay data, so new roles need no code |
+| AC9 | `roles`, `permissions`, `role_permissions` and `user_roles` each have a nullable `org_id uuid` column with no default, null in every row after `supabase db reset`; no function or policy reads it | Ready for more than one organization without a migration of existing tables |
 
 ## Technical notes
 
@@ -61,4 +63,4 @@ cd backend && supabase db reset && supabase test db
 
 ## Open questions
 
-1. **More than one church.** Should roles, permissions and their assignments carry a church identifier from the start, with Park Hill as the only church for now? Selling to other churches and isolated demo sandboxes (one throwaway church per demo session) both need data scoped per church. Adding the identifier before these tables exist is cheap; adding it after EP-03 and EP-04 ship means migrating every table, rule, permission check and test. Decide before this task starts; SUP-010 and SUP-015 follow the same answer.
+None. Resolved 2026-10-23: every table holding church data gets a nullable `org_id`, null for now (guide 4).

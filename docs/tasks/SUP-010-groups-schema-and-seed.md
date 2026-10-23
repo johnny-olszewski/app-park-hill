@@ -19,6 +19,7 @@ Store community groups, membership and leadership with rules the database itself
 - Leadership rules: a leader must be a member; removing membership removes leadership; making a leader adds membership if needed.
 - Church time zone setting (America/Los_Angeles) used for formatting meeting times.
 - Effective roles extended with roles derived from `group_types` (member and leader per community group).
+- `group_types`, `groups`, `group_members` and `group_leaders` each have a nullable `org_id uuid` column, null in every row (guide 4, organization scoping).
 - Seed: four groups (one leaderless) and personas per `specs/COMMUNITY.md` section 8; `dataset.json` updated; `make data-check` passes.
 
 ## Out of scope
@@ -37,6 +38,7 @@ Store community groups, membership and leadership with rules the database itself
 | AC6 | Seed creates the personas and groups listed in the spec; `make data-check` passes | Mock, tests and humans share the same people and groups |
 | AC7 | Clients cannot read or write these tables directly (RLS) | All access goes through functions |
 | AC8 | Adding a test group type with its own derived role, granted a test permission, makes `has_permission` return that permission for its members with no code change | Future kinds of membership, such as serving teams, are data only |
+| AC9 | `group_types`, `groups`, `group_members` and `group_leaders` each have a nullable `org_id uuid` column with no default, null in every row after `supabase db reset`; no function or policy reads it | Ready for more than one organization without a migration of existing tables |
 
 ## Technical notes
 
@@ -58,4 +60,4 @@ cd backend && supabase db reset && supabase test db && make data-check
 
 ## Open questions
 
-1. **More than one church.** Same question as SUP-009: should groups, group types and memberships carry a church identifier from the start, with Park Hill as the only church for now? Follow SUP-009's answer so every table is scoped the same way. Decide before this task starts.
+None. Resolved 2026-10-23 with SUP-009: nullable `org_id`, null for now (guide 4).

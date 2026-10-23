@@ -10,7 +10,7 @@
 
 ## Intent
 
-Enforce the iOS rules on every PR: tests pass, the app agrees with the contract fixtures, mock code never reaches a release build and no environment branching creeps in.
+Enforce the iOS rules on every PR: tests pass, the app agrees with the mock responses, mock code never reaches a release build and no environment branching creeps in.
 
 ## Scope
 
@@ -28,7 +28,7 @@ Enforce the iOS rules on every PR: tests pass, the app agrees with the contract 
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | Mock scheme unit tests pass with no backend, including fixture decoding tests | iOS stays in agreement with the contract |
+| AC1 | Mock scheme unit tests pass with no backend, including mock response decoding tests | iOS stays in agreement with the contract |
 | AC2 | The job builds the Dev release artifact and fails if its build log shows any source under `ParkHill/Mocks/` or `ParkHill/DevTools/` compiled, or if any symbol containing `Mock`, or any dev tools symbol other than `NoDevTools`, is present | Mock and debug code can never ship, enforced not trusted |
 | AC3 | The job fails if Swift source in `/ios` contains `#if` on a build configuration | The no branching rule is enforced |
 | AC4 | The job reports on every ready PR; a red check blocks merging by rule (guide 7.1 rule 10) | iOS cannot regress silently |

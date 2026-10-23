@@ -34,7 +34,7 @@ Community rows open other backend screens. This task gives every backend screen 
 | AC3 | An unknown action `type` makes the item not tappable; an unregistered target key pushes nothing; both are logged | Clients drop what they do not know |
 | AC4 | Pull to refresh on a backend screen refetches it and shows the new data | Fresh data on demand |
 | AC5 | A failed fetch shows the cached copy for that key and params, else the error screen with retry; sign-out wipes the cache | Usable offline, private after sign-out |
-| AC6 | Unit tests cover AC3 to AC5 using fixtures | Verified without a backend |
+| AC6 | Unit tests cover AC3 to AC5 using mock responses | Verified without a backend |
 
 ## Technical notes
 
@@ -56,7 +56,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

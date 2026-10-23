@@ -17,7 +17,7 @@ Make sign-in a backend-owned operation: the backend decides whether it succeeded
 - `sign_in` Edge Function per `specs/AUTH.md` 5.5.
 - `auth_attempts` table (hashed email, client address, time, outcome), not readable by clients.
 - Error strings `auth.error.*` in migrations.
-- Fixtures: `/contract/mock_responses/sign_in.ok.json`, `sign_in.error.json`.
+- Mock responses: `/contract/mock_responses/sign_in.ok.json`, `sign_in.error.json`.
 - Function tests.
 
 ## Out of scope
@@ -29,7 +29,7 @@ Make sign-in a backend-owned operation: the backend decides whether it succeeded
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | Correct persona credentials return HTTP 200 with `status: ok` and a session matching the fixture | A client can sign in through our backend |
+| AC1 | Correct persona credentials return HTTP 200 with `status: ok` and a session matching the mock response | A client can sign in through our backend |
 | AC2 | A wrong password and an unknown email both return `invalid_credentials` with identical message and status | Does not reveal which emails have accounts |
 | AC3 | The `disabled` persona returns `account_disabled` | Disabled accounts are refused with a clear message |
 | AC4 | After 5 failures for one email within 15 minutes, further attempts return `too_many_attempts` without calling Supabase's auth service; the same applies at 20 failures per client address | Guessing is limited by us, not by Supabase's shared-address limits |
@@ -55,7 +55,7 @@ deno test supabase/functions/sign_in   # or the documented test command
 ## Definition of done
 
 - [ ] All acceptance criteria pass
-- [ ] Fixtures committed and match live output
+- [ ] Mock responses committed and match live output
 - [ ] No work outside Scope
 
 ## Open questions

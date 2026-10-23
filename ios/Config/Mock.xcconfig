@@ -1,4 +1,4 @@
-// Mock: no backend. Services read contract fixtures; the app makes no network
+// Mock: no backend. Services read mock responses; the app makes no network
 // connections. Debug only; Mock never ships.
 
 #include "App.xcconfig"

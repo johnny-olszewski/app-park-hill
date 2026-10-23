@@ -41,7 +41,7 @@ The Mock build will let testers arm any sign-in refusal and see it on the real s
 ## Technical notes
 
 - Refusal triggers: `account_disabled` from the `disabled` persona with the local password; `invalid_request` from a body missing `password`; `too_many_attempts` from repeated failures for an email that has no account, from a client address used only for this, so no persona's count is touched.
-- Use a dedicated `X-Forwarded-For` value per trigger, as `write_sign_in_fixtures` does today.
+- Use a dedicated `X-Forwarded-For` value per trigger, as `write_sign_in_mock_responses` does today.
 - `unknown`: read `auth.error.unknown` for `en` from the strings table (service role) and write `{ "status": "error", "code": "unknown", "message": <string> }`, the shape the function returns (`specs/AUTH.md` 5.5). It is the only refusal file not recorded from a call.
 - Guide sections 4.1 and 6.
 
@@ -62,7 +62,7 @@ Then sign in as `attendee` and `admin` with the local password: both succeed.
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

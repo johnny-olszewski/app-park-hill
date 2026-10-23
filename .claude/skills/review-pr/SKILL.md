@@ -29,7 +29,7 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 - Correctness: bugs, missed cases, broken error handling, tests that cannot fail.
 - The responsibility split (guide 2): clients never re-implement roles or permissions, never hardcode text the backend owns.
-- Contract (guide 4.1): changes are additive; names come from `contract/names.json`; a contract change lands with its migration, regenerated fixtures and both client models.
+- Contract (guide 4.1): changes are additive; names come from `contract/names.json`; a contract change lands with its migration, regenerated mock responses and both client models.
 - Build configurations (guide 5.2): no branching on environment in app code; mock and debug code never reachable from a release build.
 - Native platform feel (guide 5.5): system components; behavior one platform gets free is built on the other.
 - Testing (guide 6): new behavior has tests that run in CI; nothing generated is edited by hand.

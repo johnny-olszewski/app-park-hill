@@ -14,7 +14,7 @@ Android twin of IOS-008. After sign-in, show the backend's tabs on empty pages w
 
 ## Scope
 
-- `getTabs(locale)` on `BackendService` (production and mock, per persona fixtures).
+- `getTabs(locale)` on `BackendService` (production and mock, per persona mock responses).
 - `TabCoordinator` per tab with its own back stack, saved and restored on tab switch.
 - Registered empty screens `home.root` and `community.home`.
 - `AssetProvider` with bundled drawables for `tab.home`, `tab.community` and a fallback.
@@ -33,7 +33,7 @@ Android twin of IOS-008. After sign-in, show the backend's tabs on empty pages w
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | After sign-in in dev, tab titles, order and count match `get_tabs`; changing them in the database shows after relaunch or foreground, no rebuild | Tabs are fed from the backend |
-| AC2 | In mock, the signed-in persona's `get_tabs` fixture is shown with no backend | Standalone app works per persona |
+| AC2 | In mock, the signed-in persona's `get_tabs` mock response is shown with no backend | Standalone app works per persona |
 | AC3 | Each tab shows its empty root screen | Navigable shell, no content |
 | AC4 | Each tab keeps its own back stack; a test pushes in one tab, switches away and back, and the stack is intact | Coordinator infrastructure is proven |
 | AC5 | A tab with an unregistered screen key is dropped and logged; if none survive, the error screen shows | Backend can ship ahead of the client |

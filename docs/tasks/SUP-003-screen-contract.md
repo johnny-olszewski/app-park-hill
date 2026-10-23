@@ -10,7 +10,7 @@
 
 ## Intent
 
-Make the backend the source of what a signed-out user sees first, and establish the screen envelope every screen will use. After this task, the sign-in screen's wording is a data change, not a release, and both clients have fixtures to build against.
+Make the backend the source of what a signed-out user sees first, and establish the screen envelope every screen will use. After this task, the sign-in screen's wording is a data change, not a release, and both clients have mock responses to build against.
 
 ## Scope
 
@@ -58,7 +58,7 @@ curl -s -X POST http://127.0.0.1:54321/rest/v1/rpc/get_entry \
 ## Definition of done
 
 - [ ] All acceptance criteria pass
-- [ ] Fixtures committed and match live output
+- [ ] Mock responses committed and match live output
 - [ ] No work outside Scope
 
 ## Open questions

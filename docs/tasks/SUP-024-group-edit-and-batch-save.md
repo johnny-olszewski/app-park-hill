@@ -20,7 +20,7 @@ Leaders update their group in one pass: details, people added and removed, and (
   - `EditField`: `id`, `label`, `kind` (enum `text`, `multiline`, `day`, `time`), `value`, optional `options` (`{ value, label }` list, for `day`)
   - `SaveResult`: `ok`, optional `field_errors` (field id to message), optional `row_errors` (user id to message)
 - `save_group_changes(p_group_id, p_batch)`, `p_batch` = `{ fields: { <id>: value }, add: [user_id], remove: [user_id], make_leader: [user_id], remove_leader: [user_id] }`: one transaction, permission checked per change; any problem applies nothing and returns `SaveResult` with every error localized.
-- Add the function to `contract/names.json`; map its ok and failed results in `contract/responses.json`; strings in migrations; fixtures for `leader`, `staff` and `admin`, and for one ok and one failed save.
+- Add the function to `contract/names.json`; map its ok and failed results in `contract/responses.json`; strings in migrations; mock responses for `leader`, `staff` and `admin`, and for one ok and one failed save.
 
 ## Out of scope
 
@@ -35,7 +35,7 @@ Leaders update their group in one pass: details, people added and removed, and (
 | AC3 | Every change is permission checked individually; one disallowed item fails the whole batch with a row or field error | Stale capabilities cannot slip through |
 | AC4 | Making a non-member a leader adds them as a member; removing a member removes their leadership (SUP-010) | Leadership always sits on top of membership |
 | AC5 | A disabled account is refused with `session_ended` | Server-side enforcement on every call |
-| AC6 | `make data-check` passes with the new types, mappings and fixtures | Mocks show edit mode per persona |
+| AC6 | `make data-check` passes with the new types, mappings and mock responses | Mocks show edit mode per persona |
 | AC7 | pgTAP tests cover AC1 to AC5, with one allowed and one refused test for `groups.edit_details`, `groups.add_member` and `groups.assign_leader` | Every permission matrix row tested both ways |
 
 ## Technical notes
@@ -55,7 +55,7 @@ supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

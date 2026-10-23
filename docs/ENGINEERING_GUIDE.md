@@ -9,7 +9,7 @@ Status: v0.2 (planning). This document governs every task. If a task conflicts w
 1. **Iteration velocity over release cadence.** Anything that can change without an app release should be able to.
 2. **Remote driven, natively rendered.** The backend decides what is shown and where taps go. Clients decide how it looks, using native components. No webviews as the norm.
 3. **Scalable by configuration.** New tabs, screens, environments and roles are added by extending config and registries, not by adding conditionals.
-4. **Two clients, one contract.** iOS (SwiftUI) and Android (Kotlin, Compose) are built in parallel against the same backend contract and the same fixtures.
+4. **Two clients, one contract.** iOS (SwiftUI) and Android (Kotlin, Compose) are built in parallel against the same backend contract and the same mock responses.
 
 ## 2. Responsibility split
 
@@ -36,7 +36,7 @@ Monorepo.
 
 ```
 /backend     Supabase project: migrations, seed, Edge Functions, tests
-/contract    API contract docs, JSON fixtures and personas (single source of truth for both clients)
+/contract    API contract docs, JSON mock responses and personas (single source of truth for both clients)
 /ios         SwiftUI app
 /android     Kotlin + Compose app
 /docs        This guide, the task template, the backlog, epics, specs, tasks
@@ -45,7 +45,7 @@ Monorepo.
 /scripts     Workflow scripts: mark_done.py, check_commits.sh, record.sh
 ```
 
-A contract change lands in one PR: migration, fixture, and both client models together.
+A contract change lands in one PR: migration, mock response, and both client models together.
 
 ## 4. Backend
 
@@ -118,7 +118,7 @@ App composition root  ->  Coordinators  ->  Screens (views + view models)
 
 | Config | Service classes | Backend | Intent |
 |---|---|---|---|
-| Mock | `MockAuthService`, `MockBackendService` | None. Reads contract fixtures; signs in as a chosen persona | App runs fully standalone: UI work, previews, demos, UI tests with no backend |
+| Mock | `MockAuthService`, `MockBackendService` | None. Reads mock responses; signs in as a chosen persona | App runs fully standalone: UI work, previews, demos, UI tests with no backend |
 | Dev | `SupabaseAuthService`, `SupabaseBackendService` | Whatever the config names. Default: local Supabase | Real end to end path on a developer machine and in CI |
 
 Later environments (QA, Prod) are added by adding a config file that reuses the Supabase classes with different values. No code changes.
@@ -178,11 +178,11 @@ Rules:
 ## 6. Testing
 
 - Backend: pgTAP per function; Edge Function tests.
-- Clients: unit tests for decoding (against contract fixtures), services, coordinators and view models. UI tests for flows.
+- Clients: unit tests for decoding (against mock responses), services, coordinators and view models. UI tests for flows.
 - **Client CI runs Mock only.** iOS and Android CI never start Supabase. Tests against local Supabase (Dev integration and UI tests) run locally with `make test-dev`, required before merging changes to an app, `/backend` or `/contract`.
 - **Backend CI** runs against local Supabase on Linux and owns correctness of logic and permissions.
-- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make mock-responses` generates the per-persona mock fixtures from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
-- Mock fixtures are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.
+- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make mock-responses` generates the per-persona mock responses from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
+- Mock responses are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.
 - CI (GitHub Actions): starts local Supabase, runs backend tests, builds and tests both clients, verifies mock code is absent from release builds.
 - A task is not done until its tests run in CI.
 
@@ -307,12 +307,13 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-23 | Recordings (7.2 rule 4): every slice's behavior criteria are recorded while they are verified, as iOS and Android screen recordings for app behavior and terminal transcripts for developer behavior, with `scripts/record.sh`, into the gitignored `recordings/<slice ID>/`. They stay local and are not linked from PRs. Earlier slices recorded ad hoc and #29 dropped it; written down so every session does it. Chosen over uploading to PRs (`gh` cannot attach files) and committing them (repository size) |
 | 2026-10-23 | Organization scoping (4): tables holding an organization's data get a nullable `org_id`, null for every row for now. Chosen over a required church identifier from the start (an `orgs` table and checks with only one organization) and over adding it later (migrating every table, rule and test after EP-03 and EP-04). Resolves the SUP-009 and SUP-010 open question |
 | 2026-10-23 | Chore branches (7.1 rule 12): housekeeping that implements no task and is not planning goes on a `chore/` branch with `[CHORE][<k>/n]` commits, numbered across the branch, and may group several unrelated items. Mirrors planning branches. Chosen over inventing a task for each rename or tooling change (tasks deliver behavior in a slice) |
+| 2026-10-23 | "Fixtures" are now called mock responses: `contract/fixtures` became `contract/mock_responses`, `make fixtures` became `make mock-responses`, and client types and tests were renamed to match (`MockResponseStore`, `TestMockResponses`). The files are unchanged: recorded backend responses that the mock builds serve, client decoding tests read and `make data-check` keeps faithful. Earlier decision log rows keep the old word |
 
 ## 9. Known risks
 
 - **Placeholder app identifiers:** bundle and application IDs are permanent once published. Replace `app.parkhill.placeholder` before the first store upload.
 
-- **Parallel platforms** double client effort before the paradigm is proven. Mitigation: shared fixtures and paired tasks.
+- **Parallel platforms** double client effort before the paradigm is proven. Mitigation: shared mock responses and paired tasks.
 - **Embedded root screen data** makes launch as slow as the slowest tab's query once screens have content. Mitigation: `get_screen` exists, so a tab can switch to lazy loading by returning empty data.
 - **Sign-in through our Edge Function** puts passwords through our code and hides client addresses from Supabase's own limits. Mitigation: our own attempt limiting, no body logging, tests for both (`specs/AUTH.md` 5.5).
-- **Mock fidelity:** client CI trusts the mock. Generated fixtures and `make data-check` keep it faithful; `make test-dev` before merging catches what the mock cannot.
+- **Mock fidelity:** client CI trusts the mock. Generated mock responses and `make data-check` keep it faithful; `make test-dev` before merging catches what the mock cannot.

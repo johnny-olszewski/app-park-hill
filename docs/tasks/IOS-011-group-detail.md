@@ -30,7 +30,7 @@ A group's detail is what members see first: its details, who leads it and who is
 | AC2 | The leader icon appears only on rows with `is_leader`, with an accessibility label; the `note` shows on its row | Leaders and the person's own row are recognisable |
 | AC3 | A pushed `community.group` shows the view with the group's title in the navigation bar | Group detail reachable from any group row |
 | AC4 | Mock UI tests open a group's detail as `member_two` and as `admin`, and check the details, leaders line and member rows | Verified per persona in CI |
-| AC5 | Decoding tests decode every recorded `community.group` fixture | The view's data matches the backend |
+| AC5 | Decoding tests decode every recorded `community.group` mock response | The view's data matches the backend |
 
 ## Technical notes
 
@@ -52,7 +52,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

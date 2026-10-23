@@ -19,7 +19,7 @@ import kotlinx.serialization.json.jsonPrimitive
 /**
  * Mock [AuthService]: signs in as a persona with no network. The persona is
  * shared with [MockBackendService], which then returns that persona's
- * fixtures. Any credentials give the result armed in [scenario], chosen in
+ * mock responses. Any credentials give the result armed in [scenario], chosen in
  * the mock menu. Not persisted: a relaunch starts signed out.
  */
 class MockAuthService(

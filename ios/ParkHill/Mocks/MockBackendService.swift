@@ -1,6 +1,6 @@
 import Foundation
 
-/// Mock `BackendService`: answers from contract fixtures and makes no network
+/// Mock `BackendService`: answers from mock responses and makes no network
 /// calls. The entry is the recorded `get_entry.json` (the production
 /// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `get_tabs` and
 /// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.

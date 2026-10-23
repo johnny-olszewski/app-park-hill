@@ -39,7 +39,7 @@ For each task:
 
 Practices that kept slices clean:
 
-- **Contract changes:** migration, `make mock-responses`, then `make data-check` in `/backend`; update both clients' models in the same slice. A new fixture can break the client fixture tests, so run both clients' unit tests in the commit that adds it.
+- **Contract changes:** migration, `make mock-responses`, then `make data-check` in `/backend`; update both clients' models in the same slice. A new mock response can break the client mock response tests, so run both clients' unit tests in the commit that adds it.
 - **Removing something tests depend on:** move the tests off it in an earlier commit, so every commit stays green.
 - **Before pushing:** `scripts/check_commits.sh "<build and test command>"` runs a check on every commit of the branch. History may be rewritten (fixup and autosquash) only before the first push. After review starts, changes are new commits continuing the numbering (guide 7.1 rule 7).
 - **Temporary code** only when a task says so, every line marked `TEMPORARY(<epic>): <what removes it>`.

@@ -14,7 +14,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 
 /**
- * Mock [BackendService]: answers from contract fixtures and makes no network
+ * Mock [BackendService]: answers from mock responses and makes no network
  * calls. The entry is the recorded `get_entry.json`; `getScreen` reads
  * `get_screen.<key>.json`, preferring the current persona's copy; `getTabs`
  * and `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.

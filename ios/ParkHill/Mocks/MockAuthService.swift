@@ -2,7 +2,7 @@ import Foundation
 
 /// Mock `AuthService`: signs in as a persona with no network. The persona is
 /// shared with `MockBackendService`, which then returns that persona's
-/// fixtures. What a sign-in does is chosen in the mock menu
+/// mock responses. What a sign-in does is chosen in the mock menu
 /// (`MockSignInScenario`), not by the credentials typed. Not persisted: a
 /// relaunch starts signed out.
 final class MockAuthService: AuthService {

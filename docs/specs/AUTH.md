@@ -167,7 +167,7 @@ A separate abstraction from the backend service, selected at build time the same
 | session state stream | Emits signed in / signed out, including when renewal is refused |
 
 - **Production class:** calls the Edge Function, then gives the session to the Supabase client library. The backend service and auth service share one Supabase client, so the access token is attached to backend calls automatically.
-- **Mock class:** `signIn` takes a persona id. It sets the current persona, which the mock backend service uses to choose fixtures. No network.
+- **Mock class:** `signIn` takes a persona id. It sets the current persona, which the mock backend service uses to choose mock responses. No network.
 
 ### 6.2 Screens
 
@@ -194,9 +194,9 @@ Defined once in `/contract/seed/dataset.json`:
 | `admin` | `admin@parkhill.test` | Active | Will hold the admin role when roles land |
 | `disabled` | `disabled@parkhill.test` | Banned | Tests the disabled path |
 
-- The dataset is the single source: `make seed` generates `seed.sql` (accounts with the shared local password documented in `/backend/README.md`) and `make mock-responses` generates the mock fixtures from it.
+- The dataset is the single source: `make seed` generates `seed.sql` (accounts with the shared local password documented in `/backend/README.md`) and `make mock-responses` generates the mock responses from it.
 - The mock persona picker lists active personas only.
-- `make data-check` in CI fails if the seed or fixtures differ from what the dataset generates.
+- `make data-check` in CI fails if the seed or mock responses differ from what the dataset generates.
 - Seed data is test data only. App configuration (screens, strings) goes in migrations so it reaches hosted projects.
 
 ## 8. Testing

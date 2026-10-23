@@ -13,7 +13,7 @@ Backend-driven, natively rendered app for iOS (SwiftUI) and Android (Kotlin, Com
 | Path | Contents |
 |---|---|
 | `/backend` | Supabase project: migrations, seed, Edge Functions, tests |
-| `/contract` | API contract docs, JSON fixtures and personas |
+| `/contract` | API contract docs, JSON mock responses and personas |
 | `/ios` | SwiftUI app |
 | `/android` | Kotlin + Compose app |
 | `/docs` | Guide, template, backlog, epics, specs, tasks |

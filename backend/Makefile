@@ -1,4 +1,4 @@
-# Generated data: seed.sql and contract fixtures come from
+# Generated data: seed.sql and mock responses come from
 # contract/seed/dataset.json; client name constants come from
 # contract/names.json; client screen models come from contract/screens.
 # Never edit generated files by hand.

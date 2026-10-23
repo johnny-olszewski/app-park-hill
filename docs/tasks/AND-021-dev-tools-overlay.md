@@ -61,7 +61,7 @@ Inspect the devRelease artifact: no dev tools classes. Screenshot the pill on a 
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

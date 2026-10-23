@@ -35,8 +35,8 @@ Android twin of IOS-002. Every backend data call goes through one abstraction, w
 | AC2 | `src/mock/.../ServiceBinding.kt` declares `typealias AppBackendService = MockBackendService`; `src/dev` declares `SupabaseBackendService`. The composition root constructs `AppBackendService` with no conditional | Build time selection, no branching |
 | AC3 | Every request from `SupabaseBackendService` carries `X-App-Config`, `X-App-Platform`, `X-App-Version` and `Accept-Language`; a test asserts the header values | Backend can tell configs, platforms and versions apart in logs |
 | AC4 | The Supabase client is created once and shared; requests automatically carry the session token when one exists | Signed-in calls work in AND-005 without changing this layer |
-| AC5 | `MockBackendService` loads the JSON files from `/contract/mock_responses` (assets of the `mock` source set only), selecting by persona when a persona-specific fixture exists | Mocks cannot drift from the contract and can vary by persona |
-| AC6 | Decoding tests parse every fixture into the models and pass; unknown fields are ignored | Android agrees with the contract and tolerates additive changes |
+| AC5 | `MockBackendService` loads the JSON files from `/contract/mock_responses` (assets of the `mock` source set only), selecting by persona when a persona-specific mock response exists | Mocks cannot drift from the contract and can vary by persona |
+| AC6 | Decoding tests parse every mock response into the models and pass; unknown fields are ignored | Android agrees with the contract and tolerates additive changes |
 | AC7 | Service errors map to a small typed set: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding`, `Server` | Callers react without inspecting SDK errors |
 | AC8 | An integration test in the `dev` flavor calls local Supabase and receives the `auth.sign_in` entry envelope | Proves the real path end to end |
 

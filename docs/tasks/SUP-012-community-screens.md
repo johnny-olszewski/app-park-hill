@@ -20,7 +20,7 @@ Each person's Community tab should show their own groups, decided entirely by th
 - The Community entry in `get_tabs` embeds `community.home` for the caller.
 - All Community screens list only community-type, non-archived groups.
 - Add `community.group` to `contract/names.json`; describe both screens in `contract/screens/` using the SUP-011 types.
-- All strings in migrations; per-persona fixtures generated into `contract/mock_responses/<persona>/get_screen.<key>.json`, with `community.group` recorded for one group each persona may open.
+- All strings in migrations; per-persona mock responses generated into `contract/mock_responses/<persona>/get_screen.<key>.json`, with `community.group` recorded for one group each persona may open.
 
 ## Out of scope
 
@@ -35,7 +35,7 @@ Each person's Community tab should show their own groups, decided entirely by th
 | AC3 | `community.group` is refused with `screen_unavailable` for a user who is not a member, a leader or a holder of `groups.view_all`, and returned for each of those | Access rules hold even with a direct request |
 | AC4 | The details, `leaders_line` ("Leaders: none yet" when leaderless), "You" note and `is_leader` match the seed data for each persona | One correct picture of a group for everyone allowed in |
 | AC5 | Changing a Community string in the database changes the next response | Wording is remote |
-| AC6 | `make data-check` passes: names, descriptions and per-persona fixtures match live output | Mocks mirror the real backend per persona |
+| AC6 | `make data-check` passes: names, descriptions and per-persona mock responses match live output | Mocks mirror the real backend per persona |
 | AC7 | pgTAP tests cover AC1 to AC5 | Enforced, not documented |
 
 ## Technical notes
@@ -56,7 +56,7 @@ supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -69,7 +69,7 @@ android {
     }
 
     sourceSets {
-        // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
+        // Mock responses, read in place: mock assets and test resources (guide 4.1 rule 6).
         getByName("mock").assets.srcDirs("../../contract/mock_responses", "../../contract/seed")
         getByName("test").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")
         getByName("androidTest").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")

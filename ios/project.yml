@@ -34,7 +34,7 @@ targets:
       # Backend function names and screen keys, generated from
       # contract/names.json. Every configuration compiles it.
       - path: ../contract/generated/ContractNames.swift
-      # Contract fixtures and the persona dataset, bundled for the mock
+      # Mock responses and the persona dataset, bundled for the mock
       # services. App.xcconfig excludes them from every configuration except Mock.
       - path: ../contract/mock_responses
         type: folder
@@ -55,7 +55,7 @@ targets:
     platform: iOS
     sources:
       - path: ParkHillTests
-      # Every configuration's tests decode the fixtures.
+      # Every configuration's tests decode the mock responses.
       - path: ../contract/mock_responses
         type: folder
         buildPhase: resources

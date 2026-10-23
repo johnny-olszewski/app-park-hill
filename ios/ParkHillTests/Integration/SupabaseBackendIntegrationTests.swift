@@ -11,7 +11,7 @@ struct SupabaseBackendIntegrationTests {
         let envelope = try await service.getEntry(locale: "en")
         let mockResponse = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))
         #expect(envelope.key == "auth.sign_in")
-        #expect(envelope == fixture)
+        #expect(envelope == mock response)
     }
 
     @Test func unknownScreenKeyThrowsUnknownScreen() async {

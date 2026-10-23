@@ -32,7 +32,7 @@ Android twin of IOS-003. The app shows whatever entry screen the backend names, 
 |---|---|---|
 | AC1 | In `devDebug` with local Supabase running, launch shows the `auth.sign_in` screen with the title from `get_entry` | The first screen is backend driven |
 | AC2 | Changing the title string in the database is reflected after relaunch or return to foreground, with no rebuild | Proves remote control of the entry screen |
-| AC3 | In `mockDebug`, launch shows the screen named by the mock entry fixture, with no backend running | The app runs independently |
+| AC3 | In `mockDebug`, launch shows the screen named by the mock entry mock response, with no backend running | The app runs independently |
 | AC4 | Screens are created only through `ScreenRegistry`. Composables do not call `NavController` or create other screens directly | Navigation stays in coordinators |
 | AC5 | Mock-only screens are registered from `src/mock` only | `.mock` screens never compile into other variants |
 | AC6 | An entry envelope with an unregistered key is treated as unusable and logged | Backend can ship ahead of the client without a blank screen |

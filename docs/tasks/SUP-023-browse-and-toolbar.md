@@ -17,7 +17,7 @@ Staff need to see every group, not just their own. This task adds the envelope's
 - Contract: `ToolbarItem` (`id`, `label`, `icon_key`, `action`) in `contract/types/`; `ScreenEnvelope` gains optional `toolbar` (list of `ToolbarItem`); `NavigateAction.presentation` gains `full_screen_cover`. Documented in `contract/README.md` (`specs/COMMUNITY.md` 3.1).
 - `community.home` envelope: a "Browse all groups" toolbar item (`icon_key` `toolbar.browse`, `navigate` to `community.browse`, `full_screen_cover`) for `groups.view_all`, on every home state.
 - `community.browse`: `{ title, search_placeholder, rows: [GroupRow] }`, every community group by name, the caller's own groups badged ("Leader" or "Member"), leaderless groups badged "No leader"; refused with `screen_unavailable` without `groups.view_all`.
-- Add `community.browse` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; per-persona fixtures.
+- Add `community.browse` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; per-persona mock responses.
 
 ## Out of scope
 
@@ -28,11 +28,11 @@ Staff need to see every group, not just their own. This task adds the envelope's
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | An envelope without `toolbar` is still valid, and every existing fixture passes the check unchanged | Backward compatible with earlier clients |
+| AC1 | An envelope without `toolbar` is still valid, and every existing mock response passes the check unchanged | Backward compatible with earlier clients |
 | AC2 | `staff` and `admin` get the browse item on `community.home`; `attendee`, `member_one`, `member_two` and `leader` do not | The UI follows what each person can do |
 | AC3 | Browse lists every non-archived community group by name, with the caller's own groups badged and leaderless groups badged "No leader"; when a group is both, "No leader" wins | Staff see the whole picture and what needs attention |
 | AC4 | Browse is refused with `screen_unavailable` for users without `groups.view_all` | Stale buttons cannot reveal all groups |
-| AC5 | `make data-check` passes with the new descriptions and per-persona fixtures | Mocks mirror the real backend per persona |
+| AC5 | `make data-check` passes with the new descriptions and per-persona mock responses | Mocks mirror the real backend per persona |
 | AC6 | pgTAP tests cover AC2 to AC4 | Enforced, not documented |
 
 ## Technical notes
@@ -52,7 +52,7 @@ supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

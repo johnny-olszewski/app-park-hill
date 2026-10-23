@@ -1,6 +1,6 @@
 import Foundation
 
-/// Contract fixtures bundled into the test target, in every configuration.
+/// Mock responses bundled into the test target, in every configuration.
 enum TestMockResponses {
     private final class BundleToken {}
 
@@ -12,7 +12,7 @@ enum TestMockResponses {
         try Data(contentsOf: root.appending(path: relativePath))
     }
 
-    /// Every `.json` file under the fixtures root, as paths relative to it.
+    /// Every `.json` file under the mock responses root, as paths relative to it.
     static func allJSONPaths() -> [String] {
         let rootPath = root.standardizedFileURL.path + "/"
         let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil)
@@ -22,8 +22,8 @@ enum TestMockResponses {
             .sorted()
     }
 
-    /// Fixtures of screen responses (`get_entry`, `get_screen`), in any persona
-    /// folder. Other fixtures, such as `get_tabs.json` and `sign_in.*.json`,
+    /// Mock responses of screen responses (`get_entry`, `get_screen`), in any persona
+    /// folder. Other mock responses, such as `get_tabs.json` and `sign_in.*.json`,
     /// have their own models.
     static func screenEnvelopePaths() -> [String] {
         allJSONPaths().filter {

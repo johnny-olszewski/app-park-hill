@@ -31,7 +31,7 @@ The Community tab gives each person exactly their own community groups, lets lea
 | 8 | As anyone, I never stay on something I lost access to | If I am removed or leave, the screen closes, the one below refreshes and I see why |
 | 9 | As the church, permissions are enforced no matter what the app shows | A stale button or direct request for something I may not do is refused by the backend |
 | 10 | As the product owner, I can change Community wording and navigation without a release | String and navigation target changes in the backend show on both platforms after refresh |
-| 11 | As a developer, I can run Community as any persona without a backend | Mock fixtures per persona match the real backend's output |
+| 11 | As a developer, I can run Community as any persona without a backend | Mock responses per persona match the real backend's output |
 
 ## Exit criteria
 

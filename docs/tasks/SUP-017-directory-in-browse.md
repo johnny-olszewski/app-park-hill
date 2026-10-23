@@ -31,7 +31,7 @@ Let eligible, listed people find each other and let staff see every eligible per
 | AC2 | Staff get both parts; the directory includes unlisted eligible people with the badge | Staff can reach every group member |
 | AC3 | Directory rows show the photo only when exposed and navigate to `people.person` | Privacy holds in lists too |
 | AC4 | An attendee with no group gets no browse button and is refused the directory | Directory is only for eligible people |
-| AC5 | pgTAP tests and fixtures cover AC1 to AC4 | Enforced and mirrored in mocks |
+| AC5 | pgTAP tests and mock responses cover AC1 to AC4 | Enforced and mirrored in mocks |
 
 ## Technical notes
 
@@ -48,7 +48,7 @@ cd backend && supabase db reset && supabase test db
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

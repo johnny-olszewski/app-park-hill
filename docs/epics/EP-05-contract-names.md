@@ -28,7 +28,7 @@ Backend function names, screen keys and screen data models are written once, in 
 ## Exit criteria
 
 1. All EP-05 tasks are Done.
-2. No client source outside tests contains a backend function name or backend screen key as a string literal, except mock fixture file names.
+2. No client source outside tests contains a backend function name or backend screen key as a string literal, except mock response file names.
 3. The screen model approach is chosen and recorded in the guide; client adoption tasks for it, and a task describing non-screen responses (`whoami`, `sign_in`), are written.
 
 ## Slices
@@ -50,7 +50,7 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 | B2 | Adding a screen to the backend without listing it in `names.json` makes `make data-check` fail |
 | B3 | Renaming a generated constant by hand breaks the iOS and Android builds, and `make data-check` reports the drift |
 | B4 | On iOS and Android, in Mock and Dev, sign-in, tabs and sign-out work as before |
-| B5 | Searching client sources outside tests finds no backend function name or screen key as a string literal, except mock fixture file names |
+| B5 | Searching client sources outside tests finds no backend function name or screen key as a string literal, except mock response file names |
 
 ### EP-05.B: Screen data is described once and checked
 
@@ -74,7 +74,7 @@ Implemented in this order (guide 7.2). Names come first because they stand on th
 | # | Behavior acceptance criterion |
 |---|---|
 | B1 | Removing `display_name` from `whoami` on the backend makes `make data-check` fail after `make mock-responses`, naming it |
-| B2 | A fixture with no type in `contract/responses.json` makes `make data-check` fail, naming it |
+| B2 | A mock response with no type in `contract/responses.json` makes `make data-check` fail, naming it |
 | B3 | Searching `ios/` and `android/` finds no hand-written envelope, tabs, profile or sign-in response type |
 | B4 | On iOS and Android, in Mock and Dev, sign-in (success and each refusal), tabs, return to the foreground and sign-out work as before |
 

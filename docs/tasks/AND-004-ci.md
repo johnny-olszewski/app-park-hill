@@ -26,7 +26,7 @@ Enforce the Android rules on every PR: Mock tests pass, the dev variant builds, 
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | `testMockDebugUnitTest` passes with no backend, including fixture decoding tests | Android stays in agreement with the contract |
+| AC1 | `testMockDebugUnitTest` passes with no backend, including mock response decoding tests | Android stays in agreement with the contract |
 | AC2 | The dev variant builds in CI; its integration tests are documented in `/android/README.md` as a local command (`make test-dev`) | CI runs Mock only; the real path is checked locally |
 | AC3 | The job builds `devRelease` and fails if any class containing `Mock` is present | Mock code can never ship, enforced not trusted |
 | AC4 | The job fails if `/android/app/src/main` contains `BuildConfig.FLAVOR` or `BuildConfig.DEBUG` | The no branching rule is enforced |

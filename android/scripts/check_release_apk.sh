@@ -1,5 +1,5 @@
 #!/bin/sh
-# Fails if a release APK contains mock code, dev tools or contract fixtures
+# Fails if a release APK contains mock code, dev tools or mock responses
 # (guide 5.2 rule 3). Usage: check_release_apk.sh <path to APK>
 apk=${1:?usage: check_release_apk.sh <apk>}
 [ -f "$apk" ] || { echo "No APK at $apk"; exit 1; }
@@ -14,10 +14,10 @@ devtools=$(strings "$work"/classes*.dex | grep -oE 'Lapp/parkhill/devtools/[A-Za
 mock_responses=$(unzip -l "$apk" | grep -E 'assets/.*(get_entry|get_screen|sign_in)[^ ]*\.json')
 
 if [ -n "$classes$devtools$mock_responses" ]; then
-    echo "Mock code, dev tools or fixtures are in the release APK (guide 5.2 rule 3):"
+    echo "Mock code, dev tools or mock responses are in the release APK (guide 5.2 rule 3):"
     [ -n "$classes" ] && echo "$classes" | head -20
     [ -n "$devtools" ] && echo "$devtools" | head -20
     [ -n "$mock_responses" ] && echo "$mock_responses" | head -20
     exit 1
 fi
-echo "Release APK: no mock code, dev tools or fixtures."
+echo "Release APK: no mock code, dev tools or mock responses."

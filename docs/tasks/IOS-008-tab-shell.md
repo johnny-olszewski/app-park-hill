@@ -14,7 +14,7 @@ After sign-in, show the tabs the backend sends, on empty pages, with one navigat
 
 ## Scope
 
-- `getTabs(locale:)` on `BackendService` (production and mock, per persona fixtures).
+- `getTabs(locale:)` on `BackendService` (production and mock, per persona mock responses).
 - `TabCoordinator` per tab owning its `NavigationStack`, exposing push, present and pop.
 - Registered empty screens `home.root` and `community.home`.
 - `AssetProvider` with bundled icons for `tab.home`, `tab.community` and a fallback.
@@ -33,7 +33,7 @@ After sign-in, show the tabs the backend sends, on empty pages, with one navigat
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | After sign-in in Dev, tab titles, order and count match `get_tabs`; changing them in the database shows after relaunch or foreground, no rebuild | Tabs are fed from the backend |
-| AC2 | In Mock, the signed-in persona's `get_tabs` fixture is shown with no backend | Standalone app works per persona |
+| AC2 | In Mock, the signed-in persona's `get_tabs` mock response is shown with no backend | Standalone app works per persona |
 | AC3 | Each tab shows its empty root screen | Navigable shell, no content |
 | AC4 | Each tab keeps its own stack; a test pushes in one tab, switches away and back, and the stack is intact | Coordinator infrastructure is proven |
 | AC5 | A tab with an unregistered screen key is dropped and logged; if none survive, the error screen shows | Backend can ship ahead of the client |

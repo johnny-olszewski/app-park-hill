@@ -52,7 +52,7 @@ xcodebuild -scheme ParkHill-Mock -destination 'platform=iOS Simulator,name=iPhon
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

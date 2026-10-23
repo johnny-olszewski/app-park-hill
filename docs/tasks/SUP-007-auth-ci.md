@@ -10,12 +10,12 @@
 
 ## Intent
 
-Make the sign-in rules and the single dataset (seed and mock fixtures) machine-enforced on every PR.
+Make the sign-in rules and the single dataset (seed and mock responses) machine-enforced on every PR.
 
 ## Scope
 
 - Serve Edge Functions in the backend job and run the `sign_in` tests.
-- Run `make data-check` (seed and fixtures regenerated from the dataset).
+- Run `make data-check` (seed and mock responses regenerated from the dataset).
 
 ## Out of scope
 

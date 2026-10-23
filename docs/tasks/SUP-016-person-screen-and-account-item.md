@@ -18,7 +18,7 @@ Serve one person detail screen that is both your own profile and how others see 
 - Edit roles toolbar button for `roles.assign_staff` or `roles.assign_admin`.
 - Shared helper adding the Account toolbar item to every tab root in `get_tabs` and `get_screen`.
 - Member rows in `community.group` gain `navigate` actions to `people.person`.
-- Per-persona fixtures.
+- Per-persona mock responses.
 
 ## Out of scope
 
@@ -35,7 +35,7 @@ Serve one person detail screen that is both your own profile and how others see 
 | AC4 | Edit roles appears only for viewers with a role assignment permission | Only admins manage roles |
 | AC5 | Every tab root returned by `get_tabs` and `get_screen` includes the Account item (test iterates all roots) | No tab can forget the account entry |
 | AC6 | Group member rows navigate to `people.person` | People are reachable from groups |
-| AC7 | pgTAP tests and per-persona fixtures cover AC1 to AC6 | Enforced and mirrored in mocks |
+| AC7 | pgTAP tests and per-persona mock responses cover AC1 to AC6 | Enforced and mirrored in mocks |
 
 ## Technical notes
 
@@ -52,7 +52,7 @@ cd backend && supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

@@ -77,7 +77,7 @@ One backend helper adds an "Account" toolbar item (`navigate` to `people.person`
 | `member_unlisted` | Member of one group, switched "show in directory" off |
 | `member_shared` | Member who exposes photo, phone and groups |
 
-The dataset gives some personas phones and photos; seed and fixtures are generated from it.
+The dataset gives some personas phones and photos; seed and mock responses are generated from it.
 
 ## 7. Tests
 

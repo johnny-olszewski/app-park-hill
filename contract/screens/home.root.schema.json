@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HomeRootData",
+  "description": "`home.root` data: empty until Home has content.",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "additionalProperties": false
+}

@@ -212,7 +212,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 | Slice | Behavior | Tasks, in order | Depends on | Status |
 |---|---|---|---|---|
 | [EP-05.A](epics/EP-05-contract-names.md#ep-05a-a-misspelled-name-fails-the-build-or-the-data-check) | A misspelled backend function name or screen key fails the build or `make data-check` on every platform | SUP-019, IOS-020, AND-020 | EP-02.A | Done |
-| [EP-05.B](epics/EP-05-contract-names.md#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Draft |
+| [EP-05.B](epics/EP-05-contract-names.md#ep-05b-screen-data-is-described-once-and-checked) | Each backend screen's data is described once in `/contract`, client models are generated from it, and `make data-check` fails when a response does not match | SUP-020 | EP-05.A | Done |
 | [EP-05.C](epics/EP-05-contract-names.md#ep-05c-the-apps-decode-screens-with-the-generated-models) | Both apps decode every screen with the generated models, and no screen model is written by hand | IOS-023, AND-024 | EP-05.B | Draft |
 | [EP-05.D](epics/EP-05-contract-names.md#ep-05d-every-response-is-described-once-and-checked) | Every response a client decodes is described once, checked by `make data-check`, and decoded with generated types in both apps | SUP-022, IOS-024, AND-025 | EP-05.C | Draft |
 
@@ -221,7 +221,7 @@ Android is level after EP-06.C; new feature slices include every platform.
 | Task | Depends on | Status |
 |---|---|---|
 | [SUP-019: Define backend function names and screen keys once and generate client constants](tasks/SUP-019-shared-contract-names.md) | SUP-006, SUP-008 | Done |
-| [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Draft |
+| [SUP-020: Choose and prove how screen data models are defined once and generated for both clients](tasks/SUP-020-screen-models.md) | SUP-019 | Done |
 | [SUP-022: Describe the non-screen responses and the screen envelope once](tasks/SUP-022-response-descriptions.md) | SUP-020 | Draft |
 
 ### iOS (IOS)

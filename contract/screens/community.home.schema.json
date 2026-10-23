@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CommunityHomeData",
+  "description": "`community.home` data: empty until EP-03 adds groups.",
+  "type": "object",
+  "properties": {},
+  "required": [],
+  "additionalProperties": false
+}

@@ -32,6 +32,7 @@ Run from `/backend`.
 | Regenerate the client screen models from `contract/screens` | `make models` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
 | Run the Edge Function tests (stack running) | `make test-functions` |
+| Run the unit tests for the data scripts (no stack needed) | `make test-scripts` |
 
 Only one local Supabase project can use these ports at a time. If `supabase start` reports a port already allocated, stop the other project with `supabase stop --project-id <id>`.
 

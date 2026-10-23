@@ -6,7 +6,7 @@
 PYTHON ?= python3
 GENERATED := supabase/seed.sql ../contract/fixtures ../contract/generated
 
-.PHONY: seed fixtures names models data-check test-functions
+.PHONY: seed fixtures names models data-check test-functions test-scripts
 
 ## Generate supabase/seed.sql from the dataset
 seed:
@@ -41,3 +41,7 @@ data-check: fixtures names models
 ## Run the Edge Function tests against the running local stack
 test-functions:
 	$(PYTHON) -m unittest discover --start-directory tests/functions --verbose
+
+## Run the unit tests for the generation and check scripts (no stack needed)
+test-scripts:
+	$(PYTHON) -m unittest discover --start-directory tests/scripts --verbose

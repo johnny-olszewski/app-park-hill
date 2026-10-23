@@ -37,6 +37,10 @@ jobs:
         with:
           version: 2.120.0
 
+      # SUP-020: the description subset and the check behind make data-check.
+      - name: Script tests
+        run: make test-scripts
+
       - name: Start local Supabase
         run: supabase start
 

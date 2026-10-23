@@ -4,7 +4,7 @@
 |---|---|
 | Area | backend |
 | Epic | EP-04 |
-| Depends on | SUP-015, SUP-016 |
+| Depends on | SUP-015, SUP-016, SUP-023 |
 | Paired with | None |
 | Status | Draft |
 

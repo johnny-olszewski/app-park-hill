@@ -16,7 +16,8 @@ Staff start new groups and retire old ones in the app. This task adds the create
 
 - `community.browse` envelope: a "Create group" toolbar item for `groups.create` (`navigate` to `community.group.create` as a `sheet`).
 - `community.group.create`: `{ title, save_label, cancel_label, fields: [EditField], save: CallAction }` with the detail fields (`specs/COMMUNITY.md` 5.7); refused with `screen_unavailable` without `groups.create`.
-- `create_group(p_fields)`: validates and creates a community group, returning `SaveResult` with field errors on failure; on success the client opens the new group's detail (see Open questions).
+- `SaveResult` gains optional `then` (`Action`): what the client does after a successful call's `on_success`. Documented in `contract/README.md` and `specs/COMMUNITY.md` 3.2.
+- `create_group(p_fields)`: validates and creates a community group, returning `SaveResult` with field errors on failure, and on success `then`: a `navigate` to `community.group` for the new group, `push`.
 - `GroupDetail` gains optional `delete` (`ActionButton`, destructive, with confirmation, `on_success` `dismiss`) for `groups.delete`, shown in edit mode.
 - `delete_group(p_group_id)` archives the group; it disappears from every list and its detail is refused with `screen_unavailable`.
 - Add the screen key and both functions to `contract/names.json`; describe the screen; strings in migrations; fixtures for `staff`.
@@ -30,7 +31,7 @@ Staff start new groups and retire old ones in the app. This task adds the create
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | `staff` and `admin` get the Create item on browse and `delete` on group detail; nobody else does | Each action only for people who may use it |
-| AC2 | `create_group` with valid fields creates the group; invalid fields create nothing and return each error at its field | Staff can start a group in one flow, fixing problems in place |
+| AC2 | `create_group` with valid fields creates the group and returns `then` opening its detail; invalid fields create nothing and return each error at its field | Staff can start a group in one flow, fixing problems in place |
 | AC3 | `delete_group` archives; the group is gone from home and browse, and its detail is refused with `screen_unavailable` | Safe, reversible delete |
 | AC4 | Both functions refuse a disabled account with `session_ended` and a caller without permission with `action_refused`; the create screen is refused without `groups.create` | Server-side enforcement on every call |
 | AC5 | `make data-check` passes with the new screen, mappings and fixtures | Mocks show create and delete for staff |
@@ -58,4 +59,4 @@ supabase db reset && supabase test db && make data-check
 
 ## Open questions
 
-1. **Opening the new group after create.** `specs/COMMUNITY.md` 5.7 says saving opens the new group's detail, but `on_success` has only `refresh`, `dismiss` and `none`, and the new group's id exists only after the call. Recommendation: `SaveResult` gains an optional `then` (`Action`), which the client performs after closing the sheet; `create_group` returns a `navigate` to `community.group` for the new group, pushed in the cover's stack. Alternative: add `on_success` `navigate_result`. Decide before this slice starts; the paired client tasks follow it.
+None. Resolved 2026-10-23: the result carries the next action (`SaveResult.then`), chosen over an `on_success` value that opens what was created and over not opening the new group.

@@ -15,7 +15,7 @@ Staff start a group from Browse and retire one from its edit mode. This task bui
 ## Scope
 
 - `community.group.create` as a sheet from the browse toolbar: the `fields` as inline fields by `kind` (shared with edit mode), Save (`save_label`) sending the `save` call with the field values, Cancel (`cancel_label`) closing it.
-- Field errors from a failed save under their fields, the sheet staying open; on success the sheet closes and the new group's detail opens (see Open questions).
+- Field errors from a failed save under their fields, the sheet staying open; on success the sheet closes, then the result's `then` action is performed (here, pushing the new group's detail in the browse cover). `then` is handled for every `call`, not only create.
 - Delete group: a destructive footer button in edit mode when `delete` is sent; its `call` confirms, archives and applies `dismiss` (the lost-access rule).
 - Mock UI tests for `staff`; Dev UI tests in `make test-dev`: `staff` creates a group and deletes it.
 
@@ -57,4 +57,4 @@ make test-dev
 
 ## Open questions
 
-1. **Opening the new group after create:** follows the answer in SUP-025's open question.
+None.

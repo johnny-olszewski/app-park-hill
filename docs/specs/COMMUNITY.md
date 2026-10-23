@@ -40,6 +40,8 @@ Two types. Every action may carry `role: "destructive"`, a meaning each platform
 
 Forms submit through a `call` in their data, with field values added.
 
+A `call`'s result may carry `then`, an action the client performs after `on_success`. It is how a call opens something whose id exists only after the call, such as a newly created group (5.7).
+
 ### 3.3 Shared types
 
 `GroupRow`:
@@ -195,5 +197,6 @@ Who can open it (as `community.group`, or as the `group` part of `community.home
 | Lost access: close and refresh the screen below, with a backend message shown as an iOS alert or Android `Snackbar` | Dead screen; pop to root; a custom notice view on both platforms |
 | Groups may be leaderless, flagged for staff | Always one leader; last leader cannot leave |
 | Create from browse; delete in edit mode; archive, not erase | Create on home; no create or delete in app |
+| After a call, the result's `then` says what to open next (for example the new group) | An `on_success` value that opens what was created; not opening the new group |
 | People picker: multi-select, all people, local search, backend marks unselectable | Single select; server search |
 | Role management in its own epic (EP-04) with an account screen | In EP-03; admin-only tab |

@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-011, SUP-012]
 paired_with: [AND-010]
-status: Draft
+status: Done
 ---
 
 # IOS-010: Build the iOS Community home for every state

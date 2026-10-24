@@ -7,7 +7,7 @@ extension ScreenRegistry {
         register(ScreenKey.homeRoot, data: HomeRootData.self) { data in
             HomeRootScreen(data: data)
         }
-        register(ScreenKey.communityHome, data: CommunityHomeData.self) { data in
+        register(ScreenKey.communityHome, data: CommunityHomeData.self, isUsable: { CommunityHomeState($0) != nil }) { data in
             CommunityHomeScreen(data: data)
         }
         register(ScreenKey.communityGroup, data: CommunityGroupData.self) { data in

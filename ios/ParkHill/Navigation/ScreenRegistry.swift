@@ -16,15 +16,19 @@ struct ScreenRegistry {
     }
 
     /// Registers `key`. The screen's data is decoded into `Data` when an
-    /// envelope with that key is resolved.
+    /// envelope with that key is resolved. Data that decodes but that the
+    /// screen cannot show (`isUsable` false) does not resolve, like data that
+    /// does not decode.
     mutating func register<Data: Decodable, Screen: View>(
         _ key: String,
         data: Data.Type,
+        isUsable: @escaping (Data) -> Bool = { _ in true },
         screen: @escaping (Data) -> Screen
     ) {
         precondition(factories[key] == nil, "Screen \(key) registered twice")
         factories[key] = { json in
             let decoded = try JSONDecoder().decode(Data.self, from: JSONEncoder().encode(json))
+            guard isUsable(decoded) else { throw UnusableData() }
             return AnyView(screen(decoded))
         }
     }
@@ -43,7 +47,7 @@ struct ScreenRegistry {
         do {
             return ResolvedScreen(envelope: envelope, view: tracked(try factory(envelope.data), envelope: envelope))
         } catch {
-            Logger.navigation.error("Dropped screen \(envelope.key, privacy: .public): data does not match its model")
+            Logger.navigation.error("Dropped screen \(envelope.key, privacy: .public): data does not match its model or cannot be shown")
             return nil
         }
     }
@@ -53,6 +57,8 @@ struct ScreenRegistry {
         return AnyView(view.modifier(ScreenTracking(envelope: envelope, tracker: tracker)))
     }
 }
+
+private struct UnusableData: Error {}
 
 /// A screen ready to show, with the envelope it was built from.
 struct ResolvedScreen {

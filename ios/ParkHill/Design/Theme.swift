@@ -60,8 +60,13 @@ enum Theme {
             .foregroundColor: ink,
         ]
         UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
+        // At the scroll edge the bar has no fill of its own: screens draw the
+        // surface color, and on iOS 26 a fill there covers the large title of
+        // a scrolling screen.
+        let edge = appearance.copy()
+        edge.backgroundColor = .clear
+        UINavigationBar.appearance().scrollEdgeAppearance = edge
     }
 
     private static func serif(size: CGFloat, weight: UIFont.Weight) -> UIFont {

@@ -93,7 +93,9 @@ final class ShellCoordinator {
             if let existing = tabs.first(where: { $0.id == item.id && $0.root.key == item.screen.key }) {
                 existing.update(from: item)
                 shown.append(existing)
-            } else if registry.resolve(item.screen) != nil {
+            } else if registry.isRegistered(item.screen.key) {
+                // A root whose data cannot be shown falls back in its tab,
+                // to its cached copy or the error screen.
                 shown.append(TabCoordinator(item: item, context: screens))
             } else {
                 Logger.navigation.error("Dropped tab \(item.id, privacy: .public): its screen is not registered")

@@ -117,7 +117,7 @@ struct ShellCoordinatorTests {
         let home = try #require(shell.tabs.first)
         let community = try #require(shell.tabs.last)
 
-        #expect(home.push(ScreenEnvelope(key: "community.home", data: .object([:]))))
+        #expect(home.push(ScreenEnvelope(key: "home.root", data: .object([:]))))
         shell.selectedTabID = "community"
         shell.selectedTabID = "home"
 

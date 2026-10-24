@@ -203,6 +203,22 @@ class Unions(unittest.TestCase):
         self.assertIn("both have type 'go'", str(raised.exception))
 
 
+class AliasScreens(unittest.TestCase):
+    ALIAS = {"$schema": screens.DRAFT, "title": "ScreenData", "description": "A screen.", "$ref": "../types/Item.schema.json"}
+
+    def test_an_alias_screen_is_its_type(self):
+        screens.validate_alias(self.ALIAS, "x")
+        self.assertEqual(screens.refs(self.ALIAS), {"Item"})
+        self.assertEqual(screens.problems(self.ALIAS, {"id": "a"}, "x", {"Item": TYPE}), [])
+        self.assertEqual(screens.problems(self.ALIAS, {}, "x", {"Item": TYPE}), ["x: missing required field 'id'"])
+
+    def test_an_alias_takes_only_a_ref(self):
+        with self.assertRaises(screens.ScreensError):
+            screens.validate_alias({**self.ALIAS, "type": "object"}, "x")
+        with self.assertRaises(screens.ScreensError):
+            screens.validate_alias({**self.ALIAS, "$ref": "Item.schema.json"}, "x")
+
+
 class Loading(unittest.TestCase):
     """load_all against descriptions written to a temporary contract folder."""
 

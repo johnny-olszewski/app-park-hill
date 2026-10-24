@@ -63,11 +63,11 @@ class CommittedMapping(unittest.TestCase):
         responses = screens.load_responses()
         paths = sorted(dataset.MOCK_RESPONSES_PATH.rglob("*.json"))
         examples = {p.stem for p in screens.EXAMPLES_PATH.glob("*.json")}
-        self.assertEqual(check_models.mapping_problems({p.stem for p in paths}, responses, described, types, examples), [])
+        self.assertEqual(check_models.mapping_problems({dataset.response_name(p.stem) for p in paths}, responses, described, types, examples), [])
         self.assertEqual(check_models.example_problems(types), [])
         for path in paths:
             with self.subTest(path=path.name):
-                kind = responses[path.stem]
+                kind = responses[dataset.response_name(path.stem)]
                 value = json.loads(path.read_text())
                 self.assertEqual(screens.problems(types[kind], value, path.name, types), [])
 

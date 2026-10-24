@@ -27,6 +27,21 @@ def persona_uuid(persona_id: str) -> str:
     return str(uuid.uuid5(PERSONA_NAMESPACE, persona_id))
 
 
+def mock_response_name(name: str, params: dict) -> str:
+    """A mock response's file name, without `.json`, for a call with params:
+    `get_screen.community.group@group_id=<uuid>`, params sorted by name. Clients
+    look a call up by this name first, then by the name alone."""
+    if not params:
+        return name
+    return name + "@" + "&".join(f"{k}={params[k]}" for k in sorted(params))
+
+
+def response_name(stem: str) -> str:
+    """The name responses.json maps: a mock response's file name without its
+    params or `.json`."""
+    return stem.partition("@")[0]
+
+
 def group_uuid(group_id: str) -> str:
     """Stable id for a seed group, so generated data never churns."""
     return str(uuid.uuid5(GROUP_NAMESPACE, group_id))

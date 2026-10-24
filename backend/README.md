@@ -95,7 +95,7 @@ Shared local password: `parkhill-local`.
 2. Run `make mock-responses`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/mock_responses`.
 3. Commit the dataset and the generated files together.
 
-Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, mock response folders) and fails if anything differs from what is committed.
+Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's; `<persona>/get_screen.<key>@<param>=<value>.json` is a screen with params that a `navigate` action in that persona's responses opens. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, mock response folders) and fails if anything differs from what is committed.
 
 ### Contract names
 

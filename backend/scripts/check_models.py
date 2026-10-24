@@ -84,15 +84,15 @@ def main() -> int:
 
     paths = sorted(dataset.MOCK_RESPONSES_PATH.rglob("*.json"))
     examples = {path.stem for path in screens.EXAMPLES_PATH.glob("*.json")}
-    problems += mapping_problems({path.stem for path in paths}, responses, described, types, examples)
+    problems += mapping_problems({dataset.response_name(path.stem) for path in paths}, responses, described, types, examples)
     problems += example_problems(types)
 
     checked = 0
     for path in paths:
         where = str(path.relative_to(dataset.MOCK_RESPONSES_PATH))
         value = json.loads(path.read_text())
-        if responses.get(path.stem) in types:
-            kind = responses[path.stem]
+        if responses.get(dataset.response_name(path.stem)) in types:
+            kind = responses[dataset.response_name(path.stem)]
             problems += screens.problems(types[kind], value, f"{where} {kind}", types)
         for location, envelope in envelopes(value, where):
             key = envelope["key"]

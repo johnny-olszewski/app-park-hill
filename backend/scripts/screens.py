@@ -13,12 +13,15 @@ description never says more than the generator and the check understand:
                "array" with items); $ref to a shared type; or nothing else:
                any JSON. A "string" may add enum, a list of snake_case values
   items        a property schema without description
+  alias screen $schema, title, description, $ref to a shared type: the
+               screen's data is that type
   union type   $schema, title, description, oneOf: a list of $refs to object
                types, each fixing its "type" field with a one-value enum. A
                value is the member whose "type" it carries
 
 /contract/responses.json maps each recorded response, by mock response file
-name without its persona folder or `.json`, to the type that describes it.
+name without its persona folder, `@` params or `.json`, to the type that
+describes it.
 
 A $ref names a file in /contract/types: `../types/<TypeName>.schema.json` from
 a screen, `<TypeName>.schema.json` from another type. A type's file name is its
@@ -43,6 +46,7 @@ DRAFT = "https://json-schema.org/draft/2020-12/schema"
 
 SCREEN_KEYWORDS = {"$schema", "title", "description", "type", "properties", "required", "additionalProperties"}
 UNION_KEYWORDS = {"$schema", "title", "description", "oneOf"}
+ALIAS_KEYWORDS = {"$schema", "title", "description", "$ref"}
 PROPERTY_KEYWORDS = {"description", "type", "items", "$ref", "enum"}
 SCALARS = {"string", "integer", "number", "boolean"}
 TYPE_NAME = re.compile(r"^[A-Z][A-Za-z0-9]*$")
@@ -107,6 +111,8 @@ def _load(folder: Path, ref_pattern: re.Pattern) -> dict[str, dict]:
         schema = json.loads(path.read_text())
         if ref_pattern is TYPE_REF and "oneOf" in schema:
             validate_union(schema, f"{folder.name}/{path.name}")
+        elif ref_pattern is SCREEN_REF and is_alias(schema):
+            validate_alias(schema, f"{folder.name}/{path.name}")
         else:
             validate_screen(schema, f"{folder.name}/{path.name}", ref_pattern)
         found[key_of(path)] = schema
@@ -115,6 +121,24 @@ def _load(folder: Path, ref_pattern: re.Pattern) -> dict[str, dict]:
 
 def is_union(schema: dict) -> bool:
     return "oneOf" in schema
+
+
+def is_alias(schema: dict) -> bool:
+    return "$ref" in schema and "properties" not in schema
+
+
+def validate_alias(schema: dict, where: str) -> None:
+    """A screen whose data is a shared type, for example community.group's
+    GroupDetail, which community.home embeds too."""
+    unknown = set(schema) - ALIAS_KEYWORDS
+    if unknown:
+        raise ScreensError(f"{where}: unsupported keywords {sorted(unknown)}")
+    if schema.get("$schema") != DRAFT:
+        raise ScreensError(f"{where}: $schema must be {DRAFT}")
+    if not TYPE_NAME.match(schema.get("title", "")):
+        raise ScreensError(f"{where}: title must be the model's type name, for example CommunityGroupData")
+    if not isinstance(schema["$ref"], str) or not SCREEN_REF.match(schema["$ref"]):
+        raise ScreensError(f"{where}: $ref must be ../types/<TypeName>.schema.json")
 
 
 def validate_union(schema: dict, where: str) -> None:
@@ -168,6 +192,8 @@ def refs(schema: dict) -> set[str]:
     and every member of a union."""
     if is_union(schema):
         return {ref_name(member["$ref"]) for member in schema["oneOf"]}
+    if is_alias(schema):
+        return {ref_name(schema["$ref"])}
     found = set()
     for field in schema["properties"].values():
         while field.get("type") == "array":

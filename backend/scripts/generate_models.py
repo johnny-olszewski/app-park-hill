@@ -136,6 +136,9 @@ def kotlin_union(source: str, schema: dict, types: dict) -> str:
 def swift(source: str, schema: dict, types: dict | None = None) -> str:
     if screens.is_union(schema):
         return swift_union(source, schema, types or {})
+    if screens.is_alias(schema):
+        target = screens.ref_name(schema["$ref"])
+        return header(source) + f"\n/// {schema['description']}\ntypealias {schema['title']} = {target}\n"
     title, properties = schema["title"], schema["properties"]
     out = header(source) + f"\n/// {schema['description']}\n"
     if not properties:
@@ -159,6 +162,9 @@ def kotlin(source: str, schema: dict, unions: dict | None = None, described_type
     """`unions` maps a type name to the unions it is a member of."""
     if screens.is_union(schema):
         return kotlin_union(source, schema, described_types or {})
+    if screens.is_alias(schema):
+        target = screens.ref_name(schema["$ref"])
+        return header(source) + f"\npackage app.parkhill.contract\n\n/** {schema['description']} */\ntypealias {schema['title']} = {target}\n"
     title, properties = schema["title"], schema["properties"]
     types = [field_type(f, KOTLIN_TYPES, "List<{}>", enum_name(title, n)) for n, f in properties.items()]
     imports = ["kotlinx.serialization.Serializable"]

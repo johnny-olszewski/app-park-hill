@@ -14,6 +14,9 @@ description never says more than the generator and the check understand:
                any JSON
   items        a property schema without description
 
+/contract/responses.json maps each recorded response, by mock response file
+name without its persona folder or `.json`, to the type that describes it.
+
 A $ref names a file in /contract/types: `../types/<TypeName>.schema.json` from
 a screen, `<TypeName>.schema.json` from another type. A type's file name is its
 title.
@@ -30,6 +33,7 @@ from dataset import REPO
 
 SCREENS_PATH = REPO / "contract" / "screens"
 TYPES_PATH = REPO / "contract" / "types"
+RESPONSES_PATH = REPO / "contract" / "responses.json"
 SUFFIX = ".schema.json"
 DRAFT = "https://json-schema.org/draft/2020-12/schema"
 
@@ -78,6 +82,14 @@ def load_all() -> tuple[dict[str, dict], dict[str, dict]]:
                 if name not in types:
                     raise ScreensError(f"{folder}/{key}{SUFFIX}: $ref to {name}, which has no file in contract/types")
     return screens, types
+
+
+def load_responses() -> dict[str, str]:
+    """Recorded response name to type name, from responses.json."""
+    responses = json.loads(RESPONSES_PATH.read_text())
+    if not isinstance(responses, dict) or not all(isinstance(v, str) and TYPE_NAME.match(v) for v in responses.values()):
+        raise ScreensError("responses.json: an object mapping each recorded response to a type name")
+    return responses
 
 
 def _load(folder: Path, ref_pattern: re.Pattern) -> dict[str, dict]:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- No INTERNET here: the mock variant makes no network connections. The dev
+<!-- No INTERNET here: the mock variant makes no network connections. The local
      source set adds it (guide 5.2). -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 

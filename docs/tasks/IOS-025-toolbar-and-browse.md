@@ -21,7 +21,7 @@ Staff open every group from a toolbar button on Community home. This task render
 - `navigate` with `full_screen_cover`: a `fullScreenCover` with its own stack, a client-drawn close button (platform icon and accessibility label), fetched fresh with a loading state each time it opens.
 - `community.browse`: the group list view from IOS-010 with a search field filtering loaded rows by title as you type; search resets on close; pull to refresh; rows push `community.group` inside the cover.
 - Bundled placeholder icon for `toolbar.browse`.
-- Mock UI tests for `staff` and `member_one`; Dev UI test for `staff` in `make test-dev`.
+- Mock UI tests for `staff` and `member_one`; Local UI test for `staff` in `make test-local`.
 
 ## Out of scope
 
@@ -36,7 +36,7 @@ Staff open every group from a toolbar button on Community home. This task render
 | AC3 | The cover slides up from the bottom when opened and down when closed, on both platforms, and has a close button with the platform's icon and accessibility label | Same presentation behavior on both platforms (guide 5.5 rule 5) |
 | AC4 | Browse shows a loading state, then every group with its badges; typing filters by title; closing and reopening clears the search and refetches | Fast local search for staff, always fresh |
 | AC5 | Tapping a browse row pushes its group detail inside the cover; back returns to browse | Staff can open any group |
-| AC6 | Mock UI tests cover AC2, AC4 and AC5; a Dev UI test covers AC4 for `staff` against local Supabase | Verified per persona |
+| AC6 | Mock UI tests cover AC2, AC4 and AC5; a Local UI test covers AC4 for `staff` against local Supabase | Verified per persona |
 
 ## Technical notes
 
@@ -49,7 +49,7 @@ Staff open every group from a toolbar button on Community home. This task render
 cd ios
 make project
 xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
-make test-dev
+make test-local
 ```
 
 ## Definition of done

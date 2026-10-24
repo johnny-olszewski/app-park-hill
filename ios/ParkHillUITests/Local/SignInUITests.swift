@@ -1,6 +1,6 @@
 import XCTest
 
-/// Dev build against local Supabase (IOS-006 AC10). Start it first:
+/// Local build against local Supabase (IOS-006 AC10). Start it first:
 /// `cd backend && supabase start && supabase db reset`.
 final class SignInUITests: XCTestCase {
     private var app: XCUIApplication!

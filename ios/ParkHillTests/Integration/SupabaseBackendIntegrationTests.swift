@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import ParkHill
 
-/// Dev only: calls the configured backend (local Supabase by default). Start it
+/// Local only: calls the configured backend (local Supabase by default). Start it
 /// first: `cd backend && supabase start && supabase db reset`.
 struct SupabaseBackendIntegrationTests {
     private let service = SupabaseBackendService(environment: ServiceBinding.environment)

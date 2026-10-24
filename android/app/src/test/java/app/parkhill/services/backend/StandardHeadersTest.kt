@@ -7,10 +7,10 @@ import org.junit.Test
 class StandardHeadersTest {
     @Test
     fun labelsTheConfigPlatformVersionAndLanguage() {
-        val headers = StandardHeaders.make(AppEnvironment("Dev", null), versionName = "0.1.0", versionCode = 7, language = "es")
+        val headers = StandardHeaders.make(AppEnvironment("Local", null), versionName = "0.1.0", versionCode = 7, language = "es")
         assertEquals(
             mapOf(
-                "X-App-Config" to "dev",
+                "X-App-Config" to "local",
                 "X-App-Platform" to "android",
                 "X-App-Version" to "0.1.0 (7)",
                 "Accept-Language" to "es",

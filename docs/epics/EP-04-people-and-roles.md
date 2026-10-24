@@ -36,7 +36,7 @@ Every person has one detail screen that is their profile and how others see them
 ## Exit criteria
 
 1. All EP-04 tasks are Done.
-2. A demo script passes on both platforms for every persona, in Mock and Dev.
+2. A demo script passes on both platforms for every persona, in Mock and Local.
 3. Visibility is tested for every field and viewer type.
 4. The temporary sign-out location from EP-02 is gone.
 

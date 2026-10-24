@@ -9,7 +9,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/** Dev against the configured backend (local Supabase by default): start it first, see README. */
+/** Local against the configured backend (local Supabase by default): start it first, see README. */
 @RunWith(AndroidJUnit4::class)
 class SupabaseBackendIntegrationTest {
     @Test

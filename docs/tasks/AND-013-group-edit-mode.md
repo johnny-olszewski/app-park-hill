@@ -21,7 +21,7 @@ Leaders update their group in one pass, and staff change who leads it. This task
 - Staging in edit mode, each control only where its capability is sent: a minus button on rows with `remove`; the leader icon as a toggle on rows with `toggle_leader` (filled for leaders, greyed for others); Add member from `add_member`, opening the picker (AND-012), whose people appear as pending rows; `edit_fields` as inline fields by `kind` (text, multiline, day picker, time picker).
 - Done sends one `save` call with the staged batch (`specs/COMMUNITY.md` 5.4); Cancel discards every staged change.
 - A failed save keeps edit mode open with each `field_errors` message under its field and each `row_errors` message on its row.
-- Dev UI tests in `make test-dev`: `leader` edits details, adds and removes members, and the changes persist after relaunch; `staff` makes someone a leader.
+- Local UI tests in `make test-local`: `leader` edits details, adds and removes members, and the changes persist after relaunch; `staff` makes someone a leader.
 
 ## Out of scope
 
@@ -35,7 +35,7 @@ Leaders update their group in one pass, and staff change who leads it. This task
 | AC2 | Nothing staged inside edit mode asks for confirmation | Done is the single commit point |
 | AC3 | Done sends exactly the staged changes in one save and leaves edit mode on `ok`; Cancel restores the screen as it was before Edit | All or nothing from the user's side too |
 | AC4 | A failed save keeps edit mode open and shows every error at its field or row, with the staged changes kept | Problems are fixable in place |
-| AC5 | Unit tests cover staging, the batch sent and Cancel; Mock UI tests cover `leader` and `staff`; Dev UI tests cover the flows in Scope against local Supabase | Verified per persona and end to end |
+| AC5 | Unit tests cover staging, the batch sent and Cancel; Mock UI tests cover `leader` and `staff`; Local UI tests cover the flows in Scope against local Supabase | Verified per persona and end to end |
 
 ## Technical notes
 
@@ -46,9 +46,9 @@ Leaders update their group in one pass, and staff change who leads it. This task
 
 ```
 cd android
-./gradlew testMockDebugUnitTest testDevDebugUnitTest connectedMockDebugAndroidTest
-make test-dev
-./gradlew assembleDevRelease && scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk
+./gradlew testMockDebugUnitTest testLocalDebugUnitTest connectedMockDebugAndroidTest
+make test-local
+./gradlew assembleLocalRelease && scripts/check_release_apk.sh app/build/outputs/apk/local/release/app-local-release-unsigned.apk
 ```
 
 ## Definition of done

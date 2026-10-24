@@ -56,7 +56,8 @@ final class AppCoordinator {
     /// Launch: restore the session (specs/AUTH.md 4.1), then follow the auth
     /// state for the rest of the app's life.
     func start() async {
-        switch await auth.restoreSession() {
+        let restored = await auth.restoreSession()
+        switch restored {
         case .signedIn(let user):
             signedInUser = user
             let shell = makeShell()
@@ -73,7 +74,7 @@ final class AppCoordinator {
             }
             await loadEntry()
         }
-        observeAuth()
+        observeAuth(skipping: restored)
     }
 
     /// Error screen retry.
@@ -142,11 +143,17 @@ final class AppCoordinator {
         return shell
     }
 
-    private func observeAuth() {
+    /// The stream starts with the current state. When that is the state
+    /// `start()` already handled, it is skipped: handling it again later could
+    /// land after a newer change and undo it.
+    private func observeAuth(skipping handled: AuthState) {
         authObservation?.cancel()
         let changes = auth.stateChanges()
         authObservation = Task { [weak self] in
+            var isFirst = true
             for await change in changes {
+                defer { isFirst = false }
+                if isFirst && change == handled { continue }
                 await self?.handle(change)
             }
         }

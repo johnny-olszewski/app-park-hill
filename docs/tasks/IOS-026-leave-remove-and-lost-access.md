@@ -20,7 +20,7 @@ Members leave a group and leaders remove someone with one tap and a confirmation
 - `call` actions: show the backend `confirm` (an alert, destructive styling when `role` is `destructive`), call `function` with `params`, then apply `on_success`: `refresh` the screen, `dismiss`, or `none`. A refusal shows the backend message the same way as the lost-access message.
 - Lost-access rule on every screen (guide 5.3 rule 9): `dismiss` on a pushed screen closes it and refreshes the screen below; on a tab root it refreshes in place. A refresh refused with `screen_unavailable` closes the screen, refreshes the one below and shows the backend message (an alert with one button).
 - Group detail: swipe to remove on rows with `remove`, labelled with its `label`; a Leave footer button from `leave`.
-- Mock UI tests for `leader` and `member_one`; Dev UI tests in `make test-dev`: `member_one` leaves, a leader removes a member, and a stale remove is refused.
+- Mock UI tests for `leader` and `member_one`; Local UI tests in `make test-local`: `member_one` leaves, a leader removes a member, and a stale remove is refused.
 
 ## Out of scope
 
@@ -35,7 +35,7 @@ Members leave a group and leaders remove someone with one tap and a confirmation
 | AC3 | Leave appears only when sent; confirming on a pushed group closes it and refreshes the screen below; on Community home it refreshes home to its new state | Leaving always lands somewhere valid |
 | AC4 | A refresh refused with `screen_unavailable` closes the screen, refreshes the one below and shows the backend message | People never stay on something they lost access to |
 | AC5 | A call refused with `action_refused` shows its message and refreshes the screen | Stale buttons can never do what the user may not |
-| AC6 | Unit tests cover AC1, AC3 and AC4 with mock responses; Mock UI tests cover AC2 and AC3; Dev UI tests in `make test-dev` cover leaving, removing and AC5 against local Supabase | Verified per persona and end to end |
+| AC6 | Unit tests cover AC1, AC3 and AC4 with mock responses; Mock UI tests cover AC2 and AC3; Local UI tests in `make test-local` cover leaving, removing and AC5 against local Supabase | Verified per persona and end to end |
 
 ## Technical notes
 
@@ -49,7 +49,7 @@ Members leave a group and leaders remove someone with one tap and a confirmation
 cd ios
 make project
 xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
-make test-dev
+make test-local
 ```
 
 ## Definition of done

@@ -5,7 +5,7 @@ package app.parkhill.environment
  * exactly one value (guide 5.2); app code never checks which.
  */
 data class AppEnvironment(
-    /** Flavor name, for example "Mock" or "Dev". */
+    /** Flavor name, for example "Mock" or "Local". */
     val name: String,
     /** The backend this build talks to, or null when it has none. */
     val backend: BackendTarget?,

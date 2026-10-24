@@ -38,13 +38,13 @@ The Community tab gives each person exactly their own community groups, lets lea
 ## Exit criteria
 
 1. All EP-03 tasks are Done.
-2. A demo script passes on both platforms for every persona, in Mock and Dev.
+2. A demo script passes on both platforms for every persona, in Mock and Local.
 3. Every permission matrix row has an allowed and a refused backend test.
 4. `specs/COMMUNITY.md` and `specs/ROLES.md` match what was built.
 
 ## Slices
 
-Implemented in this order (guide 7.2). Each slice is one behavior on every platform and brings its own per-persona Mock and Dev UI tests. Seeing your own groups comes first because every later slice acts on those screens; browsing adds the toolbar and full-screen cover; leaving and removing add `call` actions and the lost-access rule, which editing and create and delete then reuse. Planned 2026-10-23, after EP-05 made screen data descriptions the source of client models.
+Implemented in this order (guide 7.2). Each slice is one behavior on every platform and brings its own per-persona Mock and Local UI tests. Seeing your own groups comes first because every later slice acts on those screens; browsing adds the toolbar and full-screen cover; leaving and removing add `call` actions and the lost-access rule, which editing and create and delete then reuse. Planned 2026-10-23, after EP-05 made screen data descriptions the source of client models.
 
 - [EP-03.A: Each person's Community tab shows their own groups](../slices/EP-03.A-each-persons-community-tab-shows-their-own-groups.md)
 - [EP-03.B: Staff browse all groups](../slices/EP-03.B-staff-browse-all-groups.md)

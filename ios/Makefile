@@ -1,6 +1,6 @@
 XCODEGEN_VERSION := 2.46.0
 
-.PHONY: project check-xcodegen test-dev
+.PHONY: project check-xcodegen test-local
 
 ## Generate ParkHill.xcodeproj from project.yml
 project: check-xcodegen
@@ -14,9 +14,9 @@ check-xcodegen:
 		exit 1; \
 	fi
 
-## Run the Dev tests (unit, integration, UI) against freshly reset local
+## Run the Local tests (unit, integration, UI) against freshly reset local
 ## Supabase. CI runs Mock only, so run this before merging changes to an app,
 ## /backend or /contract.
-test-dev: project
+test-local: project
 	cd ../backend && supabase start && supabase db reset
-	xcodebuild -scheme ParkHill-Dev -destination "id=$$(scripts/simulator.sh)" test
+	xcodebuild -scheme ParkHill-Local -destination "id=$$(scripts/simulator.sh)" test

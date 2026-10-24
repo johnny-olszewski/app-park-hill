@@ -46,9 +46,9 @@ Edit mode adds people by picking them from everyone signed up. This task opens `
 
 ```
 cd android
-./gradlew testMockDebugUnitTest testDevDebugUnitTest connectedMockDebugAndroidTest
-make test-dev
-./gradlew assembleDevRelease && scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk
+./gradlew testMockDebugUnitTest testLocalDebugUnitTest connectedMockDebugAndroidTest
+make test-local
+./gradlew assembleLocalRelease && scripts/check_release_apk.sh app/build/outputs/apk/local/release/app-local-release-unsigned.apk
 ```
 
 ## Definition of done

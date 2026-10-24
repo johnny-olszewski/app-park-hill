@@ -1,6 +1,6 @@
 # Android
 
-Kotlin and Jetpack Compose app, min SDK 26, with `mock` and `dev` product flavors in one `environment` dimension.
+Kotlin and Jetpack Compose app, min SDK 26, with `mock` and `local` product flavors in one `environment` dimension.
 
 ## Requirements
 
@@ -13,10 +13,10 @@ Kotlin and Jetpack Compose app, min SDK 26, with `mock` and `dev` product flavor
 
 ```
 cd android
-./gradlew assembleMockDebug assembleDevDebug
+./gradlew assembleMockDebug assembleLocalDebug
 ```
 
-Both variants install side by side: `app.parkhill.placeholder.mock` ("Park Hill Mock") and `app.parkhill.placeholder.dev` ("Park Hill Dev").
+Both variants install side by side: `app.parkhill.placeholder.mock` ("Park Hill Mock") and `app.parkhill.placeholder.local` ("Park Hill Local").
 
 ## Environments
 
@@ -25,15 +25,15 @@ Selection happens at build time (guide 5.2). App code never checks which flavor 
 | Variant | Source set | Backend | Ships |
 |---|---|---|---|
 | `mockDebug` | `src/mock` | None. No `INTERNET` permission; services read mock responses | Never; `mockRelease` is disabled |
-| `devDebug`, `devRelease` | `src/dev` | Local Supabase at `http://10.0.2.2:54321` (the host, from the emulator) by default | `devRelease` is the release build |
+| `localDebug`, `localRelease` | `src/local` | Local Supabase at `http://10.0.2.2:54321` (the host, from the emulator) by default | `localRelease` is the release build |
 
-At launch every build logs its environment and backend, for example `Environment Dev, backend http://10.0.2.2:54321` (tag `ParkHill`). The value is `ServiceBinding.environment.backendLabel`.
+At launch every build logs its environment and backend, for example `Environment Local, backend http://10.0.2.2:54321` (tag `ParkHill`). The value is `ServiceBinding.environment.backendLabel`.
 
-**Cleartext** traffic is allowed only to local Supabase, by `src/dev/res/xml/network_security_config.xml`. Shipping environments use TLS.
+**Cleartext** traffic is allowed only to local Supabase, by `src/local/res/xml/network_security_config.xml`. Shipping environments use TLS.
 
-### Pointing Dev at another backend
+### Pointing Local at another backend
 
-Create `android/dev.local.properties` (gitignored). When present it replaces the defaults at build time:
+Create `android/local.override.properties` (gitignored). When present it replaces the defaults at build time:
 
 ```
 backendUrl=https://your-project.supabase.co
@@ -47,12 +47,12 @@ Delete it to return to local Supabase. Never commit hosted keys.
 For example QA, reusing the Supabase services with different values:
 
 1. In `app/build.gradle.kts`, add a `qa` flavor in the `environment` dimension with `applicationIdSuffix = ".qa"`, its `app_name`, and its `BACKEND_URL` and `BACKEND_ANON_KEY` build config fields (hosted values from CI secrets, never committed).
-2. Add `app/src/qa/java/app/parkhill/environment/ServiceBinding.kt` declaring the environment, like the dev one.
+2. Add `app/src/qa/java/app/parkhill/environment/ServiceBinding.kt` declaring the environment, like the local one.
 3. Give it no cleartext exception.
 
 ### Application ID
 
-The root `app.parkhill.placeholder` is defined once, as `appIdRoot` in `gradle.properties`; flavors append `.mock` and `.dev`. **Replace it before the first store upload** (guide decision log). The Kotlin namespace is `app.parkhill` and does not change with it.
+The root `app.parkhill.placeholder` is defined once, as `appIdRoot` in `gradle.properties`; flavors append `.mock` and `.local`. **Replace it before the first store upload** (guide decision log). The Kotlin namespace is `app.parkhill` and does not change with it.
 
 ## Services
 
@@ -60,7 +60,7 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 
 | Type | Flavor | Behavior |
 |---|---|---|
-| `SupabaseBackendService` | dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
+| `SupabaseBackendService` | local | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
 | `MockBackendService` | mock | Reads the mock responses bundled as mock assets straight from `/contract/mock_responses`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
@@ -75,7 +75,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 
 | Type | Flavor | Behavior |
 |---|---|---|
-| `SupabaseAuthService` | dev | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
+| `SupabaseAuthService` | local | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
 | `MockAuthService` | mock | Any credentials give the result armed in its `MockSignInScenario` (Mock sign-in, below); `signIn(persona)` sets the persona `MockBackendService` reads mock responses for. No network; not persisted |
 
 - **Session storage:** `EncryptedSessionManager` stores the session in `filesDir/Session/`, encrypted with an AES-GCM key held in the Android Keystore. Never plain `SharedPreferences`.
@@ -125,7 +125,7 @@ Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables f
 
 ## Dev tools
 
-Debug builds (`mockDebug`, `devDebug`) show a pill with the environment name (`MOCK`, `DEV`) centered below the status bar on every screen. Long-press it to open the menu, a bottom sheet with:
+Debug builds (`mockDebug`, `localDebug`) show a pill with the environment name (`MOCK`, `LOCAL`) centered below the status bar on every screen. Long-press it to open the menu, a bottom sheet with:
 
 1. Armed warnings, when a tool has armed something other than the normal result. The pill then shows an alert icon.
 2. The current screen's tools, if any registered for its key.
@@ -135,7 +135,7 @@ Debug builds (`mockDebug`, `devDebug`) show a pill with the environment name (`M
 |---|---|
 | `src/debug/.../devtools` | `DevTools` (`typealias AppDevTools`), the overlay, pill and menu, `CurrentScreenTracker`, `DevToolRegistry` and `AppTools` |
 | `src/release/.../devtools` | `NoDevTools`: no tracker, nothing drawn. Release builds compile no other dev tools class (`scripts/check_release_apk.sh`) |
-| `src/mockDebug`, `src/devDebug` | `registerEnvironmentTools`: each environment's own tools |
+| `src/mockDebug`, `src/localDebug` | `registerEnvironmentTools`: each environment's own tools |
 
 `ParkHillApplication` creates `AppDevTools` and installs it: activity lifecycle callbacks add the overlay to each activity's window, above its content. Only the pill takes touches. Dialogs and bottom sheets are separate windows and cover the pill while open (guide decision log). `ScreenRegistry` reports every resolved screen to the `ScreenTracker` it is given; the newest one showing is the current screen.
 
@@ -164,7 +164,7 @@ Any email and password then give the armed result. While a result other than Suc
 ## Tests
 
 ```
-./gradlew testMockDebugUnitTest testDevDebugUnitTest
+./gradlew testMockDebugUnitTest testLocalDebugUnitTest
 ```
 
 | Source set | Runs in | Needs |
@@ -174,15 +174,15 @@ Any email and password then give the armed result. While a result other than Suc
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
 | `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu |
-| `src/androidTestDev` | dev, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedDevDebugAndroidTest` |
+| `src/androidTestLocal` | local, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedLocalDebugAndroidTest` |
 
-Client CI runs Mock only (guide 6), so run the dev tests locally before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
+Client CI runs Mock only (guide 6), so run the local tests on your machine before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
 
 ```
-make test-dev
+make test-local
 ```
 
-It starts and resets local Supabase (Docker must be running), then runs `connectedDevDebugAndroidTest`: the integration tests and the dev UI tests (sign in, wrong password message, sign out, still signed in after relaunch).
+It starts and resets local Supabase (Docker must be running), then runs `connectedLocalDebugAndroidTest`: the integration tests and the local UI tests (sign in, wrong password message, sign out, still signed in after relaunch).
 
 ### CI
 
@@ -191,6 +191,6 @@ It starts and resets local Supabase (Docker must be running), then runs `connect
 | Step | Script or command |
 |---|---|
 | No build-variant branching | `scripts/check_sources.sh`: no `BuildConfig.FLAVOR`, `DEBUG` or `BUILD_TYPE` in `src/main` (also run by the pre-push hook) |
-| Unit tests | `./gradlew testMockDebugUnitTest testDevDebugUnitTest` |
+| Unit tests | `./gradlew testMockDebugUnitTest testLocalDebugUnitTest` |
 | Mock UI tests | A second job runs `connectedMockDebugAndroidTest` on an API 34 emulator |
-| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no dev tools class except `NoDevTools`, no mock responses in assets |
+| No mock code in the release build | Builds `localRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no dev tools class except `NoDevTools`, no mock responses in assets |

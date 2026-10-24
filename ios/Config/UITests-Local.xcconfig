@@ -1,4 +1,4 @@
-// Dev UI tests: against the configured backend (local Supabase by default),
+// Local UI tests: against the configured backend (local Supabase by default),
 // run locally. Mock UI tests are excluded.
 
 #include "UITests.xcconfig"

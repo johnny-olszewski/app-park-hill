@@ -1,6 +1,6 @@
 #!/bin/sh
 # Prints the UDID of an available iPhone simulator on the newest iOS runtime,
-# for xcodebuild -destination "id=...". Used by CI and make test-dev.
+# for xcodebuild -destination "id=...". Used by CI and make test-local.
 xcrun simctl list devices available --json | python3 -c '
 import json, sys
 devices = json.load(sys.stdin)["devices"]

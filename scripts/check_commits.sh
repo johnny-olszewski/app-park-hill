@@ -9,7 +9,7 @@
 #
 # Uses one temporary worktree, so build caches stay warm between commits.
 # Gitignored per-developer files the builds need (Android local.properties,
-# dev overrides) are copied in; the iOS project is regenerated per commit
+# backend overrides) are copied in; the iOS project is regenerated per commit
 # when the command builds iOS (run `make project` in the command).
 
 set -e
@@ -23,7 +23,7 @@ work=$(mktemp -d)/worktree
 git worktree add --quiet --detach "$work" "$base"
 trap 'git -C "$root" worktree remove --force "$work"' EXIT
 
-local_files="android/local.properties android/dev.local.properties ios/Config/Dev.local.xcconfig"
+local_files="android/local.properties android/local.override.properties ios/Config/Local.override.xcconfig"
 
 for commit in $commits; do
     git -C "$work" checkout --quiet "$commit"

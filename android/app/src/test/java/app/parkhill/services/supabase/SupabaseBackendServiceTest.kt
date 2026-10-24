@@ -27,7 +27,7 @@ class SupabaseBackendServiceTest {
     @Before
     fun setUp() {
         server.start()
-        val environment = AppEnvironment("Dev", BackendTarget(server.url("/").toString().trimEnd('/'), "anon-key"))
+        val environment = AppEnvironment("Local", BackendTarget(server.url("/").toString().trimEnd('/'), "anon-key"))
         service = SupabaseBackendService(SupabaseClientProvider.make(environment))
     }
 
@@ -59,7 +59,7 @@ class SupabaseBackendServiceTest {
         val request = server.takeRequest()
         assertEquals("/rest/v1/rpc/get_entry", request.requestUrl?.encodedPath)
         assertEquals(JsonObject(mapOf("p_locale" to JsonPrimitive("es"))), Json.parseToJsonElement(request.body.readUtf8()))
-        assertEquals("dev", request.getHeader("X-App-Config"))
+        assertEquals("local", request.getHeader("X-App-Config"))
         assertEquals("android", request.getHeader("X-App-Platform"))
         assertEquals("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})", request.getHeader("X-App-Version"))
         assertEquals(java.util.Locale.getDefault().language.ifEmpty { "en" }, request.getHeader("Accept-Language"))

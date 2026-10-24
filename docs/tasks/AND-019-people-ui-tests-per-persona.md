@@ -17,7 +17,7 @@ Prove privacy and directory rules end to end on the real backend for each person
 
 ## Scope
 
-- UI smoke tests per persona in Dev against local Supabase.
+- UI smoke tests per persona in Local against local Supabase.
 
 ## Out of scope
 
@@ -36,19 +36,19 @@ Prove privacy and directory rules end to end on the real backend for each person
 ## Technical notes
 
 - Persona credentials from the test config.
-- Runs locally with `make test-dev`; CI runs Mock tests only (guide 6).
+- Runs locally with `make test-local`; CI runs Mock tests only (guide 6).
 
 ## Verification
 
 ```
 cd android
-./gradlew testDevDebugUnitTest connectedDevDebugAndroidTest
+./gradlew testLocalDebugUnitTest connectedLocalDebugAndroidTest
 ```
 
 ## Definition of done
 
 - [ ] All acceptance criteria pass
-- [ ] Tests added and passing locally with `make test-dev`
+- [ ] Tests added and passing locally with `make test-local`
 - [ ] No environment branching; no mock code in release builds
 - [ ] Contract changes include mock responses
 - [ ] No work outside Scope

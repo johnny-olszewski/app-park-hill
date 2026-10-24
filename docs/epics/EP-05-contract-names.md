@@ -24,7 +24,7 @@ Backend function names, screen keys and screen data models are written once, in 
 |---|---|---|
 | 1 | As a developer, I write a function name or screen key in one place | `contract/names.json` is the only hand-written source; clients use generated constants |
 | 2 | As a developer, a misspelled name fails before anyone runs the app | A typo in a client fails its build; a mismatch between the backend and the list fails `make data-check` |
-| 3 | As a developer, Mock and Dev cannot disagree on a name | Mock and Supabase services on each platform use the same generated constant for each function |
+| 3 | As a developer, Mock and Local cannot disagree on a name | Mock and Supabase services on each platform use the same generated constant for each function |
 | 4 | As a developer, I describe a screen's data once and both clients get its model | The approach is chosen and recorded, proven on `auth.sign_in`, and `make data-check` fails when a recorded response does not match its description |
 | 5 | As a developer, no response shape is written by hand in either app | Both apps decode every screen and response with the generated types; a description change that breaks a client fails its build |
 

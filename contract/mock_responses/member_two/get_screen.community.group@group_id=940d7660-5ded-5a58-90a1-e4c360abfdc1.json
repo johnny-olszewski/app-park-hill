@@ -1,0 +1,20 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Young Families",
+    "meeting": "Sundays · 4:00 PM",
+    "members": [
+      {
+        "note": "You",
+        "title": "Member Two",
+        "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+        "is_leader": true
+      }
+    ],
+    "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1",
+    "location": "Vesper Hall",
+    "description": "Parents of young children, with childcare on site.",
+    "leaders_line": "Leaders: Member Two",
+    "members_title": "Members"
+  }
+}

@@ -26,7 +26,7 @@ Every response a client decodes is described once in `/contract`, for both clien
 - `screens/<key>.schema.json` describes one backend screen's `data`.
 - `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, `Action`, `GroupRow`). The file name is the type's `title`.
 - `types/examples/<TypeName>.json` is an example value of a shared type, for types no recorded response contains yet, so clients can build views before screens exist.
-- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
+- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder, `@` params or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
 
 `make models` in `/backend` generates a Swift and a Kotlin model from each screen and type into `generated/`, named by its `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. Swift models are `Codable, Equatable, Sendable`; Kotlin models are `@Serializable`.
 
@@ -46,6 +46,7 @@ Descriptions use this subset of JSON Schema (2020-12). Anything else is refused,
 | Screen or type | `$schema`, `title` (the model's type name), `description`, `"type": "object"`, `properties`, `required`, `"additionalProperties": false` (all but `description` are required, even when empty) |
 | Field | `description`, and one of: `type` (`string`, `integer`, `number`, `boolean`, `object` alone, or `array` with `items`); `$ref` to a type; or neither, meaning any JSON. A `string` may add `enum`: distinct snake_case values, and no other value is valid |
 | Array items | As a field, without `description` |
+| Alias screen (screens only) | `$schema`, `title`, `description`, and `$ref` to a type: the screen's data is that type, for a screen another screen embeds whole (`community.group` is `GroupDetail`) |
 | Union type (types only) | `$schema`, `title`, `description`, and `oneOf`: a list of `{"$ref": "<TypeName>.schema.json"}`. Each member is an object type whose required `type` field is a `string` with a one-value `enum`, each value used once. A value of the union is the member its `type` names; any other `type` fails the check |
 
 A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a screen, `"GroupRow.schema.json"` from another type. Objects inside a description are always shared types; the subset has no inline object types.
@@ -59,6 +60,7 @@ A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a scre
 | No `type` (any JSON) | `JSONValue` (the app's) | `JsonElement` |
 | Field not in `required` | `T?` | `T? = null` |
 | `enum` | `enum <Type><Field>: String` (`NavigateActionPresentation`), a case per value | `enum class <Type><Field>`, an entry per value with `@SerialName` |
+| Alias screen | `typealias <Title> = <Type>` | `typealias <Title> = <Type>` |
 | Union type | `enum` with a case per member (named by its `type` value) and `unknown(type:)`, decoding on `type` | `sealed interface` its members implement, with `Unknown(type)`, decoded on `type` by `<Union>Serializer` |
 
 Field names are snake_case in the description and lower camel case in the models, mapped back to the JSON name. Recorded responses must match exactly, with no undescribed fields, so descriptions stay complete; the generated decoders still ignore unknown fields (contract rule 2): Swift's `Decodable` does, and Android decodes with `ContractJson`.
@@ -112,6 +114,8 @@ Shared types for Community screens, all text backend formatted and localized:
 | `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), `action` |
 | `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members` |
 | `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader` |
+| `GroupList` | `title`, `rows` (`GroupRow`s) |
+| `EmptyState` | `title`, `message`; shown with no buttons |
 
 ## Screen keys
 
@@ -121,7 +125,8 @@ Lowercase and dot separated. A key ending in `.mock` is registered only in the M
 |---|---|---|---|
 | `auth.sign_in` | `get_entry`, `get_screen` | `screens/auth.sign_in.schema.json` (`specs/AUTH.md` 5.3) | `mock responses/get_screen.auth.sign_in.json` |
 | `home.root` | `get_tabs`, `get_screen`; signed in only | `screens/home.root.schema.json`: `{}` until Home has content | `mock responses/<persona>/get_screen.home.root.json` |
-| `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: `{}` until EP-03 | `mock responses/<persona>/get_screen.community.home.json` |
+| `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: one of `group` (`GroupDetail`), `my_groups` (`GroupList`) or `empty` (`EmptyState`) | `mock responses/<persona>/get_screen.community.home.json` |
+| `community.group` | `get_screen` with `{"group_id"}`; members, leaders and holders of `groups.view_all`, else `screen_unavailable` | `screens/community.group.schema.json`: `GroupDetail` | `mock responses/<persona>/get_screen.community.group@group_id=<id>.json`, for each group a persona's responses open |
 
 A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.
 
@@ -199,12 +204,13 @@ Generated from the real backend by `make mock-responses` in `/backend`, from the
 | `mock responses/get_entry.json` | `get_entry('en')`, signed out |
 | `mock responses/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
 | `mock responses/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
+| `mock responses/<persona>/get_screen.<key>@<param>=<value>[&...].json` | `get_screen` with those params, params sorted by name, for every `navigate` action with params in the persona's recorded responses (and in the screens those open) |
 | `mock responses/<persona>/whoami.json` | `whoami()` signed in as an active persona |
 | `mock responses/<persona>/get_tabs.json` | `get_tabs('en')` signed in as an active persona |
 | `mock responses/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
 | `mock responses/sign_in.error.json` | `sign_in` with a wrong password |
 
-A screen a caller may not see has no file for that caller. Client mocks prefer the current persona's file and fall back to the signed-out one.
+A screen a caller may not see has no file for that caller. Client mocks look a call up by its name with params first, then by its name alone, and prefer the current persona's file to the signed-out one.
 
 ## Personas
 

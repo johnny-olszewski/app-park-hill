@@ -1,4 +1,9 @@
 {
   "key": "community.home",
-  "data": {}
+  "data": {
+    "empty": {
+      "title": "You're not in a community group yet.",
+      "message": "Community Groups gather through the week to study the Bible, talk and live life together. A staff member can add you to one."
+    }
+  }
 }

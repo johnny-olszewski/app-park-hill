@@ -2,8 +2,16 @@
 
 package app.parkhill.contract
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** `community.home` data: empty until EP-03 adds groups. */
+/** `community.home` data: exactly one of group, my_groups or empty; clients show the first present, in that order (specs/COMMUNITY.md 4.1). */
 @Serializable
-class CommunityHomeData
+data class CommunityHomeData(
+    /** The caller's one group. */
+    val group: GroupDetail? = null,
+    /** The caller's groups, when they are in two or more. */
+    @SerialName("my_groups") val myGroups: GroupList? = null,
+    /** When the caller is in no group. */
+    val empty: EmptyState? = null,
+)

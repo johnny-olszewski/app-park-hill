@@ -20,4 +20,5 @@ object ScreenKey {
     const val authSignIn = "auth.sign_in"
     const val homeRoot = "home.root"
     const val communityHome = "community.home"
+    const val communityGroup = "community.group"
 }

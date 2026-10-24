@@ -179,7 +179,7 @@ Rules:
 
 - Backend: pgTAP per function; Edge Function tests.
 - Clients: unit tests for decoding (against mock responses), services, coordinators and view models. UI tests for flows.
-- **Client CI runs Mock only.** iOS and Android CI never start Supabase. Tests against local Supabase (Dev integration and UI tests) run locally with `make test-dev`, required before merging changes to an app, `/backend` or `/contract`.
+- **Client CI runs Mock only.** iOS and Android CI never start Supabase. They compile the Dev tests, so a slip in them fails the PR that made it, but tests against local Supabase (Dev integration and UI tests) run locally with `make test-dev`, required before merging changes to an app, `/backend` or `/contract`.
 - **Backend CI** runs against local Supabase on Linux and owns correctness of logic and permissions.
 - **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make mock-responses` generates the per-persona mock responses from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
 - Mock responses are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.

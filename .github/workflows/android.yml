@@ -1,5 +1,6 @@
 # Android CI (AND-004, AND-007): mock unit and UI tests, no build-variant
-# branching, and no mock code in the release build. Mock only; Dev tests run locally (guide 6).
+# branching, and no mock code in the release build. Runs mock tests only; dev
+# instrumented tests are compiled here and run locally (guide 6).
 # Reports only; guide 7.1 rule 10 forbids merging red.
 name: Android
 
@@ -42,6 +43,10 @@ jobs:
 
       - name: Build the dev variants
         run: ./gradlew --console=plain assembleDevDebug assembleDevRelease
+
+      # Dev instrumented tests need a backend to run, but compiling them needs none.
+      - name: Build the dev instrumented tests
+        run: ./gradlew --console=plain assembleDevDebugAndroidTest
 
       - name: No mock code in the release build
         run: scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk

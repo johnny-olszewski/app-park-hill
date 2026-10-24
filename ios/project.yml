@@ -63,6 +63,9 @@ targets:
       - path: ../contract/mock_responses
         type: folder
         buildPhase: resources
+      # The type of each mock response, for the decoding tests.
+      - path: ../contract/responses.json
+        buildPhase: resources
       # Personas and the local password for integration tests.
       - path: ../contract/seed
         type: folder

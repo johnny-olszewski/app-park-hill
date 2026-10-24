@@ -22,6 +22,13 @@ enum TestMockResponses {
             .sorted()
     }
 
+    /// `contract/responses.json`: each mock response's name (its file name
+    /// without the persona folder or `.json`) to the contract type it decodes as.
+    static func responseTypes() throws -> [String: String] {
+        let url = Bundle(for: BundleToken.self).url(forResource: "responses", withExtension: "json")!
+        return try JSONDecoder().decode([String: String].self, from: Data(contentsOf: url))
+    }
+
     /// Mock responses of screen responses (`get_entry`, `get_screen`), in any persona
     /// folder. Other mock responses, such as `get_tabs.json` and `sign_in.*.json`,
     /// have their own models.

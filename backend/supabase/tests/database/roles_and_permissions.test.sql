@@ -1,7 +1,7 @@
 -- Data-driven roles, permissions and the permission check (SUP-009 AC1 to AC6, AC9).
 begin;
 
-select plan(23);
+select plan(27);
 
 -- AC1: the roles and permissions in specs/ROLES.md are migration data.
 select results_eq(
@@ -42,6 +42,20 @@ select is(
   'staff grants every group and directory permission'
 );
 
+-- Personas: admin holds staff and admin; every persona holds attendee.
+select results_eq(
+  $$ select r.key from public.user_roles ur join public.roles r on r.id = ur.role_id
+     join auth.users u on u.id = ur.user_id where u.email = 'admin@parkhill.test' order by r.key $$,
+  array['admin', 'attendee', 'staff'],
+  'the admin persona holds attendee, staff and admin'
+);
+select is_empty(
+  $$ select 1 from auth.users u where u.email like '%@parkhill.test' and not exists (
+       select 1 from public.user_roles ur join public.roles r on r.id = ur.role_id
+       where ur.user_id = u.id and r.key = 'attendee') $$,
+  'every persona holds attendee'
+);
+
 -- AC2: a new account gets attendee in the same transaction.
 insert into auth.users (id, email, raw_user_meta_data)
 values ('33333333-3333-3333-3333-333333333333', 'new.role@example.com', '{}');
@@ -70,6 +84,11 @@ select ok(
 select ok(
   not internal.has_permission('33333333-3333-3333-3333-333333333333', 'roles.assign_admin'),
   'staff lacks roles.assign_admin'
+);
+select ok(
+  internal.has_permission(
+    (select id from auth.users where email = 'admin@parkhill.test'), 'roles.assign_admin'),
+  'the admin persona holds roles.assign_admin'
 );
 select ok(
   not internal.has_permission('33333333-3333-3333-3333-333333333333', 'no.such_permission'),
@@ -103,13 +122,18 @@ select throws_ok(
 );
 
 -- AC5: the last admin cannot lose the admin role.
+select throws_ok(
+  $$ delete from public.user_roles
+     where user_id = (select id from auth.users where email = 'admin@parkhill.test')
+       and role_id = (select id from public.roles where key = 'admin') $$,
+  'P0001', 'last_admin',
+  'removing admin from the last admin is refused'
+);
 insert into public.user_roles (user_id, role_id)
 select '33333333-3333-3333-3333-333333333333', id from public.roles where key = 'admin';
-insert into public.user_roles (user_id, role_id)
-select id, (select id from public.roles where key = 'admin') from auth.users where email = 'attendee@parkhill.test';
 select lives_ok(
   $$ delete from public.user_roles
-     where user_id = (select id from auth.users where email = 'attendee@parkhill.test')
+     where user_id = (select id from auth.users where email = 'admin@parkhill.test')
        and role_id = (select id from public.roles where key = 'admin') $$,
   'removing admin is allowed while another admin remains'
 );

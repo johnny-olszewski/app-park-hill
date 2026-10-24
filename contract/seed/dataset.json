@@ -12,8 +12,9 @@
       "id": "admin",
       "email": "admin@parkhill.test",
       "display_name": "Admin",
-      "description": "Will hold the admin role when roles land",
-      "state": "active"
+      "description": "Staff and admin",
+      "state": "active",
+      "roles": ["staff", "admin"]
     },
     {
       "id": "disabled",

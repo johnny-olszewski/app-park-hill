@@ -89,7 +89,7 @@ Shared local password: `parkhill-local`.
 
 ## Generated data
 
-`/contract/seed/dataset.json` is the single source of personas and seed data. Never edit `supabase/seed.sql` or anything in `/contract/mock_responses` by hand:
+`/contract/seed/dataset.json` is the single source of personas and seed data. Each persona has an `id`, `email`, `display_name`, `description`, `state` (`active` or `banned`) and optional `roles`: assigned role keys beyond attendee, which every account gets. Never edit `supabase/seed.sql` or anything in `/contract/mock_responses` by hand:
 
 1. Change `dataset.json` (or a migration, for screens and strings).
 2. Run `make mock-responses`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/mock_responses`.

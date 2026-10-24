@@ -6,7 +6,7 @@ area: backend
 epic: EP-03
 depends_on: [SUP-005]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-009: Add data-driven roles, permissions and the permission check

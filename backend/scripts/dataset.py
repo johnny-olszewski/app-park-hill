@@ -56,6 +56,9 @@ def validate(data: dict) -> None:
                 raise DatasetError(f"{pid}: {field} is required")
         if persona.get("state") not in STATES:
             raise DatasetError(f"{pid}: state must be one of {sorted(STATES)}")
+        roles = persona.get("roles", [])
+        if not isinstance(roles, list) or not all(isinstance(r, str) and PERSONA_ID.match(r) for r in roles):
+            raise DatasetError(f"{pid}: roles must be a list of role keys")
 
 
 def active_personas(data: dict) -> list[dict]:

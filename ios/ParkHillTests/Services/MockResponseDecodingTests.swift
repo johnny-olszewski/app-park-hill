@@ -9,7 +9,9 @@ struct MockResponseDecodingTests {
 
     @Test(arguments: TestMockResponses.allJSONPaths())
     func everyMockResponseDecodesWithItsTypeFromResponsesJSON(path: String) throws {
-        let name = ((path as NSString).lastPathComponent as NSString).deletingPathExtension
+        // responses.json maps names without params (`get_screen.<key>@<param>=<value>`).
+        let file = ((path as NSString).lastPathComponent as NSString).deletingPathExtension
+        let name = String(file.prefix { $0 != "@" })
         let type = try #require(try TestMockResponses.responseTypes()[name], "\(path) has no type in contract/responses.json")
         let decode = try #require(Self.decoders[type], "\(type) has no decoder in this test")
         try decode(TestMockResponses.data(path))

@@ -18,7 +18,7 @@ import org.junit.Test
 class MockResponseDecodingTest {
     private val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
 
-    /** contract/responses.json: each mock response's name (file name without folder or `.json`) to its type. */
+    /** contract/responses.json: each mock response's name (file name without folder, `@` params or `.json`) to its type. */
     private val responseTypes: Map<String, String> = ContractJson.decodeFromString(
         MapSerializer(String.serializer(), String.serializer()),
         File(checkNotNull(System.getProperty("contract.responses"))).readText(),
@@ -38,7 +38,8 @@ class MockResponseDecodingTest {
         val files = root.walkTopDown().filter { it.isFile && it.extension == "json" && it.name != "dataset.json" }.toList()
         assertTrue("no mock responses found", files.isNotEmpty())
         for (file in files) {
-            val type = checkNotNull(responseTypes[file.nameWithoutExtension]) { "${file.name} has no type in contract/responses.json" }
+            val name = file.nameWithoutExtension.substringBefore('@')
+            val type = checkNotNull(responseTypes[name]) { "${file.name} has no type in contract/responses.json" }
             val serializer = checkNotNull(serializers[type]) { "$type has no serializer in this test" }
             ContractJson.decodeFromString(serializer, file.readText())
         }

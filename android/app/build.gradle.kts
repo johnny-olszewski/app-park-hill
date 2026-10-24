@@ -66,6 +66,9 @@ android {
     testOptions {
         // android.util.Log and friends return defaults in JVM unit tests.
         unitTests.isReturnDefaultValues = true
+        // The type of each mock response, for the decoding tests.
+        val responses = file("../../contract/responses.json").absolutePath
+        unitTests.all { it.systemProperty("contract.responses", responses) }
     }
 
     sourceSets {
@@ -73,9 +76,9 @@ android {
         getByName("mock").assets.srcDirs("../../contract/mock_responses", "../../contract/seed")
         getByName("test").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")
         getByName("androidTest").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")
-        // Backend function names, screen keys and screen models, generated from
-        // contract/names.json and contract/screens. Every variant compiles every
-        // Kotlin file there; Gradle ignores the Swift files beside them.
+        // Backend function names, screen keys and response models, generated from
+        // contract/names.json, contract/screens and contract/types. Every variant
+        // compiles every Kotlin file there; Gradle ignores the Swift files beside them.
         getByName("main").java.srcDirs("../../contract/generated")
     }
 }

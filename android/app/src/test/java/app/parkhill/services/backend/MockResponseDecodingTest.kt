@@ -1,8 +1,14 @@
 package app.parkhill.services.backend
 
+import app.parkhill.contract.Profile
 import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.SignInFailure
+import app.parkhill.contract.SignInSuccess
 import app.parkhill.contract.TabsResponse
 import java.io.File
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -11,6 +17,32 @@ import org.junit.Test
 /** Android agrees with the contract: every recorded screen response decodes (guide 4.1 rule 6). */
 class MockResponseDecodingTest {
     private val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
+
+    /** contract/responses.json: each mock response's name (file name without folder or `.json`) to its type. */
+    private val responseTypes: Map<String, String> = ContractJson.decodeFromString(
+        MapSerializer(String.serializer(), String.serializer()),
+        File(checkNotNull(System.getProperty("contract.responses"))).readText(),
+    )
+
+    /** Every type contract/responses.json names, by name. */
+    private val serializers: Map<String, KSerializer<*>> = mapOf(
+        "ScreenEnvelope" to ScreenEnvelope.serializer(),
+        "TabsResponse" to TabsResponse.serializer(),
+        "Profile" to Profile.serializer(),
+        "SignInSuccess" to SignInSuccess.serializer(),
+        "SignInFailure" to SignInFailure.serializer(),
+    )
+
+    @Test
+    fun everyMockResponseDecodesWithItsTypeFromResponsesJson() {
+        val files = root.walkTopDown().filter { it.isFile && it.extension == "json" && it.name != "dataset.json" }.toList()
+        assertTrue("no mock responses found", files.isNotEmpty())
+        for (file in files) {
+            val type = checkNotNull(responseTypes[file.nameWithoutExtension]) { "${file.name} has no type in contract/responses.json" }
+            val serializer = checkNotNull(serializers[type]) { "$type has no serializer in this test" }
+            ContractJson.decodeFromString(serializer, file.readText())
+        }
+    }
 
     @Test
     fun everyScreenMockResponseDecodes() {

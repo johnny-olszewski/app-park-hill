@@ -3,8 +3,10 @@ check that makes `make data-check` fail. No Supabase stack needed."""
 
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
@@ -25,6 +27,15 @@ SCHEMA = {
         "note": {"type": "string"},
     },
     "required": ["title", "count", "ratio", "on", "labels", "anything"],
+    "additionalProperties": False,
+}
+TYPE = {
+    "$schema": screens.DRAFT,
+    "title": "Item",
+    "description": "A shared type.",
+    "type": "object",
+    "properties": {"id": {"type": "string"}},
+    "required": ["id"],
     "additionalProperties": False,
 }
 VALID = {"title": "T", "count": 1, "ratio": 0.5, "on": True, "labels": ["a"], "anything": [1, "x", {"k": None}]}
@@ -70,6 +81,19 @@ class ValueCheck(unittest.TestCase):
     def test_a_non_object_screen_is_refused(self):
         self.assertEqual(screens.problems(SCHEMA, [], "x"), ["x: expected an object"])
 
+    def test_an_object_without_properties_accepts_any_object(self):
+        anything = {"type": "object"}
+        self.assertEqual(screens.problems(anything, {"a": [1], "b": None}, "x"), [])
+        self.assertEqual(screens.problems(anything, [], "x"), ["x: expected an object"])
+
+    def test_a_ref_is_checked_against_its_type(self):
+        types = {"Item": TYPE}
+        field = {"$ref": "../types/Item.schema.json"}
+        self.assertEqual(screens.problems(field, {"id": "a"}, "x", types), [])
+        self.assertEqual(screens.problems(field, {}, "x", types), ["x: missing required field 'id'"])
+        listed = {"type": "array", "items": field}
+        self.assertEqual(screens.problems(listed, [{"id": 1}], "x", types), ["x[0].id: expected string"])
+
 
 class DescriptionSubset(unittest.TestCase):
     def assert_refused(self, schema, message):
@@ -96,6 +120,71 @@ class DescriptionSubset(unittest.TestCase):
 
     def test_arrays_need_items(self):
         self.assert_refused({**SCHEMA, "properties": {"a": {"type": "array"}}, "required": []}, "needs items")
+
+    def test_an_object_field_is_any_object_and_takes_no_properties(self):
+        screens.validate_screen({**SCHEMA, "properties": {"a": {"type": "object"}}, "required": []}, "x")
+        field = {"type": "object", "properties": {}}
+        self.assert_refused({**SCHEMA, "properties": {"a": field}, "required": []}, "unsupported keywords")
+
+    def test_refs_use_the_path_for_where_they_are(self):
+        def with_ref(ref):
+            return {**SCHEMA, "properties": {"a": {"$ref": ref, "description": "A."}}, "required": []}
+
+        screens.validate_screen(with_ref("../types/Item.schema.json"), "x")
+        screens.validate_screen(with_ref("Item.schema.json"), "x", screens.TYPE_REF)
+        self.assert_refused(with_ref("Item.schema.json"), "../types/<TypeName>.schema.json")
+        with self.assertRaises(screens.ScreensError):
+            screens.validate_screen(with_ref("../types/Item.schema.json"), "x", screens.TYPE_REF)
+        self.assert_refused(with_ref("#/$defs/Item"), "$ref must be")
+
+    def test_a_ref_stands_alone(self):
+        field = {"$ref": "../types/Item.schema.json", "type": "object"}
+        self.assert_refused({**SCHEMA, "properties": {"a": field}, "required": []}, "stands alone")
+
+    def test_refs_are_found_in_fields_and_array_items(self):
+        properties = {
+            "a": {"$ref": "../types/A.schema.json"},
+            "b": {"type": "array", "items": {"$ref": "../types/B.schema.json"}},
+            "c": {"type": "string"},
+        }
+        self.assertEqual(screens.refs({**SCHEMA, "properties": properties}), {"A", "B"})
+
+
+class Loading(unittest.TestCase):
+    """load_all against descriptions written to a temporary contract folder."""
+
+    def load(self, screen_files: dict, type_files: dict):
+        with tempfile.TemporaryDirectory() as root:
+            for folder, files in (("screens", screen_files), ("types", type_files)):
+                (Path(root) / folder).mkdir()
+                for name, schema in files.items():
+                    (Path(root) / folder / f"{name}{screens.SUFFIX}").write_text(json.dumps(schema))
+            with mock.patch.object(screens, "SCREENS_PATH", Path(root) / "screens"), \
+                    mock.patch.object(screens, "TYPES_PATH", Path(root) / "types"):
+                return screens.load_all()
+
+    def screen_using(self, ref):
+        return {**SCHEMA, "properties": {"item": {"$ref": ref}}, "required": ["item"]}
+
+    def test_screens_and_types_load_by_key_and_name(self):
+        described, types = self.load({"example": self.screen_using("../types/Item.schema.json")}, {"Item": TYPE})
+        self.assertEqual(list(described), ["example"])
+        self.assertEqual(list(types), ["Item"])
+
+    def test_a_ref_to_a_missing_type_is_named(self):
+        with self.assertRaises(screens.ScreensError) as raised:
+            self.load({"example": self.screen_using("../types/Missing.schema.json")}, {})
+        self.assertIn("screens/example.schema.json: $ref to Missing", str(raised.exception))
+
+    def test_a_type_is_titled_by_its_file_name(self):
+        with self.assertRaises(screens.ScreensError) as raised:
+            self.load({}, {"Other": TYPE})
+        self.assertIn("title must be the file name, Other", str(raised.exception))
+
+    def test_a_title_used_twice_is_named(self):
+        with self.assertRaises(screens.ScreensError) as raised:
+            self.load({"example": {**SCHEMA, "title": "Item"}}, {"Item": TYPE})
+        self.assertIn("title Item", str(raised.exception))
 
 
 class CommittedDescriptions(unittest.TestCase):

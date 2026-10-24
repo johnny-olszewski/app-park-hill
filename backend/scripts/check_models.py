@@ -31,7 +31,7 @@ def envelopes(value, where: str):
 def main() -> int:
     try:
         listed = set(names.load()["screen_keys"])
-        described = screens.load()
+        described, types = screens.load_all()
     except (names.NamesError, screens.ScreensError) as error:
         print(error)
         return 1
@@ -50,7 +50,7 @@ def main() -> int:
             if key not in described:
                 problems.append(f"{location}: screen key {key} has no description in contract/screens")
                 continue
-            problems += screens.problems(described[key], envelope["data"], f"{location} {key} data")
+            problems += screens.problems(described[key], envelope["data"], f"{location} {key} data", types)
             checked += 1
 
     for problem in problems:

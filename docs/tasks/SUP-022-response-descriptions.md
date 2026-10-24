@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-05
 depends_on: [SUP-020]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-022: Describe the non-screen responses and the screen envelope once

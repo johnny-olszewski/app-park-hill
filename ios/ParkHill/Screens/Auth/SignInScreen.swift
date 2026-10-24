@@ -1,28 +1,6 @@
 import Observation
 import SwiftUI
 
-/// `auth.sign_in` data (specs/AUTH.md 5.3). Every word on the screen.
-struct SignInScreenData: Decodable, Equatable {
-    let title: String
-    let emailLabel: String
-    let passwordLabel: String
-    let submitLabel: String
-    let cannotConnectMessage: String
-    let sessionEndedMessage: String
-    /// Not supported yet; entries are ignored (specs/AUTH.md 5.3).
-    let secondaryActions: [JSONValue]
-
-    enum CodingKeys: String, CodingKey {
-        case title
-        case emailLabel = "email_label"
-        case passwordLabel = "password_label"
-        case submitLabel = "submit_label"
-        case cannotConnectMessage = "cannot_connect_message"
-        case sessionEndedMessage = "session_ended_message"
-        case secondaryActions = "secondary_actions"
-    }
-}
-
 /// Signs in through `AuthService` and holds what the screen shows. A
 /// successful sign-in changes the auth state, which the app coordinator
 /// follows; the screen never navigates.

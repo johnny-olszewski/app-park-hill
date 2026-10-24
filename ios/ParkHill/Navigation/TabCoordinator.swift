@@ -1,5 +1,5 @@
+import Foundation
 import Observation
-import OSLog
 
 /// One tab's navigation (guide 5.1): its root screen, the screens pushed over
 /// it and the one presented as a sheet. Kept while the tab is switched away
@@ -10,34 +10,35 @@ final class TabCoordinator: Identifiable {
     let id: String
     private(set) var title: String
     private(set) var iconKey: String
-    let root: ResolvedScreen
+    let root: ScreenModel
     /// Screens pushed over the root, oldest first.
     var path: [Route] = []
     /// The screen presented as a sheet, if any.
     var presented: Route?
 
-    private let registry: ScreenRegistry
+    private let context: ScreenContext
 
-    init(item: TabItem, root: ResolvedScreen, registry: ScreenRegistry) {
+    init(item: TabItem, context: ScreenContext) {
         id = item.id
         title = item.title
         iconKey = item.iconKey
-        self.root = root
-        self.registry = registry
+        root = ScreenModel(envelope: item.screen, context: context)
+        self.context = context
     }
 
-    /// Takes a refreshed title and icon for the same tab and root screen.
+    /// Takes a refreshed title, icon and root screen for the same tab.
     func update(from item: TabItem) {
         title = item.title
         iconKey = item.iconKey
+        root.update(item.screen)
     }
 
     /// Pushes the screen for `envelope`. False, and logged by the registry,
     /// when this build cannot show it.
     @discardableResult
     func push(_ envelope: ScreenEnvelope) -> Bool {
-        guard let screen = registry.resolve(envelope) else { return false }
-        path.append(Route(screen: screen))
+        guard context.registry.resolve(envelope) != nil else { return false }
+        path.append(Route(screen: ScreenModel(envelope: envelope, context: context)))
         return true
     }
 
@@ -45,8 +46,8 @@ final class TabCoordinator: Identifiable {
     /// cannot show it.
     @discardableResult
     func present(_ envelope: ScreenEnvelope) -> Bool {
-        guard let screen = registry.resolve(envelope) else { return false }
-        presented = Route(screen: screen)
+        guard context.registry.resolve(envelope) != nil else { return false }
+        presented = Route(screen: ScreenModel(envelope: envelope, context: context))
         return true
     }
 
@@ -63,7 +64,7 @@ final class TabCoordinator: Identifiable {
 /// the same screen key can appear twice.
 struct Route: Identifiable, Hashable {
     let id = UUID()
-    let screen: ResolvedScreen
+    let screen: ScreenModel
 
     static func == (lhs: Route, rhs: Route) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }

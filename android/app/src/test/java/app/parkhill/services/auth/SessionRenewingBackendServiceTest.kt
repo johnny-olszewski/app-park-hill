@@ -1,8 +1,8 @@
 package app.parkhill.services.auth
 
+import app.parkhill.contract.Profile
 import app.parkhill.navigation.StubBackendService
 import app.parkhill.services.backend.BackendError
-import app.parkhill.services.backend.Profile
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail

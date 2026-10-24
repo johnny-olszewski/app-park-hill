@@ -1,11 +1,11 @@
 package app.parkhill.services.supabase
 
 import app.parkhill.contract.EdgeFunction
+import app.parkhill.contract.SignInFailure
+import app.parkhill.contract.SignInSuccess
 import app.parkhill.environment.BackendTarget
 import app.parkhill.services.auth.SignInError
-import app.parkhill.services.auth.SignInFailure
 import app.parkhill.services.auth.SignInRequest
-import app.parkhill.services.auth.SignInSuccess
 import app.parkhill.services.backend.ContractJson
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers

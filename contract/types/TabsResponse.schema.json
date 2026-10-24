@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TabsResponse",
+  "description": "The signed-in app's tabs (`get_tabs`, contract/README.md): in backend order, each with its root screen embedded.",
+  "type": "object",
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "items": {
+        "$ref": "TabItem.schema.json"
+      }
+    }
+  },
+  "required": [
+    "tabs"
+  ],
+  "additionalProperties": false
+}

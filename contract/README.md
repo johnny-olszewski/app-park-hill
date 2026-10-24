@@ -19,28 +19,46 @@ Text resolves per string: a string missing in the requested locale uses its `en`
 
 `names.json` is the only hand-written list of the backend function names (RPC and Edge Functions) clients call and the screen keys the backend returns. `make names` in `/backend` generates the client constants in `generated/` (`ContractNames.swift`, `ContractNames.kt`); never edit them by hand. `make data-check` fails when the list and the backend disagree, or when `generated/` differs from what `make names` produces. Mock-only keys (`.mock`) are not listed; they stay in client mock sources.
 
-## Screen data
+## Contract descriptions
 
-`screens/<key>.schema.json` describes one backend screen's `data`, once, for both clients (guide 4.1 rule 8). `make models` in `/backend` generates a Swift and a Kotlin model from each into `generated/`, named by the description's `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. `make data-check` fails when a recorded screen in `mock_responses/` (including each tab's screen in `get_tabs`) does not match its description, when a screen key in `names.json` has no description or a description has no key, and when `generated/` differs from what `make models` produces.
+Every response a client decodes is described once in `/contract`, for both clients (guide 4.1 rule 8):
+
+- `screens/<key>.schema.json` describes one backend screen's `data`.
+- `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, and later `GroupRow` or `Action`). The file name is the type's `title`.
+- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
+
+`make models` in `/backend` generates a Swift and a Kotlin model from each screen and type into `generated/`, named by its `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. Swift models are `Codable, Equatable, Sendable`; Kotlin models are `@Serializable`.
+
+`make data-check` fails when:
+
+- a recorded response does not match its type, or a recorded screen's `data` (including each tab's screen in `get_tabs`) does not match its screen's description;
+- a recorded response has no mapping in `responses.json`, a mapping names no recorded response or no type, or a type is used by no description and no mapping;
+- a screen key in `names.json` has no description, or a description has no key;
+- a `$ref` names a type with no file;
+- `generated/` differs from what `make models` produces.
 
 Descriptions use this subset of JSON Schema (2020-12). Anything else is refused, so a description never means something the generator or the check ignores:
 
 | Where | Keywords |
 |---|---|
-| Screen | `$schema`, `title` (the model's type name), `description`, `"type": "object"`, `properties`, `required`, `"additionalProperties": false` (all but `description` are required, even when empty) |
-| Field | `description`, and `type`: `string`, `integer`, `number`, `boolean`, or `array` with `items`. No `type` means any JSON |
+| Screen or type | `$schema`, `title` (the model's type name), `description`, `"type": "object"`, `properties`, `required`, `"additionalProperties": false` (all but `description` are required, even when empty) |
+| Field | `description`, and one of: `type` (`string`, `integer`, `number`, `boolean`, `object` alone, or `array` with `items`); `$ref` to a type; or neither, meaning any JSON |
 | Array items | As a field, without `description` |
+
+A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a screen, `"GroupRow.schema.json"` from another type. Objects inside a description are always shared types; the subset has no inline object types.
 
 | Description | Swift | Kotlin |
 |---|---|---|
 | `string`, `integer`, `number`, `boolean` | `String`, `Int`, `Double`, `Bool` | `String`, `Int`, `Double`, `Boolean` |
 | `array` | `[T]` | `List<T>` |
+| `$ref` | The type's name | The type's name |
+| `"type": "object"` alone (any JSON object) | `JSONValue` (the app's) | `JsonObject` |
 | No `type` (any JSON) | `JSONValue` (the app's) | `JsonElement` |
 | Field not in `required` | `T?` | `T? = null` |
 
 Field names are snake_case in the description and lower camel case in the models, mapped back to the JSON name. Recorded responses must match exactly, with no undescribed fields, so descriptions stay complete; the generated decoders still ignore unknown fields (contract rule 2): Swift's `Decodable` does, and Android decodes with `ContractJson`.
 
-Adding a screen: write its description, add its key to `names.json`, run `make models`, and commit both with the migration and the mock responses. When a screen first needs a keyword the subset lacks (for example `$ref` to a shared type such as `GroupRow` in `contract/types/`, or `enum`), the same change adds it to `backend/scripts/screens.py`, the generator and the check.
+Adding a screen: write its description, add its key to `names.json`, run `make models`, and commit both with the migration and the mock responses. Adding a response: describe its type in `types/`, map its mock response in `responses.json`, and run `make models`. When a description first needs a keyword the subset lacks (for example `enum`), the same change adds it to `backend/scripts/screens.py`, the generator and the check.
 
 ### How the approach was chosen
 

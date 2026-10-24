@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TabItem",
+  "description": "One tab: its title for the locale, a bundled icon key and its root screen.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "icon_key": {
+      "type": "string"
+    },
+    "screen": {
+      "$ref": "ScreenEnvelope.schema.json"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "icon_key",
+    "screen"
+  ],
+  "additionalProperties": false
+}

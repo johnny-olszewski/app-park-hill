@@ -1,6 +1,7 @@
 # Generated data: seed.sql and mock responses come from
 # contract/seed/dataset.json; client name constants come from
-# contract/names.json; client screen models come from contract/screens.
+# contract/names.json; client models come from contract/screens and
+# contract/types.
 # Never edit generated files by hand.
 
 PYTHON ?= python3
@@ -16,7 +17,7 @@ seed:
 names:
 	$(PYTHON) scripts/generate_names.py
 
-## Generate the client screen models in contract/generated from contract/screens
+## Generate the client models in contract/generated from contract/screens and contract/types
 models:
 	$(PYTHON) scripts/generate_models.py
 

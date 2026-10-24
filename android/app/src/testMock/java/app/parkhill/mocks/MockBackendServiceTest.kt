@@ -1,9 +1,9 @@
 package app.parkhill.mocks
 
+import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.ScreenEnvelope
-import app.parkhill.services.backend.TabsResponse
 import java.io.File
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest

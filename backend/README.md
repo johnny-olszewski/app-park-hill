@@ -29,7 +29,7 @@ Run from `/backend`.
 | Regenerate `seed.sql` from the dataset | `make seed` |
 | Reset, then regenerate mock responses from the live backend | `make mock-responses` |
 | Regenerate the client name constants from `contract/names.json` | `make names` |
-| Regenerate the client screen models from `contract/screens` | `make models` |
+| Regenerate the client models from `contract/screens` and `contract/types` | `make models` |
 | Regenerate everything and fail on any difference from git | `make data-check` |
 | Run the Edge Function tests (stack running) | `make test-functions` |
 | Run the unit tests for the data scripts (no stack needed) | `make test-scripts` |
@@ -103,11 +103,11 @@ Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root a
 
 `make data-check` also runs `scripts/check_names.py` against the reset database. It fails when a listed RPC function is not in `public` or not executable by `anon` or `authenticated`, when a listed Edge Function has no folder in `supabase/functions/`, or when the screen keys in `names.json` and the `screens` table differ in either direction.
 
-### Screen data descriptions
+### Contract descriptions
 
-`/contract/screens/<key>.schema.json` describes each backend screen's data once (`contract/README.md`, Screen data). `make models` generates the Swift and Kotlin model for each into `/contract/generated`. Adding or changing a screen's data: change its migration and its description together, run `make mock-responses` and `make models`, and commit everything.
+`/contract/screens/<key>.schema.json` describes each backend screen's data once, and `/contract/types/<TypeName>.schema.json` each shared type: the screen envelope, the other responses and their parts (`contract/README.md`, Contract descriptions). `/contract/responses.json` maps each mock response to its type. `make models` generates the Swift and Kotlin model for each screen and type into `/contract/generated`. Adding or changing a response: change its migration and its description together, map any new mock response in `responses.json`, run `make mock-responses` and `make models`, and commit everything.
 
-`make data-check` also runs `scripts/check_models.py` after regenerating the mock responses. It fails when a screen key in `names.json` has no description (or a description has no key), and when any recorded screen envelope in `/contract/mock_responses`, including each tab's `screen` in `get_tabs`, is missing a required field, has a field its description lacks, or has a value of the wrong type. It names the mock response, the field and the problem.
+`make data-check` also runs `scripts/check_models.py` after regenerating the mock responses. It fails when a screen key in `names.json` has no description (or a description has no key); when a mock response has no type in `responses.json`, a mapping names no mock response or no type, or a type is used by nothing; and when any mock response does not match its type, or any recorded screen envelope's data, including each tab's `screen` in `get_tabs`, does not match its screen's description: a missing required field, a field its description lacks, or a value of the wrong type. It names the mock response, the field and the problem.
 
 ## Rules
 

@@ -7,6 +7,23 @@ struct MockResponseDecodingTests {
         #expect(TestMockResponses.allJSONPaths().contains("get_entry.json"))
     }
 
+    @Test(arguments: TestMockResponses.allJSONPaths())
+    func everyMockResponseDecodesWithItsTypeFromResponsesJSON(path: String) throws {
+        let name = ((path as NSString).lastPathComponent as NSString).deletingPathExtension
+        let type = try #require(try TestMockResponses.responseTypes()[name], "\(path) has no type in contract/responses.json")
+        let decode = try #require(Self.decoders[type], "\(type) has no decoder in this test")
+        try decode(TestMockResponses.data(path))
+    }
+
+    /// Every type `contract/responses.json` names, by name.
+    private static let decoders: [String: @Sendable (Data) throws -> Void] = [
+        "ScreenEnvelope": { _ = try JSONDecoder().decode(ScreenEnvelope.self, from: $0) },
+        "TabsResponse": { _ = try JSONDecoder().decode(TabsResponse.self, from: $0) },
+        "Profile": { _ = try JSONDecoder().decode(Profile.self, from: $0) },
+        "SignInSuccess": { _ = try JSONDecoder().decode(SignInSuccess.self, from: $0) },
+        "SignInFailure": { _ = try JSONDecoder().decode(SignInFailure.self, from: $0) },
+    ]
+
     @Test(arguments: TestMockResponses.screenEnvelopePaths())
     func everyScreenMockResponseDecodesAsAScreenEnvelope(path: String) throws {
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data(path))

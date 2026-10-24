@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SignInFailure",
+  "description": "`sign_in` Edge Function refusal (contract/README.md, specs/AUTH.md 5.5). Clients show `message` as given.",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "code",
+    "message"
+  ],
+  "additionalProperties": false
+}

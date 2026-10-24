@@ -1,14 +1,14 @@
 package app.parkhill.mocks
 
 import android.content.Context
+import app.parkhill.contract.Profile
 import app.parkhill.contract.RpcFunction
+import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.TabsResponse
 import app.parkhill.environment.AppEnvironment
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.Profile
-import app.parkhill.services.backend.ScreenEnvelope
-import app.parkhill.services.backend.TabsResponse
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject

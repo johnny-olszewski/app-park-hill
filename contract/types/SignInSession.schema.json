@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SignInSession",
+  "description": "The session in a `sign_in` success.",
+  "type": "object",
+  "properties": {
+    "access_token": {
+      "type": "string"
+    },
+    "refresh_token": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "number"
+    },
+    "user_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_token",
+    "refresh_token",
+    "expires_at",
+    "user_id"
+  ],
+  "additionalProperties": false
+}

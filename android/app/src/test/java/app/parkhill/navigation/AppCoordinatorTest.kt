@@ -2,12 +2,12 @@ package app.parkhill.navigation
 
 import app.parkhill.cache.EntryCache
 import app.parkhill.cache.TabsCache
+import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.AuthUser
 import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.auth.SignOutReason
 import app.parkhill.services.backend.BackendError
-import app.parkhill.services.backend.ScreenEnvelope
 import java.nio.file.Files
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

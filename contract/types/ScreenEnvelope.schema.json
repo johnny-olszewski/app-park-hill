@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScreenEnvelope",
+  "description": "The one shape for any screen's content (contract/README.md). `data` stays raw JSON; the screen registry decodes it into the screen's own model.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "The screen key, mapped to a native screen by the screen registry.",
+      "type": "string"
+    },
+    "data": {
+      "description": "Everything the screen needs, described by its screen key in contract/screens.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "key",
+    "data"
+  ],
+  "additionalProperties": false
+}

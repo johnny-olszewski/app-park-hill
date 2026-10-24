@@ -6,7 +6,7 @@ area: android
 epic: EP-05
 depends_on: [SUP-022, AND-024]
 paired_with: [IOS-024]
-status: Draft
+status: Done
 ---
 
 # AND-025: Decode every backend response with the generated types in the Android app

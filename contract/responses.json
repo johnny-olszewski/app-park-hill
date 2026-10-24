@@ -1,0 +1,14 @@
+{
+  "get_entry": "ScreenEnvelope",
+  "get_screen.auth.sign_in": "ScreenEnvelope",
+  "get_screen.community.home": "ScreenEnvelope",
+  "get_screen.home.root": "ScreenEnvelope",
+  "get_tabs": "TabsResponse",
+  "sign_in.error": "SignInFailure",
+  "sign_in.error.account_disabled": "SignInFailure",
+  "sign_in.error.invalid_request": "SignInFailure",
+  "sign_in.error.too_many_attempts": "SignInFailure",
+  "sign_in.error.unknown": "SignInFailure",
+  "sign_in.ok": "SignInSuccess",
+  "whoami": "Profile"
+}

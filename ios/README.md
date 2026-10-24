@@ -28,7 +28,7 @@ Selection happens at build time (guide 5.2). App code never checks which environ
 
 Mock and Dev install side by side.
 
-**Mock** makes no network connections and needs no backend. Services read the contract fixtures; sign-in is the production screen, with the persona and result chosen in the mock menu. Use it for UI work, previews, demos and UI tests. Mock never ships, so it has no Release configuration.
+**Mock** makes no network connections and needs no backend. Services read the mock responses; sign-in is the production screen, with the persona and result chosen in the mock menu. Use it for UI work, previews, demos and UI tests. Mock never ships, so it has no Release configuration.
 
 **Dev** is the real end-to-end path. Its backend URL and anon key come from `Config/Dev.xcconfig` and default to local Supabase at `http://127.0.0.1:54321` (start it from `/backend`). No hosted project is used unless you override it.
 
@@ -50,8 +50,8 @@ BACKEND_ANON_KEY = <anon key>
 | File | Role |
 |---|---|
 | `Config/Base.xcconfig` | Shared by every configuration and target. Holds `PRODUCT_BUNDLE_IDENTIFIER_ROOT`, the only place the bundle identifier root appears |
-| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift`, `DevToolsBinding+*.swift` and `DevTools+*.swift`, everything under `Mocks/` and the contract fixtures, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DEV_TOOLS_SOURCES` (`DevToolsBinding+Enabled.swift` and `DevTools+$(APP_ENVIRONMENT).swift`) |
-| `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/fixtures` |
+| `Config/App.xcconfig` | App target settings. Excludes every `ServiceBinding+*.swift`, `DevToolsBinding+*.swift` and `DevTools+*.swift`, everything under `Mocks/` and the mock responses, then includes `ServiceBinding+$(APP_ENVIRONMENT).swift` and `DEV_TOOLS_SOURCES` (`DevToolsBinding+Enabled.swift` and `DevTools+$(APP_ENVIRONMENT).swift`) |
+| `Config/Mock.xcconfig` | `APP_ENVIRONMENT = Mock`; the one configuration that compiles `Mocks/` and bundles `/contract/mock_responses` |
 | `Config/Dev.xcconfig` | `APP_ENVIRONMENT = Dev`, backend values, optional `Dev.local.xcconfig`; `Dev-Release` sets `DEV_TOOLS_SOURCES = DevToolsBinding+Disabled.swift` and excludes `DevTools/` |
 | `Config/Dev-Info.plist` | Puts the backend values into Info.plist, plus the local HTTP exception (`NSAllowsLocalNetworking`), which exists only in Dev |
 | `ParkHill/Environment/ServiceBinding+Dev.swift` | Dev binding: `AppBackendService = SupabaseBackendService` |
@@ -78,7 +78,7 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 | Type | Configurations | Behavior |
 |---|---|---|
 | `SupabaseBackendService` | Dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the shared client from `SupabaseClientProvider`, with the standard request headers |
-| `MockBackendService` | Mock | Reads the bundled fixtures: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
+| `MockBackendService` | Mock | Reads the bundled mock responses: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 ### Contract names
 
@@ -93,7 +93,7 @@ Sign-in, session and sign-out go through `AuthService` (`ParkHill/Services/Auth/
 | Type | Configurations | Behavior |
 |---|---|---|
 | `SupabaseAuthService` | Dev | Signs in through the backend's `sign_in` function, then hands the session to the shared Supabase client, which stores it in the Keychain and renews it |
-| `MockAuthService` | Mock | `signIn(email:password:)` gives the result armed in `MockSignInScenario`, whatever was typed: Success signs in as the chosen persona; refusals throw the recorded `sign_in.error*.json` message. `signIn(persona:)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted across launches |
+| `MockAuthService` | Mock | `signIn(email:password:)` gives the result armed in `MockSignInScenario`, whatever was typed: Success signs in as the chosen persona; refusals throw the recorded `sign_in.error*.json` message. `signIn(persona:)` sets the persona `MockBackendService` reads mock responses for. No network; not persisted across launches |
 
 - **Sign-in errors** are `SignInError`: `rejected(code:message:)` carries the backend's text unchanged, plus `network` and `unexpected`.
 - **Staying signed in:** `restoreSession()` treats a stored session as signed in when offline; a refused renewal signs out with reason `sessionEnded`.

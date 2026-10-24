@@ -1,12 +1,15 @@
-# IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry
+---
+type: task
+id: IOS-003
+title: "Build the iOS root coordinator, screen registry and backend-driven entry"
+area: ios
+epic: EP-01
+depends_on: [IOS-002]
+paired_with: [AND-003]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | IOS-002 |
-| Paired with | AND-003 |
-| Status | Done |
+# IOS-003: Build the iOS root coordinator, screen registry and backend-driven entry
 
 ## Intent
 
@@ -32,7 +35,7 @@ Make the app show whatever entry screen the backend names, through the coordinat
 |---|---|---|
 | AC1 | In the Dev configuration with local Supabase running, launch shows the `auth.sign_in` screen with the title from `get_entry` | The first screen is backend driven |
 | AC2 | Changing the title string in the database is reflected after relaunch or return to foreground, with no rebuild | Proves remote control of the entry screen |
-| AC3 | In the Mock configuration, launch shows the screen named by the mock entry fixture, with no backend running | The app runs independently |
+| AC3 | In the Mock configuration, launch shows the screen named by the mock entry mock response, with no backend running | The app runs independently |
 | AC4 | Screens are created only through `ScreenRegistry`. Views do not instantiate other screens or mutate navigation state directly | Navigation stays in coordinators so targets can be backend driven |
 | AC5 | Mock-only screens are registered from a file that exists only in mock sources | `.mock` screens never compile into other configs |
 | AC6 | An entry envelope with an unregistered key is treated as unusable and logged | Backend can ship ahead of the client without a blank screen |

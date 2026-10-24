@@ -1,12 +1,15 @@
-# AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry
+---
+type: task
+id: AND-021
+title: "Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry"
+area: android
+epic: EP-06
+depends_on: [AND-006]
+paired_with: [IOS-021]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-06 |
-| Depends on | AND-006 |
-| Paired with | IOS-021 |
-| Status | Done |
+# AND-021: Build the Android dev tools overlay: top pill, menu, screen tracker and tool registry
 
 ## Intent
 
@@ -61,7 +64,7 @@ Inspect the devRelease artifact: no dev tools classes. Screenshot the pill on a 
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

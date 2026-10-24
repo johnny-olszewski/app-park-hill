@@ -9,7 +9,7 @@ from auth.users where email = 'attendee@parkhill.test';
 set local role authenticated;
 
 -- AC1: the tabs in order with their root screens, exactly as in
--- contract/fixtures/<persona>/get_tabs.json.
+-- contract/mock_responses/<persona>/get_tabs.json.
 select is(
   public.get_tabs('en'),
   '{

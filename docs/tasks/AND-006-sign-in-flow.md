@@ -1,12 +1,15 @@
-# AND-006: Build the Android sign-in flow and signed-in placeholder
+---
+type: task
+id: AND-006
+title: "Build the Android sign-in flow and signed-in placeholder"
+area: android
+epic: EP-01
+depends_on: [AND-003, AND-005]
+paired_with: [IOS-006]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | AND-003, AND-005 |
-| Paired with | IOS-006 |
-| Status | Done |
+# AND-006: Build the Android sign-in flow and signed-in placeholder
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# AND-005: Build the Android auth service with production and mock implementations
+---
+type: task
+id: AND-005
+title: "Build the Android auth service with production and mock implementations"
+area: android
+epic: EP-01
+depends_on: [AND-002, SUP-006]
+paired_with: [IOS-005]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | AND-002, SUP-006 |
-| Paired with | IOS-005 |
-| Status | Done |
+# AND-005: Build the Android auth service with production and mock implementations
 
 ## Intent
 
@@ -37,7 +40,7 @@ Android twin of IOS-005. Sign-in, session and sign-out sit behind one abstractio
 | AC5 | When renewal is refused, the session state emits signed out with reason `SessionEnded` and local data is wiped | Fail safe: disabled or revoked accounts are returned to sign-in |
 | AC6 | When any backend request is refused as unauthorized (HTTP 401 or `session_ended`), the service renews once and retries once; if either is refused, it signs out with reason `SessionEnded`. Network errors never sign out. Covered by tests | A refused request always ends in sign-in, never a stuck or half-signed-in app |
 | AC7 | `signOut()` revokes the session when online and always deletes the session, the cache directory and user files, even offline | Nothing from the last user remains on a shared device |
-| AC8 | After mock `signIn(persona)`, `MockBackendService` returns that persona's fixtures; no network connection is made | Mock build can show any persona's experience |
+| AC8 | After mock `signIn(persona)`, `MockBackendService` returns that persona's mock responses; no network connection is made | Mock build can show any persona's experience |
 | AC9 | Integration test (dev flavor, local Supabase): sign in as `attendee`, `whoami()` succeeds; sign out, `whoami()` is refused | Proves the token reaches the backend and sign-out ends access |
 
 ## Technical notes

@@ -86,7 +86,7 @@ extension XCUIApplication {
 }
 
 /// Personas and the local password from the bundled
-/// `contract/seed/dataset.json`, plus contract fixtures.
+/// `contract/seed/dataset.json`, plus mock responses.
 enum UITestData {
     private final class BundleToken {}
 

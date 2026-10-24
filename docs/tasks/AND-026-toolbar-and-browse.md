@@ -1,12 +1,15 @@
-# AND-026: Build the Android toolbar, full-screen cover and Browse all groups
+---
+type: task
+id: AND-026
+title: "Build the Android toolbar, full-screen cover and Browse all groups"
+area: android
+epic: EP-03
+depends_on: [AND-010, SUP-023]
+paired_with: [IOS-025]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-010, SUP-023 |
-| Paired with | IOS-025 |
-| Status | Draft |
+# AND-026: Build the Android toolbar, full-screen cover and Browse all groups
 
 ## Intent
 
@@ -54,7 +57,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

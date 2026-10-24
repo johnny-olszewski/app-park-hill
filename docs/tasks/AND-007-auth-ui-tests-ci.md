@@ -1,12 +1,15 @@
-# AND-007: Run Android auth UI tests: Mock in CI, Dev locally
+---
+type: task
+id: AND-007
+title: "Run Android auth UI tests: Mock in CI, Dev locally"
+area: android, ci
+epic: EP-01
+depends_on: [AND-004, AND-006]
+paired_with: [IOS-007]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android, ci |
-| Epic | EP-01 |
-| Depends on | AND-004, AND-006 |
-| Paired with | IOS-007 |
-| Status | Done |
+# AND-007: Run Android auth UI tests: Mock in CI, Dev locally
 
 ## Intent
 
@@ -47,7 +50,7 @@ make test-dev   # local only
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

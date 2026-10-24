@@ -1,12 +1,15 @@
-# IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry
+---
+type: task
+id: IOS-021
+title: "Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry"
+area: ios
+epic: EP-06
+depends_on: [IOS-006]
+paired_with: [AND-021]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-06 |
-| Depends on | IOS-006 |
-| Paired with | AND-021 |
-| Status | Done |
+# IOS-021: Build the iOS dev tools overlay: top pill, menu, screen tracker and tool registry
 
 ## Intent
 
@@ -68,7 +71,7 @@ Build Dev-Release and list its symbols: none from `DevTools/`. Screenshot the pi
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

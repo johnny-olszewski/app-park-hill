@@ -1,8 +1,8 @@
-"""Checks the recorded responses in /contract/fixtures against the screen
+"""Checks the recorded responses in /contract/mock_responses against the screen
 descriptions in /contract/screens. Fails when a backend screen key has no
 description, a description has no screen key in names.json, or a recorded
 screen's data does not match its description. Run by `make data-check` after
-`make fixtures`.
+`make mock-responses`.
 
 A screen envelope is any object with a string `key` and an object `data`,
 wherever it appears: a whole response (`get_entry`, `get_screen`) or embedded
@@ -43,8 +43,8 @@ def main() -> int:
         problems.append(f"contract/screens/{key}{screens.SUFFIX}: not a screen key in names.json")
 
     checked = 0
-    for path in sorted(dataset.FIXTURES_PATH.rglob("*.json")):
-        where = str(path.relative_to(dataset.FIXTURES_PATH))
+    for path in sorted(dataset.MOCK_RESPONSES_PATH.rglob("*.json")):
+        where = str(path.relative_to(dataset.MOCK_RESPONSES_PATH))
         for location, envelope in envelopes(json.loads(path.read_text()), where):
             key = envelope["key"]
             if key not in described:

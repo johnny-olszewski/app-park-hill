@@ -1,12 +1,15 @@
-# IOS-024: Decode every backend response with the generated types in the iOS app
+---
+type: task
+id: IOS-024
+title: "Decode every backend response with the generated types in the iOS app"
+area: ios
+epic: EP-05
+depends_on: [SUP-022, IOS-023]
+paired_with: [AND-025]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-05 |
-| Depends on | SUP-022, IOS-023 |
-| Paired with | AND-025 |
-| Status | Draft |
+# IOS-024: Decode every backend response with the generated types in the iOS app
 
 ## Intent
 
@@ -29,7 +32,7 @@ After SUP-022, the screen envelope, `get_tabs`, `whoami` and the `sign_in` respo
 |---|---|---|
 | AC1 | A search of `ios/` finds no definition of the seven types in Scope; each is defined only in `contract/generated/` | One definition per response shape |
 | AC2 | Cached envelopes and tabs written by the previous build still load after updating (same encoding), or are discarded and refetched without an error screen | Updating the app never shows an error for an old cache |
-| AC3 | Decoding tests decode every file in `contract/fixtures` with its type from `contract/responses.json` | The app decodes exactly what the backend records |
+| AC3 | Decoding tests decode every file in `contract/mock_responses` with its type from `contract/responses.json` | The app decodes exactly what the backend records |
 | AC4 | In Mock and Dev, sign-in (success and each refusal), tabs, return to foreground and sign-out work as before | No behavior change |
 
 ## Technical notes
@@ -51,7 +54,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -1,12 +1,15 @@
-# SUP-019: Define backend function names and screen keys once and generate client constants from them
+---
+type: task
+id: SUP-019
+title: "Define backend function names and screen keys once and generate client constants from them"
+area: contract, backend
+epic: EP-05
+depends_on: [SUP-006, SUP-008]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-05 |
-| Depends on | SUP-006, SUP-008 |
-| Paired with | None |
-| Status | Done |
+# SUP-019: Define backend function names and screen keys once and generate client constants from them
 
 ## Intent
 
@@ -42,7 +45,7 @@ Backend function names and screen keys are typed by hand as strings in the backe
 | AC3 | `check_names.py` fails when an RPC function in `names.json` does not exist in the local database's `public` schema, or exists but is not executable by `anon` or `authenticated` | A misspelled or unreachable function is caught before any client calls it |
 | AC4 | `check_names.py` fails when an Edge Function in `names.json` has no folder in `backend/supabase/functions/` | Same guarantee for Edge Functions |
 | AC5 | `check_names.py` fails when a screen key is in `names.json` but not in the `screens` table, or in the `screens` table but not in `names.json` | Adding a screen without listing it, or listing one that does not exist, is caught |
-| AC6 | `make data-check` runs generation and the check, and fails if `contract/generated/` differs from what is committed; backend CI runs it on every PR (SUP-007) | Drift fails the same command that already guards seed and fixtures |
+| AC6 | `make data-check` runs generation and the check, and fails if `contract/generated/` differs from what is committed; backend CI runs it on every PR (SUP-007) | Drift fails the same command that already guards seed and mock responses |
 | AC7 | The guide's 4.1 states that every client-called function and backend screen key is listed in `contract/names.json`, and section 8 records the decision | The rule outlives this task |
 
 ## Technical notes
@@ -60,7 +63,7 @@ Backend function names and screen keys are typed by hand as strings in the backe
 
 - Generated Swift (`ContractNames.swift`): `enum RPCFunction: String` and `enum EdgeFunction: String` with one case per name; `enum ScreenKey` with one `static let` per key (screen keys stay `String` because the registry takes keys from backend payloads). Case names are the lower camel case form of the name: `get_entry` becomes `getEntry`, `auth.sign_in` becomes `authSignIn`.
 - Generated Kotlin (`ContractNames.kt`): the same three groups as `enum class RpcFunction(val value: String)`, `enum class EdgeFunction(val value: String)` and `object ScreenKey` with `const val`. Package `app.parkhill.contract`, under the app's Kotlin namespace `app.parkhill` (not the placeholder application ID).
-- Generated files live in `contract/generated/`, next to the dataset and fixtures; each client compiles its file from there (IOS-020, AND-020) and never copies it.
+- Generated files live in `contract/generated/`, next to the dataset and mock responses; each client compiles its file from there (IOS-020, AND-020) and never copies it.
 - AC3: read the function list and privileges from the local database (`postgresql://postgres:postgres@127.0.0.1:54322/postgres`, Supabase CLI default). Mechanism is implementer's choice.
 - `data-check`'s drift check covers `contract/generated` alongside the existing generated paths.
 - Guide sections: 4.1 (contract), 6 (one canonical dataset, nothing generated edited by hand).
@@ -86,7 +89,7 @@ Then, one at a time, reverting after each:
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

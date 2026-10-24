@@ -1,12 +1,15 @@
-# AND-004: Add Android CI on GitHub Actions
+---
+type: task
+id: AND-004
+title: "Add Android CI on GitHub Actions"
+area: android, ci
+epic: EP-01
+depends_on: [AND-003, SUP-004]
+paired_with: [IOS-004]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android, ci |
-| Epic | EP-01 |
-| Depends on | AND-003, SUP-004 |
-| Paired with | IOS-004 |
-| Status | Done |
+# AND-004: Add Android CI on GitHub Actions
 
 ## Intent
 
@@ -26,7 +29,7 @@ Enforce the Android rules on every PR: Mock tests pass, the dev variant builds, 
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | `testMockDebugUnitTest` passes with no backend, including fixture decoding tests | Android stays in agreement with the contract |
+| AC1 | `testMockDebugUnitTest` passes with no backend, including mock response decoding tests | Android stays in agreement with the contract |
 | AC2 | The dev variant builds in CI; its integration tests are documented in `/android/README.md` as a local command (`make test-dev`) | CI runs Mock only; the real path is checked locally |
 | AC3 | The job builds `devRelease` and fails if any class containing `Mock` is present | Mock code can never ship, enforced not trusted |
 | AC4 | The job fails if `/android/app/src/main` contains `BuildConfig.FLAVOR` or `BuildConfig.DEBUG` | The no branching rule is enforced |

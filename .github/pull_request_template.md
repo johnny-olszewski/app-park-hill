@@ -1,8 +1,8 @@
-<!-- Title: [<slice ID>] <slice title> (planning PRs: [PLAN] <summary>) -->
+<!-- Title: [<slice ID>] <slice title> (planning PRs: [PLAN] <summary>; chore PRs: [CHORE] <summary>) -->
 
 ## Slice
 
-[<slice ID>: <slice title>](docs/epics/<EP-##-name>.md#slices)
+[<slice ID>: <slice title>](docs/slices/<slice file>.md)
 
 ## Summary
 
@@ -39,5 +39,5 @@ None.
 - [ ] Every CI check is green; never merge red (guide 7.1 rule 10)
 - [ ] `make test-dev` passed locally in each app the slice touches, when it changes an app, `/backend` or `/contract` (CI runs Mock only)
 - [ ] Every behavior criterion recorded in `recordings/<slice ID>/` (not linked here)
-- [ ] Each task, and then the slice, set to Done in its files, the epic and `docs/BACKLOG.md`
+- [ ] Each task, and then the slice, set to `status: Done` in its own file
 - [ ] No work outside the Scope of the slice's tasks

@@ -27,7 +27,7 @@ struct MockSignInToolsTests {
 
     @Test func signInToolsAreOnTheSignInScreenAndSwitchPersonaIsEverywhere() {
         let choices = MockSignInChoices(scenario: MockSignInScenario(persona: "attendee"), personas: personas)
-        let auth = MockAuthService(personaState: MockPersonaState(), localData: TemporaryUserData().localData, scenario: MockSignInScenario(persona: "attendee"), fixtures: .bundled)
+        let auth = MockAuthService(personaState: MockPersonaState(), localData: TemporaryUserData().localData, scenario: MockSignInScenario(persona: "attendee"), responses: .bundled)
         var registry = DevToolRegistry()
         MockSignInTools.register(in: &registry, choices: choices, session: SessionTracker(auth: auth), auth: auth)
 
@@ -41,8 +41,8 @@ struct MockSignInToolsTests {
     @Test func everyResultHasATitleAndRefusalsHaveRecordings() throws {
         for result in MockSignInResult.allCases {
             #expect(!result.title.isEmpty)
-            if let name = result.refusalFixture {
-                _ = try TestFixtures.data("\(name).json")
+            if let name = result.refusalResponse {
+                _ = try TestMockResponses.data("\(name).json")
             }
         }
     }

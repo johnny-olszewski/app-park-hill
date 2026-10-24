@@ -1,21 +1,24 @@
-# SUP-007: Extend backend CI for auth: Edge Function tests and dataset check
+---
+type: task
+id: SUP-007
+title: "Extend backend CI for auth: Edge Function tests and dataset check"
+area: backend, ci
+epic: EP-01
+depends_on: [SUP-004, SUP-006]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, ci |
-| Epic | EP-01 |
-| Depends on | SUP-004, SUP-006 |
-| Paired with | None |
-| Status | Done |
+# SUP-007: Extend backend CI for auth: Edge Function tests and dataset check
 
 ## Intent
 
-Make the sign-in rules and the single dataset (seed and mock fixtures) machine-enforced on every PR.
+Make the sign-in rules and the single dataset (seed and mock responses) machine-enforced on every PR.
 
 ## Scope
 
 - Serve Edge Functions in the backend job and run the `sign_in` tests.
-- Run `make data-check` (seed and fixtures regenerated from the dataset).
+- Run `make data-check` (seed and mock responses regenerated from the dataset).
 
 ## Out of scope
 

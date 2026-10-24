@@ -26,7 +26,7 @@ final class MockSignInUITests: XCTestCase {
     }
 
     func testAnArmedRefusalShowsItsRecordedMessage() throws {
-        let expected = try XCTUnwrap(UITestData.json("fixtures/sign_in.error.too_many_attempts")["message"] as? String)
+        let expected = try XCTUnwrap(UITestData.json("mock_responses/sign_in.error.too_many_attempts")["message"] as? String)
         choose("mockSignIn.result.tooManyAttempts")
         XCTAssertEqual(app.devToolsPill.value as? String, "Failure armed")
 
@@ -41,7 +41,7 @@ final class MockSignInUITests: XCTestCase {
     }
 
     func testNoConnectionShowsTheCannotConnectMessage() throws {
-        let data = try XCTUnwrap(UITestData.json("fixtures/get_entry")["data"] as? [String: Any])
+        let data = try XCTUnwrap(UITestData.json("mock_responses/get_entry")["data"] as? [String: Any])
         let expected = try XCTUnwrap(data["cannot_connect_message"] as? String)
         choose("mockSignIn.result.noConnection")
 

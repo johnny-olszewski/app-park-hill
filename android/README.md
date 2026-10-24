@@ -24,7 +24,7 @@ Selection happens at build time (guide 5.2). App code never checks which flavor 
 
 | Variant | Source set | Backend | Ships |
 |---|---|---|---|
-| `mockDebug` | `src/mock` | None. No `INTERNET` permission; services read contract fixtures | Never; `mockRelease` is disabled |
+| `mockDebug` | `src/mock` | None. No `INTERNET` permission; services read mock responses | Never; `mockRelease` is disabled |
 | `devDebug`, `devRelease` | `src/dev` | Local Supabase at `http://10.0.2.2:54321` (the host, from the emulator) by default | `devRelease` is the release build |
 
 At launch every build logs its environment and backend, for example `Environment Dev, backend http://10.0.2.2:54321` (tag `ParkHill`). The value is `ServiceBinding.environment.backendLabel`.
@@ -61,13 +61,13 @@ All backend data goes through `BackendService` (`services/backend`). Screens and
 | Type | Flavor | Behavior |
 |---|---|---|
 | `SupabaseBackendService` | dev | Calls `get_entry`, `get_screen`, `get_tabs` and `whoami` through the one client from `SupabaseClientProvider`, which adds the standard headers (`X-App-Config`, `X-App-Platform`, `X-App-Version`, `Accept-Language`) on its OkHttp engine |
-| `MockBackendService` | mock | Reads the fixtures bundled as mock assets straight from `/contract/fixtures`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
+| `MockBackendService` | mock | Reads the mock responses bundled as mock assets straight from `/contract/mock_responses`: `get_entry.json`, `get_screen.<key>.json`, and the signed-in persona's `get_tabs.json` and `whoami.json`, preferring `<persona>/<name>.json` for the current persona |
 
 Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppServices` constructs it. Failures reach callers as `BackendError`: `Network`, `UnknownScreen`, `Unauthorized`, `Decoding` or `Server`.
 
 ### Contract names
 
-Backend function names and screen keys come from `/contract/generated/ContractNames.kt` (`RpcFunction`, `EdgeFunction`, `ScreenKey`, package `app.parkhill.contract`), generated from `/contract/names.json`. The `main` source set compiles it in place for every variant. Never write a backend function name or screen key as a string literal in `app/src`, and never edit or copy the generated file: edit `names.json` and run `make names` in `/backend`. Tests may use literals to assert wire values; mock fixture file names such as `sign_in.error.account_disabled` stay as text.
+Backend function names and screen keys come from `/contract/generated/ContractNames.kt` (`RpcFunction`, `EdgeFunction`, `ScreenKey`, package `app.parkhill.contract`), generated from `/contract/names.json`. The `main` source set compiles it in place for every variant. Never write a backend function name or screen key as a string literal in `app/src`, and never edit or copy the generated file: edit `names.json` and run `make names` in `/backend`. Tests may use literals to assert wire values; mock response file names such as `sign_in.error.account_disabled` stay as text.
 
 ### Auth
 
@@ -76,7 +76,7 @@ Sign-in, session and sign-out go through `AuthService` (`services/auth`), declar
 | Type | Flavor | Behavior |
 |---|---|---|
 | `SupabaseAuthService` | dev | Signs in through the backend's `sign_in` function (`SignInClient`, a direct call so the backend's code and message arrive unchanged), then imports the session into the shared client, which renews it |
-| `MockAuthService` | mock | Any credentials give the result armed in its `MockSignInScenario` (Mock sign-in, below); `signIn(persona)` sets the persona `MockBackendService` reads fixtures for. No network; not persisted |
+| `MockAuthService` | mock | Any credentials give the result armed in its `MockSignInScenario` (Mock sign-in, below); `signIn(persona)` sets the persona `MockBackendService` reads mock responses for. No network; not persisted |
 
 - **Session storage:** `EncryptedSessionManager` stores the session in `filesDir/Session/`, encrypted with an AES-GCM key held in the Android Keystore. Never plain `SharedPreferences`.
 - **Sign-in errors** are `SignInError`: `Rejected(code, message)` with the backend's text unchanged, plus `Network` and `Unexpected`.
@@ -193,4 +193,4 @@ It starts and resets local Supabase (Docker must be running), then runs `connect
 | No build-variant branching | `scripts/check_sources.sh`: no `BuildConfig.FLAVOR`, `DEBUG` or `BUILD_TYPE` in `src/main` (also run by the pre-push hook) |
 | Unit tests | `./gradlew testMockDebugUnitTest testDevDebugUnitTest` |
 | Mock UI tests | A second job runs `connectedMockDebugAndroidTest` on an API 34 emulator |
-| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no dev tools class except `NoDevTools`, no contract fixtures in assets |
+| No mock code in the release build | Builds `devRelease`, then `scripts/check_release_apk.sh <apk>`: no `app.parkhill` class with `Mock` or in `mocks`, no dev tools class except `NoDevTools`, no mock responses in assets |

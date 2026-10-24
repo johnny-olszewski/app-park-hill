@@ -9,7 +9,7 @@ Status: v0.2 (planning). This document governs every task. If a task conflicts w
 1. **Iteration velocity over release cadence.** Anything that can change without an app release should be able to.
 2. **Remote driven, natively rendered.** The backend decides what is shown and where taps go. Clients decide how it looks, using native components. No webviews as the norm.
 3. **Scalable by configuration.** New tabs, screens, environments and roles are added by extending config and registries, not by adding conditionals.
-4. **Two clients, one contract.** iOS (SwiftUI) and Android (Kotlin, Compose) are built in parallel against the same backend contract and the same fixtures.
+4. **Two clients, one contract.** iOS (SwiftUI) and Android (Kotlin, Compose) are built in parallel against the same backend contract and the same mock responses.
 
 ## 2. Responsibility split
 
@@ -36,16 +36,16 @@ Monorepo.
 
 ```
 /backend     Supabase project: migrations, seed, Edge Functions, tests
-/contract    API contract docs, JSON fixtures and personas (single source of truth for both clients)
+/contract    API contract docs, JSON mock responses and personas (single source of truth for both clients)
 /ios         SwiftUI app
 /android     Kotlin + Compose app
-/docs        This guide, the task template, the backlog, epics, specs, tasks
+/docs        This guide, the task template, the backlog, epics, slices, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
 /.claude     Project skills for agent sessions (/status, /implement-slice, /review-pr, /address-review)
-/scripts     Workflow scripts: mark_done.py, check_commits.sh, record.sh
+/scripts     Workflow scripts: check_commits.sh, record.sh
 ```
 
-A contract change lands in one PR: migration, fixture, and both client models together.
+A contract change lands in one PR: migration, mock response, and both client models together.
 
 ## 4. Backend
 
@@ -87,7 +87,7 @@ Contract rules:
 3. Clients drop anything with an unknown screen key and log it. The backend may ship ahead of clients.
 4. One screen key maps to exactly one data model. Every variant of a screen is expressible in that one model, except mock variants, which have their own key.
 5. Unknown locale falls back to `en`.
-6. `/contract/fixtures` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
+6. `/contract/mock_responses` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
 7. Every backend function a client calls and every backend screen key is listed once in `contract/names.json`. Clients use the constants generated from it into `contract/generated/`, never string literals; `make data-check` fails when the list and the backend disagree.
 8. Every backend screen key has one data description in `contract/screens/`, written in the subset of JSON Schema that `contract/README.md` lists. `make models` generates each screen's Swift and Kotlin model from it into `contract/generated/`; no client model is written by hand. `make data-check` fails when a recorded screen does not match its description, a screen key has no description, or the generated models differ from what is committed.
 
@@ -118,7 +118,7 @@ App composition root  ->  Coordinators  ->  Screens (views + view models)
 
 | Config | Service classes | Backend | Intent |
 |---|---|---|---|
-| Mock | `MockAuthService`, `MockBackendService` | None. Reads contract fixtures; signs in as a chosen persona | App runs fully standalone: UI work, previews, demos, UI tests with no backend |
+| Mock | `MockAuthService`, `MockBackendService` | None. Reads mock responses; signs in as a chosen persona | App runs fully standalone: UI work, previews, demos, UI tests with no backend |
 | Dev | `SupabaseAuthService`, `SupabaseBackendService` | Whatever the config names. Default: local Supabase | Real end to end path on a developer machine and in CI |
 
 Later environments (QA, Prod) are added by adding a config file that reuses the Supabase classes with different values. No code changes.
@@ -178,11 +178,11 @@ Rules:
 ## 6. Testing
 
 - Backend: pgTAP per function; Edge Function tests.
-- Clients: unit tests for decoding (against contract fixtures), services, coordinators and view models. UI tests for flows.
+- Clients: unit tests for decoding (against mock responses), services, coordinators and view models. UI tests for flows.
 - **Client CI runs Mock only.** iOS and Android CI never start Supabase. Tests against local Supabase (Dev integration and UI tests) run locally with `make test-dev`, required before merging changes to an app, `/backend` or `/contract`.
 - **Backend CI** runs against local Supabase on Linux and owns correctness of logic and permissions.
-- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make fixtures` generates the per-persona mock fixtures from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
-- Mock fixtures are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.
+- **One canonical dataset:** `/contract/seed/dataset.json` holds personas and all seed data. `make seed` generates `seed.sql`; `make mock-responses` generates the per-persona mock responses from the real backend's output. `make data-check` in CI fails on any drift. Nothing generated is edited by hand.
+- Mock responses are static: saves in the mock show success but do not persist. Mock UI tests check UI behavior; backend tests check data changes.
 - CI (GitHub Actions): starts local Supabase, runs backend tests, builds and tests both clients, verifies mock code is absent from release builds.
 - A task is not done until its tests run in CI.
 
@@ -191,7 +191,7 @@ Rules:
 - **Temporary code** is allowed only when a task says so, and every line carries `TEMPORARY(<epic>): <what removes it>`. The removing task has an AC that a search for the marker finds nothing.
 
 
-1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, exit criteria and its task list. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks`, tagged with its epic and listed in `BACKLOG.md`. Tasks are grouped into slices (7.2).
+1. Plan before building. Work is grouped into epics (`/docs/epics/EP-##-name.md`), each with a goal, user stories, epic-level acceptance criteria, and exit criteria. Larger features also get a spec in `/docs/specs`. Every piece of work is a task written from `TASK_TEMPLATE.md`, kept flat in `/docs/tasks` and tagged with its epic. Tasks are grouped into slices (7.2). How these files record status and links is in 7.3.
 2. One slice, one PR, one reviewer (Johnny). Tasks are sized for a single agent session; a slice is the few tasks that together deliver one testable change in behavior.
 3. Every task targets one platform, because different developers with different skills may own them. IDs are per platform and sequential: `SUP-###` (backend), `IOS-###`, `AND-###`. iOS and Android tasks for the same behavior are counterparts with matching acceptance criteria. Platform idioms may differ; behavior may not.
 4. An agent that finds ambiguity or a conflict with this guide stops and asks. It does not guess and does not expand scope.
@@ -201,7 +201,7 @@ Rules:
 
 The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
 
-1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9). Work before 2026-10-15 used one `task/<task file name>` branch per task.
+1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9; chores: rule 12). Work before 2026-10-15 used one `task/<task file name>` branch per task.
 2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
 3. **Commit message format:**
 
@@ -217,23 +217,24 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
    - No mention of tools, assistants or agents, and no co-author or "generated with" trailers. The same holds for everything posted under a person's account (PR bodies, replies); only the automated reviewer's own comments, from its bot account, are exempt (rule 11).
    - On a slice branch each task keeps its own numbering, and one task's commits are finished before the next task's begin.
 4. **One pull request per slice.** Title `[<slice ID>] <slice title>`. Body follows `.github/pull_request_template.md`, with the same no-mention rule.
-5. **Status:** each task's last commit sets that task to Done in its task file, its epic and `BACKLOG.md`. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `BACKLOG.md`. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
+5. **Status:** each task's last commit sets `status: Done` in its task file. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets `status: Done` in the slice file. Merging the PR makes them true. An open PR is how a slice and its tasks show as in review.
 6. **Merging keeps every commit.** PRs merge with a merge commit; squash and rebase merging are disabled. The branch is deleted on merge.
 7. Review changes are new commits continuing the numbering, not rewrites of reviewed commits.
 8. The only direct commit to `main` was `[SUP-001][1/n] Add planning docs`, which created it.
-9. **Planning branches.** Changes that only add or revise epics, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
+9. **Planning branches.** Changes that only add or revise epics, slices, specs, tasks, the backlog or this guide, without implementing a task, use a branch named `plan/` plus a short kebab-case name, for example `plan/contract-names-and-mock-menu`. One planning branch and PR may cover several epics. Commits are `[PLAN][<k>/n] <summary>`, numbered across the branch; the PR title is `[PLAN] <summary>`, and the PR template's task link and checklist are adapted to the epics it changes. A planning PR sets no task to Done.
 10. **Checks.** CI reports on every ready pull request; draft PRs skip the macOS job. Never merge a PR with a failing or pending check. Branch protection is not available for a private repo on the free plan, so this is a rule, not a setting. `.githooks/pre-push` runs the fast checks before each push; enable it once per clone with `git config core.hooksPath .githooks`.
 
 11. **Automated review and fixes.** `.github/workflows/review.yml` reviews every PR once when it is opened ready or marked ready, following `.claude/skills/review-pr/SKILL.md`: the guide's rules for every PR, plus the slice or plan for `slice/` and `plan/` branches. It posts inline comments, each starting **Must-fix** (breaks a guide rule, an acceptance criterion, the Scope, or is a bug) or **Suggestion**, and one summary comment. It never approves, pushes or merges. The repository owner asks for a re-review by commenting `@claude review`; a re-review checks whether earlier comments were addressed and does not repeat them.
     - When every check has finished, including the review, the session that opened the PR acts on it with `/address-review`: must-fix comments and failing checks are fixed and pushed; suggestions are applied in separate, later commits and listed in a **Suggestions to verify** comment for the reviewer, who reverts any they reject with a new commit. A comment asking to change this guide or to go beyond the Scope waits for the reviewer's decision, whatever its severity.
     - The fix commits follow rule 7. The reviewer still checks the behavior criteria and merges.
     - Setup, once per repository: install the Claude GitHub app and add the `CLAUDE_CODE_OAUTH_TOKEN` secret from `claude setup-token`.
+12. **Chore branches.** Changes that neither implement a task nor only plan, such as renames, tooling and other housekeeping, use a branch named `chore/` plus a short kebab-case name, for example `chore/housekeeping`. One chore branch and PR may cover several unrelated items, each in its own commits. Commits are `[CHORE][<k>/n] <summary>`, numbered across the branch; the PR title is `[CHORE] <summary>`, and the PR template's slice, task and behavior sections are replaced by one section per item saying how it was verified. A chore changes no behavior a slice should own and sets no task to Done.
 
 ### 7.2 Slices
 
 A slice is the set of tasks, across platforms, that together deliver one change in behavior a person can check: in the app, or for developers (for example a CI check). It is the unit of implementation, review and acceptance. Tasks stay per platform, so each keeps one owner.
 
-1. **Defined in the epic.** Each epic has a Slices section listing every slice: ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. `BACKLOG.md` lists each epic's slices above its task tables. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice. Tasks Done before slices existed (2026-10-15) stay listed in their epic without a slice.
+1. **One file per slice.** Each slice is a file in `/docs/slices` (7.3): ID (`EP-##.<letter>`, for example `EP-06.B`), a title that states the behavior, behavior acceptance criteria a person checks by using the result, member tasks in implementation order, the slices it depends on, and status. Its epic's Slices section links it and explains the order; `BACKLOG.md` holds the order of all slices. Every task belongs to exactly one slice; a task that delivers behavior on its own is a one-task slice. Tasks Done before slices existed (2026-10-15) belong to their epic without a slice.
 2. **Sizing.** Split a behavior into separate slices only where the state between them is worth having on its own; a slice that only prepares for the next is merged into it.
 3. **Lockstep.** A slice includes the tasks of every platform its behavior touches (backend, iOS, Android) and is not started until every slice it depends on is Done, so the platforms move together.
    - **Catch-up slices.** A platform that falls behind gets catch-up slices: only its own tasks, with the behavior criteria of the slices they mirror. No new slice starts until every platform has caught up. Android was held back this way until 2026-10-15 while the workflow settled on iOS, and catches up through EP-01.B, EP-01.C and EP-06.C.
@@ -241,6 +242,20 @@ A slice is the set of tasks, across platforms, that together deliver one change 
    - **Recordings.** Each behavior criterion is recorded while it is verified, with `scripts/record.sh`: behavior in the apps as a screen recording on iOS and on Android, in each build the criterion names (Mock when it names none); behavior for developers (a check, a command) as a terminal transcript. Recordings go in the gitignored `recordings/<slice ID>/` folder, named by criterion, and stay on the implementer's machine for the reviewer; PRs do not link them. Planning PRs have none.
 5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria, with the recordings to hand; commits stay per task for reading the code.
 6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
+
+### 7.3 Planning docs
+
+Epics, slices and tasks are Markdown files whose structured facts live once, in YAML frontmatter at the top of the file. The prose below it (goal, scope, acceptance criteria) is for reading; the frontmatter is what views and agents rely on.
+
+1. **One place per fact.** A status, a link or a membership is written in exactly one file and never copied into a table elsewhere. Views are built from the frontmatter, not maintained by hand.
+2. **Fields.** Every file has `type` (`epic`, `slice` or `task`), `id`, `title` and `status`. Links are lists of IDs, `[]` when empty, with a `#` comment for any note.
+   - Task: `area`, `epic`, `depends_on`, `paired_with`.
+   - Slice: `epic`, `tasks` (in implementation order), `depends_on`.
+   - Epic: `specs` (paths under `/docs`), `depends_on`, and any other field it needs, such as `design`.
+   A task's slice is the slice whose `tasks` list it; it is not repeated in the task.
+3. **Order.** `BACKLOG.md` holds the order of slices as a numbered list of links, and nothing else that a frontmatter field holds.
+4. **Views.** `docs/backlog.base` is an [Obsidian Bases](https://obsidian.md/help/bases) view of every epic, slice and task by status: open `/docs` as a vault in Obsidian. GitHub shows each file's frontmatter as a table. Agents read the frontmatter directly (`/status`).
+5. **New fields** are added to this list, and for tasks to `TASK_TEMPLATE.md`, in the same change, so every file of a type has the same fields.
 
 ## 8. Decision log
 
@@ -305,12 +320,15 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 | 2026-10-22 | Screen data descriptions (SUP-020): each backend screen's data is described once in `contract/screens/<key>.schema.json`, a documented subset of JSON Schema; `make models` generates Swift (`Decodable`, `Equatable`) and Kotlin (kotlinx.serialization) models into `contract/generated/`, and `make data-check` validates every recorded screen against its description. A standard-library Python script generates and validates, and refuses keywords outside the subset; keywords are added when a screen first needs them. Chosen over JSON Schema with quicktype (Node, heavier output, no validation), JSON Schema with the `jsonschema` package (first pip dependency) and a format of our own (no tooling, one more format to learn). Comparison in `contract/README.md`. Contract rule 8 added to 4.1 |
 | 2026-10-23 | Recordings (7.2 rule 4): every slice's behavior criteria are recorded while they are verified, as iOS and Android screen recordings for app behavior and terminal transcripts for developer behavior, with `scripts/record.sh`, into the gitignored `recordings/<slice ID>/`. They stay local and are not linked from PRs. Earlier slices recorded ad hoc and #29 dropped it; written down so every session does it. Chosen over uploading to PRs (`gh` cannot attach files) and committing them (repository size) |
 | 2026-10-23 | Organization scoping (4): tables holding an organization's data get a nullable `org_id`, null for every row for now. Chosen over a required church identifier from the start (an `orgs` table and checks with only one organization) and over adding it later (migrating every table, rule and test after EP-03 and EP-04). Resolves the SUP-009 and SUP-010 open question |
+| 2026-10-23 | Chore branches (7.1 rule 12): housekeeping that implements no task and is not planning goes on a `chore/` branch with `[CHORE][<k>/n]` commits, numbered across the branch, and may group several unrelated items. Mirrors planning branches. Chosen over inventing a task for each rename or tooling change (tasks deliver behavior in a slice) |
+| 2026-10-23 | "Fixtures" are now called mock responses: `contract/fixtures` became `contract/mock_responses`, `make fixtures` became `make mock-responses`, and client types and tests were renamed to match (`MockResponseStore`, `TestMockResponses`). The files are unchanged: recorded backend responses that the mock builds serve, client decoding tests read and `make data-check` keeps faithful. Earlier decision log rows keep the old word |
+| 2026-10-23 | Planning docs (7.3): epics, slices and tasks keep status, links and membership once, in YAML frontmatter; slices moved from epic sections into `/docs/slices`; `BACKLOG.md` keeps only the slice order; `docs/backlog.base` gives an Obsidian view. `scripts/mark_done.py`, which set Done in three tables by regex, is removed: marking Done is one field. Chosen over JSON or YAML data files beside the prose (two files per item that can drift), a generated dashboard (a script to maintain) and GitHub Issues and Projects (the plan would leave the repo) |
 
 ## 9. Known risks
 
 - **Placeholder app identifiers:** bundle and application IDs are permanent once published. Replace `app.parkhill.placeholder` before the first store upload.
 
-- **Parallel platforms** double client effort before the paradigm is proven. Mitigation: shared fixtures and paired tasks.
+- **Parallel platforms** double client effort before the paradigm is proven. Mitigation: shared mock responses and paired tasks.
 - **Embedded root screen data** makes launch as slow as the slowest tab's query once screens have content. Mitigation: `get_screen` exists, so a tab can switch to lazy loading by returning empty data.
 - **Sign-in through our Edge Function** puts passwords through our code and hides client addresses from Supabase's own limits. Mitigation: our own attempt limiting, no body logging, tests for both (`specs/AUTH.md` 5.5).
-- **Mock fidelity:** client CI trusts the mock. Generated fixtures and `make data-check` keep it faithful; `make test-dev` before merging catches what the mock cannot.
+- **Mock fidelity:** client CI trusts the mock. Generated mock responses and `make data-check` keep it faithful; `make test-dev` before merging catches what the mock cannot.

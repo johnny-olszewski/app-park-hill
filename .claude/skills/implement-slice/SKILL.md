@@ -16,7 +16,7 @@ The workflow in `CLAUDE.md` and `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2, as step
 
 ## 2. Read, then re-check the plan against the code
 
-Read in this order: the guide; the slice in its epic's Slices section (behavior criteria B1…); the spec it references; every task in the slice and its "Depends on" tasks.
+Read in this order: the guide; the slice file in `docs/slices/` (behavior criteria B1…); the spec it references; every task in the slice and its `depends_on` tasks.
 
 Task drafts are often written before the code they touch exists. Before writing code, check each task against the current code and stop to ask about anything that is:
 
@@ -34,12 +34,12 @@ For each task:
 1. Split the work into standalone, logical commits ordered for review. Each commit builds and passes its tests on its own.
 2. Commit message: subject `[<TASK-ID>][<k>/n] <few-word summary>` (`k` counts that task's commits from 1, `n` is the literal letter), a blank line, then a short bulleted list. Write it to a file and use `git commit -F <file>`. Never mention Claude, AI, assistants or agents, and add no `Co-Authored-By` or "Generated with" lines.
 3. Verify every acceptance criterion and run the task's tests before its last commit.
-4. The task's last commit marks it Done: `scripts/mark_done.py <TASK-ID>` updates the task file, its epic and `docs/BACKLOG.md`.
+4. The task's last commit marks it Done: set `status: Done` in the task file's frontmatter.
 5. Finish one task's commits before starting the next. Do not interleave tasks.
 
 Practices that kept slices clean:
 
-- **Contract changes:** migration, `make fixtures`, then `make data-check` in `/backend`; update both clients' models in the same slice. A new fixture can break the client fixture tests, so run both clients' unit tests in the commit that adds it.
+- **Contract changes:** migration, `make mock-responses`, then `make data-check` in `/backend`; update both clients' models in the same slice. A new mock response can break the client mock response tests, so run both clients' unit tests in the commit that adds it.
 - **Removing something tests depend on:** move the tests off it in an earlier commit, so every commit stays green.
 - **Before pushing:** `scripts/check_commits.sh "<build and test command>"` runs a check on every commit of the branch. History may be rewritten (fixup and autosquash) only before the first push. After review starts, changes are new commits continuing the numbering (guide 7.1 rule 7).
 - **Temporary code** only when a task says so, every line marked `TEMPORARY(<epic>): <what removes it>`.
@@ -60,7 +60,7 @@ Practices that kept slices clean:
    - In the apps: boot the simulator and the emulator, then `scripts/record.sh start <ID> <B#-build-what> ios` and `... android`, show the behavior on both, then `scripts/record.sh stop`. One recording per criterion and build, short and showing only that criterion.
    - For developers: `scripts/record.sh terminal <ID> <B#-what> "<commands>"`, showing the failure and the passing run where the criterion is about a check failing.
    - Check every criterion has its recordings in `recordings/<ID>/`. Do not link them in the PR; tell the user the folder.
-2. Last commit on the branch: `[<ID>] Mark <ID> done`, using `scripts/mark_done.py <ID>`.
+2. Last commit on the branch: `[<ID>] Mark <ID> done`, setting `status: Done` in the slice file.
 3. Push, then open one PR titled `[<ID>] <slice title>` with the body from `.github/pull_request_template.md`: each task with how each criterion was verified, then the behavior criteria as an unchecked list for the reviewer, then reviewer notes (decisions, deviations, follow-ups).
 4. Tell the user the PR link, what changed, what was verified, where the recordings are, and any decisions made. CI must be green before merging, never red or pending (guide 7.1 rule 10).
 5. Watch the PR: if this session can be notified of its checks and review comments (for example the desktop app's PR monitor, with addressing comments and fixing checks turned on), turn that on. When every check has finished, including the automated review, run `/address-review <PR>` (guide 7.1 rule 11).

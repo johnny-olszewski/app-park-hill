@@ -1,12 +1,15 @@
-# AND-001: Create the Android project with Mock and Dev build variants
+---
+type: task
+id: AND-001
+title: "Create the Android project with Mock and Dev build variants"
+area: android
+epic: EP-01
+depends_on: [SUP-001]
+paired_with: [IOS-001]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-01 |
-| Depends on | SUP-001 |
-| Paired with | IOS-001 |
-| Status | Done |
+# AND-001: Create the Android project with Mock and Dev build variants
 
 ## Intent
 

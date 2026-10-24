@@ -69,10 +69,10 @@ android {
     }
 
     sourceSets {
-        // Contract fixtures, read in place: mock assets and test resources (guide 4.1 rule 6).
-        getByName("mock").assets.srcDirs("../../contract/fixtures", "../../contract/seed")
-        getByName("test").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
-        getByName("androidTest").resources.srcDirs("../../contract/fixtures", "../../contract/seed")
+        // Mock responses, read in place: mock assets and test resources (guide 4.1 rule 6).
+        getByName("mock").assets.srcDirs("../../contract/mock_responses", "../../contract/seed")
+        getByName("test").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")
+        getByName("androidTest").resources.srcDirs("../../contract/mock_responses", "../../contract/seed")
         // Backend function names and screen keys, generated from contract/names.json.
         // Every variant compiles them; Gradle ignores the Swift file beside them.
         getByName("main").java.srcDirs("../../contract/generated")

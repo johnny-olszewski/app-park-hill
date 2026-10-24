@@ -1,12 +1,15 @@
-# SUP-010: Add the groups schema, server-side rules and group personas
+---
+type: task
+id: SUP-010
+title: "Add the groups schema, server-side rules and group personas"
+area: backend
+epic: EP-03
+depends_on: [SUP-009]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-03 |
-| Depends on | SUP-009 |
-| Paired with | None |
-| Status | Draft |
+# SUP-010: Add the groups schema, server-side rules and group personas
 
 ## Intent
 
@@ -55,7 +58,7 @@ cd backend && supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

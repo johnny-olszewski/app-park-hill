@@ -18,20 +18,20 @@ class MockBackendServiceTest {
 
     @Test
     fun theEntryIsTheRecordedGetEntry() = runTest {
-        val service = MockBackendService(FixtureStore.directory(bundled), MockPersonaState())
+        val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState())
         assertEquals(expected("get_entry.json"), service.getEntry("en"))
     }
 
     @Test
-    fun getScreenReadsTheScreenFixture() = runTest {
-        val service = MockBackendService(FixtureStore.directory(bundled), MockPersonaState())
+    fun getScreenReadsTheScreenMockResponse() = runTest {
+        val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState())
         assertEquals(expected("get_screen.auth.sign_in.json"), service.getScreen("auth.sign_in", "en"))
     }
 
     @Test
     fun getTabsReturnsTheSignedInPersonasTabs() = runTest {
         val persona = MockPersonaState()
-        val service = MockBackendService(FixtureStore.directory(bundled), persona)
+        val service = MockBackendService(MockResponseStore.directory(bundled), persona)
         try {
             service.getTabs("en")
             fail("expected Unauthorized before signing in")
@@ -45,7 +45,7 @@ class MockBackendServiceTest {
 
     @Test
     fun anUnknownScreenKeyThrowsUnknownScreen() = runTest {
-        val service = MockBackendService(FixtureStore.directory(bundled), MockPersonaState())
+        val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState())
         try {
             service.getScreen("does.not_exist", "en")
             fail("expected UnknownScreen")
@@ -55,13 +55,13 @@ class MockBackendServiceTest {
     }
 
     @Test
-    fun aPersonasFixtureWinsOverTheSharedOne() = runTest {
-        val root = Files.createTempDirectory("fixtures").toFile()
+    fun aPersonasMockResponseWinsOverTheSharedOne() = runTest {
+        val root = Files.createTempDirectory("mock_responses").toFile()
         File(root, "admin").mkdirs()
         File(root, "get_entry.json").writeText("""{"key": "shared", "data": {}}""")
         File(root, "admin/get_entry.json").writeText("""{"key": "admin", "data": {}}""")
         val persona = MockPersonaState()
-        val service = MockBackendService(FixtureStore.directory(root), persona)
+        val service = MockBackendService(MockResponseStore.directory(root), persona)
 
         assertEquals("shared", service.getEntry("en").key)
         persona.current = "admin"

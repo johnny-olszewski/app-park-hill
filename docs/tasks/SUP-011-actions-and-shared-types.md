@@ -1,12 +1,15 @@
-# SUP-011: Describe actions and the shared group types in the contract
+---
+type: task
+id: SUP-011
+title: "Describe actions and the shared group types in the contract"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-022]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-022 |
-| Paired with | None |
-| Status | Draft |
+# SUP-011: Describe actions and the shared group types in the contract
 
 ## Intent
 
@@ -24,7 +27,7 @@ Community screens are built from a few shared shapes: a tappable action, a group
   - `GroupDetail`: `group_id`, `title`, `description`, `meeting`, `location`, `leaders_line`, `members_title`, `members` (list of `MemberRow`)
   - `MemberRow`: `user_id`, `title`, optional `note` (for example "You"), `is_leader`
 - Document `screen_unavailable` in `contract/README.md` Errors: when it is returned and that its `details` carry the backend's localized message.
-- One example fixture per type in `contract/types/examples/<TypeName>.json`, validated by `make data-check`.
+- One example mock response per type in `contract/types/examples/<TypeName>.json`, validated by `make data-check`.
 
 ## Out of scope
 
@@ -37,7 +40,7 @@ Community screens are built from a few shared shapes: a tappable action, a group
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | `make models` generates Swift and Kotlin for the five types; a group row with an `action` of unknown `type` decodes, with the action as unknown | Clients ignore what they do not know (contract rules 2 and 3) |
-| AC2 | A `presentation` or `role` value outside its enum fails `make data-check` when it appears in a fixture | The backend cannot send a value the clients do not know |
+| AC2 | A `presentation` or `role` value outside its enum fails `make data-check` when it appears in a mock response | The backend cannot send a value the clients do not know |
 | AC3 | Each type's example in `contract/types/examples/` passes the check, and an example missing a required field fails it | Clients can build views before screens exist |
 | AC4 | `contract/README.md` documents actions, presentation values, the shared types and `screen_unavailable` | One contract for every screen |
 | AC5 | The generated Swift and Kotlin for `Action` compile in a scratch build and decode the `NavigateAction` example and an unknown-type action (as SUP-020 AC4) | The union works on both platforms before any app uses it |
@@ -62,7 +65,7 @@ Then AC1, AC2 and AC3 failures with temporary edits to an example, reverted afte
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

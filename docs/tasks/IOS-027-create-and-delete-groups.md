@@ -1,12 +1,15 @@
-# IOS-027: Build iOS group create and delete
+---
+type: task
+id: IOS-027
+title: "Build iOS group create and delete"
+area: ios
+epic: EP-03
+depends_on: [IOS-013, SUP-025]
+paired_with: [AND-028]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-013, SUP-025 |
-| Paired with | AND-028 |
-| Status | Draft |
+# IOS-027: Build iOS group create and delete
 
 ## Intent
 
@@ -51,7 +54,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -1,12 +1,15 @@
-# IOS-022: Show the production sign-in in Mock with persona and result tools
+---
+type: task
+id: IOS-022
+title: "Show the production sign-in in Mock with persona and result tools"
+area: ios
+epic: EP-06
+depends_on: [IOS-021, SUP-021]
+paired_with: [AND-022]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-06 |
-| Depends on | IOS-021, SUP-021 |
-| Paired with | AND-022 |
-| Status | Done |
+# IOS-022: Show the production sign-in in Mock with persona and result tools
 
 ## Intent
 
@@ -65,7 +68,7 @@ Run Mock: sign in as Admin with Success; arm each refusal and sign in; arm No co
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -73,7 +73,7 @@ class SupabaseAuthIntegrationTest {
     }
 
     @Test
-    fun signedInTabsMatchTheFixtureAndSignedOutIsRefused() = runBlocking {
+    fun signedInTabsMatchTheMockResponseAndSignedOutIsRefused() = runBlocking {
         val stack = Stack(context, environment, File(context.cacheDir, "integration/tabs-session.bin").apply { delete() })
         try {
             stack.backend.getTabs("en")
@@ -83,8 +83,8 @@ class SupabaseAuthIntegrationTest {
         }
 
         stack.auth.signIn(attendeeEmail, password)
-        val fixture = checkNotNull(javaClass.classLoader?.getResourceAsStream("attendee/get_tabs.json")).bufferedReader().readText()
-        assertEquals(ContractJson.decodeFromString(TabsResponse.serializer(), fixture), stack.backend.getTabs("en"))
+        val mockResponse = checkNotNull(javaClass.classLoader?.getResourceAsStream("attendee/get_tabs.json")).bufferedReader().readText()
+        assertEquals(ContractJson.decodeFromString(TabsResponse.serializer(), mockResponse), stack.backend.getTabs("en"))
         stack.auth.signOut()
     }
 }

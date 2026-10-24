@@ -1,12 +1,15 @@
-# IOS-012: Build the iOS sheet presentation and people picker
+---
+type: task
+id: IOS-012
+title: "Build the iOS sheet presentation and people picker"
+area: ios
+epic: EP-03
+depends_on: [IOS-026, SUP-013]
+paired_with: [AND-012]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-026, SUP-013 |
-| Paired with | AND-012 |
-| Status | Draft |
+# IOS-012: Build the iOS sheet presentation and people picker
 
 ## Intent
 
@@ -31,7 +34,7 @@ Edit mode adds people by picking them from everyone signed up. This task opens `
 | AC2 | Rows that are not selectable show their note and cannot be chosen | The backend decides who can be chosen |
 | AC3 | Add returns every chosen user id to the opener and closes the sheet; Cancel and dragging down return nothing | A reusable select-people pattern |
 | AC4 | Search filters by name as you type, keeping chosen people chosen | Fast with hundreds of people |
-| AC5 | Unit tests cover AC2 to AC4 with the picker fixtures; a Mock UI test covers AC1 and AC3 | Verified without a backend |
+| AC5 | Unit tests cover AC2 to AC4 with the picker mock responses; a Mock UI test covers AC1 and AC3 | Verified without a backend |
 
 ## Technical notes
 
@@ -53,7 +56,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -1,12 +1,15 @@
-# SUP-001: Create the monorepo scaffold
+---
+type: task
+id: SUP-001
+title: "Create the monorepo scaffold"
+area: docs
+epic: EP-01
+depends_on: []
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | docs |
-| Epic | EP-01 |
-| Depends on | None |
-| Paired with | None |
-| Status | Done |
+# SUP-001: Create the monorepo scaffold
 
 ## Intent
 

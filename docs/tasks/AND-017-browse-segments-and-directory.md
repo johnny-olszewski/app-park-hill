@@ -1,12 +1,15 @@
-# AND-017: Add the Android directory and segmented control to Browse
+---
+type: task
+id: AND-017
+title: "Add the Android directory and segmented control to Browse"
+area: android
+epic: EP-04
+depends_on: [AND-026, SUP-017]
+paired_with: [IOS-017]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-04 |
-| Depends on | AND-026, SUP-017 |
-| Paired with | IOS-017 |
-| Status | Draft |
+# AND-017: Add the Android directory and segmented control to Browse
 
 ## Intent
 
@@ -28,7 +31,7 @@ Let people browse groups, the directory, or both from one place, with the segmen
 | AC1 | With both parts, a segmented control with backend titles switches instantly between them | One screen, two views |
 | AC2 | With one part, no segmented control is shown | Only what the person can use |
 | AC3 | Directory search filters by name as you type; rows open person detail | Find people fast |
-| AC4 | Personas get the parts their fixtures give them (listed member: directory only; staff: both) | The UI follows the data |
+| AC4 | Personas get the parts their mock responses give them (listed member: directory only; staff: both) | The UI follows the data |
 | AC5 | Unit and Mock UI tests cover AC1 to AC4 | Verified |
 
 ## Technical notes
@@ -47,7 +50,7 @@ cd android
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

@@ -29,7 +29,7 @@ enum MockSignInResult: String, CaseIterable, Identifiable, Sendable {
 
     /// The recorded `sign_in` refusal this result replays, without `.json`,
     /// or nil when it is not a backend refusal.
-    var refusalFixture: String? {
+    var refusalResponse: String? {
         switch self {
         case .invalidCredentials: "sign_in.error"
         case .accountDisabled: "sign_in.error.account_disabled"

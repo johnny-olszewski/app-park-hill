@@ -1,6 +1,6 @@
 """Loads /contract/screens, one JSON Schema description per backend screen
 key, and checks values against them. Shared by the model generator and the
-fixture check.
+mock response check.
 
 Only a subset of JSON Schema is supported, and anything else is refused, so a
 description never says more than the generator and the check understand:

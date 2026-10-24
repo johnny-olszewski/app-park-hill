@@ -40,14 +40,14 @@ struct ScreenRegistryTests {
         #expect(received == Data(title: "Hello"))
     }
 
-    @Test func realSignInFixtureResolves() throws {
-        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestFixtures.data("get_entry.json"))
+    @Test func realSignInMockResponseResolves() throws {
+        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))
         #expect(makeRegistry().resolve(envelope) != nil)
     }
 
     @Test func everyRecordedTabRootResolves() throws {
-        for path in TestFixtures.allJSONPaths().filter({ $0.hasSuffix("/get_tabs.json") }) {
-            let response = try JSONDecoder().decode(TabsResponse.self, from: TestFixtures.data(path))
+        for path in TestMockResponses.allJSONPaths().filter({ $0.hasSuffix("/get_tabs.json") }) {
+            let response = try JSONDecoder().decode(TabsResponse.self, from: TestMockResponses.data(path))
             for tab in response.tabs {
                 #expect(makeRegistry().resolve(tab.screen) != nil, "\(path): \(tab.screen.key)")
             }

@@ -66,14 +66,14 @@ class SignInTests(unittest.TestCase):
 
     # AC1
 
-    def test_correct_credentials_return_a_session_matching_the_fixture(self):
+    def test_correct_credentials_return_a_session_matching_the_mock_response(self):
         attendee = self.persona("attendee")
         status, body = self.sign_in(attendee["email"], self.data["local_password"])
         self.assertEqual(status, 200, body)
         self.assertEqual(body["status"], "ok")
-        fixture = json.loads((dataset.FIXTURES_PATH / "sign_in.ok.json").read_text())
-        self.assertEqual(set(body), set(fixture))
-        self.assertEqual(set(body["session"]), set(fixture["session"]))
+        mock_response = json.loads((dataset.MOCK_RESPONSES_PATH / "sign_in.ok.json").read_text())
+        self.assertEqual(set(body), set(mock_response))
+        self.assertEqual(set(body["session"]), set(mock_response["session"]))
         self.assertEqual(body["session"]["user_id"], dataset.persona_uuid("attendee"))
         self.assertTrue(body["session"]["access_token"])
         self.assertTrue(body["session"]["refresh_token"])

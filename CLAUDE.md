@@ -7,8 +7,8 @@ Start a session with `/status`: where the work stands and the next step. Impleme
 Before changing anything:
 
 1. Read `docs/ENGINEERING_GUIDE.md`. It governs every task; if a task conflicts with it, the guide wins.
-2. Read your assigned slice in its epic's Slices section (`docs/epics/`), and the spec in `docs/specs/` it references.
-3. Read every task in the slice in `docs/tasks/`, and their "Depends on" tasks.
+2. Read your assigned slice in `docs/slices/`, and the spec in `docs/specs/` it references.
+3. Read every task in the slice in `docs/tasks/`, and their `depends_on` tasks.
 
 Rules:
 
@@ -25,9 +25,10 @@ Follow `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2. In short:
 - Branch from an up-to-date `main`, named `slice/` plus the slice ID and a short name (`slice/EP-06.B-mock-sign-in`). Never commit to `main`.
 - Split each task's work into standalone, logical commits ordered for review. Finish one task's commits before starting the next.
 - Commit subject `[<TASK-ID>][<k>/n] <few-word summary>`, where `<k>` counts that task's commits from 1 and `n` is the literal letter `n`. Then a blank line and a short bulleted list of brief details.
-- Each task's last commit sets it to Done in the task file, its epic and `docs/BACKLOG.md` (`scripts/mark_done.py <TASK-ID>`). The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets the slice to Done in its epic and `docs/BACKLOG.md`.
+- Each task's last commit sets `status: Done` in its task file's frontmatter. The branch's last commit, `[<slice ID>] Mark <slice ID> done`, sets `status: Done` in the slice file (guide 7.3).
 - Open one PR per slice, titled `[<slice ID>] <slice title>`, with the body from `.github/pull_request_template.md`.
 - Planning-only changes use `plan/` branches (guide 7.1 rule 9).
+- Housekeeping that implements no task (renames, tooling) uses `chore/` branches (guide 7.1 rule 12).
 - Never merge a PR with a failing or pending check (guide 7.1 rule 10). Enable the pre-push hook once per clone: `git config core.hooksPath .githooks`.
 - Never mention Claude, AI, assistants or agents in commits, PRs or anything posted under a person's account, including replies to review comments. No `Co-Authored-By` or "Generated with" lines. Only the automated reviewer's own bot comments are exempt (guide 7.1 rule 11).
 - Every PR gets one automated review when ready; fix must-fix comments, apply suggestions in separate commits for the reviewer to verify, and ask first about guide or Scope changes (guide 7.1 rule 11).

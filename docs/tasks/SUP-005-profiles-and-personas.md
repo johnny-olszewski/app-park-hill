@@ -1,12 +1,15 @@
-# SUP-005: Add profiles, seeded personas and a signed-in check function
+---
+type: task
+id: SUP-005
+title: "Add profiles, seeded personas and a signed-in check function"
+area: backend, contract
+epic: EP-01
+depends_on: [SUP-003]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-01 |
-| Depends on | SUP-003 |
-| Paired with | None |
-| Status | Done |
+# SUP-005: Add profiles, seeded personas and a signed-in check function
 
 ## Intent
 
@@ -15,9 +18,9 @@ Give every account a profile, give tests and the mock the same set of people, an
 ## Scope
 
 - `profiles` table (id = auth user id, display name, created at), created automatically when an account is created.
-- `/contract/seed/dataset.json`: the single source for personas and all seed data (`specs/AUTH.md` 7). Nobody edits `seed.sql` or mock fixtures by hand.
+- `/contract/seed/dataset.json`: the single source for personas and all seed data (`specs/AUTH.md` 7). Nobody edits `seed.sql` or mock responses by hand.
 - `make seed` generates `backend/supabase/seed.sql` from the dataset.
-- `make fixtures` loads the seed into local Supabase, signs in as each persona (and anonymously), calls every screen function and writes `/contract/fixtures/<persona>/`.
+- `make mock-responses` loads the seed into local Supabase, signs in as each persona (and anonymously), calls every screen function and writes `/contract/mock_responses/<persona>/`.
 - `make data-check` regenerates both and fails on any difference from what is committed.
 - `seed.sql`: accounts for each persona with the shared local password; `disabled` is banned.
 - `require_active_user()`: shared check every signed-in function calls first; raises `session_ended` when there is no valid user or the account is disabled.
@@ -40,7 +43,7 @@ Give every account a profile, give tests and the mock the same set of people, an
 | AC3 | `/backend/README.md` documents the persona emails and shared local password, and states they exist only locally | Anyone can sign in locally; no one mistakes them for real accounts |
 | AC4 | `whoami()` as a signed-in persona returns that persona's profile; as `anon` it raises a distinct, documented error | Proves signed-in identity reaches backend functions |
 | AC5 | A signed-in user cannot read or change another user's profile row directly (RLS) | Profiles are private by default |
-| AC6 | `make data-check` fails if `seed.sql` or any fixture differs from what the dataset generates | Seed and mock data are updated in one place and cannot drift |
+| AC6 | `make data-check` fails if `seed.sql` or any mock response differs from what the dataset generates | Seed and mock data are updated in one place and cannot drift |
 | AC7 | After the `attendee` account is disabled, `whoami()` called with its still-unexpired token raises `session_ended` | A disabled account loses access on its next request, not when its token expires |
 | AC8 | `/backend/README.md` states that every signed-in function must call `require_active_user()` first | Future functions inherit the rule |
 | AC9 | pgTAP tests cover AC1, AC2, AC4, AC5 and AC7 | Enforced, not documented |

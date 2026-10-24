@@ -54,7 +54,7 @@ jobs:
       - name: Edge Function tests
         run: make test-functions
 
-      # SUP-007: seed and mock fixtures regenerated from the dataset must
+      # SUP-007: seed and mock responses regenerated from the dataset must
       # match what is committed.
       - name: Dataset check
         run: make data-check

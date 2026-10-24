@@ -1,12 +1,15 @@
-# IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder
+---
+type: task
+id: IOS-006
+title: "Build the iOS sign-in flow, mock persona picker and signed-in placeholder"
+area: ios
+epic: EP-01
+depends_on: [IOS-003, IOS-005]
+paired_with: [AND-006]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | IOS-003, IOS-005 |
-| Paired with | AND-006 |
-| Status | Done |
+# IOS-006: Build the iOS sign-in flow, mock persona picker and signed-in placeholder
 
 ## Intent
 

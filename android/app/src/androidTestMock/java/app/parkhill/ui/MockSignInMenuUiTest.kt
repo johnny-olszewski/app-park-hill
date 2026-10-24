@@ -76,8 +76,8 @@ class MockSignInMenuUiTest {
         assertEquals("admin", compose.signedInUser())
     }
 
-    private fun recordedMessage(fixture: String, field: String = "message"): String {
-        val text = checkNotNull(javaClass.classLoader?.getResourceAsStream(fixture)) { "$fixture not bundled" }.bufferedReader().readText()
+    private fun recordedMessage(mockResponse: String, field: String = "message"): String {
+        val text = checkNotNull(javaClass.classLoader?.getResourceAsStream(mockResponse)) { "$mockResponse not bundled" }.bufferedReader().readText()
         val root = Json.parseToJsonElement(text).jsonObject
         return (root["data"]?.jsonObject ?: root).getValue(field).jsonPrimitive.content
     }

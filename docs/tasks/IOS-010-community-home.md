@@ -1,12 +1,15 @@
-# IOS-010: Build the iOS Community home for every state
+---
+type: task
+id: IOS-010
+title: "Build the iOS Community home for every state"
+area: ios
+epic: EP-03
+depends_on: [IOS-011, SUP-012]
+paired_with: [AND-010]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-011, SUP-012 |
-| Paired with | AND-010 |
-| Status | Draft |
+# IOS-010: Build the iOS Community home for every state
 
 ## Intent
 
@@ -56,7 +59,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

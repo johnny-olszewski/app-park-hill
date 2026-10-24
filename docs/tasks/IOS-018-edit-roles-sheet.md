@@ -1,12 +1,15 @@
-# IOS-018: Build the iOS Edit roles half sheet
+---
+type: task
+id: IOS-018
+title: "Build the iOS Edit roles half sheet"
+area: ios
+epic: EP-04
+depends_on: [IOS-015, SUP-018]
+paired_with: [AND-018]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-04 |
-| Depends on | IOS-015, SUP-018 |
-| Paired with | AND-018 |
-| Status | Draft |
+# IOS-018: Build the iOS Edit roles half sheet
 
 ## Intent
 
@@ -46,7 +49,7 @@ xcodebuild -scheme ParkHill-Mock -destination 'platform=iOS Simulator,name=iPhon
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

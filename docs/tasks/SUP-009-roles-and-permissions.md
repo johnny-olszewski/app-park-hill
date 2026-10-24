@@ -1,12 +1,15 @@
-# SUP-009: Add data-driven roles, permissions and the permission check
+---
+type: task
+id: SUP-009
+title: "Add data-driven roles, permissions and the permission check"
+area: backend
+epic: EP-03
+depends_on: [SUP-005]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | backend |
-| Epic | EP-03 |
-| Depends on | SUP-005 |
-| Paired with | None |
-| Status | Draft |
+# SUP-009: Add data-driven roles, permissions and the permission check
 
 ## Intent
 
@@ -58,7 +61,7 @@ cd backend && supabase db reset && supabase test db
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

@@ -1,12 +1,15 @@
-# IOS-001: Create the iOS project with Mock and Dev build configurations
+---
+type: task
+id: IOS-001
+title: "Create the iOS project with Mock and Dev build configurations"
+area: ios
+epic: EP-01
+depends_on: [SUP-001]
+paired_with: [AND-001]
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-01 |
-| Depends on | SUP-001 |
-| Paired with | AND-001 |
-| Status | Done |
+# IOS-001: Create the iOS project with Mock and Dev build configurations
 
 ## Intent
 

@@ -1,12 +1,15 @@
-# IOS-016: Build iOS profile edit mode with photo upload
+---
+type: task
+id: IOS-016
+title: "Build iOS profile edit mode with photo upload"
+area: ios
+epic: EP-04
+depends_on: [IOS-015, SUP-018]
+paired_with: [AND-016]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-04 |
-| Depends on | IOS-015, SUP-018 |
-| Paired with | AND-016 |
-| Status | Draft |
+# IOS-016: Build iOS profile edit mode with photo upload
 
 ## Intent
 
@@ -48,7 +51,7 @@ xcodebuild -scheme ParkHill-Mock -destination 'platform=iOS Simulator,name=iPhon
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

@@ -1,16 +1,19 @@
-# SUP-003: Define the screen contract and implement get_entry and get_screen
+---
+type: task
+id: SUP-003
+title: "Define the screen contract and implement get_entry and get_screen"
+area: backend, contract
+epic: EP-01
+depends_on: [SUP-002]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, contract |
-| Epic | EP-01 |
-| Depends on | SUP-002 |
-| Paired with | None |
-| Status | Done |
+# SUP-003: Define the screen contract and implement get_entry and get_screen
 
 ## Intent
 
-Make the backend the source of what a signed-out user sees first, and establish the screen envelope every screen will use. After this task, the sign-in screen's wording is a data change, not a release, and both clients have fixtures to build against.
+Make the backend the source of what a signed-out user sees first, and establish the screen envelope every screen will use. After this task, the sign-in screen's wording is a data change, not a release, and both clients have mock responses to build against.
 
 ## Scope
 
@@ -18,7 +21,7 @@ Make the backend the source of what a signed-out user sees first, and establish 
 - Functions `get_entry(p_locale)` and `get_screen(p_key, p_locale, p_params)` per guide 4.1.
 - Migration data (not seed): screen `auth.sign_in` and its English strings per `specs/AUTH.md` 5.3.
 - `/contract/README.md` with the envelope, entry points, contract rules and screen key naming rule.
-- `/contract/fixtures/get_entry.json`, `get_screen.auth.sign_in.json`.
+- `/contract/mock_responses/get_entry.json`, `get_screen.auth.sign_in.json`.
 - pgTAP tests.
 
 ## Out of scope
@@ -58,7 +61,7 @@ curl -s -X POST http://127.0.0.1:54321/rest/v1/rpc/get_entry \
 ## Definition of done
 
 - [ ] All acceptance criteria pass
-- [ ] Fixtures committed and match live output
+- [ ] Mock responses committed and match live output
 - [ ] No work outside Scope
 
 ## Open questions

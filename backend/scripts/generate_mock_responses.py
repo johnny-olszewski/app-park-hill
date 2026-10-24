@@ -1,6 +1,6 @@
-"""Regenerates /contract/fixtures from the real backend. Run with
-`make fixtures`, which resets local Supabase from migrations and the generated
-seed first. Never edit fixtures by hand.
+"""Regenerates /contract/mock_responses from the real backend. Run with
+`make mock-responses`, which resets local Supabase from migrations and the generated
+seed first. Never edit mock responses by hand.
 
 Layout:
   get_entry.json, get_screen.<key>.json            signed out
@@ -52,9 +52,9 @@ def clear(root: Path) -> None:
                 child.unlink()
 
 
-def write_sign_in_fixtures(supabase: LocalSupabase, data: dict) -> None:
+def write_sign_in_mock_responses(supabase: LocalSupabase, data: dict) -> None:
     attendee = next(p for p in dataset.active_personas(data) if p["id"] == "attendee")
-    headers = {"X-Forwarded-For": "fixtures"}
+    headers = {"X-Forwarded-For": "mock-responses"}
 
     def call(password: str):
         body = json.dumps({"email": attendee["email"], "password": password, "locale": LOCALE}).encode()
@@ -62,19 +62,19 @@ def write_sign_in_fixtures(supabase: LocalSupabase, data: dict) -> None:
 
     status, error = call("not-the-password")
     if status != 401:
-        raise SystemExit(f"sign_in error fixture: expected 401, got {status}: {error}")
-    write(dataset.FIXTURES_PATH / "sign_in.error.json", error)
+        raise SystemExit(f"sign_in error mock response: expected 401, got {status}: {error}")
+    write(dataset.MOCK_RESPONSES_PATH / "sign_in.error.json", error)
 
     status, ok = call(data["local_password"])
     if status != 200:
-        raise SystemExit(f"sign_in ok fixture: expected 200, got {status}: {ok}")
+        raise SystemExit(f"sign_in ok mock response: expected 200, got {status}: {ok}")
     ok["session"].update(access_token="<access_token>", refresh_token="<refresh_token>", expires_at=0)
-    write(dataset.FIXTURES_PATH / "sign_in.ok.json", ok)
+    write(dataset.MOCK_RESPONSES_PATH / "sign_in.ok.json", ok)
 
-    write_refusal_fixtures(supabase, data)
+    write_refusal_mock_responses(supabase, data)
 
 
-def write_refusal_fixtures(supabase: LocalSupabase, data: dict) -> None:
+def write_refusal_mock_responses(supabase: LocalSupabase, data: dict) -> None:
     """Every other sign_in refusal, for the mock menu's results. Each trigger
     uses its own client address, and the attempt limit is reached with an email
     that has no account, so no persona is left locked."""
@@ -82,31 +82,31 @@ def write_refusal_fixtures(supabase: LocalSupabase, data: dict) -> None:
     def refusal(code: str, body: dict, address: str) -> dict:
         status, error = supabase.call_function("sign_in", json.dumps(body).encode(), {"X-Forwarded-For": address})
         if error.get("code") != code:
-            raise SystemExit(f"sign_in {code} fixture: got {status}: {error}")
+            raise SystemExit(f"sign_in {code} mock response: got {status}: {error}")
         return error
 
     def write_refusal(error: dict) -> None:
-        write(dataset.FIXTURES_PATH / f"sign_in.error.{error['code']}.json", error)
+        write(dataset.MOCK_RESPONSES_PATH / f"sign_in.error.{error['code']}.json", error)
 
     disabled = next(p for p in data["personas"] if p["state"] == "banned")
     write_refusal(refusal(
         "account_disabled",
         {"email": disabled["email"], "password": data["local_password"], "locale": LOCALE},
-        "fixtures-disabled",
+        "mock-responses-disabled",
     ))
 
-    write_refusal(refusal("invalid_request", {"email": disabled["email"], "locale": LOCALE}, "fixtures-invalid"))
+    write_refusal(refusal("invalid_request", {"email": disabled["email"], "locale": LOCALE}, "mock-responses-invalid"))
 
-    unknown_email = {"email": "attempt-limit@fixtures.test", "password": "not-the-password", "locale": LOCALE}
+    unknown_email = {"email": "attempt-limit@mock-responses.test", "password": "not-the-password", "locale": LOCALE}
     for _ in range(10):
         status, error = supabase.call_function(
-            "sign_in", json.dumps(unknown_email).encode(), {"X-Forwarded-For": "fixtures-limit"}
+            "sign_in", json.dumps(unknown_email).encode(), {"X-Forwarded-For": "mock-responses-limit"}
         )
         if error.get("code") == "too_many_attempts":
             write_refusal(error)
             break
     else:
-        raise SystemExit("sign_in too_many_attempts fixture: the attempt limit was never reached")
+        raise SystemExit("sign_in too_many_attempts mock response: the attempt limit was never reached")
 
     # `unknown` cannot be triggered on demand: built from the same message the
     # function sends, in the shape it sends it (specs/AUTH.md 5.5).
@@ -120,7 +120,7 @@ def main() -> None:
     data = dataset.load()
     supabase = LocalSupabase()
     keys = screen_keys(supabase)
-    root = dataset.FIXTURES_PATH
+    root = dataset.MOCK_RESPONSES_PATH
     clear(root)
 
     print("Signed out:")
@@ -132,7 +132,7 @@ def main() -> None:
         )
 
     print("sign_in:")
-    write_sign_in_fixtures(supabase, data)
+    write_sign_in_mock_responses(supabase, data)
 
     for persona in dataset.active_personas(data):
         print(f"{persona['id']}:")

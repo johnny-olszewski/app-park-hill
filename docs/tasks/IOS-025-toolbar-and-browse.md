@@ -1,12 +1,15 @@
-# IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups
+---
+type: task
+id: IOS-025
+title: "Build the iOS toolbar, full-screen cover and Browse all groups"
+area: ios
+epic: EP-03
+depends_on: [IOS-010, SUP-023]
+paired_with: [AND-026]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | ios |
-| Epic | EP-03 |
-| Depends on | IOS-010, SUP-023 |
-| Paired with | AND-026 |
-| Status | Draft |
+# IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups
 
 ## Intent
 
@@ -54,7 +57,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

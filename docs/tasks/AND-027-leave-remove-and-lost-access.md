@@ -1,12 +1,15 @@
-# AND-027: Handle call actions and lost access, and add leave and swipe to remove on Android
+---
+type: task
+id: AND-027
+title: "Handle call actions and lost access, and add leave and swipe to remove on Android"
+area: android
+epic: EP-03
+depends_on: [AND-026, SUP-014]
+paired_with: [IOS-026]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-026, SUP-014 |
-| Paired with | IOS-026 |
-| Status | Draft |
+# AND-027: Handle call actions and lost access, and add leave and swipe to remove on Android
 
 ## Intent
 
@@ -32,7 +35,7 @@ Members leave a group and leaders remove someone with one tap and a confirmation
 | AC3 | Leave appears only when sent; confirming on a pushed group closes it and refreshes the screen below; on Community home it refreshes home to its new state | Leaving always lands somewhere valid |
 | AC4 | A refresh refused with `screen_unavailable` closes the screen, refreshes the one below and shows the backend message | People never stay on something they lost access to |
 | AC5 | A call refused with `action_refused` shows its message and refreshes the screen | Stale buttons can never do what the user may not |
-| AC6 | Unit tests cover AC1, AC3 and AC4 with fixtures; Mock UI tests cover AC2 and AC3; Dev UI tests in `make test-dev` cover leaving, removing and AC5 against local Supabase | Verified per persona and end to end |
+| AC6 | Unit tests cover AC1, AC3 and AC4 with mock responses; Mock UI tests cover AC2 and AC3; Dev UI tests in `make test-dev` cover leaving, removing and AC5 against local Supabase | Verified per persona and end to end |
 
 ## Technical notes
 
@@ -54,7 +57,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

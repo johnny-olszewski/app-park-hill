@@ -26,7 +26,7 @@ select is_empty(
 
 set local role anon;
 
--- AC1: the signed-out entry screen, exactly as in contract/fixtures/get_entry.json.
+-- AC1: the signed-out entry screen, exactly as in contract/mock_responses/get_entry.json.
 select is(
   public.get_entry('en'),
   '{

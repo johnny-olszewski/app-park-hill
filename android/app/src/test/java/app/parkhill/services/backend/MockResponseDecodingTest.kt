@@ -7,15 +7,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** Android agrees with the contract: every recorded screen response decodes (guide 4.1 rule 6). */
-class FixtureDecodingTest {
+class MockResponseDecodingTest {
     private val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
 
     @Test
-    fun everyScreenFixtureDecodes() {
+    fun everyScreenMockResponseDecodes() {
         val screens = root.walkTopDown()
             .filter { it.isFile && (it.name == "get_entry.json" || it.name.startsWith("get_screen.")) }
             .toList()
-        assertTrue("no screen fixtures found", screens.isNotEmpty())
+        assertTrue("no screen mock responses found", screens.isNotEmpty())
         for (file in screens) {
             val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), file.readText())
             assertTrue("${file.name} has no key", envelope.key.isNotEmpty())
@@ -23,9 +23,9 @@ class FixtureDecodingTest {
     }
 
     @Test
-    fun everyTabsFixtureDecodes() {
+    fun everyTabsMockResponseDecodes() {
         val files = root.walkTopDown().filter { it.isFile && it.name == "get_tabs.json" }.toList()
-        assertTrue("no tabs fixtures found", files.isNotEmpty())
+        assertTrue("no tabs mock responses found", files.isNotEmpty())
         for (file in files) {
             val response = ContractJson.decodeFromString(TabsResponse.serializer(), file.readText())
             assertTrue("${file.path} has no tabs", response.tabs.isNotEmpty())

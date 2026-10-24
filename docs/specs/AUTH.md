@@ -96,7 +96,7 @@ Mock shows the production `auth.sign_in` from the recorded `get_entry` response.
 - **Sign in as:** any active persona in `/contract/seed/dataset.json`; default the first.
 - **Next sign-in:** Success (signs in as the chosen persona), a refusal from 5.5 (`invalid_credentials`, `account_disabled`, `too_many_attempts`, `invalid_request`, `unknown`, shown with its recorded message), No connection, or Something went wrong. Default Success. A choice stays until changed for the rest of the launch.
 
-Recorded refusals: `contract/fixtures/sign_in.error.json` (`invalid_credentials`) and `sign_in.error.<code>.json` for the others. `unknown` cannot be triggered on demand, so its file is built from the same message the function sends.
+Recorded refusals: `contract/mock_responses/sign_in.error.json` (`invalid_credentials`) and `sign_in.error.<code>.json` for the others. `unknown` cannot be triggered on demand, so its file is built from the same message the function sends.
 
 ### 5.5 `sign_in` Edge Function
 
@@ -167,7 +167,7 @@ A separate abstraction from the backend service, selected at build time the same
 | session state stream | Emits signed in / signed out, including when renewal is refused |
 
 - **Production class:** calls the Edge Function, then gives the session to the Supabase client library. The backend service and auth service share one Supabase client, so the access token is attached to backend calls automatically.
-- **Mock class:** `signIn` takes a persona id. It sets the current persona, which the mock backend service uses to choose fixtures. No network.
+- **Mock class:** `signIn` takes a persona id. It sets the current persona, which the mock backend service uses to choose mock responses. No network.
 
 ### 6.2 Screens
 
@@ -194,9 +194,9 @@ Defined once in `/contract/seed/dataset.json`:
 | `admin` | `admin@parkhill.test` | Active | Will hold the admin role when roles land |
 | `disabled` | `disabled@parkhill.test` | Banned | Tests the disabled path |
 
-- The dataset is the single source: `make seed` generates `seed.sql` (accounts with the shared local password documented in `/backend/README.md`) and `make fixtures` generates the mock fixtures from it.
+- The dataset is the single source: `make seed` generates `seed.sql` (accounts with the shared local password documented in `/backend/README.md`) and `make mock-responses` generates the mock responses from it.
 - The mock persona picker lists active personas only.
-- `make data-check` in CI fails if the seed or fixtures differ from what the dataset generates.
+- `make data-check` in CI fails if the seed or mock responses differ from what the dataset generates.
 - Seed data is test data only. App configuration (screens, strings) goes in migrations so it reaches hosted projects.
 
 ## 8. Testing
@@ -205,7 +205,7 @@ Defined once in `/contract/seed/dataset.json`:
 |---|---|
 | Backend (pgTAP) | `get_entry`, strings fallback, profiles created on account creation |
 | Edge Function tests | Success, wrong password, disabled account, attempt limit, unknown locale falls back to `en`, no password in logs |
-| Recorded refusals | `make fixtures` records every refusal in 5.5 into `contract/fixtures/sign_in.error*.json` without locking any persona; `make data-check` guards them |
+| Recorded refusals | `make mock-responses` records every refusal in 5.5 into `contract/mock_responses/sign_in.error*.json` without locking any persona; `make data-check` guards them |
 | Integration | Signed-in persona calls `whoami()` and succeeds; signed-out call is refused; after the persona is disabled, its still-unexpired token is refused with `session_ended` |
 | Client unit | Auth services, session restore, renewal refused path, unauthorized response leads to one renewal then sign-out, network errors never sign out, sign-out clears data, error display |
 | UI, Dev against local Supabase, both platforms | Sign in, wrong password shows the backend message, sign out, still signed in after relaunch |

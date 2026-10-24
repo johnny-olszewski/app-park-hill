@@ -1,12 +1,15 @@
-# SUP-004: Add backend CI on GitHub Actions against local Supabase
+---
+type: task
+id: SUP-004
+title: "Add backend CI on GitHub Actions against local Supabase"
+area: backend, ci
+epic: EP-01
+depends_on: [SUP-003]
+paired_with: []
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | backend, ci |
-| Epic | EP-01 |
-| Depends on | SUP-003 |
-| Paired with | None |
-| Status | Done |
+# SUP-004: Add backend CI on GitHub Actions against local Supabase
 
 ## Intent
 

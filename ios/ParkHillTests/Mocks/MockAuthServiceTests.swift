@@ -8,24 +8,24 @@ struct MockAuthServiceTests {
     private let scenario = MockSignInScenario(persona: "admin")
 
     private func makeService() -> MockAuthService {
-        MockAuthService(personaState: personaState, localData: userData.localData, scenario: scenario, fixtures: .bundled)
+        MockAuthService(personaState: personaState, localData: userData.localData, scenario: scenario, responses: .bundled)
     }
 
     private func recorded(_ name: String) throws -> SignInFailure {
-        try JSONDecoder().decode(SignInFailure.self, from: TestFixtures.data("\(name).json"))
+        try JSONDecoder().decode(SignInFailure.self, from: TestMockResponses.data("\(name).json"))
     }
 
     @Test func startsSignedOut() async {
         #expect(await makeService().restoreSession() == .signedOut(nil))
     }
 
-    @Test func personaSignInSwitchesTheBackendToThatPersonasFixtures() async throws {
+    @Test func personaSignInSwitchesTheBackendToThatPersonasMockResponses() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: root.appending(path: "admin"), withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
         try Data(#"{"key":"shared","data":{}}"#.utf8).write(to: root.appending(path: "get_screen.home.json"))
         try Data(#"{"key":"admin","data":{}}"#.utf8).write(to: root.appending(path: "admin/get_screen.home.json"))
-        let backend = MockBackendService(fixtures: FixtureStore(root: root), personaState: personaState)
+        let backend = MockBackendService(responses: MockResponseStore(root: root), personaState: personaState)
         let auth = makeService()
 
         #expect(try await backend.getScreen(key: "home", locale: "en").key == "shared")
@@ -48,9 +48,9 @@ struct MockAuthServiceTests {
         (.invalidRequest, "sign_in.error.invalid_request"),
         (.serverError, "sign_in.error.unknown"),
     ])
-    func aRefusalThrowsItsRecordedMessage(result: MockSignInResult, fixture: String) async throws {
+    func aRefusalThrowsItsRecordedMessage(result: MockSignInResult, mockResponse: String) async throws {
         scenario.result = result
-        let expected = try recorded(fixture)
+        let expected = try recorded(mockResponse)
         await #expect(throws: SignInError.rejected(code: expected.code, message: expected.message)) {
             _ = try await makeService().signIn(email: "x", password: "y")
         }

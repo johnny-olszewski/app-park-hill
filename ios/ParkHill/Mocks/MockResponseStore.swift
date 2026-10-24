@@ -1,0 +1,26 @@
+import Foundation
+
+/// Reads mock responses (`/contract/mock_responses`), bundled into the Mock
+/// configuration only. A persona's own mock response, in `<persona>/`, wins over the
+/// shared one at the root.
+struct MockResponseStore: Sendable {
+    let root: URL
+
+    /// The mock responses bundled with the app.
+    static var bundled: MockResponseStore {
+        guard let root = Bundle.main.url(forResource: "mock_responses", withExtension: nil) else {
+            preconditionFailure("Mock responses are not bundled in this configuration")
+        }
+        return MockResponseStore(root: root)
+    }
+
+    /// The mock response data for `name` (without `.json`), or nil when none exists.
+    func data(named name: String, persona: String?) -> Data? {
+        var candidates: [URL] = []
+        if let persona {
+            candidates.append(root.appending(path: persona).appending(path: "\(name).json"))
+        }
+        candidates.append(root.appending(path: "\(name).json"))
+        return candidates.lazy.compactMap { try? Data(contentsOf: $0) }.first
+    }
+}

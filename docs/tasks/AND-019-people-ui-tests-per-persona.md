@@ -1,12 +1,15 @@
-# AND-019: Add Android people and directory UI tests per persona against local Supabase (local)
+---
+type: task
+id: AND-019
+title: "Add Android people and directory UI tests per persona against local Supabase (local)"
+area: android
+epic: EP-04
+depends_on: [AND-016, AND-017, AND-018, SUP-018]
+paired_with: [IOS-019]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-04 |
-| Depends on | AND-016, AND-017, AND-018, SUP-018 |
-| Paired with | IOS-019 |
-| Status | Draft |
+# AND-019: Add Android people and directory UI tests per persona against local Supabase (local)
 
 ## Intent
 
@@ -47,7 +50,7 @@ cd android
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally with `make test-dev`
 - [ ] No environment branching; no mock code in release builds
-- [ ] Contract changes include fixtures
+- [ ] Contract changes include mock responses
 - [ ] No work outside Scope
 
 ## Open questions

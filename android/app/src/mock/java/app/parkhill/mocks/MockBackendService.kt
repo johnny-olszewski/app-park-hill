@@ -14,16 +14,16 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 
 /**
- * Mock [BackendService]: answers from contract fixtures and makes no network
+ * Mock [BackendService]: answers from mock responses and makes no network
  * calls. The entry is the recorded `get_entry.json`; `getScreen` reads
  * `get_screen.<key>.json`, preferring the current persona's copy; `getTabs`
  * and `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
  */
 class MockBackendService(
-    private val fixtures: FixtureStore,
+    private val responses: MockResponseStore,
     private val personaState: MockPersonaState,
 ) : BackendService {
-    constructor(context: Context, environment: AppEnvironment) : this(FixtureStore.assets(context), MockPersonaState.shared)
+    constructor(context: Context, environment: AppEnvironment) : this(MockResponseStore.assets(context), MockPersonaState.shared)
 
     override suspend fun getEntry(locale: String): ScreenEnvelope =
         decode(RpcFunction.getEntry.value, missing = BackendError.Server)
@@ -45,7 +45,7 @@ class MockBackendService(
         decode(name, missing, ScreenEnvelope.serializer())
 
     private fun <T> decode(name: String, missing: BackendError, serializer: KSerializer<T>): T {
-        val text = fixtures.text(name, personaState.current) ?: throw missing
+        val text = responses.text(name, personaState.current) ?: throw missing
         return try {
             ContractJson.decodeFromString(serializer, text)
         } catch (_: SerializationException) {

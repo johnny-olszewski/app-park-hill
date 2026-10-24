@@ -43,7 +43,7 @@ final class SignInUITests: XCTestCase {
     }
 
     func testWrongPasswordShowsTheBackendMessage() throws {
-        let expected = try XCTUnwrap(UITestData.json("fixtures/sign_in.error")["message"] as? String)
+        let expected = try XCTUnwrap(UITestData.json("mock_responses/sign_in.error")["message"] as? String)
         app.launchSignedOut(entry: emailField)
 
         signIn(email: try UITestData.email(of: "admin"), password: "not-the-password")

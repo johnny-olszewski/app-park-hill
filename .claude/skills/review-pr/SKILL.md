@@ -16,8 +16,9 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 | Branch | Read | Also check |
 |---|---|---|
-| `slice/<ID>-…` | The slice in its epic's Slices section (behavior criteria), every task in it (Scope, Out of scope, acceptance criteria), the spec they reference | The slice checks in section 2 |
-| `plan/…` | Every epic, spec and task the PR changes, and the code those tasks name | The planning checks in section 2 |
+| `slice/<ID>-…` | The slice file in `docs/slices/` (behavior criteria), every task in it (Scope, Out of scope, acceptance criteria), the spec they reference | The slice checks in section 2 |
+| `plan/…` | Every epic, slice, spec and task the PR changes, and the code those tasks name | The planning checks in section 2 |
+| `chore/…` | Nothing more | Only the general checks, plus guide 7.1 rule 12 |
 | Anything else | Nothing more | Only the general checks |
 
 4. **Re-review.** If this PR already has comments from this reviewer, read them and their replies first. For each, check whether the new commits address it: reply on its thread with what changed, or say why it still stands. Then review only what changed since your last review. Never repeat a comment already made.
@@ -28,7 +29,7 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 - Correctness: bugs, missed cases, broken error handling, tests that cannot fail.
 - The responsibility split (guide 2): clients never re-implement roles or permissions, never hardcode text the backend owns.
-- Contract (guide 4.1): changes are additive; names come from `contract/names.json`; a contract change lands with its migration, regenerated fixtures and both client models.
+- Contract (guide 4.1): changes are additive; names come from `contract/names.json`; a contract change lands with its migration, regenerated mock responses and both client models.
 - Build configurations (guide 5.2): no branching on environment in app code; mock and debug code never reachable from a release build.
 - Native platform feel (guide 5.5): system components; behavior one platform gets free is built on the other.
 - Testing (guide 6): new behavior has tests that run in CI; nothing generated is edited by hand.
@@ -46,7 +47,7 @@ Review the PR the way the reviewer (Johnny) would: against the rules this repo w
 
 - Tasks match the current code: files, screens, names and tests they mention exist as described.
 - Each task has one platform, acceptance criteria a person can verify, and no open questions left unmarked.
-- Slice tables in the epic and `docs/BACKLOG.md` agree; dependencies exist.
+- Frontmatter follows guide 7.3: every ID in `tasks`, `depends_on` and `paired_with` exists, each task is in exactly one slice's `tasks`, and no status or link is copied into a table.
 - No task or slice is set to Done.
 
 ## 3. Comment

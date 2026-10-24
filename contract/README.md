@@ -1,6 +1,6 @@
 # Contract
 
-API contract docs, JSON fixtures and personas. The single source of truth both clients build and test against. Governed by `docs/ENGINEERING_GUIDE.md` 4.1.
+API contract docs, JSON mock responses and personas. The single source of truth both clients build and test against. Governed by `docs/ENGINEERING_GUIDE.md` 4.1.
 
 ## Screen envelope
 
@@ -21,7 +21,7 @@ Text resolves per string: a string missing in the requested locale uses its `en`
 
 ## Screen data
 
-`screens/<key>.schema.json` describes one backend screen's `data`, once, for both clients (guide 4.1 rule 8). `make models` in `/backend` generates a Swift and a Kotlin model from each into `generated/`, named by the description's `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. `make data-check` fails when a recorded screen in `fixtures/` (including each tab's screen in `get_tabs`) does not match its description, when a screen key in `names.json` has no description or a description has no key, and when `generated/` differs from what `make models` produces.
+`screens/<key>.schema.json` describes one backend screen's `data`, once, for both clients (guide 4.1 rule 8). `make models` in `/backend` generates a Swift and a Kotlin model from each into `generated/`, named by the description's `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. `make data-check` fails when a recorded screen in `mock responses/` (including each tab's screen in `get_tabs`) does not match its description, when a screen key in `names.json` has no description or a description has no key, and when `generated/` differs from what `make models` produces.
 
 Descriptions use this subset of JSON Schema (2020-12). Anything else is refused, so a description never means something the generator or the check ignores:
 
@@ -40,7 +40,7 @@ Descriptions use this subset of JSON Schema (2020-12). Anything else is refused,
 
 Field names are snake_case in the description and lower camel case in the models, mapped back to the JSON name. Recorded responses must match exactly, with no undescribed fields, so descriptions stay complete; the generated decoders still ignore unknown fields (contract rule 2): Swift's `Decodable` does, and Android decodes with `ContractJson`.
 
-Adding a screen: write its description, add its key to `names.json`, run `make models`, and commit both with the migration and the fixtures. When a screen first needs a keyword the subset lacks (for example `$ref` to a shared type such as `GroupRow` in `contract/types/`, or `enum`), the same change adds it to `backend/scripts/screens.py`, the generator and the check.
+Adding a screen: write its description, add its key to `names.json`, run `make models`, and commit both with the migration and the mock responses. When a screen first needs a keyword the subset lacks (for example `$ref` to a shared type such as `GroupRow` in `contract/types/`, or `enum`), the same change adds it to `backend/scripts/screens.py`, the generator and the check.
 
 ### How the approach was chosen
 
@@ -69,11 +69,11 @@ Also considered and rejected before SUP-020: a generic list of typed elements lo
 
 Lowercase and dot separated. A key ending in `.mock` is registered only in the Mock configuration and is never returned by the real backend.
 
-| Key | Returned by | Data | Fixture |
+| Key | Returned by | Data | Mock response |
 |---|---|---|---|
-| `auth.sign_in` | `get_entry`, `get_screen` | `screens/auth.sign_in.schema.json` (`specs/AUTH.md` 5.3) | `fixtures/get_screen.auth.sign_in.json` |
-| `home.root` | `get_tabs`, `get_screen`; signed in only | `screens/home.root.schema.json`: `{}` until Home has content | `fixtures/<persona>/get_screen.home.root.json` |
-| `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: `{}` until EP-03 | `fixtures/<persona>/get_screen.community.home.json` |
+| `auth.sign_in` | `get_entry`, `get_screen` | `screens/auth.sign_in.schema.json` (`specs/AUTH.md` 5.3) | `mock responses/get_screen.auth.sign_in.json` |
+| `home.root` | `get_tabs`, `get_screen`; signed in only | `screens/home.root.schema.json`: `{}` until Home has content | `mock responses/<persona>/get_screen.home.root.json` |
+| `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: `{}` until EP-03 | `mock responses/<persona>/get_screen.community.home.json` |
 
 A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.
 
@@ -139,24 +139,24 @@ A network failure produces no body; clients tell the two apart by whether a resp
 3. Clients drop anything with an unknown screen key and log it. The backend may ship ahead of clients.
 4. One screen key maps to exactly one data model. Every variant of a screen is expressible in that one model, except mock variants, which have their own key.
 5. Unknown locale falls back to `en`.
-6. `/contract/fixtures` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
+6. `/contract/mock_responses` holds a JSON example of every response. Client mocks and client decoding tests read these files. Backend tests assert the live functions match their shape.
 
-## Fixtures
+## Mock responses
 
-Generated from the real backend by `make fixtures` in `/backend`, from the personas in `seed/dataset.json`. Never edit them by hand; `make data-check` fails on any drift.
+Generated from the real backend by `make mock-responses` in `/backend`, from the personas in `seed/dataset.json`. Never edit them by hand; `make data-check` fails on any drift.
 
 | Path | Response |
 |---|---|
-| `fixtures/get_entry.json` | `get_entry('en')`, signed out |
-| `fixtures/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
-| `fixtures/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
-| `fixtures/<persona>/whoami.json` | `whoami()` signed in as an active persona |
-| `fixtures/<persona>/get_tabs.json` | `get_tabs('en')` signed in as an active persona |
-| `fixtures/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
-| `fixtures/sign_in.error.json` | `sign_in` with a wrong password |
+| `mock responses/get_entry.json` | `get_entry('en')`, signed out |
+| `mock responses/get_screen.<key>.json` | `get_screen(<key>, 'en', '{}')`, signed out |
+| `mock responses/<persona>/get_screen.<key>.json` | The same call signed in as an active persona |
+| `mock responses/<persona>/whoami.json` | `whoami()` signed in as an active persona |
+| `mock responses/<persona>/get_tabs.json` | `get_tabs('en')` signed in as an active persona |
+| `mock responses/sign_in.ok.json` | `sign_in` success for `attendee`; tokens and `expires_at` are placeholders |
+| `mock responses/sign_in.error.json` | `sign_in` with a wrong password |
 
 A screen a caller may not see has no file for that caller. Client mocks prefer the current persona's file and fall back to the signed-out one.
 
 ## Personas
 
-`seed/dataset.json` defines the personas once (`specs/AUTH.md` 7). It generates the local accounts in `backend/supabase/seed.sql` and the persona fixture folders above. A contract change updates the migration or dataset and the screen's description, regenerates the fixtures and models, and updates both clients in one PR.
+`seed/dataset.json` defines the personas once (`specs/AUTH.md` 7). It generates the local accounts in `backend/supabase/seed.sql` and the persona mock response folders above. A contract change updates the migration or dataset and the screen's description, regenerates the mock responses and models, and updates both clients in one PR.

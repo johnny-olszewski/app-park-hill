@@ -1,12 +1,15 @@
-# AND-010: Build the Android Community home for every state
+---
+type: task
+id: AND-010
+title: "Build the Android Community home for every state"
+area: android
+epic: EP-03
+depends_on: [AND-011, SUP-012]
+paired_with: [IOS-010]
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-03 |
-| Depends on | AND-011, SUP-012 |
-| Paired with | IOS-010 |
-| Status | Draft |
+# AND-010: Build the Android Community home for every state
 
 ## Intent
 
@@ -56,7 +59,7 @@ make test-dev
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

@@ -1,12 +1,15 @@
-# AND-023: Animate the Android entry in and out like iOS
+---
+type: task
+id: AND-023
+title: "Animate the Android entry in and out like iOS"
+area: android
+epic: EP-02
+depends_on: [AND-008]
+paired_with: []  # iOS already has this: its entry is a full-screen cover
+status: Done
+---
 
-| Field | Value |
-|---|---|
-| Area | android |
-| Epic | EP-02 |
-| Depends on | AND-008 |
-| Paired with | None (iOS already has this: its entry is a full-screen cover) |
-| Status | Done |
+# AND-023: Animate the Android entry in and out like iOS
 
 ## Intent
 
@@ -52,7 +55,7 @@ Run Mock with animator duration scale 10 (developer options) and check AC1 to AC
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

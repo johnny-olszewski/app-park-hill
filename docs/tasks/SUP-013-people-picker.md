@@ -1,12 +1,15 @@
-# SUP-013: Build the people picker screen
+---
+type: task
+id: SUP-013
+title: "Build the people picker screen"
+area: contract, backend
+epic: EP-03
+depends_on: [SUP-014]
+paired_with: []
+status: Draft
+---
 
-| Field | Value |
-|---|---|
-| Area | contract, backend |
-| Epic | EP-03 |
-| Depends on | SUP-014 |
-| Paired with | None |
-| Status | Draft |
+# SUP-013: Build the people picker screen
 
 ## Intent
 
@@ -17,7 +20,7 @@ Leaders and staff add people to a group by picking them from everyone signed up.
 - Contract: `PersonRow` (`user_id`, `title`, optional `subtitle`, optional `note`, `selectable`) in `contract/types/`; `NavigateAction.presentation` gains `sheet`.
 - `people.picker` with `group_id`: `{ title, search_placeholder, add_label, cancel_label, rows: [PersonRow] }`, every active user by display name, current members not selectable with the note "Already a member" (`specs/COMMUNITY.md` 5.8).
 - Refused with `screen_unavailable` without `groups.add_member` on that group.
-- Add `people.picker` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; fixtures for `leader` and `staff`.
+- Add `people.picker` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; mock responses for `leader` and `staff`.
 
 ## Out of scope
 
@@ -29,7 +32,7 @@ Leaders and staff add people to a group by picking them from everyone signed up.
 |---|---|---|
 | AC1 | The picker lists every active user by display name and marks current members not selectable with the backend note | The backend decides who can be chosen |
 | AC2 | The picker is refused with `screen_unavailable` for users without `groups.add_member` on that group, and returned for the group's leader and for staff | Only people who can add members can open it |
-| AC3 | `make data-check` passes with the new type, description and fixtures | Mocks mirror the real backend |
+| AC3 | `make data-check` passes with the new type, description and mock responses | Mocks mirror the real backend |
 | AC4 | pgTAP tests cover AC1 and AC2 | Enforced, not documented |
 
 ## Technical notes
@@ -48,7 +51,7 @@ supabase db reset && supabase test db && make data-check
 - [ ] All acceptance criteria pass
 - [ ] Tests added and passing locally and in CI (once the platform's CI task is done)
 - [ ] No environment branching in app code; no mock or debug code reachable from release configurations
-- [ ] Contract changes include fixture and both client models
+- [ ] Contract changes include mock response and both client models
 - [ ] Docs updated if behavior or structure changed
 - [ ] No work outside Scope
 

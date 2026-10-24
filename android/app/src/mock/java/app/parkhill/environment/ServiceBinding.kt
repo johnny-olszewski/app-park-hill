@@ -12,7 +12,7 @@ typealias AppBackendService = MockBackendService
 typealias AppAuthService = MockAuthService
 
 object ServiceBinding {
-    /** No backend: services read contract fixtures and make no network calls. */
+    /** No backend: services read mock responses and make no network calls. */
     val environment = AppEnvironment(name = "Mock", backend = null)
 
     /** The screens this flavor registers. */

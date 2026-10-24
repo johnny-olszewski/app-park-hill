@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import ParkHill
 
-/// Dev only: signs in against the configured backend (local Supabase by
+/// Local only: signs in against the configured backend (local Supabase by
 /// default) with the real Keychain. Start it first:
 /// `cd backend && supabase start && supabase db reset`.
 @Suite(.serialized)

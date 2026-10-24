@@ -3,11 +3,11 @@ import Testing
 @testable import ParkHill
 
 /// SupabaseAuthService against a stubbed transport and in-memory session
-/// storage: no backend needed, so these run in Mock CI as well as Dev.
+/// storage: no backend needed, so these run in Mock CI as well as Local.
 @Suite(.serialized)
 struct SupabaseAuthServiceTests {
     private static let environment = AppEnvironment(
-        name: "Dev",
+        name: "Local",
         backend: BackendTarget(url: URL(string: "http://backend.test")!, anonKey: "test-anon-key")
     )
 
@@ -64,7 +64,7 @@ struct SupabaseAuthServiceTests {
         #expect(user == AuthUser(id: AuthMockResponses.userID, email: "attendee@parkhill.test"))
         let request = try #require(StubURLProtocol.requests.first)
         #expect(request.url?.path == "/functions/v1/sign_in")
-        #expect(request.value(forHTTPHeaderField: "X-App-Config") == "dev")
+        #expect(request.value(forHTTPHeaderField: "X-App-Config") == "local")
         #expect(request.value(forHTTPHeaderField: "X-App-Platform") == "ios")
         #expect(request.value(forHTTPHeaderField: "X-App-Version") != nil)
         #expect(request.value(forHTTPHeaderField: "Accept-Language") != nil)

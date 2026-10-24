@@ -1,12 +1,12 @@
-// Dev: real Supabase backend, local Supabase by default.
-// To target another backend, create Config/Dev.local.xcconfig (gitignored)
+// Local: real Supabase backend, local Supabase by default.
+// To target another backend, create Config/Local.override.xcconfig (gitignored)
 // and set BACKEND_URL and BACKEND_ANON_KEY there. See ios/README.md.
 
 #include "App.xcconfig"
 
-APP_ENVIRONMENT = Dev
-APP_ENVIRONMENT_ID = dev
-APP_DISPLAY_NAME = Park Hill Dev
+APP_ENVIRONMENT = Local
+APP_ENVIRONMENT_ID = local
+APP_DISPLAY_NAME = Park Hill Local
 
 // Backend values, read at runtime from Info.plist. "/$()/" keeps "//" from
 // starting an xcconfig comment.
@@ -16,10 +16,10 @@ BACKEND_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1k
 
 // Release ships without dev tools (App.xcconfig). Debug builds show their
 // environment in the dev tools pill (guide 5.2 rule 5).
-DEV_TOOLS_SOURCES[config=Dev-Release] = DevToolsBinding+Disabled.swift
-DEV_TOOLS_EXCLUDED[config=Dev-Release] = */DevTools/*
+DEV_TOOLS_SOURCES[config=Local-Release] = DevToolsBinding+Disabled.swift
+DEV_TOOLS_EXCLUDED[config=Local-Release] = */DevTools/*
 
-// Carries the backend keys and Dev's local HTTP exception.
-INFOPLIST_FILE = Config/Dev-Info.plist
+// Carries the backend keys and the local HTTP exception.
+INFOPLIST_FILE = Config/Local-Info.plist
 
-#include? "Dev.local.xcconfig"
+#include? "Local.override.xcconfig"

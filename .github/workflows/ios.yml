@@ -1,5 +1,5 @@
 # iOS CI (IOS-004, IOS-007): Mock unit and UI tests, no build-configuration branching, and no mock
-# or dev tools code in the release build. Runs Mock tests only; Dev tests are
+# or dev tools code in the release build. Runs Mock tests only; Local tests are
 # compiled here and run locally (guide 6). Runs on ready PRs only, to stay within the free macOS minutes;
 # reports only, guide 7.1 rule 10 forbids merging red.
 name: iOS
@@ -48,18 +48,18 @@ jobs:
       - name: Mock unit and UI tests
         run: xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
 
-      # Dev tests need a backend to run, but compiling them needs none.
-      - name: Build the Dev tests
-        run: xcodebuild -scheme ParkHill-Dev -destination "id=$(scripts/simulator.sh)" build-for-testing
+      # Local tests need a backend to run, but compiling them needs none.
+      - name: Build the Local tests
+        run: xcodebuild -scheme ParkHill-Local -destination "id=$(scripts/simulator.sh)" build-for-testing
 
       # Fresh derived data, so the log lists every compiled source.
-      - name: Build the Dev release
+      - name: Build the Local release
         run: |
-          xcodebuild -scheme ParkHill-Dev -configuration Dev-Release \
+          xcodebuild -scheme ParkHill-Local -configuration Local-Release \
             -destination "id=$(scripts/simulator.sh)" -derivedDataPath "$RUNNER_TEMP/release" build \
             | tee "$RUNNER_TEMP/release-build.log"
 
       - name: No mock or dev tools code in the release build
         run: |
           scripts/check_release_build_log.sh "$RUNNER_TEMP/release-build.log"
-          scripts/check_release_binary.sh "$RUNNER_TEMP/release/Build/Products/Dev-Release-iphonesimulator/ParkHill.app"
+          scripts/check_release_binary.sh "$RUNNER_TEMP/release/Build/Products/Local-Release-iphonesimulator/ParkHill.app"

@@ -3,7 +3,7 @@ import Foundation
 /// The environment this build targets. Each configuration's binding file
 /// declares exactly one value (guide 5.2); app code never checks which.
 struct AppEnvironment: Sendable {
-    /// Configuration name, for example "Mock" or "Dev".
+    /// Configuration name, for example "Mock" or "Local".
     let name: String
     /// The backend this build talks to, or nil when it has none.
     let backend: BackendTarget?

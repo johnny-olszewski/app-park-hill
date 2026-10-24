@@ -12,13 +12,13 @@ options:
 # each environment that can ship. Mock never ships, so it has no release.
 configs:
   Mock-Debug: debug
-  Dev-Debug: debug
-  Dev-Release: release
+  Local-Debug: debug
+  Local-Release: release
 
 configFiles:
   Mock-Debug: Config/Base.xcconfig
-  Dev-Debug: Config/Base.xcconfig
-  Dev-Release: Config/Base.xcconfig
+  Local-Debug: Config/Base.xcconfig
+  Local-Release: Config/Base.xcconfig
 
 packages:
   Supabase:
@@ -51,8 +51,8 @@ targets:
         product: Supabase
     configFiles:
       Mock-Debug: Config/Mock.xcconfig
-      Dev-Debug: Config/Dev.xcconfig
-      Dev-Release: Config/Dev.xcconfig
+      Local-Debug: Config/Local.xcconfig
+      Local-Release: Config/Local.xcconfig
 
   ParkHillTests:
     type: bundle.unit-test
@@ -74,8 +74,8 @@ targets:
       - target: ParkHill
     configFiles:
       Mock-Debug: Config/Tests-Mock.xcconfig
-      Dev-Debug: Config/Tests-Dev.xcconfig
-      Dev-Release: Config/Tests-Dev.xcconfig
+      Local-Debug: Config/Tests-Local.xcconfig
+      Local-Release: Config/Tests-Local.xcconfig
 
   ParkHillUITests:
     type: bundle.ui-testing
@@ -93,8 +93,8 @@ targets:
       - target: ParkHill
     configFiles:
       Mock-Debug: Config/UITests-Mock.xcconfig
-      Dev-Debug: Config/UITests-Dev.xcconfig
-      Dev-Release: Config/UITests-Dev.xcconfig
+      Local-Debug: Config/UITests-Local.xcconfig
+      Local-Release: Config/UITests-Local.xcconfig
 
 schemes:
   ParkHill-Mock:
@@ -115,20 +115,20 @@ schemes:
     archive:
       config: Mock-Debug
 
-  ParkHill-Dev:
+  ParkHill-Local:
     build:
       targets:
         ParkHill: all
         ParkHillTests: [test]
         ParkHillUITests: [test]
     run:
-      config: Dev-Debug
+      config: Local-Debug
     test:
-      config: Dev-Debug
+      config: Local-Debug
       targets: [ParkHillTests, ParkHillUITests]
     profile:
-      config: Dev-Release
+      config: Local-Release
     analyze:
-      config: Dev-Debug
+      config: Local-Debug
     archive:
-      config: Dev-Release
+      config: Local-Release

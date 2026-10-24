@@ -3,11 +3,11 @@ import Testing
 @testable import ParkHill
 
 /// SupabaseBackendService against a stubbed transport: no backend needed, so
-/// these run in Mock CI as well as Dev.
+/// these run in Mock CI as well as Local.
 @Suite(.serialized)
 struct SupabaseBackendServiceTests {
     private static let environment = AppEnvironment(
-        name: "Dev",
+        name: "Local",
         backend: BackendTarget(url: URL(string: "http://backend.test")!, anonKey: "test-anon-key")
     )
 
@@ -29,7 +29,7 @@ struct SupabaseBackendServiceTests {
 
         let request = try #require(StubURLProtocol.requests.last)
         #expect(request.url?.path == "/rest/v1/rpc/get_entry")
-        #expect(request.value(forHTTPHeaderField: "X-App-Config") == "dev")
+        #expect(request.value(forHTTPHeaderField: "X-App-Config") == "local")
         #expect(request.value(forHTTPHeaderField: "X-App-Platform") == "ios")
         let version = try #require(request.value(forHTTPHeaderField: "X-App-Version"))
         #expect(version.wholeMatch(of: /\d+\.\d+\.\d+ \(\d+\)/) != nil)

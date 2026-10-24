@@ -31,19 +31,13 @@ targets:
     platform: iOS
     sources:
       - path: ParkHill
-      # Backend function names, screen keys and screen models, generated from
-      # contract/names.json and contract/screens. Every configuration compiles
-      # every Swift file there, so a new screen model needs no change here.
+      # Backend function names, screen keys and response models, generated from
+      # contract/names.json, contract/screens and contract/types. Every
+      # configuration compiles every Swift file there, so a new model needs no
+      # change here.
       - path: ../contract/generated
         excludes:
           - "*.kt"
-          - "ScreenEnvelope.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "TabsResponse.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "TabItem.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "Profile.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "SignInSuccess.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "SignInSession.swift"  # TEMPORARY(EP-05): removed by IOS-024
-          - "SignInFailure.swift"  # TEMPORARY(EP-05): removed by IOS-024
       # Mock responses and the persona dataset, bundled for the mock
       # services. App.xcconfig excludes them from every configuration except Mock.
       - path: ../contract/mock_responses

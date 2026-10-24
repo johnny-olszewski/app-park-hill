@@ -1,6 +1,16 @@
 package app.parkhill.navigation
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,7 +97,12 @@ fun SignedInShell(
     }
 }
 
-/** One tab: the top of its stack under a top app bar titled with the tab's title, and its sheet. */
+/**
+ * One tab: the top of its stack under a top app bar, and its sheet. The root
+ * shows the tab's title as a large title; a pushed screen shows its own
+ * title with a back button. Pushed screens slide in from the trailing edge
+ * and back out on back, as iOS's navigation stack does (guide 5.5 rule 5).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TabRoot(
@@ -95,29 +110,71 @@ private fun TabRoot(
     signOut: (() -> Unit)?, // TEMPORARY(EP-04): remove with IOS-015/AND-015
 ) {
     BackHandler(enabled = tab.path.isNotEmpty()) { tab.pop() }
+    val top = tab.path.lastOrNull()
+    val topBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = ParkHill.colors.surface,
+        scrolledContainerColor = ParkHill.colors.surface,
+        titleContentColor = ParkHill.colors.ink,
+        navigationIconContentColor = ParkHill.colors.ink,
+    )
     Column(Modifier.fillMaxSize()) {
-        LargeTopAppBar(
-            title = { Text(tab.title, style = ParkHill.heading, modifier = Modifier.testTag("tab.title")) },
-            actions = {
-                if (signOut != null) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
-                    TextButton(onClick = signOut, modifier = Modifier.testTag("home.signOut")) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
-                        Text(stringResource(R.string.shell_sign_out), color = ParkHill.colors.ink) // TEMPORARY(EP-04): remove with IOS-015/AND-015
+        if (top == null) {
+            LargeTopAppBar(
+                title = { Text(tab.title, style = ParkHill.heading, modifier = Modifier.testTag("tab.title")) },
+                actions = {
+                    if (signOut != null) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                        TextButton(onClick = signOut, modifier = Modifier.testTag("home.signOut")) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                            Text(stringResource(R.string.shell_sign_out), color = ParkHill.colors.ink) // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                        } // TEMPORARY(EP-04): remove with IOS-015/AND-015
                     } // TEMPORARY(EP-04): remove with IOS-015/AND-015
-                } // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = ParkHill.colors.surface,
+                    scrolledContainerColor = ParkHill.colors.surface,
+                    titleContentColor = ParkHill.colors.ink,
+                ),
+            )
+        } else {
+            TopAppBar(
+                title = {
+                    Text(
+                        (top.screen.state as? ScreenState.Showing)?.screen?.title.orEmpty(),
+                        style = ParkHill.heading.copy(fontSize = 20.sp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.testTag("screen.title"),
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { tab.pop() }, modifier = Modifier.testTag("screen.back")) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.navigation_back))
+                    }
+                },
+                colors = topBarColors,
+            )
+        }
+        AnimatedContent(
+            targetState = top,
+            transitionSpec = {
+                val pushing = (targetState?.id ?: 0L) > (initialState?.id ?: 0L)
+                if (pushing) {
+                    slideInHorizontally { it } togetherWith slideOutHorizontally { -it / 3 }
+                } else {
+                    slideInHorizontally { -it / 3 } togetherWith slideOutHorizontally { it }
+                }
             },
-            colors = TopAppBarDefaults.largeTopAppBarColors(
-                containerColor = ParkHill.colors.surface,
-                scrolledContainerColor = ParkHill.colors.surface,
-                titleContentColor = ParkHill.colors.ink,
-            ),
-        )
-        Box(Modifier.weight(1f)) {
-            (tab.path.lastOrNull()?.screen ?: tab.root).content()
+            contentKey = { it?.id },
+            label = "stack",
+            modifier = Modifier.weight(1f),
+        ) { route ->
+            Box(Modifier.fillMaxSize().background(ParkHill.colors.surface)) {
+                ScreenHost(route?.screen ?: tab.root)
+            }
         }
     }
     tab.presented?.let { route ->
         ModalBottomSheet(onDismissRequest = tab::dismiss, containerColor = ParkHill.colors.surface) {
-            route.screen.content()
+            ScreenHost(route.screen)
         }
     }
 }

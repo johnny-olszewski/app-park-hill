@@ -6,6 +6,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import app.parkhill.cache.EntryCache
+import app.parkhill.cache.ScreenCache
 import app.parkhill.cache.TabsCache
 import app.parkhill.devtools.AppDevTools
 import app.parkhill.environment.ServiceBinding
@@ -40,6 +41,7 @@ class ParkHillApplication : Application() {
             scope = scope,
             locale = { AppLocale.current() },
             tabsCache = TabsCache.standard(filesDir),
+            screenCache = ScreenCache.standard(filesDir),
         )
         scope.launch { coordinator.start() }
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {

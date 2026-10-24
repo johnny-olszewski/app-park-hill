@@ -13,12 +13,13 @@ import java.util.concurrent.atomic.AtomicLong
  * it and the one presented as a sheet. Kept while the tab is switched away
  * from, so each tab returns to where it was. Snapshot state, read by the shell.
  */
-class TabCoordinator(item: TabItem, val root: ResolvedScreen, private val registry: ScreenRegistry) {
+class TabCoordinator(item: TabItem, private val context: ScreenContext) {
     val id: String = item.id
     var title: String by mutableStateOf(item.title)
         private set
     var iconKey: String by mutableStateOf(item.iconKey)
         private set
+    val root: ScreenModel = ScreenModel.showing(item.screen, context)
 
     private val _path = mutableStateListOf<Route>()
 
@@ -29,23 +30,24 @@ class TabCoordinator(item: TabItem, val root: ResolvedScreen, private val regist
     var presented: Route? by mutableStateOf(null)
         private set
 
-    /** Takes a refreshed title and icon for the same tab and root screen. */
+    /** Takes a refreshed title, icon and root screen for the same tab. */
     fun update(item: TabItem) {
         title = item.title
         iconKey = item.iconKey
+        root.update(item.screen)
     }
 
     /** Pushes the screen for `envelope`. False, and logged by the registry, when this build cannot show it. */
     fun push(envelope: ScreenEnvelope): Boolean {
-        val screen = registry.resolve(envelope) ?: return false
-        _path += Route(screen)
+        if (context.registry.resolve(envelope) == null) return false
+        _path += Route(ScreenModel.showing(envelope, context))
         return true
     }
 
     /** Presents the screen for `envelope` as a sheet. False when this build cannot show it. */
     fun present(envelope: ScreenEnvelope): Boolean {
-        val screen = registry.resolve(envelope) ?: return false
-        presented = Route(screen)
+        if (context.registry.resolve(envelope) == null) return false
+        presented = Route(ScreenModel.showing(envelope, context))
         return true
     }
 
@@ -58,7 +60,7 @@ class TabCoordinator(item: TabItem, val root: ResolvedScreen, private val regist
 }
 
 /** One shown screen in a tab's stack or sheet. Identity is per showing, so the same key can appear twice. */
-class Route(val screen: ResolvedScreen) {
+class Route(val screen: ScreenModel) {
     val id: Long = nextId.incrementAndGet()
 
     private companion object {

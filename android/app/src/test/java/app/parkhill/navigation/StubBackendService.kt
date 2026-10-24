@@ -10,7 +10,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-/** A [BackendService] whose entry and tabs answers each test sets. */
+/** A [BackendService] whose entry, screen and tabs answers each test sets. */
 class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     var entryCalls = 0
         private set
@@ -20,7 +20,14 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
         return entry()
     }
 
-    override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope = entry()
+    /** Answers `getScreen`; by default the entry. */
+    var screen: (key: String, params: JsonObject) -> ScreenEnvelope = { _, _ -> entry() }
+    val screenCalls = mutableListOf<Pair<String, JsonObject>>()
+
+    override suspend fun getScreen(key: String, locale: String, params: JsonObject): ScreenEnvelope {
+        screenCalls += key to params
+        return screen(key, params)
+    }
 
     var tabs: () -> TabsResponse = { throw BackendError.Server }
     val tabsCalls = mutableListOf<String>()

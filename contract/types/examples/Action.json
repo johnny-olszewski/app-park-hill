@@ -1,0 +1,8 @@
+{
+  "type": "navigate",
+  "screen_key": "community.group",
+  "params": {
+    "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+  },
+  "presentation": "push"
+}

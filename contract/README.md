@@ -24,7 +24,8 @@ Text resolves per string: a string missing in the requested locale uses its `en`
 Every response a client decodes is described once in `/contract`, for both clients (guide 4.1 rule 8):
 
 - `screens/<key>.schema.json` describes one backend screen's `data`.
-- `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, and later `GroupRow` or `Action`). The file name is the type's `title`.
+- `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, `Action`, `GroupRow`). The file name is the type's `title`.
+- `types/examples/<TypeName>.json` is an example value of a shared type, for types no recorded response contains yet, so clients can build views before screens exist.
 - `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
 
 `make models` in `/backend` generates a Swift and a Kotlin model from each screen and type into `generated/`, named by its `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. Swift models are `Codable, Equatable, Sendable`; Kotlin models are `@Serializable`.
@@ -35,6 +36,7 @@ Every response a client decodes is described once in `/contract`, for both clien
 - a recorded response has no mapping in `responses.json`, a mapping names no recorded response or no type, or a type is used by no description and no mapping;
 - a screen key in `names.json` has no description, or a description has no key;
 - a `$ref` names a type with no file;
+- an example in `types/examples/` names no type or does not match it (a type with an example counts as used);
 - `generated/` differs from what `make models` produces.
 
 Descriptions use this subset of JSON Schema (2020-12). Anything else is refused, so a description never means something the generator or the check ignores:
@@ -42,8 +44,9 @@ Descriptions use this subset of JSON Schema (2020-12). Anything else is refused,
 | Where | Keywords |
 |---|---|
 | Screen or type | `$schema`, `title` (the model's type name), `description`, `"type": "object"`, `properties`, `required`, `"additionalProperties": false` (all but `description` are required, even when empty) |
-| Field | `description`, and one of: `type` (`string`, `integer`, `number`, `boolean`, `object` alone, or `array` with `items`); `$ref` to a type; or neither, meaning any JSON |
+| Field | `description`, and one of: `type` (`string`, `integer`, `number`, `boolean`, `object` alone, or `array` with `items`); `$ref` to a type; or neither, meaning any JSON. A `string` may add `enum`: distinct snake_case values, and no other value is valid |
 | Array items | As a field, without `description` |
+| Union type (types only) | `$schema`, `title`, `description`, and `oneOf`: a list of `{"$ref": "<TypeName>.schema.json"}`. Each member is an object type whose required `type` field is a `string` with a one-value `enum`, each value used once. A value of the union is the member its `type` names; any other `type` fails the check |
 
 A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a screen, `"GroupRow.schema.json"` from another type. Objects inside a description are always shared types; the subset has no inline object types.
 
@@ -55,8 +58,12 @@ A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a scre
 | `"type": "object"` alone (any JSON object) | `JSONValue` (the app's) | `JsonObject` |
 | No `type` (any JSON) | `JSONValue` (the app's) | `JsonElement` |
 | Field not in `required` | `T?` | `T? = null` |
+| `enum` | `enum <Type><Field>: String` (`NavigateActionPresentation`), a case per value | `enum class <Type><Field>`, an entry per value with `@SerialName` |
+| Union type | `enum` with a case per member (named by its `type` value) and `unknown(type:)`, decoding on `type` | `sealed interface` its members implement, with `Unknown(type)`, decoded on `type` by `<Union>Serializer` |
 
 Field names are snake_case in the description and lower camel case in the models, mapped back to the JSON name. Recorded responses must match exactly, with no undescribed fields, so descriptions stay complete; the generated decoders still ignore unknown fields (contract rule 2): Swift's `Decodable` does, and Android decodes with `ContractJson`.
+
+An unknown `type` in a union decodes as unknown instead of failing, so the backend can add an action type before clients know it (contract rule 3): clients make such an item not tappable. An `enum` has no unknown value: a new value is added to its description, both apps and the backend together.
 
 Adding a screen: write its description, add its key to `names.json`, run `make models`, and commit both with the migration and the mock responses. Adding a response: describe its type in `types/`, map its mock response in `responses.json`, and run `make models`. When a description first needs a keyword the subset lacks (for example `enum`), the same change adds it to `backend/scripts/screens.py`, the generator and the check.
 
@@ -82,6 +89,29 @@ SUP-020 compared ways to describe each screen's data once in `/contract` and gen
 **Chosen: D.** It meets every criterion, like C, but the files are standard JSON Schema: editors validate and complete them, other tools and teams can read them, and the format needs no explaining when this architecture is reused elsewhere. The script supports only the keywords screens use and rejects any other, so a description never means something the generator or the check silently ignores; a keyword is added to the script when a screen first needs it. Because the files are valid JSON Schema, moving to B later (full validator, same files) stays open. A and B were set aside for adding Node or pip to every machine and CI run for what a short standard-library Python script does. C was set aside only because a format of our own is one more thing to learn and document, with no tooling.
 
 Also considered and rejected before SUP-020: a generic list of typed elements looked up by id (`[{ "type": "text", "id": "title", "value": "Sign in" }]`). Clients would still write per-screen lookup code for every field, lose compile-time typing, and express nested data such as a list of groups poorly.
+
+## Actions and shared types
+
+Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNITY.md 3.2), a union told apart by `type`:
+
+| `type` | Type | Fields |
+|---|---|---|
+| `navigate` | `NavigateAction` | `screen_key`, `params` (any object, passed to `get_screen` as `p_params`), `presentation`, optional `role` |
+
+| Field | Values |
+|---|---|
+| `presentation` | `push`: the current tab's stack. Later slices add `full_screen_cover` (EP-03.B) and `sheet` (EP-03.D) |
+| `role` | `destructive`: a meaning each platform styles its own way |
+
+`call` actions arrive with EP-03.C.
+
+Shared types for Community screens, all text backend formatted and localized:
+
+| Type | Fields |
+|---|---|
+| `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), `action` |
+| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members` |
+| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader` |
 
 ## Screen keys
 
@@ -139,6 +169,7 @@ Errors use PostgREST's error body. The `message` field is a stable code clients 
 |---|---|---|---|---|
 | `unknown_screen` | 400 | `P0001` | `get_screen` called with a key the backend does not register | The requested key |
 | `session_ended` | 400 | `P0001` | A signed-in function was called with no valid user, or the account is banned or deleted | None |
+| `screen_unavailable` | 400 | `P0001` | `get_screen` for a screen the caller may not see, such as a group they are not in, for example after losing access | The backend's localized message for the caller's locale, shown as given (specs/COMMUNITY.md 5.5) |
 
 Clients treat `session_ended` like an HTTP 401 (expired or invalid token): one silent session renewal and retry, then sign out (`specs/AUTH.md` 4.3).
 

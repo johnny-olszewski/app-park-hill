@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GroupRow",
+  "description": "One group in a list: backend-formatted text and what tapping it does.",
+  "type": "object",
+  "properties": {
+    "group_id": {
+      "type": "string"
+    },
+    "title": {
+      "description": "The group's name.",
+      "type": "string"
+    },
+    "subtitle": {
+      "description": "For example \"Tuesdays · 7:00 PM · Smith home\".",
+      "type": "string"
+    },
+    "badge": {
+      "description": "For example \"Leader\".",
+      "type": "string"
+    },
+    "action": {
+      "$ref": "Action.schema.json"
+    }
+  },
+  "required": [
+    "group_id",
+    "title",
+    "subtitle",
+    "action"
+  ],
+  "additionalProperties": false
+}

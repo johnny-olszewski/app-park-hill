@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MemberRow",
+  "description": "One member of a group.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "title": {
+      "description": "The member's display name.",
+      "type": "string"
+    },
+    "note": {
+      "description": "For example \"You\" on the caller's own row.",
+      "type": "string"
+    },
+    "is_leader": {
+      "description": "Whether this member leads the group.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "user_id",
+    "title",
+    "is_leader"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SignInSuccess",
+  "description": "`sign_in` Edge Function success (contract/README.md, specs/AUTH.md 5.5).",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string"
+    },
+    "session": {
+      "$ref": "SignInSession.schema.json"
+    }
+  },
+  "required": [
+    "status",
+    "session"
+  ],
+  "additionalProperties": false
+}

@@ -23,6 +23,7 @@ SUP-020 describes each screen's `data`, but the shapes around it (the screen env
 - Describe as types in `contract/types/`: `ScreenEnvelope` (`key`, `data`: any object), `TabsResponse`, `TabItem`, `Profile`, `SignInSuccess`, `SignInSession`, `SignInFailure`. Field names and types as the clients have them today.
 - `contract/responses.json`: maps each recorded response, by mock response file name without its persona folder (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to its type. `make data-check` validates every mock response against its type and fails on a mock response with no mapping. Screen `data` inside an envelope is still validated against its screen's description.
 - All generated Swift types conform to `Codable, Equatable, Sendable` (the clients cache envelopes and tabs); Kotlin types stay `@Serializable`.
+- `ios/project.yml` excludes the seven generated Swift types, each line marked `TEMPORARY(EP-05): removed by IOS-024`, because the iOS app compiles every Swift file in `contract/generated/` and still has its hand-written copies until IOS-024. Android needs nothing: its generated types are in their own package.
 - Update `contract/README.md` (Screen data becomes Contract descriptions: subset, `$ref`, `responses.json`) and `backend/README.md`.
 - Update guide 4.1 rule 8 to cover every response a client decodes, with a decision log entry.
 

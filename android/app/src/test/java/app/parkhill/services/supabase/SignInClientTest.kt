@@ -24,7 +24,7 @@ class SignInClientTest {
     fun setUp() {
         server.start()
         val target = BackendTarget(server.url("/").toString().trimEnd('/'), "anon-key")
-        client = SignInClient(target, SupabaseClientProvider.httpClient(AppEnvironment("Dev", target)))
+        client = SignInClient(target, SupabaseClientProvider.httpClient(AppEnvironment("Local", target)))
     }
 
     @After
@@ -51,7 +51,7 @@ class SignInClientTest {
         assertEquals("POST", sent.method)
         assertEquals(Json.parseToJsonElement("""{"email": "attendee@parkhill.test", "password": "secret", "locale": "en"}"""), Json.parseToJsonElement(sent.body.readUtf8()))
         assertEquals("anon-key", sent.getHeader("apikey"))
-        assertEquals("dev", sent.getHeader("X-App-Config"))
+        assertEquals("local", sent.getHeader("X-App-Config"))
         assertEquals("android", sent.getHeader("X-App-Platform"))
     }
 

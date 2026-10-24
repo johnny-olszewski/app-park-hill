@@ -1,4 +1,4 @@
-// Compiled only in the dev flavor (src/dev).
+// Compiled only in the local flavor (src/local).
 package app.parkhill.environment
 
 import app.parkhill.BuildConfig
@@ -13,9 +13,9 @@ typealias AppBackendService = SupabaseBackendService
 typealias AppAuthService = SupabaseAuthService
 
 object ServiceBinding {
-    /** Local Supabase by default; dev.local.properties overrides it (README). */
+    /** Local Supabase by default; local.override.properties overrides it (README). */
     val environment = AppEnvironment(
-        name = "Dev",
+        name = "Local",
         backend = BackendTarget(url = BuildConfig.BACKEND_URL, anonKey = BuildConfig.BACKEND_ANON_KEY),
     )
 

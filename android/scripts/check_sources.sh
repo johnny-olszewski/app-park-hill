@@ -1,6 +1,6 @@
 #!/bin/sh
 # Fails if shared app sources branch on the build variant (guide 5.2 rule 2).
-# Flavor source sets (src/mock, src/dev) are where variants differ. Run by CI
+# Flavor source sets (src/mock, src/local) are where variants differ. Run by CI
 # and the pre-push hook.
 cd "$(dirname "$0")/.." || exit 1
 

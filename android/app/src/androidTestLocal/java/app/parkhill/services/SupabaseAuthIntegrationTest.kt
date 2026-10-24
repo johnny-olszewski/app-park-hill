@@ -27,7 +27,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Dev against the configured backend (local Supabase, reset recently): the
+ * Local against the configured backend (local Supabase, reset recently): the
  * token reaches the backend, survives a fresh client, and sign-out ends access.
  */
 @RunWith(AndroidJUnit4::class)

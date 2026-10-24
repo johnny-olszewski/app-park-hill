@@ -48,7 +48,7 @@ class SupabaseAuthServiceTest {
         }
         server.start()
         val target = BackendTarget(server.url("/").toString().trimEnd('/'), "anon-key")
-        val environment = AppEnvironment("Dev", target)
+        val environment = AppEnvironment("Local", target)
         val http = SupabaseClientProvider.httpClient(environment)
         service = SupabaseAuthService(
             client = SupabaseClientProvider.make(environment, sessions, http),

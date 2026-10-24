@@ -11,7 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Dev build against local Supabase, reset recently: each run adds one failed
+ * Local build against local Supabase, reset recently: each run adds one failed
  * sign-in for `admin`, and 5 within 15 minutes lock it (README).
  */
 @RunWith(AndroidJUnit4::class)

@@ -7,9 +7,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-// Optional, gitignored per-developer override of the dev backend (README).
-val devLocal = Properties().apply {
-    val file = rootProject.file("dev.local.properties")
+// Optional, gitignored per-developer override of the local backend (README).
+val localOverride = Properties().apply {
+    val file = rootProject.file("local.override.properties")
     if (file.exists()) file.inputStream().use { load(it) }
 }
 
@@ -39,13 +39,13 @@ android {
             applicationIdSuffix = ".mock"
             resValue("string", "app_name", "Park Hill Mock")
         }
-        create("dev") {
+        create("local") {
             dimension = "environment"
-            applicationIdSuffix = ".dev"
-            resValue("string", "app_name", "Park Hill Dev")
+            applicationIdSuffix = ".local"
+            resValue("string", "app_name", "Park Hill Local")
             // Local Supabase from the emulator by default.
-            buildConfigField("String", "BACKEND_URL", "\"${devLocal.getProperty("backendUrl") ?: "http://10.0.2.2:54321"}\"")
-            buildConfigField("String", "BACKEND_ANON_KEY", "\"${devLocal.getProperty("backendAnonKey") ?: localAnonKey}\"")
+            buildConfigField("String", "BACKEND_URL", "\"${localOverride.getProperty("backendUrl") ?: "http://10.0.2.2:54321"}\"")
+            buildConfigField("String", "BACKEND_ANON_KEY", "\"${localOverride.getProperty("backendAnonKey") ?: localAnonKey}\"")
         }
     }
 

@@ -23,7 +23,7 @@ work=$(mktemp -d)/worktree
 git worktree add --quiet --detach "$work" "$base"
 trap 'git -C "$root" worktree remove --force "$work"' EXIT
 
-local_files="android/local.properties android/dev.local.properties ios/Config/Local.override.xcconfig"
+local_files="android/local.properties android/local.override.properties ios/Config/Local.override.xcconfig"
 
 for commit in $commits; do
     git -C "$work" checkout --quiet "$commit"

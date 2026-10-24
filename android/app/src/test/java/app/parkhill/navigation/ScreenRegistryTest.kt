@@ -23,6 +23,20 @@ class ScreenRegistryTest {
         assertTrue(registry().isRegistered("auth.sign_in"))
     }
 
+    /** Each recorded screen decodes into the generated model its key is registered with. */
+    @Test
+    fun everyRecordedScreenResolves() {
+        val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
+        val files = root.walkTopDown()
+            .filter { it.isFile && (it.name == "get_entry.json" || it.name.startsWith("get_screen.")) }
+            .toList()
+        assertTrue(files.isNotEmpty())
+        for (file in files) {
+            val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), file.readText())
+            assertNotNull("${file.path}: ${envelope.key}", registry().resolve(envelope))
+        }
+    }
+
     @Test
     fun everyRecordedTabRootResolves() {
         val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!

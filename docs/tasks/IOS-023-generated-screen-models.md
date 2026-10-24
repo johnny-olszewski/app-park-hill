@@ -6,7 +6,7 @@ area: ios
 epic: EP-05
 depends_on: [SUP-020]
 paired_with: [AND-024]
-status: Draft
+status: Done
 ---
 
 # IOS-023: Decode screens with the generated models in the iOS app

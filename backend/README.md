@@ -1,6 +1,6 @@
 # Backend
 
-Local Supabase project: migrations, seed, Edge Functions and pgTAP tests. Local Supabase is the only instance for now, the default Dev target for both apps, and the permanent test environment for CI.
+Local Supabase project: migrations, seed, Edge Functions and pgTAP tests. Local Supabase is the only instance for now, the default Local target for both apps, and the permanent test environment for CI.
 
 ## Environment
 
@@ -38,7 +38,7 @@ Only one local Supabase project can use these ports at a time. If `supabase star
 
 ## Ports
 
-Pinned in `supabase/config.toml`. Client Dev configs default to the API URL.
+Pinned in `supabase/config.toml`. Client Local configs default to the API URL.
 
 | Service | Port |
 |---|---|

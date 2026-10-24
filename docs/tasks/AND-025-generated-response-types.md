@@ -46,7 +46,7 @@ After SUP-022, the screen envelope, `get_tabs`, `whoami` and the `sign_in` respo
 cd android
 ./gradlew testMockDebugUnitTest testDevDebugUnitTest connectedMockDebugAndroidTest
 make test-dev
-./gradlew assembleDevRelease && scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk
+./gradlew assembleDevRelease && scripts/check_release_apk.sh app/build/outputs/apk/local/release/app-dev-release-unsigned.apk
 ```
 
 ## Definition of done

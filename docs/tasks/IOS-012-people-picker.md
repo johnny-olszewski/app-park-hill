@@ -48,7 +48,7 @@ Edit mode adds people by picking them from everyone signed up. This task opens `
 cd ios
 make project
 xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
-make test-dev
+make test-local
 ```
 
 ## Definition of done

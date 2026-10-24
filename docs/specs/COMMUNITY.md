@@ -173,7 +173,7 @@ Who can open it (as `community.group`, or as the `group` part of `community.home
 
 - The dataset adds four groups, one leaderless. Seed and per-persona mock responses are generated from it (`make seed`, `make mock-responses`).
 - Backend: one allowed and one refused test per permission matrix row; all-or-nothing tests for the batch save.
-- Clients: decoding tests for every mock response; unit tests for state inference, edit-mode staging and the lost-access rule; UI smoke tests per persona in Mock (CI) and against local Supabase (local, `make test-dev`).
+- Clients: decoding tests for every mock response; unit tests for state inference, edit-mode staging and the lost-access rule; UI smoke tests per persona in Mock (CI) and against local Supabase (local, `make test-local`).
 
 ## 9. Decisions
 

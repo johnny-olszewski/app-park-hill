@@ -51,7 +51,7 @@ Community rows open other backend screens. This task gives every backend screen 
 cd ios
 make project
 xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
-make test-dev
+make test-local
 ```
 
 ## Definition of done

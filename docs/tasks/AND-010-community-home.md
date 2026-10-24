@@ -21,7 +21,7 @@ The Community tab shows each person exactly their own groups. This task renders 
 - `group`: the group detail view from AND-011.
 - `my_groups`: the group list view, a shared component: one row per `GroupRow` with `title`, `subtitle` and optional `badge`; tapping performs the row's action.
 - `empty`: the empty view, with `title` and `message` and no buttons.
-- UI tests per persona (`attendee`, `member_one`, `member_two`, `leader`, `staff`, `admin`) in Mock, and the same against local Supabase in `make test-dev`.
+- UI tests per persona (`attendee`, `member_one`, `member_two`, `leader`, `staff`, `admin`) in Mock, and the same against local Supabase in `make test-local`.
 
 ## Out of scope
 
@@ -35,13 +35,13 @@ The Community tab shows each person exactly their own groups. This task renders 
 | AC2 | A `community.home` with none of the three parts shows the cached copy, else the error screen with retry | Unknown shapes never render blank |
 | AC3 | Group rows show `title`, `subtitle` and `badge` as sent; tapping one pushes that group's detail, and back returns to the list | Same row contract everywhere |
 | AC4 | Pull to refresh on Community home refetches it | Fresh data on demand |
-| AC5 | Mock UI tests cover AC1 and AC3 for every persona; Dev UI tests cover AC1 against local Supabase in `make test-dev` | Every role checked end to end |
+| AC5 | Mock UI tests cover AC1 and AC3 for every persona; Local UI tests cover AC1 against local Supabase in `make test-local` | Every role checked end to end |
 | AC6 | Unit tests cover the state inference, including none present | Verified without a backend |
 
 ## Technical notes
 
 - The tab title stays the one `get_tabs` sends ("Community").
-- Persona credentials come from `contract/seed/dataset.json`, as the existing Dev tests do.
+- Persona credentials come from `contract/seed/dataset.json`, as the existing Local tests do.
 - The empty view is a centered Material layout with the title and message.
 - Behavior must match IOS-010.
 
@@ -49,9 +49,9 @@ The Community tab shows each person exactly their own groups. This task renders 
 
 ```
 cd android
-./gradlew testMockDebugUnitTest testDevDebugUnitTest connectedMockDebugAndroidTest
-make test-dev
-./gradlew assembleDevRelease && scripts/check_release_apk.sh app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk
+./gradlew testMockDebugUnitTest testLocalDebugUnitTest connectedMockDebugAndroidTest
+make test-local
+./gradlew assembleLocalRelease && scripts/check_release_apk.sh app/build/outputs/apk/local/release/app-local-release-unsigned.apk
 ```
 
 ## Definition of done

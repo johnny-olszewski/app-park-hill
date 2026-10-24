@@ -49,14 +49,14 @@ Practices that kept slices clean:
 | Change | Run |
 |---|---|
 | `/backend`, `/contract` | `cd backend && supabase db reset && supabase test db && make data-check && make test-functions` |
-| `/ios` | `cd ios && make project`, then the Mock scheme's `test`; `make test-dev` |
-| `/android` | `cd android && ./gradlew testMockDebugUnitTest testDevDebugUnitTest connectedMockDebugAndroidTest`; `make test-dev`; `./gradlew assembleDevRelease && scripts/check_release_apk.sh <apk>` |
+| `/ios` | `cd ios && make project`, then the Mock scheme's `test`; `make test-local` |
+| `/android` | `cd android && ./gradlew testMockDebugUnitTest testLocalDebugUnitTest connectedMockDebugAndroidTest`; `make test-local`; `./gradlew assembleLocalRelease && scripts/check_release_apk.sh <apk>` |
 
-`make test-dev` needs Docker and local Supabase, and must pass in each app the slice touches before the PR (CI runs Mock only). After checking Dev behavior by hand against the database, restore any rows you changed.
+`make test-local` needs Docker and local Supabase, and must pass in each app the slice touches before the PR (CI runs Mock only). After checking Local behavior by hand against the database, restore any rows you changed.
 
 ## 5. Finish the slice
 
-1. Verify every behavior criterion (B1…) by using the apps, in Mock and Dev, and record each one while verifying it (guide 7.2 rule 4):
+1. Verify every behavior criterion (B1…) by using the apps, in Mock and Local, and record each one while verifying it (guide 7.2 rule 4):
    - In the apps: boot the simulator and the emulator, then `scripts/record.sh start <ID> <B#-build-what> ios` and `... android`, show the behavior on both, then `scripts/record.sh stop`. One recording per criterion and build, short and showing only that criterion.
    - For developers: `scripts/record.sh terminal <ID> <B#-what> "<commands>"`, showing the failure and the passing run where the criterion is about a check failing.
    - Check every criterion has its recordings in `recordings/<ID>/`. Do not link them in the PR; tell the user the folder.

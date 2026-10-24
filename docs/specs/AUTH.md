@@ -146,7 +146,7 @@ Sent by the production service classes on every Supabase call, including the Edg
 
 | Header | Values |
 |---|---|
-| `X-App-Config` | `dev` (later `qa`, `prod`) |
+| `X-App-Config` | `local` (later `qa`, `prod`) |
 | `X-App-Platform` | `ios`, `android` |
 | `X-App-Version` | marketing version and build, e.g. `1.0.0 (12)` |
 | `Accept-Language` | device preferred language |
@@ -173,14 +173,14 @@ A separate abstraction from the backend service, selected at build time the same
 
 | Screen | Configs | Notes |
 |---|---|---|
-| Sign in (`auth.sign_in`) | Mock and Dev registries | Native layout. All text from screen data. Secure password field, platform autofill for credentials |
+| Sign in (`auth.sign_in`) | Mock and Local registries | Native layout. All text from screen data. Secure password field, platform autofill for credentials |
 | Mock sign-in tools | Mock dev tools menu only | Persona and next result for `auth.sign_in` (5.4). Live in mock-only sources |
 | Signed-in placeholder | All | Not backend driven. Shows signed-in email and a sign-out button, bundled text. Lives in a `Temporary` folder. Deleted by IOS-008 and AND-008 |
 
 ### 6.3 Config and credentials
 
 - Each Supabase-backed config has a committed config file with local Supabase values (URL and the well-known local anon key).
-- An optional, gitignored override file per developer replaces those values, for example to point Dev at a hosted project.
+- An optional, gitignored override file per developer replaces those values, for example to point Local at a hosted project.
 - CI writes hosted values from GitHub secrets when QA and Prod exist.
 - Every non-release build shows which backend it targets (for example a small label on the sign-in screen and a log line at launch).
 
@@ -208,10 +208,10 @@ Defined once in `/contract/seed/dataset.json`:
 | Recorded refusals | `make mock-responses` records every refusal in 5.5 into `contract/mock_responses/sign_in.error*.json` without locking any persona; `make data-check` guards them |
 | Integration | Signed-in persona calls `whoami()` and succeeds; signed-out call is refused; after the persona is disabled, its still-unexpired token is refused with `session_ended` |
 | Client unit | Auth services, session restore, renewal refused path, unauthorized response leads to one renewal then sign-out, network errors never sign out, sign-out clears data, error display |
-| UI, Dev against local Supabase, both platforms | Sign in, wrong password shows the backend message, sign out, still signed in after relaunch |
+| UI, Local against local Supabase, both platforms | Sign in, wrong password shows the backend message, sign out, still signed in after relaunch |
 | UI, Mock, both platforms | Sign in through the mock menu as a chosen persona, one refusal and No connection, with no network |
 
-Client CI runs Mock tests only. Dev UI tests run locally with `make test-dev`.
+Client CI runs Mock tests only. Local UI tests run locally with `make test-local`.
 
 ## 9. Decisions
 

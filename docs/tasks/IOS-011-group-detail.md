@@ -47,7 +47,7 @@ A group's detail is what members see first: its details, who leads it and who is
 cd ios
 make project
 xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
-make test-dev
+make test-local
 ```
 
 ## Definition of done

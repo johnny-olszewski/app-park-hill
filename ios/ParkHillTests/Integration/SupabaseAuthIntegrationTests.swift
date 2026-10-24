@@ -52,7 +52,7 @@ struct SupabaseAuthIntegrationTests {
 
         _ = try await auth.signIn(email: attendee.email, password: dataset.localPassword)
         let mockResponse = try JSONDecoder().decode(TabsResponse.self, from: TestMockResponses.data("attendee/get_tabs.json"))
-        #expect(try await backend.getTabs(locale: "en") == mock response)
+        #expect(try await backend.getTabs(locale: "en") == mockResponse)
         await auth.signOut()
     }
 

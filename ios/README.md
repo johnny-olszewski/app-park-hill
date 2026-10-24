@@ -82,7 +82,7 @@ All backend data goes through `BackendService` (`ParkHill/Services/Backend/`). S
 
 ### Contract names
 
-Backend function names and screen keys come from `/contract/generated/ContractNames.swift` (`RPCFunction`, `EdgeFunction`, `ScreenKey`), generated from `/contract/names.json` and compiled into the app in every configuration by `project.yml`. Never write a backend function name or screen key as a string literal in `ParkHill/`, and never edit or copy the generated file: edit `names.json`, run `make names` in `/backend`, then `make project`. Tests may use literals to assert wire values.
+Backend function names and screen keys come from `/contract/generated/ContractNames.swift` (`RPCFunction`, `EdgeFunction`, `ScreenKey`), generated from `/contract/names.json` and compiled into the app in every configuration by `project.yml`. Screen data models (`SignInScreenData`, `HomeRootData`, `CommunityHomeData`) are generated beside it from `/contract/screens` by `make models`; `project.yml` compiles every Swift file in `/contract/generated`, so a new screen's model needs only `make project`. Never write a backend function name or screen key as a string literal in `ParkHill/`, and never edit or copy the generated file: edit `names.json`, run `make names` in `/backend`, then `make project`. Tests may use literals to assert wire values.
 
 The Supabase SDK (supabase-swift, pinned in `project.yml`) is imported only under `ParkHill/Services/Supabase/` (and by the Dev-only integration tests). Failures reach callers as `BackendError`: `network`, `unknownScreen`, `unauthorized`, `decoding` or `server`.
 

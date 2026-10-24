@@ -6,7 +6,7 @@ area: android
 epic: EP-05
 depends_on: [SUP-020]
 paired_with: [IOS-023]
-status: Draft
+status: Done
 ---
 
 # AND-024: Decode screens with the generated models in the Android app

@@ -31,9 +31,12 @@ targets:
     platform: iOS
     sources:
       - path: ParkHill
-      # Backend function names and screen keys, generated from
-      # contract/names.json. Every configuration compiles it.
-      - path: ../contract/generated/ContractNames.swift
+      # Backend function names, screen keys and screen models, generated from
+      # contract/names.json and contract/screens. Every configuration compiles
+      # every Swift file there, so a new screen model needs no change here.
+      - path: ../contract/generated
+        excludes:
+          - "*.kt"
       # Mock responses and the persona dataset, bundled for the mock
       # services. App.xcconfig excludes them from every configuration except Mock.
       - path: ../contract/mock_responses

@@ -38,28 +38,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.parkhill.contract.SignInScreenData
 import app.parkhill.design.ParkHill
 import app.parkhill.design.PrimaryButton
 import app.parkhill.design.brandFieldColors
 import app.parkhill.services.auth.AuthService
 import app.parkhill.services.auth.SignInError
 import kotlinx.coroutines.launch
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
-
-/** `auth.sign_in` data (specs/AUTH.md 5.3). */
-@Serializable
-data class SignInScreenData(
-    val title: String,
-    @SerialName("email_label") val emailLabel: String,
-    @SerialName("password_label") val passwordLabel: String,
-    @SerialName("submit_label") val submitLabel: String,
-    @SerialName("cannot_connect_message") val cannotConnectMessage: String,
-    @SerialName("session_ended_message") val sessionEndedMessage: String,
-    /** Not supported yet; entries are ignored (specs/AUTH.md 5.3). */
-    @SerialName("secondary_actions") val secondaryActions: List<JsonElement> = emptyList(),
-)
 
 /**
  * True when the user was signed out because access ended, so the sign-in

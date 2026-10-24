@@ -21,7 +21,7 @@ Text resolves per string: a string missing in the requested locale uses its `en`
 
 ## Screen data
 
-`screens/<key>.schema.json` describes one backend screen's `data`, once, for both clients (guide 4.1 rule 8). `make models` in `/backend` generates a Swift and a Kotlin model from each into `generated/`, named by the description's `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. `make data-check` fails when a recorded screen in `mock responses/` (including each tab's screen in `get_tabs`) does not match its description, when a screen key in `names.json` has no description or a description has no key, and when `generated/` differs from what `make models` produces.
+`screens/<key>.schema.json` describes one backend screen's `data`, once, for both clients (guide 4.1 rule 8). `make models` in `/backend` generates a Swift and a Kotlin model from each into `generated/`, named by the description's `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. `make data-check` fails when a recorded screen in `mock_responses/` (including each tab's screen in `get_tabs`) does not match its description, when a screen key in `names.json` has no description or a description has no key, and when `generated/` differs from what `make models` produces.
 
 Descriptions use this subset of JSON Schema (2020-12). Anything else is refused, so a description never means something the generator or the check ignores:
 

@@ -6,6 +6,7 @@ import app.parkhill.services.backend.Profile
 import app.parkhill.services.backend.ScreenEnvelope
 import app.parkhill.services.backend.TabItem
 import app.parkhill.services.backend.TabsResponse
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -56,6 +57,7 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
                     "submit_label" to JsonPrimitive("Sign in"),
                     "cannot_connect_message" to JsonPrimitive("Can't connect."),
                     "session_ended_message" to JsonPrimitive("You've been signed out."),
+                    "secondary_actions" to JsonArray(emptyList()),
                 ),
             ),
         )

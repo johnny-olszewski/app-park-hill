@@ -40,9 +40,11 @@ struct ScreenRegistryTests {
         #expect(received == Data(title: "Hello"))
     }
 
-    @Test func realSignInMockResponseResolves() throws {
-        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data("get_entry.json"))
-        #expect(makeRegistry().resolve(envelope) != nil)
+    /// Each recorded screen decodes into the generated model its key is registered with.
+    @Test(arguments: TestMockResponses.screenEnvelopePaths())
+    func everyRecordedScreenResolves(path: String) throws {
+        let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data(path))
+        #expect(makeRegistry().resolve(envelope) != nil, "\(path): \(envelope.key)")
     }
 
     @Test func everyRecordedTabRootResolves() throws {

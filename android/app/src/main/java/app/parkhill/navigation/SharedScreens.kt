@@ -1,12 +1,12 @@
 package app.parkhill.navigation
 
+import app.parkhill.contract.CommunityHomeData
+import app.parkhill.contract.HomeRootData
 import app.parkhill.contract.ScreenKey
-import app.parkhill.screens.community.CommunityHomeData
-import app.parkhill.screens.community.CommunityHomeScreen
-import app.parkhill.screens.home.HomeRootData
-import app.parkhill.screens.home.HomeRootScreen
+import app.parkhill.contract.SignInScreenData
 import app.parkhill.screens.auth.SignInScreen
-import app.parkhill.screens.auth.SignInScreenData
+import app.parkhill.screens.community.CommunityHomeScreen
+import app.parkhill.screens.home.HomeRootScreen
 import app.parkhill.services.auth.AuthService
 
 /** Screens every flavor can show. */

@@ -67,7 +67,7 @@ Each flavor's `ServiceBinding.kt` declares `typealias AppBackendService`; `AppSe
 
 ### Contract names
 
-Backend function names and screen keys come from `/contract/generated/ContractNames.kt` (`RpcFunction`, `EdgeFunction`, `ScreenKey`, package `app.parkhill.contract`), generated from `/contract/names.json`. The `main` source set compiles it in place for every variant. Never write a backend function name or screen key as a string literal in `app/src`, and never edit or copy the generated file: edit `names.json` and run `make names` in `/backend`. Tests may use literals to assert wire values; mock response file names such as `sign_in.error.account_disabled` stay as text.
+Backend function names and screen keys come from `/contract/generated/ContractNames.kt` (`RpcFunction`, `EdgeFunction`, `ScreenKey`, package `app.parkhill.contract`), generated from `/contract/names.json`. Screen data models (`SignInScreenData`, `HomeRootData`, `CommunityHomeData`, same package) are generated beside it from `/contract/screens` by `make models`. The `main` source set compiles every Kotlin file in `/contract/generated` in place for every variant, so a new screen's model needs no Gradle change. Never write a backend function name or screen key as a string literal in `app/src`, and never edit or copy the generated file: edit `names.json` and run `make names` in `/backend`. Tests may use literals to assert wire values; mock response file names such as `sign_in.error.account_disabled` stay as text.
 
 ### Auth
 

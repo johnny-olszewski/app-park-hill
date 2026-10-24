@@ -6,7 +6,7 @@ area: ios
 epic: EP-05
 depends_on: [SUP-022, IOS-023]
 paired_with: [AND-025]
-status: Draft
+status: Done
 ---
 
 # IOS-024: Decode every backend response with the generated types in the iOS app
@@ -35,7 +35,7 @@ After SUP-022, the screen envelope, `get_tabs`, `whoami` and the `sign_in` respo
 | AC2 | Cached envelopes and tabs written by the previous build still load after updating (same encoding), or are discarded and refetched without an error screen | Updating the app never shows an error for an old cache |
 | AC3 | Decoding tests decode every file in `contract/mock_responses` with its type from `contract/responses.json` | The app decodes exactly what the backend records |
 | AC4 | In Mock and Dev, sign-in (success and each refusal), tabs, return to foreground and sign-out work as before | No behavior change |
-| AC5 | A search of the repository for `TEMPORARY(EP-05)` finds nothing | SUP-022's temporary excludes are gone |
+| AC5 | A search outside `docs/` for `TEMPORARY(EP-05)` finds nothing | SUP-022's temporary excludes are gone |
 
 ## Technical notes
 

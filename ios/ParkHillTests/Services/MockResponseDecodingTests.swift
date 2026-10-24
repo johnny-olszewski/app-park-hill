@@ -77,6 +77,17 @@ struct MockResponseDecodingTests {
         }
     }
 
+    @Test func everyGroupDetailMockResponseDecodes() throws {
+        let paths = TestMockResponses.allJSONPaths().filter { ($0 as NSString).lastPathComponent.hasPrefix("get_screen.community.group@") }
+        #expect(!paths.isEmpty)
+        for path in paths {
+            let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data(path))
+            let detail = try JSONDecoder().decode(CommunityGroupData.self, from: JSONEncoder().encode(envelope.data))
+            #expect(!detail.title.isEmpty, "\(path)")
+            #expect(!detail.members.isEmpty, "\(path)")
+        }
+    }
+
     @Test func unknownFieldsAreIgnored() throws {
         let json = #"{"key": "auth.sign_in", "data": {"title": "Sign in"}, "toolbar": [], "future_field": {"x": 1}}"#
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: Data(json.utf8))

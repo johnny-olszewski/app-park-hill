@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-009, SUP-012]
 paired_with: [AND-011]
-status: Draft
+status: Done
 ---
 
 # IOS-011: Build the iOS group detail view and screen

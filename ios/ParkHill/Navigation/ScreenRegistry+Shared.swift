@@ -10,5 +10,8 @@ extension ScreenRegistry {
         register(ScreenKey.communityHome, data: CommunityHomeData.self) { data in
             CommunityHomeScreen(data: data)
         }
+        register(ScreenKey.communityGroup, data: CommunityGroupData.self) { data in
+            CommunityGroupScreen(data: data)
+        }
     }
 }

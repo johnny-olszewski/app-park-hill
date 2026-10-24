@@ -51,3 +51,6 @@ __pycache__/
 
 # Behavior recordings, kept on the implementer's machine (guide 7.2 rule 4)
 recordings/
+
+# Obsidian vault settings, per person (docs/ is opened as a vault; guide 7.3)
+.obsidian/

@@ -3,7 +3,8 @@ import Foundation
 import Testing
 @testable import ParkHill
 
-/// Backend screens: refresh and the per-screen cache (IOS-009 AC4, AC5).
+/// Backend screens: push from actions, refresh and the per-screen cache
+/// (IOS-009 AC3 to AC5).
 @MainActor
 struct ScreenModelTests {
     private let cache = ScreenCache(directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString))
@@ -23,8 +24,44 @@ struct ScreenModelTests {
 
     private static let params: [String: JSONValue] = ["id": .string("1")]
 
+    private func navigate(to key: String, params: [String: JSONValue] = ScreenModelTests.params) -> Action {
+        .navigate(NavigateAction(type: .navigate, screenKey: key, params: .object(params), presentation: .push, role: nil))
+    }
+
     private func tab() -> TabCoordinator {
         TabCoordinator(item: TabItem(id: "t", title: "T", iconKey: "tab.t", screen: Self.screen("Root")), context: context)
+    }
+
+    // AC1, AC3: a push action opens its target over a loading state; what
+    // this build does not know does nothing.
+
+    @Test func pushingFetchesTheTargetWithItsParams() async throws {
+        defer { try? FileManager.default.removeItem(at: cache.directory) }
+        backend.enqueueScreen(.success(Self.screen("Pushed")))
+        let tab = tab()
+
+        tab.perform(navigate(to: "test.screen"))
+        let pushed = try #require(tab.path.last?.screen)
+        guard case .loading = pushed.state else { Issue.record("not loading first"); return }
+
+        await pushed.load()
+        #expect(pushed.envelope == Self.screen("Pushed"))
+        #expect(backend.screenCalls.last == .init(key: "test.screen", params: Self.params))
+    }
+
+    @Test func anUnregisteredTargetPushesNothing() {
+        let tab = tab()
+        tab.perform(navigate(to: "future.screen"))
+        #expect(tab.path.isEmpty)
+    }
+
+    @Test func anUnknownActionTypeIsNotPerformableAndDoesNothing() {
+        let tab = tab()
+        let unknown = Action.unknown(type: "teleport")
+        #expect(!ScreenActions().canPerform(unknown))
+        #expect(ScreenActions().canPerform(navigate(to: "test.screen")))
+        tab.perform(unknown)
+        #expect(tab.path.isEmpty)
     }
 
     // AC4: pull to refresh shows the new data.

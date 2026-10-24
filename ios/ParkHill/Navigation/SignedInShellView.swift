@@ -60,10 +60,12 @@ private struct TabRoot: View {
                     ScreenHostView(model: route.screen)
                 }
         }
+        .environment(\.screenActions, tab.actions)
         .sheet(item: $tab.presented) { route in
             NavigationStack {
                 ScreenHostView(model: route.screen)
             }
-            }
+            .environment(\.screenActions, tab.actions)
+        }
     }
 }

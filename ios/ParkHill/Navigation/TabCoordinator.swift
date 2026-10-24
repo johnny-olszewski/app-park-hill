@@ -1,5 +1,5 @@
-import Foundation
 import Observation
+import OSLog
 
 /// One tab's navigation (guide 5.1): its root screen, the screens pushed over
 /// it and the one presented as a sheet. Kept while the tab is switched away
@@ -31,6 +31,32 @@ final class TabCoordinator: Identifiable {
         title = item.title
         iconKey = item.iconKey
         root.update(item.screen)
+    }
+
+    /// What this tab's screens call when something is tapped.
+    var actions: ScreenActions {
+        ScreenActions(perform: { [weak self] action in self?.perform(action) })
+    }
+
+    /// Performs a backend action: `navigate` with `push` fetches the target
+    /// screen over a loading state on this tab's stack. An unknown action, or
+    /// a target this build does not register, does nothing and is logged.
+    func perform(_ action: Action) {
+        switch action {
+        case .navigate(let navigate):
+            guard context.registry.isRegistered(navigate.screenKey) else {
+                Logger.navigation.error("Dropped navigation to unregistered screen key \(navigate.screenKey, privacy: .public)")
+                return
+            }
+            switch navigate.presentation {
+            case .push:
+                let screen = ScreenModel(key: navigate.screenKey, params: navigate.params.objectValue, context: context)
+                path.append(Route(screen: screen))
+                Task { await screen.load() }
+            }
+        case .unknown:
+            _ = ScreenActions.isKnown(action)
+        }
     }
 
     /// Pushes the screen for `envelope`. False, and logged by the registry,
@@ -68,4 +94,12 @@ struct Route: Identifiable, Hashable {
 
     static func == (lhs: Route, rhs: Route) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
+}
+
+extension JSONValue {
+    /// The members of an object; empty for any other value.
+    var objectValue: [String: JSONValue] {
+        if case .object(let members) = self { return members }
+        return [:]
+    }
 }

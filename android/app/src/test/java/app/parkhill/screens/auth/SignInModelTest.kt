@@ -1,5 +1,6 @@
 package app.parkhill.screens.auth
 
+import app.parkhill.contract.SignInScreenData
 import app.parkhill.navigation.StubBackendService
 import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.auth.SignInError

@@ -26,6 +26,14 @@ struct EntryCacheTests {
         #expect(cache.load(locale: "en") == .signIn(title: "New"))
     }
 
+    @Test func envelopeCachedByTheHandWrittenModelStillLoads() throws {
+        defer { try? FileManager.default.removeItem(at: cache.directory) }
+        try FileManager.default.createDirectory(at: cache.directory, withIntermediateDirectories: true)
+        let cached = #"{"key":"auth.sign_in","data":{"title":"Sign in"}}"#
+        try Data(cached.utf8).write(to: cache.directory.appending(path: "en.json"))
+        #expect(cache.load(locale: "en") == ScreenEnvelope(key: "auth.sign_in", data: .object(["title": .string("Sign in")])))
+    }
+
     @Test func standardCacheLivesUnderTheDeletableCacheDirectory() {
         #expect(EntryCache.standard.directory.path.hasPrefix(CacheDirectory.url.path))
     }
@@ -46,6 +54,15 @@ struct TabsCacheTests {
         try cache.save(tabs, locale: "en")
         #expect(cache.load(locale: "en") == tabs)
         #expect(cache.load(locale: "es") == nil)
+    }
+
+    @Test func tabsCachedByTheHandWrittenModelStillLoad() throws {
+        defer { try? FileManager.default.removeItem(at: cache.directory) }
+        try FileManager.default.createDirectory(at: cache.directory, withIntermediateDirectories: true)
+        let cached = #"{"tabs":[{"id":"home","title":"Home","icon_key":"tab.home","screen":{"key":"home.root","data":{}}}]}"#
+        try Data(cached.utf8).write(to: cache.directory.appending(path: "en.json"))
+        let tab = TabItem(id: "home", title: "Home", iconKey: "tab.home", screen: ScreenEnvelope(key: "home.root", data: .object([:])))
+        #expect(cache.load(locale: "en") == TabsResponse(tabs: [tab]))
     }
 
     @Test func standardCacheLivesUnderTheDeletableCacheDirectory() {

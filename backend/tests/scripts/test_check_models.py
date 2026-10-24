@@ -47,6 +47,10 @@ class Mapping(unittest.TestCase):
         found = check_models.mapping_problems({"get_entry", "get_tabs"}, RESPONSES, {}, types)
         self.assertEqual(found, [f"contract/types/Unused{screens.SUFFIX}: used by no description and no mapping in responses.json"])
 
+    def test_a_type_with_an_example_is_used(self):
+        types = {**TYPES, "Row": described_type("Row")}
+        self.assertEqual(check_models.mapping_problems({"get_entry", "get_tabs"}, RESPONSES, {}, types, {"Row"}), [])
+
     def test_a_type_used_only_by_a_screen_is_used(self):
         types = {**TYPES, "Row": described_type("Row")}
         screen = described_type("ScreenData", {"row": {"$ref": "../types/Row.schema.json"}})
@@ -58,7 +62,9 @@ class CommittedMapping(unittest.TestCase):
         described, types = screens.load_all()
         responses = screens.load_responses()
         paths = sorted(dataset.MOCK_RESPONSES_PATH.rglob("*.json"))
-        self.assertEqual(check_models.mapping_problems({p.stem for p in paths}, responses, described, types), [])
+        examples = {p.stem for p in screens.EXAMPLES_PATH.glob("*.json")}
+        self.assertEqual(check_models.mapping_problems({p.stem for p in paths}, responses, described, types, examples), [])
+        self.assertEqual(check_models.example_problems(types), [])
         for path in paths:
             with self.subTest(path=path.name):
                 kind = responses[path.stem]

@@ -106,8 +106,18 @@ class DescriptionSubset(unittest.TestCase):
 
     def test_unsupported_keywords_are_refused(self):
         self.assert_refused({**SCHEMA, "oneOf": []}, "unsupported keywords")
-        properties = {**SCHEMA["properties"], "title": {"type": "string", "enum": ["a"]}}
+        properties = {**SCHEMA["properties"], "title": {"type": "string", "const": "a"}}
         self.assert_refused({**SCHEMA, "properties": properties}, "unsupported keywords")
+
+    def test_enums_are_distinct_snake_case_strings(self):
+        def with_enum(field):
+            return {**SCHEMA, "properties": {"a": field}, "required": []}
+
+        screens.validate_screen(with_enum({"type": "string", "enum": ["push", "full_screen_cover"]}), "x")
+        self.assert_refused(with_enum({"type": "integer", "enum": ["a"]}), 'only for "type": "string"')
+        self.assert_refused(with_enum({"type": "string", "enum": []}), "non-empty list")
+        self.assert_refused(with_enum({"type": "string", "enum": ["a", "a"]}), "distinct")
+        self.assert_refused(with_enum({"type": "string", "enum": ["Push"]}), "snake_case")
 
     def test_screens_must_be_closed_objects(self):
         self.assert_refused({**SCHEMA, "additionalProperties": True}, "additionalProperties")
@@ -148,6 +158,49 @@ class DescriptionSubset(unittest.TestCase):
             "c": {"type": "string"},
         }
         self.assertEqual(screens.refs({**SCHEMA, "properties": properties}), {"A", "B"})
+
+
+MEMBER = {
+    **TYPE,
+    "title": "Go",
+    "properties": {"type": {"type": "string", "enum": ["go"]}, "to": {"type": "string", "enum": ["here", "there"]}},
+    "required": ["type", "to"],
+}
+UNION = {"$schema": screens.DRAFT, "title": "Act", "description": "A union.", "oneOf": [{"$ref": "Go.schema.json"}]}
+UNION_TYPES = {"Go": MEMBER, "Act": UNION}
+
+
+class Unions(unittest.TestCase):
+    def test_a_value_is_checked_against_the_member_its_type_names(self):
+        self.assertEqual(screens.problems(UNION, {"type": "go", "to": "here"}, "x", UNION_TYPES), [])
+        self.assertEqual(screens.problems(UNION, {"type": "go"}, "x", UNION_TYPES), ["x: missing required field 'to'"])
+
+    def test_an_unknown_type_is_named(self):
+        self.assertEqual(screens.problems(UNION, {"type": "jump"}, "x", UNION_TYPES), ["x: type 'jump' is not one of ['go']"])
+
+    def test_a_value_outside_an_enum_is_named(self):
+        found = screens.problems(UNION, {"type": "go", "to": "everywhere"}, "x", UNION_TYPES)
+        self.assertEqual(found, ["x.to: 'everywhere' is not one of ['here', 'there']"])
+
+    def test_members_are_found_as_refs(self):
+        self.assertEqual(screens.refs(UNION), {"Go"})
+
+    def test_a_union_is_only_refs(self):
+        screens.validate_union(UNION, "x")
+        with self.assertRaises(screens.ScreensError):
+            screens.validate_union({**UNION, "oneOf": [{"type": "object"}]}, "x")
+        with self.assertRaises(screens.ScreensError):
+            screens.validate_union({**UNION, "type": "object"}, "x")
+
+    def test_each_member_fixes_a_distinct_type(self):
+        self.assertEqual(screens.union_tags(UNION, UNION_TYPES), {"go": "Go"})
+        loose = {**MEMBER, "properties": {**MEMBER["properties"], "type": {"type": "string"}}}
+        with self.assertRaises(screens.ScreensError):
+            screens.union_tags(UNION, {"Go": loose})
+        twice = {**UNION, "oneOf": [{"$ref": "Go.schema.json"}, {"$ref": "Again.schema.json"}]}
+        with self.assertRaises(screens.ScreensError) as raised:
+            screens.union_tags(twice, {"Go": MEMBER, "Again": {**MEMBER, "title": "Again"}})
+        self.assertIn("both have type 'go'", str(raised.exception))
 
 
 class Loading(unittest.TestCase):

@@ -40,9 +40,9 @@ The Mock build shows the production app, starting with the real sign-in screen, 
 
 Implemented in this order (guide 7.2). EP-06.C brings Android level with EP-06.A and EP-06.B (catch-up, guide 7.2 rule 3).
 
-- [EP-06.A: Dev tools over the app](../slices/EP-06.A-local-tools-over-the-app.md)
+- [EP-06.A: Dev tools over the app](../slices/EP-06.A-dev-tools-over-the-app.md)
 - [EP-06.B: Mock testers sign in through the menu](../slices/EP-06.B-mock-testers-sign-in-through-the-menu.md)
-- [EP-06.C: Android dev tools and Mock sign-in](../slices/EP-06.C-android-local-tools-and-mock-sign-in.md)
+- [EP-06.C: Android dev tools and Mock sign-in](../slices/EP-06.C-android-dev-tools-and-mock-sign-in.md)
 
 ## Tasks
 

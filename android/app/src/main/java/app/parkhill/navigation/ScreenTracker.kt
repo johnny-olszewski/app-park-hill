@@ -1,6 +1,6 @@
 package app.parkhill.navigation
 
-import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.contract.ScreenEnvelope
 
 /**
  * Told when a backend-driven screen appears and disappears, so debug tooling

@@ -1,8 +1,8 @@
 package app.parkhill.design
 
 import app.parkhill.R
+import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.TabsResponse
 import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

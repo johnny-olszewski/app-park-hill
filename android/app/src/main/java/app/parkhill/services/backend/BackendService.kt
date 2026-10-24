@@ -1,5 +1,8 @@
 package app.parkhill.services.backend
 
+import app.parkhill.contract.Profile
+import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.TabsResponse
 import kotlinx.serialization.json.JsonObject
 
 /**

@@ -1,8 +1,8 @@
 package app.parkhill.cache
 
+import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.ScreenEnvelope
-import app.parkhill.services.backend.TabsResponse
 import java.io.File
 import kotlinx.serialization.KSerializer
 

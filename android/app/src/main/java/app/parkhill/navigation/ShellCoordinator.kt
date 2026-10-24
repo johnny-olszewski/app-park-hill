@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import app.parkhill.cache.TabsCache
 import app.parkhill.contract.RpcFunction
+import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendService
-import app.parkhill.services.backend.TabsResponse
 import kotlinx.coroutines.CancellationException
 
 /** What the signed-in shell shows. */

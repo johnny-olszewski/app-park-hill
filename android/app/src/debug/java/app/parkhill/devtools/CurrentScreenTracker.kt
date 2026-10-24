@@ -1,8 +1,8 @@
 package app.parkhill.devtools
 
 import androidx.compose.runtime.mutableStateListOf
+import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.navigation.ScreenTracker
-import app.parkhill.services.backend.ScreenEnvelope
 
 /**
  * The backend-driven screens currently on screen, newest last. The newest is

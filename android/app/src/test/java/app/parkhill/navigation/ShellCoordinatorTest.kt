@@ -1,10 +1,10 @@
 package app.parkhill.navigation
 
 import app.parkhill.cache.TabsCache
+import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.contract.TabsResponse
 import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.backend.BackendError
-import app.parkhill.services.backend.ScreenEnvelope
-import app.parkhill.services.backend.TabsResponse
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonObject

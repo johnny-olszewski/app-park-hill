@@ -1,6 +1,6 @@
 package app.parkhill.devtools
 
-import app.parkhill.services.backend.ScreenEnvelope
+import app.parkhill.contract.ScreenEnvelope
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject

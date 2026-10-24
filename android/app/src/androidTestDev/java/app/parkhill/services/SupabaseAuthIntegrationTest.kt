@@ -2,12 +2,12 @@ package app.parkhill.services
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import app.parkhill.contract.TabsResponse
 import app.parkhill.environment.ServiceBinding
 import app.parkhill.services.auth.AuthState
 import app.parkhill.services.auth.LocalUserData
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.TabsResponse
 import app.parkhill.services.supabase.EncryptedSessionManager
 import app.parkhill.services.supabase.KeystoreSessionCipher
 import app.parkhill.services.supabase.SignInClient

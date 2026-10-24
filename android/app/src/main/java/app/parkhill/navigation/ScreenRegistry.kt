@@ -3,8 +3,8 @@ package app.parkhill.navigation
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.services.backend.ContractJson
-import app.parkhill.services.backend.ScreenEnvelope
 import java.util.concurrent.atomic.AtomicLong
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException

@@ -1,6 +1,7 @@
-# Android CI (AND-004, AND-007): mock unit and UI tests, no build-variant
-# branching, and no mock code in the release build. Runs mock tests only; local
-# instrumented tests are compiled here and run locally (guide 6).
+# Android CI (AND-004, AND-007): the merge gate in mock (unit tests and the smoke
+# instrumented tests in android/smoke-mock.txt), no build-variant branching, and
+# no mock code in the release build. Every instrumented test runs nightly
+# (nightly.yml); local ones are compiled here (guide 6, 7.2 rule 4).
 # Reports only; guide 7.1 rule 10 forbids merging red.
 name: Android
 
@@ -11,6 +12,7 @@ on:
       - "android/**"
       - "contract/**"
       - "backend/**"
+      - "scripts/smoke_tests.sh"
       - ".github/workflows/android.yml"
 
 concurrency:
@@ -51,7 +53,7 @@ jobs:
       - name: No mock code in the release build
         run: scripts/check_release_apk.sh app/build/outputs/apk/local/release/app-local-release-unsigned.apk
 
-  # AND-007: the mock UI tests on an emulator. No backend (guide 6).
+  # AND-007: the smoke mock UI tests on an emulator. No backend (guide 6).
   android-ui:
     name: Android mock UI tests
     runs-on: ubuntu-latest
@@ -83,4 +85,4 @@ jobs:
           target: google_apis
           disable-animations: true
           working-directory: android
-          script: ./gradlew --console=plain connectedMockDebugAndroidTest
+          script: make test-smoke

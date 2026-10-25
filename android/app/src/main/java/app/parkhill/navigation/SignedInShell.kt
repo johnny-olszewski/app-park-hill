@@ -26,6 +26,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -65,9 +68,13 @@ fun SignedInShell(
         ShellState.Tabs -> {
             val selected = shell.tabs.firstOrNull { it.id == shell.selectedTabId } ?: shell.tabs.first()
             val saveableState = rememberSaveableStateHolder()
+            val snackbar = remember(selected) { SnackbarHostState() }
+            TabMessages(selected, snackbar)
             Box(Modifier.fillMaxSize()) {
                 Scaffold(
                     containerColor = ParkHill.colors.surface,
+                    // Over the cover when one is open; otherwise over the tab.
+                    snackbarHost = { if (selected.cover == null) MessageHost(snackbar) },
                     bottomBar = {
                         NavigationBar(containerColor = ParkHill.colors.surface) {
                             shell.tabs.forEach { tab ->
@@ -98,10 +105,26 @@ fun SignedInShell(
                         }
                     }
                 }
-                FullScreenCover(selected)
+                FullScreenCover(selected, snackbar)
             }
         }
     }
+}
+
+/** Shows the tab's messages, such as the lost-access message, one at a time as a `Snackbar` (guide 5.5). */
+@Composable
+private fun TabMessages(tab: TabCoordinator, snackbar: SnackbarHostState) {
+    val message = tab.message ?: return
+    LaunchedEffect(message) {
+        snackbar.showSnackbar(message.text)
+        tab.messageShown(message)
+    }
+}
+
+/** Where a tab's `Snackbar` appears. */
+@Composable
+internal fun MessageHost(snackbar: SnackbarHostState) {
+    SnackbarHost(snackbar) { data -> Snackbar(data, modifier = Modifier.testTag("message")) }
 }
 
 /**

@@ -6,6 +6,9 @@ import app.parkhill.contract.TabItem
 import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -79,3 +82,7 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
         )
     }
 }
+
+/** A scope that runs what coordinators launch at once, up to its first suspension; stubs never suspend. */
+@OptIn(ExperimentalCoroutinesApi::class)
+fun eagerScope(): CoroutineScope = CoroutineScope(UnconfinedTestDispatcher())

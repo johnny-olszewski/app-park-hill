@@ -13,7 +13,7 @@ Before changing anything:
 Rules:
 
 - Work only within the Scope of the slice's tasks. Do not expand it.
-- Implement only a Ready slice (guide 7.2 rule 7), its tasks in the slice's order. Verify each task's acceptance criteria and run its tests before starting the next; verify the slice's behavior criteria at the end.
+- Implement only a Ready slice (guide 7.2 rule 7), its tasks in the slice's order. Checks run in tiers (guide 7.2 rule 4): fast checks every commit; a task's unit and backend tests before the next task; UI tests, `make test-local` and the behavior criteria once, at the end of the slice. iOS and Android tasks may run in parallel worktrees once the backend tasks are committed.
 - If you find ambiguity or a conflict with the guide, stop and ask. Do not guess.
 - Decisions that change the guide are recorded in its decision log (section 8) in the same change.
 - Temporary code only when a task says so, with every line marked `TEMPORARY(<epic>): <what removes it>`.

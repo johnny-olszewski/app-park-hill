@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.parkhill.contract.GroupList
 import app.parkhill.contract.GroupRow
+import app.parkhill.contract.GroupRowBadgeTone
 import app.parkhill.design.ParkHill
 import app.parkhill.navigation.LocalScreenActions
 
@@ -50,7 +51,7 @@ fun GroupListView(list: GroupList) {
     }
 }
 
-/** One group: title, subtitle and optional badge. Tappable only when this build knows its action. */
+/** One group: title, subtitle and optional badge, in the danger color when it needs attention. Tappable only when this build knows its action. */
 @Composable
 fun GroupRowView(row: GroupRow) {
     val actions = LocalScreenActions.current
@@ -67,7 +68,10 @@ fun GroupRowView(row: GroupRow) {
             Text(row.title, color = ParkHill.colors.ink, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(row.subtitle, color = ParkHill.colors.inkMuted, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        row.badge?.let { Badge(it) }
+        row.badge?.let { badge ->
+            val attention = row.badgeTone == GroupRowBadgeTone.ATTENTION
+            Badge(badge, Modifier.testTag(if (attention) "groupRow.badge.attention" else "groupRow.badge"), attention = attention)
+        }
         if (tappable) {
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = ParkHill.colors.inkMuted)
         }

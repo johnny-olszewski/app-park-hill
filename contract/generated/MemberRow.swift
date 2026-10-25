@@ -10,6 +10,13 @@ struct MemberRow: Codable, Equatable, Sendable {
     /// Whether this member leads the group.
     let isLeader: Bool
 
+    init(userId: String, title: String, note: String? = nil, isLeader: Bool) {
+        self.userId = userId
+        self.title = title
+        self.note = note
+        self.isLeader = isLeader
+    }
+
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case title

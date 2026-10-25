@@ -19,4 +19,5 @@ enum ScreenKey {
     static let homeRoot = "home.root"
     static let communityHome = "community.home"
     static let communityGroup = "community.group"
+    static let communityBrowse = "community.browse"
 }

@@ -20,4 +20,15 @@ object AssetProvider {
 
     /** Whether `key` has its own bundled icon rather than the fallback. */
     fun hasTabIcon(key: String): Boolean = key in tabIcons
+
+    private val toolbarIcons = mapOf(
+        "toolbar.browse" to R.drawable.ic_toolbar_browse,
+    )
+
+    /** The icon for a toolbar item's `icon_key`; an unknown key gets the fallback, so a new key can never break a bar. */
+    @DrawableRes
+    fun toolbarIcon(key: String): Int = toolbarIcons[key] ?: R.drawable.ic_toolbar_fallback
+
+    /** Whether `key` has its own bundled toolbar icon rather than the fallback. */
+    fun hasToolbarIcon(key: String): Boolean = key in toolbarIcons
 }

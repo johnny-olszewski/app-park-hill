@@ -70,7 +70,15 @@
       "members": [
         "leader",
         "member_one",
-        "member_two"
+        "member_two",
+        "p_jordan_lee",
+        "p_maria_lopez",
+        "p_daniel_kim",
+        "p_priya_shah",
+        "p_ana_ruiz",
+        "p_ben_carter",
+        "p_grace_park",
+        "p_sam_ortiz"
       ],
       "leaders": [
         "leader"
@@ -85,7 +93,13 @@
       "meeting_time": "18:30",
       "location": "Shah home",
       "members": [
-        "admin"
+        "admin",
+        "p_hannah_brooks",
+        "p_marcus_reed",
+        "p_elena_petrova",
+        "p_david_nguyen",
+        "p_olivia_bennett",
+        "p_isaac_morales"
       ],
       "leaders": [
         "admin"
@@ -100,10 +114,19 @@
       "meeting_time": "16:00",
       "location": "Vesper Hall",
       "members": [
-        "member_two"
+        "member_two",
+        "p_rachel_cohen",
+        "p_tyler_grant",
+        "p_sofia_alvarez",
+        "p_james_okafor",
+        "p_lauren_mitchell",
+        "p_kevin_tran",
+        "p_naomi_fischer",
+        "p_caleb_wright"
       ],
       "leaders": [
-        "member_two"
+        "member_two",
+        "p_rachel_cohen"
       ]
     },
     {
@@ -114,8 +137,547 @@
       "meeting_day": 3,
       "meeting_time": "19:00",
       "location": "Vesper Hall",
-      "members": [],
+      "members": [
+        "p_mei_chen",
+        "p_andre_thompson",
+        "p_julia_santos",
+        "p_ethan_walsh",
+        "p_leah_goldberg"
+      ],
       "leaders": []
+    },
+    {
+      "id": "normal_heights",
+      "type": "community",
+      "name": "Normal Heights Group",
+      "description": "Dinner, discussion and prayer for neighbors in Normal Heights.",
+      "meeting_day": 1,
+      "meeting_time": "19:00",
+      "location": "Kim home, Normal Heights",
+      "members": [
+        "p_noah_patel",
+        "p_chloe_dubois",
+        "p_victor_hernandez",
+        "p_abigail_foster",
+        "p_micah_johnson",
+        "p_zoe_laurent",
+        "p_owen_murphy",
+        "p_fatima_rahman",
+        "p_luke_anderson",
+        "p_isabella_rossi"
+      ],
+      "leaders": [
+        "p_noah_patel",
+        "p_chloe_dubois"
+      ]
+    },
+    {
+      "id": "womens_morning",
+      "type": "community",
+      "name": "Women's Morning Study",
+      "description": "A slow walk through one book of the Bible each term, with coffee.",
+      "meeting_day": 3,
+      "meeting_time": "09:30",
+      "location": "Church lounge",
+      "members": [
+        "p_gabriel_silva",
+        "p_ruth_adeyemi",
+        "p_nathan_brooks",
+        "p_emily_sato",
+        "p_diego_castillo",
+        "p_hope_williams",
+        "p_simon_novak",
+        "p_aaliyah_davis",
+        "p_peter_lindqvist",
+        "p_camila_torres",
+        "p_jonah_price",
+        "p_lydia_kowalski"
+      ],
+      "leaders": [
+        "p_gabriel_silva"
+      ]
+    },
+    {
+      "id": "mens_breakfast",
+      "type": "community",
+      "name": "Men's Breakfast",
+      "description": "Breakfast, a short passage and honest conversation before work.",
+      "meeting_day": 6,
+      "meeting_time": "07:00",
+      "location": "Café on Adams",
+      "members": [
+        "p_elijah_moore",
+        "p_esther_mensah",
+        "p_thomas_becker",
+        "p_sarah_ibrahim",
+        "p_aaron_fleming",
+        "p_joy_okonkwo",
+        "p_matthew_ellis",
+        "p_rebecca_hart"
+      ],
+      "leaders": [
+        "p_elijah_moore"
+      ]
+    },
+    {
+      "id": "young_adults",
+      "type": "community",
+      "name": "College and Young Adults",
+      "description": "For students and people in their twenties.",
+      "meeting_day": 5,
+      "meeting_time": "19:30",
+      "location": "Garcia apartment, University Heights",
+      "members": [
+        "p_joel_ramirez",
+        "p_anna_yamamoto",
+        "p_michael_o_brien",
+        "p_deborah_wu",
+        "p_christopher_hale",
+        "p_lucia_ferreira",
+        "p_paul_henderson",
+        "p_martha_quinn",
+        "p_adam_sokolov",
+        "p_lily_nakamura",
+        "p_timothy_ward",
+        "p_eva_horvath",
+        "p_stephen_clarke",
+        "p_miriam_levy"
+      ],
+      "leaders": [
+        "p_joel_ramirez",
+        "p_anna_yamamoto"
+      ]
+    },
+    {
+      "id": "south_park",
+      "type": "community",
+      "name": "South Park Group",
+      "description": "A mixed group of families and singles in South Park.",
+      "meeting_day": 2,
+      "meeting_time": "18:30",
+      "location": "Nguyen home, South Park",
+      "members": [
+        "p_josiah_banks",
+        "p_clara_weiss",
+        "p_philip_mendez",
+        "p_vera_ivanova",
+        "p_silas_turner",
+        "p_irene_costa",
+        "p_benjamin_ford"
+      ],
+      "leaders": [
+        "p_josiah_banks"
+      ]
+    },
+    {
+      "id": "kensington_couples",
+      "type": "community",
+      "name": "Kensington Couples",
+      "description": "Married and engaged couples meeting every other week.",
+      "meeting_day": 4,
+      "meeting_time": "19:00",
+      "location": "Bennett home, Kensington",
+      "members": [
+        "p_noah_patel",
+        "p_chloe_dubois",
+        "p_victor_hernandez",
+        "p_abigail_foster",
+        "p_gabriel_silva",
+        "p_ruth_adeyemi",
+        "p_nathan_brooks",
+        "p_emily_sato",
+        "p_josiah_banks",
+        "p_clara_weiss"
+      ],
+      "leaders": [
+        "p_noah_patel"
+      ]
+    },
+    {
+      "id": "grief_and_hope",
+      "type": "community",
+      "name": "Grief and Hope",
+      "description": "A small group for those who have lost someone.",
+      "meeting_day": 1,
+      "meeting_time": "18:00",
+      "location": "Room 2, church building",
+      "members": [
+        "p_diego_castillo",
+        "p_hope_williams",
+        "p_simon_novak",
+        "p_aaliyah_davis",
+        "p_tabitha_young",
+        "p_jacob_rivera"
+      ],
+      "leaders": [
+        "p_tabitha_young"
+      ]
+    },
+    {
+      "id": "grupo_espanol",
+      "type": "community",
+      "name": "Grupo en Español",
+      "description": "Estudio bíblico y oración en español.",
+      "meeting_day": 3,
+      "meeting_time": "19:00",
+      "location": "Salón de la iglesia",
+      "members": [
+        "p_peter_lindqvist",
+        "p_camila_torres",
+        "p_jonah_price",
+        "p_lydia_kowalski",
+        "p_joel_ramirez",
+        "p_anna_yamamoto",
+        "p_michael_o_brien",
+        "p_deborah_wu",
+        "p_christopher_hale"
+      ],
+      "leaders": [
+        "p_peter_lindqvist"
+      ]
+    },
+    {
+      "id": "summer_book_club",
+      "type": "community",
+      "name": "Summer Book Club",
+      "description": "Read one book together over the summer.",
+      "meeting_day": 4,
+      "meeting_time": "19:30",
+      "location": "Church library",
+      "members": [
+        "p_elijah_moore",
+        "p_esther_mensah",
+        "p_thomas_becker",
+        "p_sarah_ibrahim",
+        "p_aaron_fleming",
+        "p_joy_okonkwo"
+      ],
+      "leaders": [
+        "p_elijah_moore"
+      ],
+      "archived": true
+    }
+  ],
+  "people": [
+    {
+      "id": "p_jordan_lee",
+      "display_name": "Jordan Lee"
+    },
+    {
+      "id": "p_maria_lopez",
+      "display_name": "Maria Lopez"
+    },
+    {
+      "id": "p_daniel_kim",
+      "display_name": "Daniel Kim"
+    },
+    {
+      "id": "p_priya_shah",
+      "display_name": "Priya Shah"
+    },
+    {
+      "id": "p_ana_ruiz",
+      "display_name": "Ana Ruiz"
+    },
+    {
+      "id": "p_ben_carter",
+      "display_name": "Ben Carter"
+    },
+    {
+      "id": "p_grace_park",
+      "display_name": "Grace Park"
+    },
+    {
+      "id": "p_sam_ortiz",
+      "display_name": "Sam Ortiz"
+    },
+    {
+      "id": "p_hannah_brooks",
+      "display_name": "Hannah Brooks"
+    },
+    {
+      "id": "p_marcus_reed",
+      "display_name": "Marcus Reed"
+    },
+    {
+      "id": "p_elena_petrova",
+      "display_name": "Elena Petrova"
+    },
+    {
+      "id": "p_david_nguyen",
+      "display_name": "David Nguyen"
+    },
+    {
+      "id": "p_olivia_bennett",
+      "display_name": "Olivia Bennett"
+    },
+    {
+      "id": "p_isaac_morales",
+      "display_name": "Isaac Morales"
+    },
+    {
+      "id": "p_rachel_cohen",
+      "display_name": "Rachel Cohen"
+    },
+    {
+      "id": "p_tyler_grant",
+      "display_name": "Tyler Grant"
+    },
+    {
+      "id": "p_sofia_alvarez",
+      "display_name": "Sofia Alvarez"
+    },
+    {
+      "id": "p_james_okafor",
+      "display_name": "James Okafor"
+    },
+    {
+      "id": "p_lauren_mitchell",
+      "display_name": "Lauren Mitchell"
+    },
+    {
+      "id": "p_kevin_tran",
+      "display_name": "Kevin Tran"
+    },
+    {
+      "id": "p_naomi_fischer",
+      "display_name": "Naomi Fischer"
+    },
+    {
+      "id": "p_caleb_wright",
+      "display_name": "Caleb Wright"
+    },
+    {
+      "id": "p_mei_chen",
+      "display_name": "Mei Chen"
+    },
+    {
+      "id": "p_andre_thompson",
+      "display_name": "Andre Thompson"
+    },
+    {
+      "id": "p_julia_santos",
+      "display_name": "Julia Santos"
+    },
+    {
+      "id": "p_ethan_walsh",
+      "display_name": "Ethan Walsh"
+    },
+    {
+      "id": "p_leah_goldberg",
+      "display_name": "Leah Goldberg"
+    },
+    {
+      "id": "p_noah_patel",
+      "display_name": "Noah Patel"
+    },
+    {
+      "id": "p_chloe_dubois",
+      "display_name": "Chloe Dubois"
+    },
+    {
+      "id": "p_victor_hernandez",
+      "display_name": "Victor Hernandez"
+    },
+    {
+      "id": "p_abigail_foster",
+      "display_name": "Abigail Foster"
+    },
+    {
+      "id": "p_micah_johnson",
+      "display_name": "Micah Johnson"
+    },
+    {
+      "id": "p_zoe_laurent",
+      "display_name": "Zoe Laurent"
+    },
+    {
+      "id": "p_owen_murphy",
+      "display_name": "Owen Murphy"
+    },
+    {
+      "id": "p_fatima_rahman",
+      "display_name": "Fatima Rahman"
+    },
+    {
+      "id": "p_luke_anderson",
+      "display_name": "Luke Anderson"
+    },
+    {
+      "id": "p_isabella_rossi",
+      "display_name": "Isabella Rossi"
+    },
+    {
+      "id": "p_gabriel_silva",
+      "display_name": "Gabriel Silva"
+    },
+    {
+      "id": "p_ruth_adeyemi",
+      "display_name": "Ruth Adeyemi"
+    },
+    {
+      "id": "p_nathan_brooks",
+      "display_name": "Nathan Brooks"
+    },
+    {
+      "id": "p_emily_sato",
+      "display_name": "Emily Sato"
+    },
+    {
+      "id": "p_diego_castillo",
+      "display_name": "Diego Castillo"
+    },
+    {
+      "id": "p_hope_williams",
+      "display_name": "Hope Williams"
+    },
+    {
+      "id": "p_simon_novak",
+      "display_name": "Simon Novak"
+    },
+    {
+      "id": "p_aaliyah_davis",
+      "display_name": "Aaliyah Davis"
+    },
+    {
+      "id": "p_peter_lindqvist",
+      "display_name": "Peter Lindqvist"
+    },
+    {
+      "id": "p_camila_torres",
+      "display_name": "Camila Torres"
+    },
+    {
+      "id": "p_jonah_price",
+      "display_name": "Jonah Price"
+    },
+    {
+      "id": "p_lydia_kowalski",
+      "display_name": "Lydia Kowalski"
+    },
+    {
+      "id": "p_elijah_moore",
+      "display_name": "Elijah Moore"
+    },
+    {
+      "id": "p_esther_mensah",
+      "display_name": "Esther Mensah"
+    },
+    {
+      "id": "p_thomas_becker",
+      "display_name": "Thomas Becker"
+    },
+    {
+      "id": "p_sarah_ibrahim",
+      "display_name": "Sarah Ibrahim"
+    },
+    {
+      "id": "p_aaron_fleming",
+      "display_name": "Aaron Fleming"
+    },
+    {
+      "id": "p_joy_okonkwo",
+      "display_name": "Joy Okonkwo"
+    },
+    {
+      "id": "p_matthew_ellis",
+      "display_name": "Matthew Ellis"
+    },
+    {
+      "id": "p_rebecca_hart",
+      "display_name": "Rebecca Hart"
+    },
+    {
+      "id": "p_joel_ramirez",
+      "display_name": "Joel Ramirez"
+    },
+    {
+      "id": "p_anna_yamamoto",
+      "display_name": "Anna Yamamoto"
+    },
+    {
+      "id": "p_michael_o_brien",
+      "display_name": "Michael O'Brien"
+    },
+    {
+      "id": "p_deborah_wu",
+      "display_name": "Deborah Wu"
+    },
+    {
+      "id": "p_christopher_hale",
+      "display_name": "Christopher Hale"
+    },
+    {
+      "id": "p_lucia_ferreira",
+      "display_name": "Lucia Ferreira"
+    },
+    {
+      "id": "p_paul_henderson",
+      "display_name": "Paul Henderson"
+    },
+    {
+      "id": "p_martha_quinn",
+      "display_name": "Martha Quinn"
+    },
+    {
+      "id": "p_adam_sokolov",
+      "display_name": "Adam Sokolov"
+    },
+    {
+      "id": "p_lily_nakamura",
+      "display_name": "Lily Nakamura"
+    },
+    {
+      "id": "p_timothy_ward",
+      "display_name": "Timothy Ward"
+    },
+    {
+      "id": "p_eva_horvath",
+      "display_name": "Eva Horvath"
+    },
+    {
+      "id": "p_stephen_clarke",
+      "display_name": "Stephen Clarke"
+    },
+    {
+      "id": "p_miriam_levy",
+      "display_name": "Miriam Levy"
+    },
+    {
+      "id": "p_josiah_banks",
+      "display_name": "Josiah Banks"
+    },
+    {
+      "id": "p_clara_weiss",
+      "display_name": "Clara Weiss"
+    },
+    {
+      "id": "p_philip_mendez",
+      "display_name": "Philip Mendez"
+    },
+    {
+      "id": "p_vera_ivanova",
+      "display_name": "Vera Ivanova"
+    },
+    {
+      "id": "p_silas_turner",
+      "display_name": "Silas Turner"
+    },
+    {
+      "id": "p_irene_costa",
+      "display_name": "Irene Costa"
+    },
+    {
+      "id": "p_benjamin_ford",
+      "display_name": "Benjamin Ford"
+    },
+    {
+      "id": "p_tabitha_young",
+      "display_name": "Tabitha Young"
+    },
+    {
+      "id": "p_jacob_rivera",
+      "display_name": "Jacob Rivera"
     }
   ]
 }

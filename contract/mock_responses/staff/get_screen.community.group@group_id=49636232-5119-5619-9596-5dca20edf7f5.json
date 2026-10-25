@@ -1,0 +1,44 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Grief and Hope",
+    "meeting": "Mondays · 6:00 PM",
+    "members": [
+      {
+        "title": "Tabitha Young",
+        "user_id": "0ce04da4-5572-533e-8837-1139146723c3",
+        "is_leader": true
+      },
+      {
+        "title": "Aaliyah Davis",
+        "user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
+        "is_leader": false
+      },
+      {
+        "title": "Diego Castillo",
+        "user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
+        "is_leader": false
+      },
+      {
+        "title": "Hope Williams",
+        "user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
+        "is_leader": false
+      },
+      {
+        "title": "Jacob Rivera",
+        "user_id": "899397aa-d671-5768-ae6d-79ce7a889021",
+        "is_leader": false
+      },
+      {
+        "title": "Simon Novak",
+        "user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
+        "is_leader": false
+      }
+    ],
+    "group_id": "49636232-5119-5619-9596-5dca20edf7f5",
+    "location": "Room 2, church building",
+    "description": "A small group for those who have lost someone.",
+    "leaders_line": "Leaders: Tabitha Young",
+    "members_title": "Members"
+  }
+}

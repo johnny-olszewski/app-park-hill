@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-010, SUP-023]
 paired_with: [IOS-025]
-status: Draft
+status: Done
 ---
 
 # AND-026: Build the Android toolbar, full-screen cover and Browse all groups
@@ -17,8 +17,9 @@ Staff open every group from a toolbar button on Community home. This task render
 
 ## Scope
 
-- Toolbar from the envelope on every backend screen: items in backend order with the backend label and `icon_key` through `AssetProvider`; items beyond what fits go to the platform's overflow menu, in order.
-- `navigate` with `full_screen_cover`: a full-screen dialog with its own stack, a client-drawn close button (platform icon and accessibility label), fetched fresh with a loading state each time it opens.
+- Toolbar from the envelope on every backend screen: items in backend order with the backend label and `icon_key` through `AssetProvider`; items beyond what the platform's bar fits go to its overflow menu, in order (the platform decides how many fit).
+- `navigate` with `full_screen_cover`: a full-screen layer drawn inside the activity over the shell (not a `Dialog`, which would hide the dev tools pill), with its own stack, a client-drawn close button (platform icon and accessibility label), fetched fresh with a loading state each time it opens.
+- Group rows draw a badge with `badge_tone` `attention` in the danger color.
 - `community.browse`: the group list view from AND-010 with a search field filtering loaded rows by title as you type; search resets on close; pull to refresh; rows push `community.group` inside the cover.
 - Bundled placeholder icon for `toolbar.browse`.
 - Mock UI tests for `staff` and `member_one`; Local UI test for `staff` in `make test-local`.
@@ -31,7 +32,7 @@ Staff open every group from a toolbar button on Community home. This task render
 
 | # | Criterion | Intent |
 |---|---|---|
-| AC1 | Toolbar items render with the backend label and icon in backend order; extras go to the overflow menu in order; a screen without `toolbar` shows none | One toolbar pattern for every screen |
+| AC1 | Toolbar items render with the backend label and icon in backend order; items the bar cannot fit go to the overflow menu in order; a screen without `toolbar` shows none | One toolbar pattern for every screen |
 | AC2 | `staff` and `admin` see the browse button on every home state; other personas do not | The UI follows what each person can do |
 | AC3 | The cover slides up from the bottom when opened and down when closed, on both platforms, and has a close button with the platform's icon and accessibility label | Same presentation behavior on both platforms (guide 5.5 rule 5) |
 | AC4 | Browse shows a loading state, then every group with its badges; typing filters by title; closing and reopening clears the search and refetches | Fast local search for staff, always fresh |
@@ -40,7 +41,7 @@ Staff open every group from a toolbar button on Community home. This task render
 
 ## Technical notes
 
-- Toolbar items are top app bar actions with an overflow menu; search is a Material 3 `SearchBar`; the dialog uses `DialogProperties(usePlatformDefaultWidth = false)` and animates in and out like the entry transition in AND-023.
+- Toolbar items are top app bar actions with an overflow menu; search is a Material 3 `SearchBar`; the layer slides up and down like the entry transition in AND-023, and system back closes it when it has nothing pushed.
 - Behavior must match IOS-025.
 
 ## Verification

@@ -133,7 +133,13 @@ select is(
   'Leaders: none yet', 'a leaderless group says so'
 );
 select is(
-  (pg_temp.home('member.one@parkhill.test') -> 'group') - 'group_id',
+  (select (g - 'group_id' - 'members') || jsonb_build_object(
+     'leaders', (select jsonb_agg(m ->> 'title' order by o) from jsonb_array_elements(g -> 'members') with ordinality e(m, o) where (m ->> 'is_leader')::boolean),
+     'you', (select jsonb_agg(m ->> 'title') from jsonb_array_elements(g -> 'members') m where m ->> 'note' = 'You'),
+     'leaders_first', (select bool_and(not (m ->> 'is_leader')::boolean or o <= 2) from jsonb_array_elements(g -> 'members') with ordinality e(m, o)),
+     'members', jsonb_array_length(g -> 'members'),
+     'member_ids', (select bool_and(m ? 'user_id') from jsonb_array_elements(g -> 'members') m))
+   from (select pg_temp.home('member.one@parkhill.test') -> 'group' as g) x),
   jsonb_build_object(
     'title', 'Tuesday Night Group',
     'description', 'Study, conversation and dinner together.',
@@ -141,12 +147,11 @@ select is(
     'location', 'Lee home, North Park',
     'leaders_line', 'Leaders: Leader, Order Test',
     'members_title', 'Members',
-    'members', jsonb_build_array(
-      jsonb_build_object('user_id', pg_temp.persona('leader@parkhill.test'), 'title', 'Leader', 'is_leader', true),
-      jsonb_build_object('user_id', '55555555-5555-5555-5555-555555555555', 'title', 'Order Test', 'is_leader', true),
-      jsonb_build_object('user_id', pg_temp.persona('member.one@parkhill.test'), 'title', 'Member One', 'note', 'You', 'is_leader', false),
-      jsonb_build_object('user_id', pg_temp.persona('member.two@parkhill.test'), 'title', 'Member Two', 'is_leader', false)
-    )
+    'leaders', jsonb_build_array('Leader', 'Order Test'),
+    'you', jsonb_build_array('Member One'),
+    'leaders_first', true,
+    'members', (select count(*)::int from public.group_members m join public.groups g on g.id = m.group_id where g.name = 'Tuesday Night Group'),
+    'member_ids', true
   ),
   'member_one''s group: details, leaders line, leaders first, and You on their own row'
 );

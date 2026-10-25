@@ -13,5 +13,8 @@ extension ScreenRegistry {
         register(ScreenKey.communityGroup, data: CommunityGroupData.self) { data in
             CommunityGroupScreen(data: data)
         }
+        register(ScreenKey.communityBrowse, data: CommunityBrowseData.self) { data in
+            CommunityBrowseScreen(data: data)
+        }
     }
 }

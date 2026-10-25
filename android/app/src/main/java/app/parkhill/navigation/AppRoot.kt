@@ -109,6 +109,6 @@ private fun Loading() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = ParkHill.colors.ink) }
 }
 
-/** About the iOS cover's duration. */
-private const val COVER_MILLIS = 400
+/** About the iOS cover's duration; also the full-screen cover's (AND-026). */
+internal const val COVER_MILLIS = 400
 private const val FADE_MILLIS = 250

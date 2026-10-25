@@ -9,6 +9,12 @@ struct CommunityHomeData: Codable, Equatable, Sendable {
     /// When the caller is in no group.
     let empty: EmptyState?
 
+    init(group: GroupDetail? = nil, myGroups: GroupList? = nil, empty: EmptyState? = nil) {
+        self.group = group
+        self.myGroups = myGroups
+        self.empty = empty
+    }
+
     enum CodingKeys: String, CodingKey {
         case group
         case myGroups = "my_groups"

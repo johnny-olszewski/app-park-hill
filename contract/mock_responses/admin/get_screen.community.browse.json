@@ -1,0 +1,168 @@
+{
+  "key": "community.browse",
+  "data": {
+    "rows": [
+      {
+        "title": "College and Young Adults",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "b3498332-6110-5058-b0f3-ccaf9900b056",
+        "subtitle": "Fridays · 7:30 PM · Garcia apartment, University Heights"
+      },
+      {
+        "title": "Grief and Hope",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "49636232-5119-5619-9596-5dca20edf7f5",
+        "subtitle": "Mondays · 6:00 PM · Room 2, church building"
+      },
+      {
+        "title": "Grupo en Español",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "66df7968-d702-5b96-b22b-6ad83ea0e79e"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "66df7968-d702-5b96-b22b-6ad83ea0e79e",
+        "subtitle": "Wednesdays · 7:00 PM · Salón de la iglesia"
+      },
+      {
+        "title": "Kensington Couples",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81",
+        "subtitle": "Thursdays · 7:00 PM · Bennett home, Kensington"
+      },
+      {
+        "title": "Men's Breakfast",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40",
+        "subtitle": "Saturdays · 7:00 AM · Café on Adams"
+      },
+      {
+        "badge": "Leader",
+        "title": "Mission Hills Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa",
+        "subtitle": "Thursdays · 6:30 PM · Shah home"
+      },
+      {
+        "title": "Normal Heights Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "833c5b65-36de-528f-8807-cc13a7d1a916",
+        "subtitle": "Mondays · 7:00 PM · Kim home, Normal Heights"
+      },
+      {
+        "badge": "No leader",
+        "title": "Point Loma Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85",
+        "subtitle": "Wednesdays · 7:00 PM · Vesper Hall",
+        "badge_tone": "attention"
+      },
+      {
+        "title": "South Park Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df",
+        "subtitle": "Tuesdays · 6:30 PM · Nguyen home, South Park"
+      },
+      {
+        "title": "Tuesday Night Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e",
+        "subtitle": "Tuesdays · 7:00 PM · Lee home, North Park"
+      },
+      {
+        "title": "Women's Morning Study",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "767a6aa8-c916-5926-a015-7bc0e8610022"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "767a6aa8-c916-5926-a015-7bc0e8610022",
+        "subtitle": "Wednesdays · 9:30 AM · Church lounge"
+      },
+      {
+        "title": "Young Families",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1",
+        "subtitle": "Sundays · 4:00 PM · Vesper Hall"
+      }
+    ],
+    "title": "All groups",
+    "search_placeholder": "Search groups"
+  }
+}

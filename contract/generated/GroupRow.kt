@@ -15,5 +15,12 @@ data class GroupRow(
     val subtitle: String,
     /** For example "Leader". */
     val badge: String? = null,
+    /** How the badge reads: `attention` for one that needs attention, such as "No leader". Absent: plain. */
+    @SerialName("badge_tone") val badgeTone: GroupRowBadgeTone? = null,
     val action: Action,
 )
+
+@Serializable
+enum class GroupRowBadgeTone {
+    @SerialName("attention") ATTENTION,
+}

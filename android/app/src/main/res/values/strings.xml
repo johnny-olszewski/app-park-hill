@@ -8,6 +8,9 @@
     <string name="screen_error_message">Check your connection and try again.</string>
     <string name="screen_error_retry">Try again</string>
     <string name="navigation_back">Back</string>
+    <string name="navigation_close">Close</string>
+    <string name="toolbar_more">More options</string>
+    <string name="search_clear">Clear search</string>
     <string name="group_leader_icon">Leader</string>
     <!-- TEMPORARY(EP-04): remove with IOS-015/AND-015 -->
     <string name="shell_sign_out">Sign out</string>

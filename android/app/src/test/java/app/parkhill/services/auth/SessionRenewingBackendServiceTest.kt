@@ -4,6 +4,7 @@ import app.parkhill.contract.Profile
 import app.parkhill.navigation.StubBackendService
 import app.parkhill.services.backend.BackendError
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
@@ -35,6 +36,15 @@ class SessionRenewingBackendServiceTest {
         assertEquals(Profile("u", "User"), service.whoami())
         assertEquals(1, auth.renewals)
         assertEquals(0, auth.endedSessions)
+    }
+
+    @Test
+    fun aCallRefusedAsUnauthorizedRenewsAndRetries() = runTest {
+        var calls = 0
+        backend.callResult = { if (calls++ == 0) throw BackendError.Unauthorized }
+        service.call("leave_group", JsonObject(emptyMap()), "en")
+        assertEquals(2, backend.calls.size)
+        assertEquals(1, auth.renewals)
     }
 
     @Test

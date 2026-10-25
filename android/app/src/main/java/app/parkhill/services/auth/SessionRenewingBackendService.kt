@@ -26,6 +26,9 @@ class SessionRenewingBackendService(
 
     override suspend fun whoami(): Profile = withRenewal { base.whoami() }
 
+    override suspend fun call(function: String, params: JsonObject, locale: String) =
+        withRenewal { base.call(function, params, locale) }
+
     private suspend fun <T> withRenewal(request: suspend () -> T): T = try {
         request()
     } catch (unauthorized: BackendError.Unauthorized) {

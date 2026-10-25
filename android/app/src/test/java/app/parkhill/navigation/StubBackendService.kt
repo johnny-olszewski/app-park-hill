@@ -10,7 +10,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-/** A [BackendService] whose entry, screen and tabs answers each test sets. */
+/** A [BackendService] whose entry, screen, tabs and call answers each test sets. */
 class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     var entryCalls = 0
         private set
@@ -44,6 +44,15 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     override suspend fun whoami(): Profile {
         whoamiCalls += 1
         return profile()
+    }
+
+    /** Answers `call`; by default a success. */
+    var callResult: (function: String) -> Unit = {}
+    val calls = mutableListOf<Triple<String, JsonObject, String>>()
+
+    override suspend fun call(function: String, params: JsonObject, locale: String) {
+        calls += Triple(function, params, locale)
+        callResult(function)
     }
 
     companion object {

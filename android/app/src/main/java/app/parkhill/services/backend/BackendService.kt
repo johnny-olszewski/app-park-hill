@@ -22,6 +22,12 @@ interface BackendService {
 
     /** The signed-in caller's profile; refused when not signed in or no longer active. */
     suspend fun whoami(): Profile
+
+    /**
+     * A `call` action's backend function, with the action's `params` and
+     * `p_locale` added. A success's body is not read.
+     */
+    suspend fun call(function: String, params: JsonObject, locale: String)
 }
 
 /** The small set of failures callers react to, never SDK errors. */
@@ -34,6 +40,12 @@ sealed class BackendError : Exception() {
 
     /** Refused as unauthorized: no valid session, or access ended. */
     data object Unauthorized : BackendError() { private fun readResolve(): Any = Unauthorized }
+
+    /** The caller may no longer see the screen (`screen_unavailable`), with the backend's message (guide 5.3 rule 9). */
+    data class ScreenUnavailable(override val message: String) : BackendError()
+
+    /** The caller may no longer make the call (`action_refused`), with the backend's message. */
+    data class ActionRefused(override val message: String) : BackendError()
 
     /** A response arrived that does not match the contract. */
     data object Decoding : BackendError() { private fun readResolve(): Any = Decoding }

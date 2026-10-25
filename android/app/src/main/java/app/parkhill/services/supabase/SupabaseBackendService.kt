@@ -40,6 +40,16 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
 
     override suspend fun whoami(): Profile = call(RpcFunction.whoami, JsonObject(emptyMap()), Profile.serializer())
 
+    override suspend fun call(function: String, params: JsonObject, locale: String) {
+        try {
+            client.postgrest.rpc(function, JsonObject(params + ("p_locale" to JsonPrimitive(locale))))
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            throw map(error)
+        }
+    }
+
     private suspend fun call(function: RpcFunction, params: JsonObject): ScreenEnvelope =
         call(function, params, ScreenEnvelope.serializer())
 
@@ -71,6 +81,8 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
             is RestException -> when {
                 error.error == "unknown_screen" -> BackendError.UnknownScreen
                 error.error == "session_ended" -> BackendError.Unauthorized
+                error.error == "screen_unavailable" -> BackendError.ScreenUnavailable(error.description.orEmpty())
+                error.error == "action_refused" -> BackendError.ActionRefused(error.description.orEmpty())
                 error.statusCode == 401 -> BackendError.Unauthorized
                 else -> BackendError.Server
             }

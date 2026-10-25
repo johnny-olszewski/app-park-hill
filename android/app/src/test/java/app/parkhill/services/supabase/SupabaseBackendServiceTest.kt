@@ -90,6 +90,32 @@ class SupabaseBackendServiceTest {
     }
 
     @Test
+    fun callSendsTheActionsParamsWithTheLocale() = runTest {
+        respond(200, "{}")
+        service.call("leave_group", JsonObject(mapOf("p_group_id" to JsonPrimitive("g"))), "es")
+        val request = server.takeRequest()
+        assertEquals("/rest/v1/rpc/leave_group", request.requestUrl?.encodedPath)
+        assertEquals(
+            Json.parseToJsonElement("""{"p_group_id": "g", "p_locale": "es"}"""),
+            Json.parseToJsonElement(request.body.readUtf8()),
+        )
+    }
+
+    @Test
+    fun actionRefusedCarriesTheBackendsMessage() = runTest {
+        respond(400, """{"code": "P0001", "message": "action_refused", "details": "You can't make this change anymore.", "hint": null}""")
+        expectError(BackendError.ActionRefused("You can't make this change anymore.")) {
+            service.call("remove_member", JsonObject(emptyMap()), "en")
+        }
+    }
+
+    @Test
+    fun screenUnavailableCarriesTheBackendsMessage() = runTest {
+        respond(400, """{"code": "P0001", "message": "screen_unavailable", "details": "You're no longer in this group", "hint": null}""")
+        expectError(BackendError.ScreenUnavailable("You're no longer in this group")) { service.getScreen("community.group", "en") }
+    }
+
+    @Test
     fun unknownScreenMapsToUnknownScreen() = runTest {
         respond(400, """{"code": "P0001", "message": "unknown_screen", "details": null, "hint": null}""")
         expectError(BackendError.UnknownScreen) { service.getScreen("nope", "en") }

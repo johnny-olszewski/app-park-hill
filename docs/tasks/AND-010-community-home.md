@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-011, SUP-012]
 paired_with: [IOS-010]
-status: Draft
+status: Done
 ---
 
 # AND-010: Build the Android Community home for every state

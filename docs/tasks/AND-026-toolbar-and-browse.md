@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-010, SUP-023]
 paired_with: [IOS-025]
-status: Draft
+status: Ready
 ---
 
 # AND-026: Build the Android toolbar, full-screen cover and Browse all groups

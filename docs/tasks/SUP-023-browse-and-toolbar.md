@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-012]
 paired_with: []
-status: Draft
+status: Ready
 ---
 
 # SUP-023: Build Browse all groups and the screen toolbar

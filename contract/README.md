@@ -7,11 +7,12 @@ API contract docs, JSON mock responses and personas. The single source of truth 
 The one shape for any screen's content, wherever it comes from:
 
 ```json
-{ "key": "auth.sign_in", "data": { } }
+{ "key": "auth.sign_in", "data": { }, "toolbar": [ ] }
 ```
 
 - `key`: the screen key. Clients map it to a native screen through their screen registry.
 - `data`: everything that screen needs, with all text already resolved for the requested locale. One screen key maps to exactly one data model.
+- `toolbar` (optional): the buttons for the screen's bar, in order, each a `ToolbarItem` (`id`, `label`, `icon_key`, `action`). The backend sends only the items the caller may use, and leaves the field out when there are none. A screen gets a toolbar by naming a `toolbar_function` in `public.screens`.
 
 Text resolves per string: a string missing in the requested locale uses its `en` value.
 
@@ -58,7 +59,7 @@ A `$ref` names a file in `types/`: `"../types/GroupRow.schema.json"` from a scre
 | `$ref` | The type's name | The type's name |
 | `"type": "object"` alone (any JSON object) | `JSONValue` (the app's) | `JsonObject` |
 | No `type` (any JSON) | `JSONValue` (the app's) | `JsonElement` |
-| Field not in `required` | `T?` | `T? = null` |
+| Field not in `required` | `T?`, defaulting to `nil` in the generated initializer | `T? = null` |
 | `enum` | `enum <Type><Field>: String` (`NavigateActionPresentation`), a case per value | `enum class <Type><Field>`, an entry per value with `@SerialName` |
 | Alias screen | `typealias <Title> = <Type>` | `typealias <Title> = <Type>` |
 | Union type | `enum` with a case per member (named by its `type` value) and `unknown(type:)`, decoding on `type` | `sealed interface` its members implement, with `Unknown(type)`, decoded on `type` by `<Union>Serializer` |
@@ -102,7 +103,7 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 
 | Field | Values |
 |---|---|
-| `presentation` | `push`: the current tab's stack. Later slices add `full_screen_cover` (EP-03.B) and `sheet` (EP-03.D) |
+| `presentation` | `push`: the current tab's stack. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. EP-03.D adds `sheet` |
 | `role` | `destructive`: a meaning each platform styles its own way |
 
 `call` actions arrive with EP-03.C.
@@ -111,7 +112,8 @@ Shared types for Community screens, all text backend formatted and localized:
 
 | Type | Fields |
 |---|---|
-| `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), `action` |
+| `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), optional `badge_tone` (`attention`, for example on "No leader"), `action` |
+| `ToolbarItem` | `id`, `label` (also the accessibility label of an icon button), `icon_key` (a bundled icon), `action` |
 | `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members` |
 | `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader` |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
@@ -126,6 +128,7 @@ Lowercase and dot separated. A key ending in `.mock` is registered only in the M
 | `auth.sign_in` | `get_entry`, `get_screen` | `screens/auth.sign_in.schema.json` (`specs/AUTH.md` 5.3) | `mock responses/get_screen.auth.sign_in.json` |
 | `home.root` | `get_tabs`, `get_screen`; signed in only | `screens/home.root.schema.json`: `{}` until Home has content | `mock responses/<persona>/get_screen.home.root.json` |
 | `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: one of `group` (`GroupDetail`), `my_groups` (`GroupList`) or `empty` (`EmptyState`) | `mock responses/<persona>/get_screen.community.home.json` |
+| `community.browse` | `get_screen`; holders of `groups.view_all`, else `screen_unavailable` | `screens/community.browse.schema.json`: `title`, `search_placeholder`, `rows` (every group by name, `GroupRow`s badged for the caller) | `mock responses/<persona>/get_screen.community.browse.json` |
 | `community.group` | `get_screen` with `{"group_id"}`; members, leaders and holders of `groups.view_all`, else `screen_unavailable` | `screens/community.group.schema.json`: `GroupDetail` | `mock responses/<persona>/get_screen.community.group@group_id=<id>.json`, for each group a persona's responses open |
 
 A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.

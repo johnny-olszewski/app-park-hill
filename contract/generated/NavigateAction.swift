@@ -13,6 +13,14 @@ struct NavigateAction: Codable, Equatable, Sendable {
     /// A meaning each platform styles its own way.
     let role: NavigateActionRole?
 
+    init(type: NavigateActionType, screenKey: String, params: JSONValue, presentation: NavigateActionPresentation, role: NavigateActionRole? = nil) {
+        self.type = type
+        self.screenKey = screenKey
+        self.params = params
+        self.presentation = presentation
+        self.role = role
+    }
+
     enum CodingKeys: String, CodingKey {
         case type
         case screenKey = "screen_key"

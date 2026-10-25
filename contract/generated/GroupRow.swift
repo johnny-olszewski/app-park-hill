@@ -11,6 +11,14 @@ struct GroupRow: Codable, Equatable, Sendable {
     let badge: String?
     let action: Action
 
+    init(groupId: String, title: String, subtitle: String, badge: String? = nil, action: Action) {
+        self.groupId = groupId
+        self.title = title
+        self.subtitle = subtitle
+        self.badge = badge
+        self.action = action
+    }
+
     enum CodingKeys: String, CodingKey {
         case groupId = "group_id"
         case title

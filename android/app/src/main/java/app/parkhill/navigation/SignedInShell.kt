@@ -124,6 +124,7 @@ private fun TabRoot(
                 LargeTopAppBar(
                     title = { Text(tab.title, style = ParkHill.heading, modifier = Modifier.testTag("tab.title")) },
                     actions = {
+                        ToolbarActions(tab.root.envelope?.toolbar)
                         if (signOut != null) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                             TextButton(onClick = signOut, modifier = Modifier.testTag("home.signOut")) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                                 Text(stringResource(R.string.shell_sign_out), color = ParkHill.colors.ink) // TEMPORARY(EP-04): remove with IOS-015/AND-015
@@ -134,6 +135,7 @@ private fun TabRoot(
                         containerColor = ParkHill.colors.surface,
                         scrolledContainerColor = ParkHill.colors.surface,
                         titleContentColor = ParkHill.colors.ink,
+                        actionIconContentColor = ParkHill.colors.ink,
                     ),
                 )
             } else {
@@ -152,6 +154,7 @@ private fun TabRoot(
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.navigation_back))
                         }
                     },
+                    actions = { ToolbarActions(top.screen.envelope?.toolbar) },
                     colors = topBarColors,
                 )
             }

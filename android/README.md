@@ -109,7 +109,7 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/` (`LocaleCach
 | `get_tabs` fails, no cache | Error screen with retry |
 | Foreground refetch | Tabs update; unchanged tabs keep their stacks and the selected tab stays |
 
-Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables for `tab.home` and `tab.community`, and a fallback for any other key. Home's top app bar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
+Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables for `tab.home` and `tab.community`, and a fallback for any other key. **Toolbar:** every backend screen's envelope `toolbar` shows as top app bar actions, in backend order (`ScreenToolbar.kt`): each item's icon from `AssetProvider` (a placeholder for `toolbar.browse`, a fallback for any other key) with its label as the content description, and items beyond three go to the overflow menu, in order (`ToolbarLayout`). Home's top app bar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
 
 **Transitions:** `AppRoot` moves the entry like the iOS full-screen cover: after sign-in it slides down to reveal the tabs, and on sign-out or access ending it slides back up over them. Launch and changes inside the entry cross-fade. With animations off (developer options) every change is instant. Screens know nothing about it.
 

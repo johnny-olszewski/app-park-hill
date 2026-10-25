@@ -70,8 +70,9 @@ class CommunityUiTest {
             compose.onNodeWithTag("groupDetail").performScrollToNode(hasText(members.first().text("title")))
             compose.onAllNodesWithTag("groupDetail.leaderIcon").onFirst().assertExists()
         }
-        members.firstNotNullOfOrNull { it["note"]?.jsonPrimitive?.content }?.let { note ->
-            compose.onNodeWithTag("groupDetail.note").assertTextEquals(note.uppercase())
+        members.firstOrNull { it["note"] != null }?.let { member ->
+            compose.onNodeWithTag("groupDetail").performScrollToNode(hasText(member.text("title")))
+            compose.onNodeWithTag("groupDetail.note").assertTextEquals(member.getValue("note").jsonPrimitive.content.uppercase())
         }
     }
 

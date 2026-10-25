@@ -12,6 +12,15 @@ final class StubBackendService: BackendService {
         var tabsCalls: [String] = []
         var screenResults: [Result<ScreenEnvelope, BackendError>] = []
         var screenCalls: [ScreenCall] = []
+        var callResults: [Result<Void, BackendError>] = []
+        var calls: [FunctionCall] = []
+    }
+
+    /// One `call` call.
+    struct FunctionCall: Equatable {
+        let function: String
+        let params: [String: JSONValue]
+        let locale: String
     }
 
     /// One `getScreen` call.
@@ -85,6 +94,25 @@ final class StubBackendService: BackendService {
         }
         guard let result else { throw .server }
         return try result.get()
+    }
+
+    /// Results for the next `call` calls, in order. The last one repeats.
+    /// None queued: success.
+    func enqueueCall(_ results: Result<Void, BackendError>...) {
+        state.withLock { $0.callResults.append(contentsOf: results) }
+    }
+
+    /// Functions, params and locales passed to `call`, one per call.
+    var calls: [FunctionCall] {
+        state.withLock { $0.calls }
+    }
+
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+        let result = state.withLock { state in
+            state.calls.append(FunctionCall(function: function, params: params, locale: locale))
+            return state.callResults.count > 1 ? state.callResults.removeFirst() : state.callResults.first
+        }
+        try result?.get()
     }
 
     private let whoamiCallCount = OSAllocatedUnfairLock(initialState: 0)

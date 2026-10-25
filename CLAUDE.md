@@ -2,7 +2,7 @@
 
 Park Hill is a real app and a proving ground for a transferable architecture and an agent-driven way of working (`docs/ENGINEERING_GUIDE.md`, Purpose). When two approaches both work, prefer the one that generalizes and that the next agent can follow from the repo alone.
 
-Start a session with `/status`: where the work stands and the next step. Implement a slice with `/implement-slice <ID>`. Act on a PR's review with `/address-review <PR>` once its checks have finished. Both skills live in `.claude/skills/`.
+Start a session with `/status`: where the work stands and the next step. Check a Draft slice against the code with `/ready-slice <ID>`, then implement a Ready slice with `/implement-slice <ID>`. Act on a PR's review with `/address-review <PR>` once its checks have finished. The skills live in `.claude/skills/`.
 
 Before changing anything:
 
@@ -13,7 +13,7 @@ Before changing anything:
 Rules:
 
 - Work only within the Scope of the slice's tasks. Do not expand it.
-- Implement the tasks in the slice's order. Verify each task's acceptance criteria and run its tests before starting the next; verify the slice's behavior criteria at the end.
+- Implement only a Ready slice (guide 7.2 rule 7), its tasks in the slice's order. Verify each task's acceptance criteria and run its tests before starting the next; verify the slice's behavior criteria at the end.
 - If you find ambiguity or a conflict with the guide, stop and ask. Do not guess.
 - Decisions that change the guide are recorded in its decision log (section 8) in the same change.
 - Temporary code only when a task says so, with every line marked `TEMPORARY(<epic>): <what removes it>`.

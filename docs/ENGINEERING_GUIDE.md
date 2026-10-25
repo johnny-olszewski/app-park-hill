@@ -41,7 +41,7 @@ Monorepo.
 /android     Kotlin + Compose app
 /docs        This guide, the task template, the backlog, epics, slices, specs, tasks
 /.github     GitHub Actions workflows and the pull request template
-/.claude     Project skills for agent sessions (/status, /implement-slice, /review-pr, /address-review)
+/.claude     Project skills for agent sessions (/status, /ready-slice, /implement-slice, /review-pr, /address-review)
 /scripts     Workflow scripts: check_commits.sh, record.sh
 ```
 
@@ -241,7 +241,8 @@ A slice is the set of tasks, across platforms, that together deliver one change 
 4. **Order and checks.** Tasks are implemented in the slice's order. When a task's commits are done, its acceptance criteria are verified and its tests run before the next task starts. After the last task, the slice's behavior criteria are verified by using the result.
    - **Recordings.** Each behavior criterion is recorded while it is verified, with `scripts/record.sh`: behavior in the apps as a screen recording on iOS and on Android, in each build the criterion names (Mock when it names none); behavior for developers (a check, a command) as a terminal transcript. Recordings go in the gitignored `recordings/<slice ID>/` folder, named by criterion, and stay on the implementer's machine for the reviewer; PRs do not link them. Planning PRs have none.
 5. **Review.** The PR lists each task with how it was verified, then the slice's behavior criteria as a checklist. The reviewer accepts the slice by checking the behavior criteria, with the recordings to hand; commits stay per task for reading the code.
-6. **Status:** Draft, Ready (every task Ready and every dependency Done), In progress, In review (PR open), Done (PR merged).
+6. **Status:** Draft, Ready (its readiness check merged, rule 7), In progress, In review (PR open), Done (PR merged).
+7. **Readiness check.** A slice is checked against the current code before it is implemented, once every slice it depends on is Done, with `/ready-slice` on a `plan/` branch: each task for anything undefined, stale, in conflict, missing on one platform (5.5 rule 5), needing tooling no task builds, assuming test data that does not exist, in the wrong order, or making the slice worth splitting (rule 2). Every finding is settled with the reviewer and written into the planning docs, and the slice and its tasks are set to Ready. Implementation starts only on a Ready slice, and the implementer still stops and asks about anything the check missed (7 rule 4).
 
 ### 7.3 Planning docs
 

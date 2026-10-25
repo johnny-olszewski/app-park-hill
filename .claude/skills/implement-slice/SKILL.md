@@ -14,18 +14,13 @@ The workflow in `CLAUDE.md` and `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2, as step
 - `git config core.hooksPath .githooks` (once per clone).
 - Branch `slice/<ID>-<short-kebab-name>`, for example `slice/EP-06.B-mock-sign-in`.
 
-## 2. Read, then re-check the plan against the code
+## 2. Read, and confirm the slice is Ready
+
+Implement only a Ready slice (guide 7.2 rule 7). If the slice file says Draft, stop: its readiness check comes first, with `/ready-slice <ID>`.
 
 Read in this order: the guide; the slice file in `docs/slices/` (behavior criteria B1…); the spec it references; every task in the slice and its `depends_on` tasks.
 
-Task drafts are often written before the code they touch exists. Before writing code, check each task against the current code and stop to ask about anything that is:
-
-- undefined (a field or term nobody defines or reads),
-- stale (it names files, screens or tests that changed or no longer exist),
-- in conflict with the guide,
-- missing a behavior one platform gets free from a system component (guide 5.5 rule 5).
-
-Ask with a recommendation. Do not guess, and do not expand the Scope.
+The readiness check settled the gaps it found. If anything has changed since, or you find something it missed (undefined, stale, in conflict with the guide, or missing a behavior one platform gets free from a system component, guide 5.5 rule 5), stop and ask with a recommendation. Do not guess, and do not expand the Scope.
 
 ## 3. Implement each task, in the slice's order
 

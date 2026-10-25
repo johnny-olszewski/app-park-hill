@@ -8,6 +8,8 @@ enum class RpcFunction(val value: String) {
     getScreen("get_screen"),
     getTabs("get_tabs"),
     whoami("whoami"),
+    leaveGroup("leave_group"),
+    removeMember("remove_member"),
 }
 
 /** Backend Edge Functions clients call. */

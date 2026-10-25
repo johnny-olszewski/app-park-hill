@@ -3,7 +3,9 @@
     "get_entry",
     "get_screen",
     "get_tabs",
-    "whoami"
+    "whoami",
+    "leave_group",
+    "remove_member"
   ],
   "edge_functions": [
     "sign_in"

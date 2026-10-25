@@ -144,6 +144,8 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_entry(p_locale)` | Signed out (`anon`) | The signed-out entry screen envelope. Today always `auth.sign_in` |
 | `get_screen(p_key, p_locale, p_params)` | Depends on the screen | One screen envelope. Used for refresh and for screens reached by navigation |
 | `get_tabs(p_locale)` | Signed in only | The enabled tabs in order, at most five: `{ "tabs": [ { "id", "title", "icon_key", "screen": <envelope> } ] }`. `title` is resolved for the locale; `icon_key` names a bundled client asset |
+| `leave_group(p_group_id, p_locale)` | Signed in, in the group | `{}`. Ends the caller's membership and leadership; the last leader may leave. Else `action_refused` |
+| `remove_member(p_group_id, p_user_id, p_locale)` | Signed in, with `groups.remove_member` for the group; leaders cannot remove leaders | `{}`. Ends that member's membership and leadership. Else `action_refused` |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 ### `sign_in` Edge Function
@@ -180,6 +182,7 @@ Errors use PostgREST's error body. The `message` field is a stable code clients 
 | `unknown_screen` | 400 | `P0001` | `get_screen` called with a key the backend does not register | The requested key |
 | `session_ended` | 400 | `P0001` | A signed-in function was called with no valid user, or the account is banned or deleted | None |
 | `screen_unavailable` | 400 | `P0001` | `get_screen` for a screen the caller may not see, such as a group they are not in, for example after losing access | The backend's localized message for the caller's locale, shown as given (specs/COMMUNITY.md 5.5) |
+| `action_refused` | 400 | `P0001` | A `call` the caller may not make (any more), such as removing a member who already left | The backend's localized message for the caller's locale, shown as given; the client then refreshes the screen |
 
 Clients treat `session_ended` like an HTTP 401 (expired or invalid token): one silent session renewal and retry, then sign out (`specs/AUTH.md` 4.3).
 

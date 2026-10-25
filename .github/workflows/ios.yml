@@ -1,6 +1,7 @@
-# iOS CI (IOS-004, IOS-007): Mock unit and UI tests, no build-configuration branching, and no mock
-# or dev tools code in the release build. Runs Mock tests only; Local tests are
-# compiled here and run locally (guide 6). Runs on ready PRs only, to stay within the free macOS minutes;
+# iOS CI (IOS-004, IOS-007): the merge gate in Mock (unit tests and the smoke UI
+# tests in ios/smoke-mock.txt), no build-configuration branching, and no mock or
+# dev tools code in the release build. Every UI test runs nightly (nightly.yml);
+# Local tests are compiled here and run locally (guide 6, 7.2 rule 4). Runs on ready PRs only, to stay within the free macOS minutes;
 # reports only, guide 7.1 rule 10 forbids merging red.
 name: iOS
 
@@ -11,6 +12,7 @@ on:
       - "ios/**"
       - "contract/**"
       - "backend/**"
+      - "scripts/smoke_tests.sh"
       - ".github/workflows/ios.yml"
 
 concurrency:
@@ -45,8 +47,8 @@ jobs:
       - name: No build-configuration branching
         run: scripts/check_sources.sh
 
-      - name: Mock unit and UI tests
-        run: xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" test
+      - name: Mock unit and smoke UI tests
+        run: make test-smoke
 
       # Local tests need a backend to run, but compiling them needs none.
       - name: Build the Local tests

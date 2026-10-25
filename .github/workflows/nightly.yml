@@ -1,0 +1,136 @@
+# Nightly full test run (guide 7.2 rule 4): every UI test in both apps in Mock,
+# and Android's local instrumented tests against local Supabase. PRs run only the
+# smoke tests. A failure opens an issue labelled nightly-failure, or comments on
+# the one already open, so the next slice's readiness check picks it up. Runs on
+# main; start one by hand from the Actions tab.
+name: Nightly
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  ios-full:
+    name: iOS full Mock tests
+    runs-on: macos-26
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26.5
+        run: sudo xcode-select -s /Applications/Xcode_26.5.app
+
+      # Same version as ios/Makefile.
+      - name: Install XcodeGen 2.46.0
+        run: |
+          curl -sSL https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip -o "$RUNNER_TEMP/xcodegen.zip"
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+
+      - name: Every Mock test
+        run: make test-full
+
+  android-full:
+    name: Android full mock tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Enable KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Every mock instrumented test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          working-directory: android
+          script: make test-full
+
+  # The emulator reaches local Supabase on the runner at 10.0.2.2:54321, the
+  # local flavor's default backend.
+  android-local:
+    name: Android local tests against Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same version as backend/README.md.
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.120.0
+
+      - name: Start local Supabase
+        working-directory: backend
+        run: supabase start
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Enable KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Every local instrumented test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          working-directory: android
+          script: make test-local
+
+  report:
+    name: Report failures
+    needs: [ios-full, android-full, android-local]
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update the nightly-failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create nightly-failure --color B60205 --description "The nightly full test run failed" 2>/dev/null || true
+          body="The nightly full test run failed on $(date -u +%Y-%m-%d): $RUN_URL"
+          open=$(gh issue list --label nightly-failure --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "$body"
+          else
+            gh issue create --title "Nightly full test run failed" --label nightly-failure --body "$body"
+          fi

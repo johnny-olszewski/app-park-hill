@@ -1,0 +1,11 @@
+# Smoke instrumented tests for the merge gate, mock build (guide 7.2 rule 4):
+# about one UI test per screen's main path, and the small non-UI instrumented
+# tests. Everything else runs nightly. One per line, as <class>#<method> or a
+# whole <class>; unit tests always run with these.
+app.parkhill.navigation.ScreenTrackingTest
+app.parkhill.services.KeystoreSessionCipherTest
+app.parkhill.ui.MockSignInMenuUiTest#successSignsInAsTheChosenPersona
+app.parkhill.ui.TabsUiTest#signInShowsTheTabsAndSwitchingFollowsInTheMenu
+app.parkhill.ui.DevToolsUiTest#menuShowsTheCurrentScreenAndTheAppStillTakesTouches
+app.parkhill.ui.CommunityUiTest#memberTwoListsBothGroupsAndOpensEach
+app.parkhill.ui.BrowseUiTest#staffBrowsesSearchesOpensAGroupAndCloses

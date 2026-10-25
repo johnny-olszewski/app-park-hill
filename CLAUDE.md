@@ -13,7 +13,7 @@ Before changing anything:
 Rules:
 
 - Work only within the Scope of the slice's tasks. Do not expand it.
-- Write no task's code until the slice is Ready (guide 7.2 rule 7), then implement its tasks in the slice's order. Checks run in tiers (guide 7.2 rule 4): fast checks every commit; a task's unit and backend tests before the next task; UI tests, `make test-local` and the behavior criteria once, at the end of the slice. iOS and Android tasks may run in parallel worktrees once the backend tasks are committed.
+- Write no task's code until the slice is Ready (guide 7.2 rule 7), then implement its tasks in the slice's order. Checks run in tiers (guide 7.2 rule 4): every commit builds; a task runs the unit tests of the platforms it touched; the merge gate runs all unit and backend tests and the smoke UI tests (`make test-smoke`, `make test-local-smoke`); the full UI suites run nightly in CI. iOS and Android tasks may run in parallel worktrees once the backend tasks are committed.
 - If you find ambiguity or a conflict with the guide, stop and ask. Do not guess.
 - Decisions that change the guide are recorded in its decision log (section 8) in the same change.
 - Temporary code only when a task says so, with every line marked `TEMPORARY(<epic>): <what removes it>`.

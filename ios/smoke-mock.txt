@@ -1,0 +1,8 @@
+# Smoke UI tests for the merge gate, Mock build (guide 7.2 rule 4): about one
+# per screen's main path. Every other UI test runs nightly. One test per line,
+# as <target>/<class>/<method>; unit tests always run with these.
+ParkHillUITests/MockSignInUITests/testSignsInAsTheChosenPersonaWhateverIsTyped
+ParkHillUITests/TabsUITests/testSignInShowsTheTabsAndSwitchingFollowsInTheMenu
+ParkHillUITests/DevToolsUITests/testMenuShowsTheCurrentScreenAndTheAppStillTakesTouches
+ParkHillUITests/CommunityUITests/testMemberTwoListsBothGroupsAndOpensEach
+ParkHillUITests/BrowseUITests/testStaffBrowseSearchOpenAndCloseResetsTheSearch

@@ -111,7 +111,13 @@ The cache is one JSON file per locale under `filesDir/Cache/entry/` (`LocaleCach
 
 Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables for `tab.home` and `tab.community`, and a fallback for any other key. Home's top app bar has a temporary Sign out button, marked `TEMPORARY(EP-04)`, until the account entry replaces it.
 
-**Transitions:** `AppRoot` moves the entry like the iOS full-screen cover: after sign-in it slides down to reveal the tabs, and on sign-out or access ending it slides back up over them. Launch and changes inside the entry cross-fade. With animations off (developer options) every change is instant. Screens know nothing about it.
+**Toolbar:** every backend screen's envelope `toolbar` shows as top app bar actions, in backend order (`ScreenToolbar.kt`): each item's icon from `AssetProvider` (a placeholder for `toolbar.browse`, a fallback for any other key) with its label as the content description, and items beyond three go to the overflow menu, in order (`ToolbarLayout`).
+
+**Transitions:** `AppRoot` moves the entry like the iOS full-screen cover: after sign-in it slides down to reveal the tabs, and on sign-out or access ending it slides back up over them. Launch and changes inside the entry cross-fade.
+
+**Full-screen cover:** `navigate` with `full_screen_cover` opens its target in the tab's `cover`, a `ScreenStack` of its own (`FullScreenCover.kt`), drawn as a layer over the whole shell inside the activity, not as a dialog, so the dev tools pill stays above it. It slides up from the bottom and back down on close, like the entry. It is fetched fresh, over a loading state, each time it opens; pushes go inside it while it is open; its root has a close button (Close) and pushed screens a back button. System back pops inside the cover, then closes it. Each stack keeps a screen's saveable state (such as a list's scroll position) while screens are pushed over it, and the cover starts afresh each time it opens.
+
+**Browse all groups:** `community.browse` (`screens/community/CommunityBrowseScreen.kt`) opens from Community home's toolbar as a full-screen cover. It shows the group rows of Community home's list with a Material search field that filters the loaded rows by title as you type (`filterGroupRows`), pull to refresh, and rows that push `community.group` inside the cover. Tapping a row ends the search first (clears it and drops focus), so back from a group shows every group, as on iOS. A row's badge with `badge_tone` `attention` (such as "No leader") is drawn in the danger color. With animations off (developer options) every change is instant. Screens know nothing about it.
 
 **Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 
@@ -173,7 +179,7 @@ Any email and password then give the armed result. While a result other than Suc
 | `src/testDebug` | Both debug variants | Nothing. Dev tools registry, current screen and JSON formatting |
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
-| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu |
+| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu; each persona's Community tab, its toolbar and Browse all groups |
 | `src/androidTestLocal` | local, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedLocalDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the local tests on your machine before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:

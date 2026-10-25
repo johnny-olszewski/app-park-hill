@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-012]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-023: Build Browse all groups and the screen toolbar
@@ -17,9 +17,10 @@ Staff need to see every group, not just their own. This task adds the envelope's
 
 ## Scope
 
-- Contract: `ToolbarItem` (`id`, `label`, `icon_key`, `action`) in `contract/types/`; `ScreenEnvelope` gains optional `toolbar` (list of `ToolbarItem`); `NavigateAction.presentation` gains `full_screen_cover`. Documented in `contract/README.md` (`specs/COMMUNITY.md` 3.1).
+- Contract: `ToolbarItem` (`id`, `label`, `icon_key`, `action`) in `contract/types/`; `ScreenEnvelope` gains optional `toolbar` (list of `ToolbarItem`); `NavigateAction.presentation` gains `full_screen_cover`; `GroupRow` gains optional `badge_tone` (enum, `attention`; `specs/COMMUNITY.md` 3.3). Documented in `contract/README.md` (`specs/COMMUNITY.md` 3.1).
+- Both apps get a `full_screen_cover` case that logs and does nothing, in the commit that regenerates the models, so every commit builds; IOS-025 and AND-026 replace it.
 - `community.home` envelope: a "Browse all groups" toolbar item (`icon_key` `toolbar.browse`, `navigate` to `community.browse`, `full_screen_cover`) for `groups.view_all`, on every home state.
-- `community.browse`: `{ title, search_placeholder, rows: [GroupRow] }`, every community group by name, the caller's own groups badged ("Leader" or "Member"), leaderless groups badged "No leader"; refused with `screen_unavailable` without `groups.view_all`.
+- `community.browse`: `{ title, search_placeholder, rows: [GroupRow] }`, every community group by name, the caller's own groups badged ("Leader" or "Member"), leaderless groups badged "No leader" with `badge_tone` `attention`; refused with `screen_unavailable` without `groups.view_all`.
 - Add `community.browse` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; per-persona mock responses.
 
 ## Out of scope
@@ -33,7 +34,7 @@ Staff need to see every group, not just their own. This task adds the envelope's
 |---|---|---|
 | AC1 | An envelope without `toolbar` is still valid, and every existing mock response passes the check unchanged | Backward compatible with earlier clients |
 | AC2 | `staff` and `admin` get the browse item on `community.home`; `attendee`, `member_one`, `member_two` and `leader` do not | The UI follows what each person can do |
-| AC3 | Browse lists every non-archived community group by name, with the caller's own groups badged and leaderless groups badged "No leader"; when a group is both, "No leader" wins | Staff see the whole picture and what needs attention |
+| AC3 | Browse lists every non-archived community group by name, with the caller's own groups badged and leaderless groups badged "No leader" with `badge_tone` `attention`; when a group is both, "No leader" wins | Staff see the whole picture and what needs attention |
 | AC4 | Browse is refused with `screen_unavailable` for users without `groups.view_all` | Stale buttons cannot reveal all groups |
 | AC5 | `make data-check` passes with the new descriptions and per-persona mock responses | Mocks mirror the real backend per persona |
 | AC6 | pgTAP tests cover AC2 to AC4 | Enforced, not documented |

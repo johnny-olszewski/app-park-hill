@@ -12,6 +12,7 @@
     "auth.sign_in",
     "home.root",
     "community.home",
-    "community.group"
+    "community.group",
+    "community.browse"
   ]
 }

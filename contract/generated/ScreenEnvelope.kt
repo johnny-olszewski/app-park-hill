@@ -12,4 +12,6 @@ data class ScreenEnvelope(
     val key: String,
     /** Everything the screen needs, described by its screen key in contract/screens. */
     val data: JsonObject,
+    /** Buttons for the screen's bar, in order, only those the caller may use. Absent means none. */
+    val toolbar: List<ToolbarItem>? = null,
 )

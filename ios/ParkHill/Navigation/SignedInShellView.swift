@@ -50,7 +50,7 @@ private struct TabRoot: View {
                 .navigationTitle(tab.title)
                 .toolbar {
                     if let signOut { // TEMPORARY(EP-04): remove with IOS-015/AND-015
-                        ToolbarItem(placement: .topBarTrailing) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                        SwiftUI.ToolbarItem(placement: .topBarTrailing) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                             Button(String(localized: "shell.sign_out", defaultValue: "Sign out"), role: .destructive, action: signOut) // TEMPORARY(EP-04): remove with IOS-015/AND-015
                                 .accessibilityIdentifier("home.signOut") // TEMPORARY(EP-04): remove with IOS-015/AND-015
                         } // TEMPORARY(EP-04): remove with IOS-015/AND-015
@@ -61,11 +61,42 @@ private struct TabRoot: View {
                 }
         }
         .environment(\.screenActions, tab.actions)
+        .fullScreenCover(item: $tab.cover) { cover in
+            CoverView(cover: cover, close: tab.closeCover)
+        }
         .sheet(item: $tab.presented) { route in
             NavigationStack {
                 ScreenHostView(model: route.screen)
             }
             .environment(\.screenActions, tab.actions)
         }
+    }
+}
+
+/// A full-screen cover: its root in its own navigation stack, with a
+/// client-drawn close button at the leading edge (guide 5.5).
+private struct CoverView: View {
+    @Bindable var cover: CoverCoordinator
+    let close: () -> Void
+
+    var body: some View {
+        NavigationStack(path: $cover.path) {
+            ScreenHostView(model: cover.root)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    SwiftUI.ToolbarItem(placement: .topBarLeading) {
+                        Button(action: close) {
+                            Image(systemName: "xmark")
+                        }
+                        .accessibilityLabel(String(localized: "cover.close", defaultValue: "Close"))
+                        .accessibilityIdentifier("cover.close")
+                    }
+                }
+                .navigationDestination(for: Route.self) { route in
+                    ScreenHostView(model: route.screen)
+                }
+        }
+        .environment(\.screenActions, cover.actions)
+        .tint(Color.phInk)
     }
 }

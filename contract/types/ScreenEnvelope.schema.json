@@ -11,6 +11,13 @@
     "data": {
       "description": "Everything the screen needs, described by its screen key in contract/screens.",
       "type": "object"
+    },
+    "toolbar": {
+      "description": "Buttons for the screen's bar, in order, only those the caller may use. Absent means none.",
+      "type": "array",
+      "items": {
+        "$ref": "ToolbarItem.schema.json"
+      }
     }
   },
   "required": [

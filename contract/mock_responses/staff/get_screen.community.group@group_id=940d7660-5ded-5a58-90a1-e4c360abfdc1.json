@@ -1,0 +1,59 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Young Families",
+    "meeting": "Sundays · 4:00 PM",
+    "members": [
+      {
+        "title": "Member Two",
+        "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+        "is_leader": true
+      },
+      {
+        "title": "Rachel Cohen",
+        "user_id": "79bfd124-baa3-51c4-905f-ea7f14b15627",
+        "is_leader": true
+      },
+      {
+        "title": "Caleb Wright",
+        "user_id": "6338e781-f31b-51ac-a4c9-def6988dbc68",
+        "is_leader": false
+      },
+      {
+        "title": "James Okafor",
+        "user_id": "f7cca5d6-22cb-5a92-bf6a-999b1e9cd86f",
+        "is_leader": false
+      },
+      {
+        "title": "Kevin Tran",
+        "user_id": "560616ef-26c3-5d09-bee3-ca49afa1b0b5",
+        "is_leader": false
+      },
+      {
+        "title": "Lauren Mitchell",
+        "user_id": "ed1a627d-0bcd-5559-9657-f7c5f4d3e189",
+        "is_leader": false
+      },
+      {
+        "title": "Naomi Fischer",
+        "user_id": "f78bbb09-d693-5500-9288-3f0a361820c2",
+        "is_leader": false
+      },
+      {
+        "title": "Sofia Alvarez",
+        "user_id": "14faa8ac-6d79-5ea2-9161-84ba47be7714",
+        "is_leader": false
+      },
+      {
+        "title": "Tyler Grant",
+        "user_id": "408644ee-ed2f-56dc-ac3a-8080ff2c0fd6",
+        "is_leader": false
+      }
+    ],
+    "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1",
+    "location": "Vesper Hall",
+    "description": "Parents of young children, with childcare on site.",
+    "leaders_line": "Leaders: Member Two, Rachel Cohen",
+    "members_title": "Members"
+  }
+}

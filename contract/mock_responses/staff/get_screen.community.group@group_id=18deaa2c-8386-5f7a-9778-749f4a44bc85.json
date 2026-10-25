@@ -1,0 +1,39 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Point Loma Group",
+    "meeting": "Wednesdays · 7:00 PM",
+    "members": [
+      {
+        "title": "Andre Thompson",
+        "user_id": "7ea18780-b3bb-538f-9a98-c67b4000cdfc",
+        "is_leader": false
+      },
+      {
+        "title": "Ethan Walsh",
+        "user_id": "35c64e2d-2825-583f-94d2-11b1077d40e6",
+        "is_leader": false
+      },
+      {
+        "title": "Julia Santos",
+        "user_id": "69f0760e-7d8e-538d-bc61-394ff38cda3c",
+        "is_leader": false
+      },
+      {
+        "title": "Leah Goldberg",
+        "user_id": "023aa20f-cf34-5316-934b-fac5c95d6330",
+        "is_leader": false
+      },
+      {
+        "title": "Mei Chen",
+        "user_id": "05b05497-f377-52c5-ba07-449728c897fd",
+        "is_leader": false
+      }
+    ],
+    "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85",
+    "location": "Vesper Hall",
+    "description": "A new group looking for a leader.",
+    "leaders_line": "Leaders: none yet",
+    "members_title": "Members"
+  }
+}

@@ -121,14 +121,19 @@ fun MemberRowView(member: MemberRow) {
     }
 }
 
-/** A small uppercase label on the brand's sky color, such as "You" or "Leader". */
+/**
+ * A small uppercase label on the brand's sky color, such as "You" or
+ * "Leader"; one that needs attention, such as "No leader", on the danger color.
+ */
 @Composable
-fun Badge(text: String, modifier: Modifier = Modifier) {
+fun Badge(text: String, modifier: Modifier = Modifier, attention: Boolean = false) {
     Text(
         text.uppercase(),
         style = ParkHill.label.copy(fontSize = 10.sp),
-        color = ParkHill.colors.ink,
-        modifier = modifier.background(ParkHill.colors.sky, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = 1.dp),
+        color = if (attention) ParkHill.colors.surface else ParkHill.colors.ink,
+        modifier = modifier
+            .background(if (attention) ParkHill.colors.danger else ParkHill.colors.sky, RoundedCornerShape(4.dp))
+            .padding(horizontal = 6.dp, vertical = 1.dp),
     )
 }
 

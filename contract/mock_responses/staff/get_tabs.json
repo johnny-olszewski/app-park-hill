@@ -19,7 +19,20 @@
             "title": "You're not in a community group yet.",
             "message": "Community Groups gather through the week to study the Bible, talk and live life together. A staff member can add you to one."
           }
-        }
+        },
+        "toolbar": [
+          {
+            "id": "browse_all_groups",
+            "label": "Browse all groups",
+            "action": {
+              "type": "navigate",
+              "params": {},
+              "screen_key": "community.browse",
+              "presentation": "full_screen_cover"
+            },
+            "icon_key": "toolbar.browse"
+          }
+        ]
       },
       "icon_key": "tab.community"
     }

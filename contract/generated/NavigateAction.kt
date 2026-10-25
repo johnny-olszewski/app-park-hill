@@ -29,6 +29,7 @@ enum class NavigateActionType {
 @Serializable
 enum class NavigateActionPresentation {
     @SerialName("push") PUSH,
+    @SerialName("full_screen_cover") FULL_SCREEN_COVER,
 }
 
 @Serializable

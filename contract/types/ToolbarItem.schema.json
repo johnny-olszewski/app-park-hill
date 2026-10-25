@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ToolbarItem",
+  "description": "One button in a screen's bar (specs/COMMUNITY.md 3.1).",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Stable identifier, for tests and logs.",
+      "type": "string"
+    },
+    "label": {
+      "description": "The button's text, and its accessibility label when drawn as an icon.",
+      "type": "string"
+    },
+    "icon_key": {
+      "description": "A bundled icon, resolved by the client's AssetProvider.",
+      "type": "string"
+    },
+    "action": {
+      "$ref": "Action.schema.json"
+    }
+  },
+  "required": [
+    "id",
+    "label",
+    "icon_key",
+    "action"
+  ],
+  "additionalProperties": false
+}

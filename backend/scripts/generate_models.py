@@ -60,6 +60,20 @@ def enums(schema: dict) -> list[tuple[str, list[str]]]:
     return found
 
 
+def swift_init(title: str, schema: dict) -> str:
+    """A memberwise initializer whose optional fields default to nil, so adding
+    an optional field to a type does not break code that builds it."""
+    params = []
+    for name, field in schema["properties"].items():
+        kind = field_type(field, SWIFT_TYPES, "[{}]", enum_name(title, name))
+        default = "" if name in schema["required"] else "? = nil"
+        params.append(f"{names.identifier(name)}: {kind}{default}")
+    out = f"\n    init({', '.join(params)}) {{\n"
+    for name in schema["properties"]:
+        out += f"        self.{names.identifier(name)} = {names.identifier(name)}\n"
+    return out + "    }\n"
+
+
 def swift_enum(name: str, values: list[str]) -> str:
     out = f"\nenum {name}: String, {SWIFT_CONFORMANCES} {{\n"
     for value in values:
@@ -150,6 +164,8 @@ def swift(source: str, schema: dict, types: dict | None = None) -> str:
             out += f"    /// {field['description']}\n"
         kind = field_type(field, SWIFT_TYPES, "[{}]", enum_name(title, name))
         out += f"    let {names.identifier(name)}: {kind}{optional}\n"
+    if any(name not in schema["required"] for name in properties):
+        out += swift_init(title, schema)
     out += "\n    enum CodingKeys: String, CodingKey {\n"
     for name in properties:
         swift_name = names.identifier(name)

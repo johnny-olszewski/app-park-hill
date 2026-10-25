@@ -76,7 +76,7 @@ class MockResponseDecodingTest {
         for (file in files) {
             val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), file.readText())
             val detail = ContractJson.decodeFromJsonElement(CommunityGroupData.serializer(), envelope.data)
-            assertTrue(file.name, detail.title.isNotEmpty() && detail.members.isNotEmpty())
+            assertTrue(file.name, detail.title.isNotEmpty() && detail.leadersLine.isNotEmpty())
         }
     }
 
@@ -89,7 +89,7 @@ class MockResponseDecodingTest {
 
     @Test
     fun unknownFieldsAreIgnored() {
-        val json = """{"key": "auth.sign_in", "data": {"title": "Sign in"}, "toolbar": [], "future_field": {"x": 1}}"""
+        val json = """{"key": "auth.sign_in", "data": {"title": "Sign in"}, "future_field": {"x": 1}}"""
         assertEquals("auth.sign_in", ContractJson.decodeFromString(ScreenEnvelope.serializer(), json).key)
     }
 }

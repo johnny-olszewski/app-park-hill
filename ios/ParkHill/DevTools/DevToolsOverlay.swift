@@ -91,7 +91,7 @@ struct DevToolsMenu: View {
             .navigationTitle("\(devTools.environment.name) menu")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                SwiftUI.ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                         .accessibilityIdentifier("devTools.done")
                 }

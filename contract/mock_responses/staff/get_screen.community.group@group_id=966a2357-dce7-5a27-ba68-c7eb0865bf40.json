@@ -1,0 +1,54 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Men's Breakfast",
+    "meeting": "Saturdays · 7:00 AM",
+    "members": [
+      {
+        "title": "Elijah Moore",
+        "user_id": "2a029eaf-5685-5569-a277-cc081e75e604",
+        "is_leader": true
+      },
+      {
+        "title": "Aaron Fleming",
+        "user_id": "9110e485-dccc-5e54-986e-985f982ab382",
+        "is_leader": false
+      },
+      {
+        "title": "Esther Mensah",
+        "user_id": "94b87fab-7cae-594b-8bb7-ddba32f10bd5",
+        "is_leader": false
+      },
+      {
+        "title": "Joy Okonkwo",
+        "user_id": "4ba39b63-2f40-5c12-83a0-f0e6bc6a24ff",
+        "is_leader": false
+      },
+      {
+        "title": "Matthew Ellis",
+        "user_id": "b010b520-0f3f-508c-8fe5-ed682ae3263a",
+        "is_leader": false
+      },
+      {
+        "title": "Rebecca Hart",
+        "user_id": "ef87952e-a5e2-573b-bcd4-d0f5b8b1387b",
+        "is_leader": false
+      },
+      {
+        "title": "Sarah Ibrahim",
+        "user_id": "22814fc1-b99f-5156-8c09-06853f945975",
+        "is_leader": false
+      },
+      {
+        "title": "Thomas Becker",
+        "user_id": "c9f59ed1-2522-5d3a-a6f1-fee729bfe49f",
+        "is_leader": false
+      }
+    ],
+    "group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40",
+    "location": "Café on Adams",
+    "description": "Breakfast, a short passage and honest conversation before work.",
+    "leaders_line": "Leaders: Elijah Moore",
+    "members_title": "Members"
+  }
+}

@@ -6,9 +6,18 @@ struct ScreenEnvelope: Codable, Equatable, Sendable {
     let key: String
     /// Everything the screen needs, described by its screen key in contract/screens.
     let data: JSONValue
+    /// Buttons for the screen's bar, in order, only those the caller may use. Absent means none.
+    let toolbar: [ToolbarItem]?
+
+    init(key: String, data: JSONValue, toolbar: [ToolbarItem]? = nil) {
+        self.key = key
+        self.data = data
+        self.toolbar = toolbar
+    }
 
     enum CodingKeys: String, CodingKey {
         case key
         case data
+        case toolbar
     }
 }

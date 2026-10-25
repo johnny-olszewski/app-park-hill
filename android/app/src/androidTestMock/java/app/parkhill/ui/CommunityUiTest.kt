@@ -7,6 +7,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -64,9 +65,14 @@ class CommunityUiTest {
             compose.onNodeWithTag("groupDetail").performScrollToNode(hasText(member.text("title")))
             compose.onNodeWithText(member.text("title")).assertExists()
         }
-        compose.onAllNodesWithTag("groupDetail.leaderIcon").assertCountEquals(members.count { it.getValue("is_leader").jsonPrimitive.boolean })
-        members.firstNotNullOfOrNull { it["note"]?.jsonPrimitive?.content }?.let { note ->
-            compose.onNodeWithTag("groupDetail.note").assertTextEquals(note.uppercase())
+        // Leaders come first, so their icons are on screen once the list is back at the top.
+        if (members.any { it.getValue("is_leader").jsonPrimitive.boolean }) {
+            compose.onNodeWithTag("groupDetail").performScrollToNode(hasText(members.first().text("title")))
+            compose.onAllNodesWithTag("groupDetail.leaderIcon").onFirst().assertExists()
+        }
+        members.firstOrNull { it["note"] != null }?.let { member ->
+            compose.onNodeWithTag("groupDetail").performScrollToNode(hasText(member.text("title")))
+            compose.onNodeWithTag("groupDetail.note").assertTextEquals(member.getValue("note").jsonPrimitive.content.uppercase())
         }
     }
 

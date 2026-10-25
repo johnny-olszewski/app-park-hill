@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CommunityBrowseData",
+  "description": "`community.browse` data: every community group by name, for groups.view_all (specs/COMMUNITY.md 4.2).",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "search_placeholder": {
+      "description": "The search field's placeholder.",
+      "type": "string"
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "../types/GroupRow.schema.json"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "search_placeholder",
+    "rows"
+  ],
+  "additionalProperties": false
+}

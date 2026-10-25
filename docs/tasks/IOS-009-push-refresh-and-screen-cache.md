@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-024, SUP-011]
 paired_with: [AND-009]
-status: Draft
+status: Done
 ---
 
 # IOS-009: Open backend screens by push, with refresh and a per-screen cache on iOS

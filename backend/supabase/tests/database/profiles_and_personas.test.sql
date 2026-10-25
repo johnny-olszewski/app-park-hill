@@ -7,7 +7,10 @@ select plan(14);
 -- AC2: every persona exists after reset; disabled is banned.
 select results_eq(
   $$ select email::text from auth.users where email like '%@parkhill.test' order by email $$,
-  array['admin@parkhill.test', 'attendee@parkhill.test', 'disabled@parkhill.test'],
+  array[
+    'admin@parkhill.test', 'attendee@parkhill.test', 'disabled@parkhill.test', 'leader@parkhill.test',
+    'member.one@parkhill.test', 'member.two@parkhill.test', 'staff@parkhill.test'
+  ],
   'each persona has an account'
 );
 select ok(

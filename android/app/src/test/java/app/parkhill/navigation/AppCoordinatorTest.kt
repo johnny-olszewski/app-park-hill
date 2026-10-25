@@ -1,6 +1,7 @@
 package app.parkhill.navigation
 
 import app.parkhill.cache.EntryCache
+import app.parkhill.cache.ScreenCache
 import app.parkhill.cache.TabsCache
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.services.auth.AuthState
@@ -33,6 +34,7 @@ class AppCoordinatorTest {
 
     private fun TestScope.coordinator() = AppCoordinator(
         backend, auth, ScreenRegistry().apply { registerSharedScreens(auth) }, cache, backgroundScope, { "en" }, tabsCache,
+        ScreenCache(Files.createTempDirectory("screens").toFile()),
     )
 
     private fun AppCoordinator.shownTitle(): String? =

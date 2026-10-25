@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Action",
+  "description": "What happens when something is tapped, told apart by `type` (specs/COMMUNITY.md 3.2).",
+  "oneOf": [
+    {
+      "$ref": "NavigateAction.schema.json"
+    }
+  ]
+}

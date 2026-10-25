@@ -89,13 +89,13 @@ Shared local password: `parkhill-local`.
 
 ## Generated data
 
-`/contract/seed/dataset.json` is the single source of personas and seed data. Never edit `supabase/seed.sql` or anything in `/contract/mock_responses` by hand:
+`/contract/seed/dataset.json` is the single source of personas and seed data. Each persona has an `id`, `email`, `display_name`, `description`, `state` (`active` or `banned`) and optional `roles`: assigned role keys beyond attendee, which every account gets. Each group has an `id`, `type` (a group type key), `name`, `description`, `meeting_day` (ISO, 1 Monday to 7 Sunday), `meeting_time` (`HH:MM`, local to the church time zone), `location`, and the persona ids of its `members` and `leaders` (every leader is also a member). Never edit `supabase/seed.sql` or anything in `/contract/mock_responses` by hand:
 
 1. Change `dataset.json` (or a migration, for screens and strings).
 2. Run `make mock-responses`: regenerates `seed.sql`, resets local Supabase, signs in as each active persona and anonymously, calls every registered screen and rewrites `/contract/mock_responses`.
 3. Commit the dataset and the generated files together.
 
-Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, mock response folders) and fails if anything differs from what is committed.
+Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root are the signed-out responses; `<persona>/get_screen.<key>.json` and `<persona>/whoami.json` are an active persona's; `<persona>/get_screen.<key>@<param>=<value>.json` is a screen with params that a `navigate` action in that persona's responses opens. `make data-check` regenerates both, checks persona consistency (dataset, accounts, profiles, mock response folders) and fails if anything differs from what is committed.
 
 ### Contract names
 
@@ -107,7 +107,7 @@ Mock response layout: `get_entry.json` and `get_screen.<key>.json` at the root a
 
 `/contract/screens/<key>.schema.json` describes each backend screen's data once, and `/contract/types/<TypeName>.schema.json` each shared type: the screen envelope, the other responses and their parts (`contract/README.md`, Contract descriptions). `/contract/responses.json` maps each mock response to its type. `make models` generates the Swift and Kotlin model for each screen and type into `/contract/generated`. Adding or changing a response: change its migration and its description together, map any new mock response in `responses.json`, run `make mock-responses` and `make models`, and commit everything.
 
-`make data-check` also runs `scripts/check_models.py` after regenerating the mock responses. It fails when a screen key in `names.json` has no description (or a description has no key); when a mock response has no type in `responses.json`, a mapping names no mock response or no type, or a type is used by nothing; and when any mock response does not match its type, or any recorded screen envelope's data, including each tab's `screen` in `get_tabs`, does not match its screen's description: a missing required field, a field its description lacks, or a value of the wrong type. It names the mock response, the field and the problem.
+`make data-check` also runs `scripts/check_models.py` after regenerating the mock responses. It fails when a screen key in `names.json` has no description (or a description has no key); when a mock response has no type in `responses.json`, a mapping names no mock response or no type, or a type is used by nothing; and when any mock response does not match its type, or any recorded screen envelope's data, including each tab's `screen` in `get_tabs`, does not match its screen's description: a missing required field, a field its description lacks, a value of the wrong type or outside its `enum`, or a union value whose `type` is none of its members'. Examples in `/contract/types/examples` are checked against their types the same way. It names the mock response, the field and the problem.
 
 ## Rules
 

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GroupList",
+  "description": "A titled list of groups.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "GroupRow.schema.json"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "rows"
+  ],
+  "additionalProperties": false
+}

@@ -2,14 +2,22 @@ import Foundation
 import os
 @testable import ParkHill
 
-/// Test double for `BackendService`: answers `getEntry` and `getTabs` with
-/// queued results and counts calls.
+/// Test double for `BackendService`: answers `getEntry`, `getScreen` and
+/// `getTabs` with queued results and counts calls.
 final class StubBackendService: BackendService {
     private struct State {
         var entryResults: [Result<ScreenEnvelope, BackendError>] = []
         var entryCalls: [String] = []
         var tabsResults: [Result<TabsResponse, BackendError>] = []
         var tabsCalls: [String] = []
+        var screenResults: [Result<ScreenEnvelope, BackendError>] = []
+        var screenCalls: [ScreenCall] = []
+    }
+
+    /// One `getScreen` call.
+    struct ScreenCall: Equatable {
+        let key: String
+        let params: [String: JSONValue]
     }
 
     private let state = OSAllocatedUnfairLock(initialState: State())
@@ -40,8 +48,24 @@ final class StubBackendService: BackendService {
         return try result.get()
     }
 
+    /// Results for the next `getScreen` calls, in order. The last one repeats.
+    /// None queued: `unknownScreen`.
+    func enqueueScreen(_ results: Result<ScreenEnvelope, BackendError>...) {
+        state.withLock { $0.screenResults.append(contentsOf: results) }
+    }
+
+    /// Keys and params passed to `getScreen`, one per call.
+    var screenCalls: [ScreenCall] {
+        state.withLock { $0.screenCalls }
+    }
+
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
-        throw .unknownScreen
+        let result = state.withLock { state in
+            state.screenCalls.append(ScreenCall(key: key, params: params))
+            return state.screenResults.count > 1 ? state.screenResults.removeFirst() : state.screenResults.first
+        }
+        guard let result else { throw .unknownScreen }
+        return try result.get()
     }
 
     /// Results for the next `getTabs` calls, in order. The last one repeats.

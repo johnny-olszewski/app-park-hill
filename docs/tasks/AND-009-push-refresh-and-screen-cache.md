@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-025, SUP-011]
 paired_with: [IOS-009]
-status: Draft
+status: Done
 ---
 
 # AND-009: Open backend screens by push, with refresh and a per-screen cache on Android

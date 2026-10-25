@@ -7,6 +7,8 @@ import app.parkhill.services.backend.ContractJson
 import java.io.File
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
@@ -26,6 +28,30 @@ class MockBackendServiceTest {
     fun getScreenReadsTheScreenMockResponse() = runTest {
         val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState())
         assertEquals(expected("get_screen.auth.sign_in.json"), service.getScreen("auth.sign_in", "en"))
+    }
+
+    @Test
+    fun getScreenWithParamsReadsTheMockResponseForThoseParams() = runTest {
+        val persona = MockPersonaState().apply { current = "member_two" }
+        val service = MockBackendService(MockResponseStore.directory(bundled), persona)
+        val groupId = "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+        val params = JsonObject(mapOf("group_id" to JsonPrimitive(groupId)))
+        assertEquals(expected("member_two/get_screen.community.group@group_id=$groupId.json"), service.getScreen("community.group", "en", params))
+    }
+
+    @Test
+    fun getScreenWithParamsFallsBackToTheScreenAlone() = runTest {
+        val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState())
+        val params = JsonObject(mapOf("unused" to JsonPrimitive("x")))
+        assertEquals(expected("get_screen.auth.sign_in.json"), service.getScreen("auth.sign_in", "en", params))
+    }
+
+    @Test
+    fun mockResponseNamesSortParamsByName() {
+        assertEquals("get_screen.a", MockResponseStore.name("get_screen.a", JsonObject(emptyMap())))
+        val params = JsonObject(mapOf("z" to JsonPrimitive(2), "b" to JsonPrimitive("x")))
+        assertEquals("get_screen.a@b=x&z=2", MockResponseStore.name("get_screen.a", params))
+        assertEquals("get_screen.a", MockResponseStore.name("get_screen.a", JsonObject(mapOf("b" to JsonPrimitive(true)))))
     }
 
     @Test

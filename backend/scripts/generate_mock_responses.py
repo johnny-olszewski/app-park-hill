@@ -5,6 +5,9 @@ seed first. Never edit mock responses by hand.
 Layout:
   get_entry.json, get_screen.<key>.json            signed out
   <persona>/get_screen.<key>.json                  signed in as an active persona
+  <persona>/get_screen.<key>@<param>=<value>.json  a screen with params, reached
+                                                   by a navigate action in that
+                                                   persona's recorded responses
   <persona>/whoami.json                            whoami() as that persona
   <persona>/get_tabs.json                          get_tabs() as that persona
   sign_in.ok.json, sign_in.error.json              the sign_in Edge Function
@@ -34,13 +37,46 @@ def screen_keys(supabase: LocalSupabase) -> list[str]:
     return [row["key"] for row in rows]
 
 
-def capture(path: Path, call) -> None:
+def capture(path: Path, call):
+    """Writes the response and returns it, or None when the caller may not see it."""
     try:
-        write(path, call())
+        response = call()
     except RequestFailed as error:
         if 400 <= error.status < 500:
-            return
+            return None
         raise
+    write(path, response)
+    return response
+
+
+def navigate_targets(value) -> list[tuple[str, dict]]:
+    """Every (screen_key, params) a navigate action with params opens, in order."""
+    found = []
+    if isinstance(value, dict):
+        if value.get("type") == "navigate" and isinstance(value.get("screen_key"), str) and value.get("params"):
+            found.append((value["screen_key"], value["params"]))
+        for child in value.values():
+            found += navigate_targets(child)
+    elif isinstance(value, list):
+        for child in value:
+            found += navigate_targets(child)
+    return found
+
+
+def capture_reachable(folder: Path, responses: list, call_screen) -> None:
+    """Records every screen with params that the recorded responses can open,
+    following the ones it reaches in turn, each once."""
+    queue = [target for response in responses for target in navigate_targets(response)]
+    seen = set()
+    while queue:
+        key, params = queue.pop(0)
+        name = dataset.mock_response_name(f"get_screen.{key}", params)
+        if name in seen:
+            continue
+        seen.add(name)
+        response = capture(folder / f"{name}.json", lambda key=key, params=params: call_screen(key, params))
+        if response is not None:
+            queue += navigate_targets(response)
 
 
 def clear(root: Path) -> None:
@@ -124,12 +160,14 @@ def main() -> None:
     clear(root)
 
     print("Signed out:")
-    capture(root / "get_entry.json", lambda: supabase.rpc("get_entry", {"p_locale": LOCALE}))
+
+    def signed_out_screen(key, params):
+        return supabase.rpc("get_screen", {"p_key": key, "p_locale": LOCALE, "p_params": params})
+
+    recorded = [capture(root / "get_entry.json", lambda: supabase.rpc("get_entry", {"p_locale": LOCALE}))]
     for key in keys:
-        capture(
-            root / f"get_screen.{key}.json",
-            lambda key=key: supabase.rpc("get_screen", {"p_key": key, "p_locale": LOCALE, "p_params": {}}),
-        )
+        recorded.append(capture(root / f"get_screen.{key}.json", lambda key=key: signed_out_screen(key, {})))
+    capture_reachable(root, recorded, signed_out_screen)
 
     print("sign_in:")
     write_sign_in_mock_responses(supabase, data)
@@ -137,18 +175,16 @@ def main() -> None:
     for persona in dataset.active_personas(data):
         print(f"{persona['id']}:")
         token = supabase.sign_in(persona["email"], data["local_password"])
-        capture(root / persona["id"] / "whoami.json", lambda token=token: supabase.rpc("whoami", {}, token=token))
-        capture(
-            root / persona["id"] / "get_tabs.json",
-            lambda token=token: supabase.rpc("get_tabs", {"p_locale": LOCALE}, token=token),
-        )
+        folder = root / persona["id"]
+
+        def screen(key, params, token=token):
+            return supabase.rpc("get_screen", {"p_key": key, "p_locale": LOCALE, "p_params": params}, token=token)
+
+        capture(folder / "whoami.json", lambda token=token: supabase.rpc("whoami", {}, token=token))
+        recorded = [capture(folder / "get_tabs.json", lambda token=token: supabase.rpc("get_tabs", {"p_locale": LOCALE}, token=token))]
         for key in keys:
-            capture(
-                root / persona["id"] / f"get_screen.{key}.json",
-                lambda key=key: supabase.rpc(
-                    "get_screen", {"p_key": key, "p_locale": LOCALE, "p_params": {}}, token=token
-                ),
-            )
+            recorded.append(capture(folder / f"get_screen.{key}.json", lambda key=key: screen(key, {})))
+        capture_reachable(folder, recorded, screen)
 
 
 if __name__ == "__main__":

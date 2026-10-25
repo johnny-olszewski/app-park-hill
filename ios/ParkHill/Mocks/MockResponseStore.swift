@@ -14,6 +14,26 @@ struct MockResponseStore: Sendable {
         return MockResponseStore(root: root)
     }
 
+    /// The file name, without `.json`, of a call with params:
+    /// `get_screen.community.group@group_id=<id>`, params sorted by name
+    /// (contract/README.md, Mock responses). Only text and whole-number
+    /// params are named; others give `name` alone.
+    static func name(_ name: String, params: [String: JSONValue]) -> String {
+        guard !params.isEmpty else { return name }
+        var parts: [String] = []
+        for (key, value) in params.sorted(by: { $0.key < $1.key }) {
+            switch value {
+            case .string(let text):
+                parts.append("\(key)=\(text)")
+            case .number(let number) where number == number.rounded():
+                parts.append("\(key)=\(Int(number))")
+            default:
+                return name
+            }
+        }
+        return name + "@" + parts.joined(separator: "&")
+    }
+
     /// The mock response data for `name` (without `.json`), or nil when none exists.
     func data(named name: String, persona: String?) -> Data? {
         var candidates: [URL] = []

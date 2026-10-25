@@ -1,5 +1,6 @@
 package app.parkhill.services.backend
 
+import app.parkhill.contract.CommunityGroupData
 import app.parkhill.contract.Profile
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.SignInFailure
@@ -18,7 +19,7 @@ import org.junit.Test
 class MockResponseDecodingTest {
     private val root = File(checkNotNull(javaClass.classLoader?.getResource("get_entry.json")).toURI()).parentFile!!
 
-    /** contract/responses.json: each mock response's name (file name without folder or `.json`) to its type. */
+    /** contract/responses.json: each mock response's name (file name without folder, `@` params or `.json`) to its type. */
     private val responseTypes: Map<String, String> = ContractJson.decodeFromString(
         MapSerializer(String.serializer(), String.serializer()),
         File(checkNotNull(System.getProperty("contract.responses"))).readText(),
@@ -38,7 +39,8 @@ class MockResponseDecodingTest {
         val files = root.walkTopDown().filter { it.isFile && it.extension == "json" && it.name != "dataset.json" }.toList()
         assertTrue("no mock responses found", files.isNotEmpty())
         for (file in files) {
-            val type = checkNotNull(responseTypes[file.nameWithoutExtension]) { "${file.name} has no type in contract/responses.json" }
+            val name = file.nameWithoutExtension.substringBefore('@')
+            val type = checkNotNull(responseTypes[name]) { "${file.name} has no type in contract/responses.json" }
             val serializer = checkNotNull(serializers[type]) { "$type has no serializer in this test" }
             ContractJson.decodeFromString(serializer, file.readText())
         }
@@ -64,6 +66,17 @@ class MockResponseDecodingTest {
             val response = ContractJson.decodeFromString(TabsResponse.serializer(), file.readText())
             assertTrue("${file.path} has no tabs", response.tabs.isNotEmpty())
             assertTrue(response.tabs.all { it.title.isNotEmpty() && it.iconKey.isNotEmpty() })
+        }
+    }
+
+    @Test
+    fun everyGroupDetailMockResponseDecodes() {
+        val files = root.walkTopDown().filter { it.isFile && it.name.startsWith("get_screen.community.group@") }.toList()
+        assertTrue("no community.group mock responses found", files.isNotEmpty())
+        for (file in files) {
+            val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), file.readText())
+            val detail = ContractJson.decodeFromJsonElement(CommunityGroupData.serializer(), envelope.data)
+            assertTrue(file.name, detail.title.isNotEmpty() && detail.members.isNotEmpty())
         }
     }
 

@@ -40,11 +40,15 @@ struct ScreenRegistryTests {
         #expect(received == Data(title: "Hello"))
     }
 
-    /// Each recorded screen decodes into the generated model its key is registered with.
+    /// Each recorded screen this build registers decodes into the generated
+    /// model its key is registered with. The backend may record a screen
+    /// before this build registers it (contract rule 3); tab roots must resolve.
     @Test(arguments: TestMockResponses.screenEnvelopePaths())
     func everyRecordedScreenResolves(path: String) throws {
         let envelope = try JSONDecoder().decode(ScreenEnvelope.self, from: TestMockResponses.data(path))
-        #expect(makeRegistry().resolve(envelope) != nil, "\(path): \(envelope.key)")
+        let registry = makeRegistry()
+        guard registry.isRegistered(envelope.key) else { return }
+        #expect(registry.resolve(envelope) != nil, "\(path): \(envelope.key)")
     }
 
     @Test func everyRecordedTabRootResolves() throws {

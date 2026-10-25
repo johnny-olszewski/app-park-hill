@@ -9,11 +9,46 @@
       "state": "active"
     },
     {
+      "id": "member_one",
+      "email": "member.one@parkhill.test",
+      "display_name": "Member One",
+      "description": "Member of one group",
+      "state": "active"
+    },
+    {
+      "id": "member_two",
+      "email": "member.two@parkhill.test",
+      "display_name": "Member Two",
+      "description": "Member of two groups, leading one",
+      "state": "active"
+    },
+    {
+      "id": "leader",
+      "email": "leader@parkhill.test",
+      "display_name": "Leader",
+      "description": "Leads one group",
+      "state": "active"
+    },
+    {
+      "id": "staff",
+      "email": "staff@parkhill.test",
+      "display_name": "Staff",
+      "description": "Staff, no group",
+      "state": "active",
+      "roles": [
+        "staff"
+      ]
+    },
+    {
       "id": "admin",
       "email": "admin@parkhill.test",
       "display_name": "Admin",
-      "description": "Will hold the admin role when roles land",
-      "state": "active"
+      "description": "Staff and admin, leads one group",
+      "state": "active",
+      "roles": [
+        "staff",
+        "admin"
+      ]
     },
     {
       "id": "disabled",
@@ -21,6 +56,66 @@
       "display_name": "Disabled",
       "description": "Banned account for testing the disabled path",
       "state": "banned"
+    }
+  ],
+  "groups": [
+    {
+      "id": "tuesday_night",
+      "type": "community",
+      "name": "Tuesday Night Group",
+      "description": "Study, conversation and dinner together.",
+      "meeting_day": 2,
+      "meeting_time": "19:00",
+      "location": "Lee home, North Park",
+      "members": [
+        "leader",
+        "member_one",
+        "member_two"
+      ],
+      "leaders": [
+        "leader"
+      ]
+    },
+    {
+      "id": "mission_hills",
+      "type": "community",
+      "name": "Mission Hills Group",
+      "description": "Bible study and prayer for Mission Hills neighbors.",
+      "meeting_day": 4,
+      "meeting_time": "18:30",
+      "location": "Shah home",
+      "members": [
+        "admin"
+      ],
+      "leaders": [
+        "admin"
+      ]
+    },
+    {
+      "id": "young_families",
+      "type": "community",
+      "name": "Young Families",
+      "description": "Parents of young children, with childcare on site.",
+      "meeting_day": 7,
+      "meeting_time": "16:00",
+      "location": "Vesper Hall",
+      "members": [
+        "member_two"
+      ],
+      "leaders": [
+        "member_two"
+      ]
+    },
+    {
+      "id": "point_loma",
+      "type": "community",
+      "name": "Point Loma Group",
+      "description": "A new group looking for a leader.",
+      "meeting_day": 3,
+      "meeting_time": "19:00",
+      "location": "Vesper Hall",
+      "members": [],
+      "leaders": []
     }
   ]
 }

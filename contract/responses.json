@@ -1,6 +1,7 @@
 {
   "get_entry": "ScreenEnvelope",
   "get_screen.auth.sign_in": "ScreenEnvelope",
+  "get_screen.community.group": "ScreenEnvelope",
   "get_screen.community.home": "ScreenEnvelope",
   "get_screen.home.root": "ScreenEnvelope",
   "get_tabs": "TabsResponse",

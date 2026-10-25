@@ -15,7 +15,10 @@ select is(
   '{
     "tabs": [
       {"id": "home", "title": "Home", "icon_key": "tab.home", "screen": {"key": "home.root", "data": {}}},
-      {"id": "community", "title": "Community", "icon_key": "tab.community", "screen": {"key": "community.home", "data": {}}}
+      {"id": "community", "title": "Community", "icon_key": "tab.community", "screen": {"key": "community.home", "data": {"empty": {
+        "title": "You''re not in a community group yet.",
+        "message": "Community Groups gather through the week to study the Bible, talk and live life together. A staff member can add you to one."
+      }}}}
     ]
   }'::jsonb,
   'get_tabs(en) returns the tabs in order with their root screens'

@@ -1,9 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "CommunityHomeData",
-  "description": "`community.home` data: empty until EP-03 adds groups.",
+  "description": "`community.home` data: exactly one of group, my_groups or empty; clients show the first present, in that order (specs/COMMUNITY.md 4.1).",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "group": {
+      "description": "The caller's one group.",
+      "$ref": "../types/GroupDetail.schema.json"
+    },
+    "my_groups": {
+      "description": "The caller's groups, when they are in two or more.",
+      "$ref": "../types/GroupList.schema.json"
+    },
+    "empty": {
+      "description": "When the caller is in no group.",
+      "$ref": "../types/EmptyState.schema.json"
+    }
+  },
   "required": [],
   "additionalProperties": false
 }

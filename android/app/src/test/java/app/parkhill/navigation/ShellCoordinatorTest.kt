@@ -1,5 +1,6 @@
 package app.parkhill.navigation
 
+import app.parkhill.cache.ScreenCache
 import app.parkhill.cache.TabsCache
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.TabsResponse
@@ -25,7 +26,7 @@ class ShellCoordinatorTest {
         val backend = StubBackendService { StubBackendService.signIn() }
         backend.tabs = { (if (queue.size > 1) queue.removeFirst() else queue.first())() }
         val registry = ScreenRegistry().apply { registerSharedScreens(FakeAuthService()) }
-        return ShellCoordinator(backend, registry, cache) { "en" } to backend
+        return ShellCoordinator(backend, registry, cache, ScreenCache(Files.createTempDirectory("screens").toFile())) { "en" } to backend
     }
 
     private fun empty(key: String) = ScreenEnvelope(key, JsonObject(emptyMap()))
@@ -123,7 +124,7 @@ class ShellCoordinatorTest {
         val home = shell.tabs.first()
         val community = shell.tabs.last()
 
-        assertTrue(home.push(empty("community.home")))
+        assertTrue(home.push(empty("home.root")))
         shell.selectedTabId = "community"
         shell.selectedTabId = "home"
 

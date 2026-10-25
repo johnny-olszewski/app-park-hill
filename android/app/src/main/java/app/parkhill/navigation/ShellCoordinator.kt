@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import app.parkhill.cache.ScreenCache
 import app.parkhill.cache.TabsCache
 import app.parkhill.contract.RpcFunction
 import app.parkhill.contract.TabsResponse
@@ -22,8 +23,11 @@ class ShellCoordinator(
     private val backend: BackendService,
     private val registry: ScreenRegistry,
     private val cache: TabsCache,
+    screenCache: ScreenCache,
     private val locale: () -> String,
 ) {
+    private val screens = ScreenContext(backend, registry, screenCache, locale)
+
     var state: ShellState by mutableStateOf(ShellState.Loading)
         private set
     var tabs: List<TabCoordinator> by mutableStateOf(emptyList())
@@ -79,19 +83,20 @@ class ShellCoordinator(
 
     /**
      * Shows the first five tabs whose root screens this build registers,
-     * keeping each unchanged tab's coordinator and the selected tab. False
-     * when no tab can be shown.
+     * keeping each tab's coordinator and stack while its root screen key stays
+     * the same, and the selected tab. False when no tab can be shown.
      */
     private fun show(response: TabsResponse): Boolean {
         if (response.tabs.size > MAXIMUM_TABS) {
             Log.e(TAG, "Dropped tabs beyond $MAXIMUM_TABS: ${response.tabs.drop(MAXIMUM_TABS).joinToString { it.id }}")
         }
         val shown = response.tabs.take(MAXIMUM_TABS).mapNotNull { item ->
-            val existing = tabs.firstOrNull { it.id == item.id && it.root.envelope == item.screen }
+            val existing = tabs.firstOrNull { it.id == item.id && it.root.key == item.screen.key }
             when {
                 existing != null -> existing.also { it.update(item) }
-                else -> registry.resolve(item.screen)?.let { TabCoordinator(item, it, registry) }
-                    ?: null.also { Log.e(TAG, "Dropped tab ${item.id}: its screen is not registered") }
+                // A root whose data cannot be shown falls back in its tab, to its cached copy or the error screen.
+                registry.isRegistered(item.screen.key) -> TabCoordinator(item, screens)
+                else -> null.also { Log.e(TAG, "Dropped tab ${item.id}: its screen is not registered") }
             }
         }
         if (shown.isEmpty()) return false

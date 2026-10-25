@@ -11,7 +11,8 @@ struct ShellCoordinatorTests {
     private func makeShell(_ backend: StubBackendService) -> ShellCoordinator {
         var registry = ScreenRegistry()
         registry.registerSharedScreens(auth: StubAuthService())
-        return ShellCoordinator(backend: backend, registry: registry, cache: cache, locale: { "en" })
+        let screenCache = ScreenCache(directory: cache.directory.appending(path: "screens"))
+        return ShellCoordinator(backend: backend, registry: registry, cache: cache, screenCache: screenCache, locale: { "en" })
     }
 
     private func backend(_ results: Result<TabsResponse, BackendError>...) -> StubBackendService {
@@ -116,7 +117,7 @@ struct ShellCoordinatorTests {
         let home = try #require(shell.tabs.first)
         let community = try #require(shell.tabs.last)
 
-        #expect(home.push(ScreenEnvelope(key: "community.home", data: .object([:]))))
+        #expect(home.push(ScreenEnvelope(key: "home.root", data: .object([:]))))
         shell.selectedTabID = "community"
         shell.selectedTabID = "home"
 

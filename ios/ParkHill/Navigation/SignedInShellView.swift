@@ -46,7 +46,7 @@ private struct TabRoot: View {
 
     var body: some View {
         NavigationStack(path: $tab.path) {
-            tab.root.view
+            ScreenHostView(model: tab.root)
                 .navigationTitle(tab.title)
                 .toolbar {
                     if let signOut { // TEMPORARY(EP-04): remove with IOS-015/AND-015
@@ -57,13 +57,15 @@ private struct TabRoot: View {
                     } // TEMPORARY(EP-04): remove with IOS-015/AND-015
                 }
                 .navigationDestination(for: Route.self) { route in
-                    route.screen.view
+                    ScreenHostView(model: route.screen)
                 }
         }
+        .environment(\.screenActions, tab.actions)
         .sheet(item: $tab.presented) { route in
             NavigationStack {
-                route.screen.view
+                ScreenHostView(model: route.screen)
             }
+            .environment(\.screenActions, tab.actions)
         }
     }
 }

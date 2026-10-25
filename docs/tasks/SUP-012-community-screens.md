@@ -6,7 +6,7 @@ area: backend
 epic: EP-03
 depends_on: [SUP-008, SUP-010, SUP-011]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-012: Build Community home and group detail for each person

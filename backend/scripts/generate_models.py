@@ -6,7 +6,11 @@ Field names stay snake_case in the descriptions and become lower camel case
 properties, mapped back to the JSON names. Any JSON (a property with no type)
 is the app's `JSONValue` on iOS and `JsonElement` on Android; any JSON object
 (`"type": "object"` alone) is `JSONValue` and `JsonObject`. A `$ref` is the
-referenced type's name. Both decoders
+referenced type's name. A string `enum` is its own enum, named after the type
+and field (`NavigateAction.presentation` is `NavigateActionPresentation`). A
+union type is a Swift enum with one case per member plus `unknown`, and a
+Kotlin sealed interface its members implement plus `Unknown`; both decode on
+`type` and keep an unknown `type` as unknown (contract rule 3). Both decoders
 ignore unknown fields: Swift's `Decodable` does by default, and Android decodes
 with `ContractJson` (`ignoreUnknownKeys`)."""
 
@@ -26,15 +30,115 @@ def header(source: str) -> str:
     return f"// {MARKER} in /backend from contract/{source}. Do not edit.\n"
 
 
-def field_type(field: dict, types: dict, array: str) -> str:
+def pascal(name: str) -> str:
+    """`full_screen_cover` -> `FullScreenCover`."""
+    return "".join(part.capitalize() for part in name.split("_"))
+
+
+def enum_name(title: str, field_name: str) -> str:
+    return title + pascal(field_name)
+
+
+def field_type(field: dict, types: dict, array: str, enum: str = "") -> str:
     if field.get("type") == "array":
-        return array.format(field_type(field["items"], types, array))
+        return array.format(field_type(field["items"], types, array, enum))
     if "$ref" in field:
         return screens.ref_name(field["$ref"])
+    if "enum" in field:
+        return enum
     return types[field.get("type")]
 
 
-def swift(source: str, schema: dict) -> str:
+def enums(schema: dict) -> list[tuple[str, list[str]]]:
+    """Each enum field's generated name and values, in field order."""
+    found = []
+    for name, field in schema["properties"].items():
+        while field.get("type") == "array":
+            field = field["items"]
+        if "enum" in field:
+            found.append((enum_name(schema["title"], name), field["enum"]))
+    return found
+
+
+def swift_enum(name: str, values: list[str]) -> str:
+    out = f"\nenum {name}: String, {SWIFT_CONFORMANCES} {{\n"
+    for value in values:
+        case = names.identifier(value)
+        out += f"    case {case}\n" if case == value else f'    case {case} = "{value}"\n'
+    return out + "}\n"
+
+
+def kotlin_enum(name: str, values: list[str]) -> str:
+    out = f"\n@Serializable\nenum class {name} {{\n"
+    for value in values:
+        out += f'    @SerialName("{value}") {value.upper()},\n'
+    return out + "}\n"
+
+
+def swift_union(source: str, schema: dict, types: dict) -> str:
+    title, tags = schema["title"], screens.union_tags(schema, types)
+    out = header(source) + f"\n/// {schema['description']}\nenum {title}: {SWIFT_CONFORMANCES} {{\n"
+    for tag, member in tags.items():
+        out += f"    case {names.identifier(tag)}({member})\n"
+    out += "    /// A `type` this build does not know (contract rule 3).\n    case unknown(type: String?)\n"
+    out += "\n    private enum CodingKeys: String, CodingKey {\n        case type\n    }\n"
+    out += "\n    init(from decoder: any Decoder) throws {\n"
+    out += "        let type = try? decoder.container(keyedBy: CodingKeys.self).decodeIfPresent(String.self, forKey: .type)\n"
+    out += "        switch type {\n"
+    for tag, member in tags.items():
+        out += f'        case "{tag}": self = .{names.identifier(tag)}(try {member}(from: decoder))\n'
+    out += "        default: self = .unknown(type: type)\n        }\n    }\n"
+    out += "\n    func encode(to encoder: any Encoder) throws {\n        switch self {\n"
+    for tag in tags:
+        out += f"        case .{names.identifier(tag)}(let value): try value.encode(to: encoder)\n"
+    out += "        case .unknown(let type):\n"
+    out += "            var container = encoder.container(keyedBy: CodingKeys.self)\n"
+    out += "            try container.encodeIfPresent(type, forKey: .type)\n"
+    return out + "        }\n    }\n}\n"
+
+
+def kotlin_union(source: str, schema: dict, types: dict) -> str:
+    title, tags = schema["title"], screens.union_tags(schema, types)
+    imports = [
+        "kotlinx.serialization.KSerializer",
+        "kotlinx.serialization.Serializable",
+        "kotlinx.serialization.descriptors.SerialDescriptor",
+        "kotlinx.serialization.descriptors.buildClassSerialDescriptor",
+        "kotlinx.serialization.encoding.Decoder",
+        "kotlinx.serialization.encoding.Encoder",
+        "kotlinx.serialization.json.JsonDecoder",
+        "kotlinx.serialization.json.JsonObject",
+        "kotlinx.serialization.json.JsonPrimitive",
+        "kotlinx.serialization.json.contentOrNull",
+    ]
+    out = header(source) + "\npackage app.parkhill.contract\n\n"
+    out += "".join(f"import {i}\n" for i in sorted(imports))
+    out += f"\n/** {schema['description']} */\n@Serializable(with = {title}Serializer::class)\nsealed interface {title} {{\n"
+    out += "    /** A `type` this build does not know (contract rule 3). */\n"
+    out += f"    @Serializable\n    data class Unknown(val type: String? = null) : {title}\n}}\n"
+    out += f"\n/** Decodes {title} by its `type`; an unknown `type` is {title}.Unknown. */\n"
+    out += f"object {title}Serializer : KSerializer<{title}> {{\n"
+    out += f'    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("app.parkhill.contract.{title}")\n'
+    out += f"\n    override fun deserialize(decoder: Decoder): {title} {{\n"
+    out += "        val input = decoder as JsonDecoder\n        val element = input.decodeJsonElement()\n"
+    out += '        val type = ((element as? JsonObject)?.get("type") as? JsonPrimitive)?.contentOrNull\n'
+    out += "        return when (type) {\n"
+    for tag, member in tags.items():
+        out += f'            "{tag}" -> input.json.decodeFromJsonElement({member}.serializer(), element)\n'
+    out += f"            else -> {title}.Unknown(type)\n        }}\n    }}\n"
+    out += f"\n    override fun serialize(encoder: Encoder, value: {title}) {{\n        when (value) {{\n"
+    for member in tags.values():
+        out += f"            is {member} -> encoder.encodeSerializableValue({member}.serializer(), value)\n"
+    out += f"            is {title}.Unknown -> encoder.encodeSerializableValue({title}.Unknown.serializer(), value)\n"
+    return out + "        }\n    }\n}\n"
+
+
+def swift(source: str, schema: dict, types: dict | None = None) -> str:
+    if screens.is_union(schema):
+        return swift_union(source, schema, types or {})
+    if screens.is_alias(schema):
+        target = screens.ref_name(schema["$ref"])
+        return header(source) + f"\n/// {schema['description']}\ntypealias {schema['title']} = {target}\n"
     title, properties = schema["title"], schema["properties"]
     out = header(source) + f"\n/// {schema['description']}\n"
     if not properties:
@@ -44,19 +148,27 @@ def swift(source: str, schema: dict) -> str:
         optional = "" if name in schema["required"] else "?"
         if "description" in field:
             out += f"    /// {field['description']}\n"
-        out += f"    let {names.identifier(name)}: {field_type(field, SWIFT_TYPES, '[{}]')}{optional}\n"
+        kind = field_type(field, SWIFT_TYPES, "[{}]", enum_name(title, name))
+        out += f"    let {names.identifier(name)}: {kind}{optional}\n"
     out += "\n    enum CodingKeys: String, CodingKey {\n"
     for name in properties:
         swift_name = names.identifier(name)
         out += f"        case {swift_name}\n" if swift_name == name else f'        case {swift_name} = "{name}"\n'
-    return out + "    }\n}\n"
+    out += "    }\n}\n"
+    return out + "".join(swift_enum(name, values) for name, values in enums(schema))
 
 
-def kotlin(source: str, schema: dict) -> str:
+def kotlin(source: str, schema: dict, unions: dict | None = None, described_types: dict | None = None) -> str:
+    """`unions` maps a type name to the unions it is a member of."""
+    if screens.is_union(schema):
+        return kotlin_union(source, schema, described_types or {})
+    if screens.is_alias(schema):
+        target = screens.ref_name(schema["$ref"])
+        return header(source) + f"\npackage app.parkhill.contract\n\n/** {schema['description']} */\ntypealias {schema['title']} = {target}\n"
     title, properties = schema["title"], schema["properties"]
-    types = [field_type(f, KOTLIN_TYPES, "List<{}>") for f in properties.values()]
+    types = [field_type(f, KOTLIN_TYPES, "List<{}>", enum_name(title, n)) for n, f in properties.items()]
     imports = ["kotlinx.serialization.Serializable"]
-    if any(names.identifier(n) != n for n in properties):
+    if any(names.identifier(n) != n for n in properties) or enums(schema):
         imports.append("kotlinx.serialization.SerialName")
     for json_type in ("JsonElement", "JsonObject"):
         if any(json_type in t for t in types):
@@ -64,8 +176,10 @@ def kotlin(source: str, schema: dict) -> str:
     out = header(source) + "\npackage app.parkhill.contract\n\n"
     out += "".join(f"import {i}\n" for i in sorted(imports))
     out += f"\n/** {schema['description']} */\n@Serializable\n"
+    supertypes = (unions or {}).get(title, [])
+    inherits = f" : {', '.join(supertypes)}" if supertypes else ""
     if not properties:
-        return out + f"class {title}\n"
+        return out + f"class {title}{inherits}\n"
     out += f"data class {title}(\n"
     for (name, field), kind in zip(properties.items(), types):
         if "description" in field:
@@ -74,7 +188,8 @@ def kotlin(source: str, schema: dict) -> str:
         serial = "" if kotlin_name == name else f'@SerialName("{name}") '
         tail = "" if name in schema["required"] else "? = null"
         out += f"    {serial}val {kotlin_name}: {kind}{tail},\n"
-    return out + ")\n"
+    out += f"){inherits}\n"
+    return out + "".join(kotlin_enum(name, values) for name, values in enums(schema))
 
 
 def main() -> int:
@@ -87,11 +202,16 @@ def main() -> int:
     for path in names.GENERATED_PATH.iterdir():
         if path.suffix in (".swift", ".kt") and MARKER in path.read_text().partition("\n")[0]:
             path.unlink()
+    unions: dict[str, list[str]] = {}
+    for name, schema in types.items():
+        if screens.is_union(schema):
+            for member in screens.refs(schema):
+                unions.setdefault(member, []).append(name)
     sources = [(f"screens/{key}{screens.SUFFIX}", schema) for key, schema in described.items()]
     sources += [(f"types/{name}{screens.SUFFIX}", schema) for name, schema in types.items()]
     for source, schema in sources:
-        (names.GENERATED_PATH / f"{schema['title']}.swift").write_text(swift(source, schema))
-        (names.GENERATED_PATH / f"{schema['title']}.kt").write_text(kotlin(source, schema))
+        (names.GENERATED_PATH / f"{schema['title']}.swift").write_text(swift(source, schema, types))
+        (names.GENERATED_PATH / f"{schema['title']}.kt").write_text(kotlin(source, schema, unions, types))
     print(f"Wrote {len(described)} screen models and {len(types)} shared types, in Swift and Kotlin, in {names.GENERATED_PATH}")
     return 0
 

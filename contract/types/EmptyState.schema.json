@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyState",
+  "description": "A message shown in place of content, with no buttons.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "message"
+  ],
+  "additionalProperties": false
+}

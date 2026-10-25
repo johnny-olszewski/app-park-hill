@@ -35,6 +35,27 @@ struct MockBackendServiceTests {
         #expect(try await service.getScreen(key: "auth.sign_in", locale: "en") == expected("get_screen.auth.sign_in.json"))
     }
 
+    @Test func getScreenWithParamsReadsTheMockResponseForThoseParams() async throws {
+        let personaState = MockPersonaState()
+        personaState.current = "member_two"
+        let service = MockBackendService(responses: .bundled, personaState: personaState)
+        let groupID = "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+        let screen = try await service.getScreen(key: "community.group", locale: "en", params: ["group_id": .string(groupID)])
+        #expect(screen == (try expected("member_two/get_screen.community.group@group_id=\(groupID).json")))
+    }
+
+    @Test func getScreenWithParamsFallsBackToTheScreenAlone() async throws {
+        let service = MockBackendService(environment: .mock)
+        let screen = try await service.getScreen(key: "auth.sign_in", locale: "en", params: ["unused": .string("x")])
+        #expect(screen == (try expected("get_screen.auth.sign_in.json")))
+    }
+
+    @Test func mockResponseNamesSortParamsByName() {
+        #expect(MockResponseStore.name("get_screen.a", params: [:]) == "get_screen.a")
+        #expect(MockResponseStore.name("get_screen.a", params: ["z": .number(2), "b": .string("x")]) == "get_screen.a@b=x&z=2")
+        #expect(MockResponseStore.name("get_screen.a", params: ["b": .bool(true)]) == "get_screen.a")
+    }
+
     @Test func unknownScreenKeyThrowsUnknownScreen() async {
         let service = MockBackendService(environment: .mock)
         await #expect(throws: BackendError.unknownScreen) {

@@ -25,12 +25,20 @@ final class ShellCoordinator {
     private let registry: ScreenRegistry
     private let cache: TabsCache
     private let locale: () -> String
+    private let screens: ScreenContext
 
-    init(backend: any BackendService, registry: ScreenRegistry, cache: TabsCache, locale: @escaping () -> String) {
+    init(
+        backend: any BackendService,
+        registry: ScreenRegistry,
+        cache: TabsCache,
+        screenCache: ScreenCache = .standard,
+        locale: @escaping () -> String
+    ) {
         self.backend = backend
         self.registry = registry
         self.cache = cache
         self.locale = locale
+        screens = ScreenContext(backend: backend, registry: registry, cache: screenCache, locale: locale)
     }
 
     /// Fetches the tabs. Also the foreground refresh: a failure keeps the tabs
@@ -73,8 +81,8 @@ final class ShellCoordinator {
     }
 
     /// Shows the first five tabs whose root screens this build registers,
-    /// keeping each unchanged tab's coordinator and the selected tab. False
-    /// when no tab can be shown.
+    /// keeping each tab's coordinator and stack while its root screen key
+    /// stays the same, and the selected tab. False when no tab can be shown.
     private func show(_ response: TabsResponse) -> Bool {
         if response.tabs.count > Self.maximumTabs {
             let dropped = response.tabs.dropFirst(Self.maximumTabs).map(\.id).joined(separator: ", ")
@@ -82,11 +90,13 @@ final class ShellCoordinator {
         }
         var shown: [TabCoordinator] = []
         for item in response.tabs.prefix(Self.maximumTabs) {
-            if let existing = tabs.first(where: { $0.id == item.id && $0.root.envelope == item.screen }) {
+            if let existing = tabs.first(where: { $0.id == item.id && $0.root.key == item.screen.key }) {
                 existing.update(from: item)
                 shown.append(existing)
-            } else if let root = registry.resolve(item.screen) {
-                shown.append(TabCoordinator(item: item, root: root, registry: registry))
+            } else if registry.isRegistered(item.screen.key) {
+                // A root whose data cannot be shown falls back in its tab,
+                // to its cached copy or the error screen.
+                shown.append(TabCoordinator(item: item, context: screens))
             } else {
                 Logger.navigation.error("Dropped tab \(item.id, privacy: .public): its screen is not registered")
             }

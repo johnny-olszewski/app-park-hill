@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CommunityGroupData",
+  "description": "`community.group` data: one group's detail (specs/COMMUNITY.md 4.3).",
+  "$ref": "../types/GroupDetail.schema.json"
+}

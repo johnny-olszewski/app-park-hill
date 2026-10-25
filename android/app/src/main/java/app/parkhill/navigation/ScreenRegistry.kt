@@ -16,16 +16,28 @@ import kotlinx.serialization.json.JsonObject
  * screens. Each flavor's binding decides which screen sets are registered.
  */
 class ScreenRegistry(private val tracker: ScreenTracker? = null) {
-    private val factories = mutableMapOf<String, (JsonObject) -> (@Composable () -> Unit)>()
+    private val factories = mutableMapOf<String, (JsonObject) -> Pair<String?, @Composable () -> Unit>>()
     private val nextId = AtomicLong()
 
-    /** Registers `key`; its data is decoded with `serializer` when an envelope is resolved. */
-    fun <Data> register(key: String, serializer: KSerializer<Data>, screen: @Composable (Data) -> Unit) {
+    /**
+     * Registers `key`; its data is decoded with `serializer` when an envelope
+     * is resolved. `title`, when given, is the title a pushed screen shows in
+     * the top app bar. Data that decodes but that the screen cannot show
+     * (`isUsable` false) does not resolve, like data that does not decode.
+     */
+    fun <Data> register(
+        key: String,
+        serializer: KSerializer<Data>,
+        title: ((Data) -> String)? = null,
+        isUsable: (Data) -> Boolean = { true },
+        screen: @Composable (Data) -> Unit,
+    ) {
         require(key !in factories) { "Screen $key registered twice" }
         factories[key] = { json ->
             val data = ContractJson.decodeFromJsonElement(serializer, json)
+            require(isUsable(data)) { "Screen $key cannot show this data" }
             val content: @Composable () -> Unit = { screen(data) }
-            content
+            title?.invoke(data) to content
         }
     }
 
@@ -41,12 +53,13 @@ class ScreenRegistry(private val tracker: ScreenTracker? = null) {
             return null
         }
         return try {
-            ResolvedScreen(envelope, tracked(factory(envelope.data), envelope))
+            val (title, content) = factory(envelope.data)
+            ResolvedScreen(envelope, tracked(content, envelope), title)
         } catch (error: SerializationException) {
             Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
             null
         } catch (error: IllegalArgumentException) {
-            Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
+            Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model or cannot be shown")
             null
         }
     }
@@ -69,7 +82,7 @@ class ScreenRegistry(private val tracker: ScreenTracker? = null) {
     }
 }
 
-/** A screen ready to show, with the envelope it was built from. */
-class ResolvedScreen(val envelope: ScreenEnvelope, val content: @Composable () -> Unit) {
+/** A screen ready to show, with the envelope it was built from and its title, if it has one. */
+class ResolvedScreen(val envelope: ScreenEnvelope, val content: @Composable () -> Unit, val title: String? = null) {
     val key: String get() = envelope.key
 }

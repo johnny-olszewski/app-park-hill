@@ -2,6 +2,7 @@ package app.parkhill.navigation
 
 import android.util.Log
 import app.parkhill.cache.EntryCache
+import app.parkhill.cache.ScreenCache
 import app.parkhill.cache.TabsCache
 import app.parkhill.contract.RpcFunction
 import app.parkhill.services.auth.AuthService
@@ -53,6 +54,7 @@ class AppCoordinator(
     private val scope: CoroutineScope,
     private val locale: () -> String,
     private val tabsCache: TabsCache,
+    private val screenCache: ScreenCache,
 ) {
     private val _state = MutableStateFlow(AppState())
     val state: StateFlow<AppState> = _state.asStateFlow()
@@ -134,7 +136,7 @@ class AppCoordinator(
         }
     }
 
-    private fun makeShell() = ShellCoordinator(backend, registry, tabsCache, locale)
+    private fun makeShell() = ShellCoordinator(backend, registry, tabsCache, screenCache, locale)
 
     private fun observeAuth() {
         authObservation?.cancel()

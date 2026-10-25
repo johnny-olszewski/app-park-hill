@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-022]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-011: Describe actions and the shared group types in the contract

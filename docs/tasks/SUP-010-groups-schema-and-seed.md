@@ -6,7 +6,7 @@ area: backend
 epic: EP-03
 depends_on: [SUP-009]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-010: Add the groups schema, server-side rules and group personas

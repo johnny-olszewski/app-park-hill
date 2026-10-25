@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GroupDetail",
+  "description": "A group's details and members (specs/COMMUNITY.md 5.1).",
+  "type": "object",
+  "properties": {
+    "group_id": {
+      "type": "string"
+    },
+    "title": {
+      "description": "The group's name.",
+      "type": "string"
+    },
+    "description": {
+      "description": "Empty when the group has none.",
+      "type": "string"
+    },
+    "meeting": {
+      "description": "One line, for example \"Tuesdays · 7:00 PM\".",
+      "type": "string"
+    },
+    "location": {
+      "description": "Empty when the group has none.",
+      "type": "string"
+    },
+    "leaders_line": {
+      "description": "For example \"Leaders: Jordan Lee\" or \"Leaders: none yet\".",
+      "type": "string"
+    },
+    "members_title": {
+      "description": "The member list's heading.",
+      "type": "string"
+    },
+    "members": {
+      "type": "array",
+      "items": {
+        "$ref": "MemberRow.schema.json"
+      }
+    }
+  },
+  "required": [
+    "group_id",
+    "title",
+    "description",
+    "meeting",
+    "location",
+    "leaders_line",
+    "members_title",
+    "members"
+  ],
+  "additionalProperties": false
+}

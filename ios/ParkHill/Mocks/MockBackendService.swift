@@ -2,7 +2,8 @@ import Foundation
 
 /// Mock `BackendService`: answers from mock responses and makes no network
 /// calls. The entry is the recorded `get_entry.json` (the production
-/// `auth.sign_in`); `get_screen` reads `get_screen.<key>.json`; `get_tabs` and
+/// `auth.sign_in`); `get_screen` reads `get_screen.<key>@<params>.json`, else
+/// `get_screen.<key>.json`; `get_tabs` and
 /// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
 struct MockBackendService: BackendService {
     private let responses: MockResponseStore
@@ -22,7 +23,8 @@ struct MockBackendService: BackendService {
     }
 
     func getScreen(key: String, locale: String, params: [String: JSONValue]) async throws(BackendError) -> ScreenEnvelope {
-        return try decode("\(RPCFunction.getScreen.rawValue).\(key)", missing: .unknownScreen)
+        let name = "\(RPCFunction.getScreen.rawValue).\(key)"
+        return try decode([MockResponseStore.name(name, params: params), name], missing: .unknownScreen)
     }
 
     func getTabs(locale: String) async throws(BackendError) -> TabsResponse {
@@ -36,7 +38,12 @@ struct MockBackendService: BackendService {
     }
 
     private func decode<Response: Decodable>(_ name: String, missing: BackendError) throws(BackendError) -> Response {
-        guard let data = responses.data(named: name, persona: personaState.current) else {
+        try decode([name], missing: missing)
+    }
+
+    /// Decodes the first of `names` that has a mock response.
+    private func decode<Response: Decodable>(_ names: [String], missing: BackendError) throws(BackendError) -> Response {
+        guard let data = names.lazy.compactMap({ responses.data(named: $0, persona: personaState.current) }).first else {
             throw missing
         }
         do {

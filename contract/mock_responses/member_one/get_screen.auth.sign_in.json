@@ -1,0 +1,12 @@
+{
+  "key": "auth.sign_in",
+  "data": {
+    "title": "Sign in",
+    "email_label": "Email",
+    "submit_label": "Sign in",
+    "password_label": "Password",
+    "secondary_actions": [],
+    "session_ended_message": "You've been signed out. Please sign in again.",
+    "cannot_connect_message": "Can't connect. Check your connection and try again."
+  }
+}

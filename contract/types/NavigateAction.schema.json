@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NavigateAction",
+  "description": "Opens a backend screen: fetched with get_screen(screen_key, params) and shown as presentation says.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Always `navigate`.",
+      "type": "string",
+      "enum": [
+        "navigate"
+      ]
+    },
+    "screen_key": {
+      "description": "The screen to open.",
+      "type": "string"
+    },
+    "params": {
+      "description": "Passed to get_screen as p_params.",
+      "type": "object"
+    },
+    "presentation": {
+      "description": "How to show the screen, mapped to each platform's equivalent.",
+      "type": "string",
+      "enum": [
+        "push"
+      ]
+    },
+    "role": {
+      "description": "A meaning each platform styles its own way.",
+      "type": "string",
+      "enum": [
+        "destructive"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "screen_key",
+    "params",
+    "presentation"
+  ],
+  "additionalProperties": false
+}

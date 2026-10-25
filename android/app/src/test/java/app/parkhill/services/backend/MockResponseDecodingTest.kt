@@ -1,5 +1,6 @@
 package app.parkhill.services.backend
 
+import app.parkhill.contract.CommunityGroupData
 import app.parkhill.contract.Profile
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.SignInFailure
@@ -65,6 +66,17 @@ class MockResponseDecodingTest {
             val response = ContractJson.decodeFromString(TabsResponse.serializer(), file.readText())
             assertTrue("${file.path} has no tabs", response.tabs.isNotEmpty())
             assertTrue(response.tabs.all { it.title.isNotEmpty() && it.iconKey.isNotEmpty() })
+        }
+    }
+
+    @Test
+    fun everyGroupDetailMockResponseDecodes() {
+        val files = root.walkTopDown().filter { it.isFile && it.name.startsWith("get_screen.community.group@") }.toList()
+        assertTrue("no community.group mock responses found", files.isNotEmpty())
+        for (file in files) {
+            val envelope = ContractJson.decodeFromString(ScreenEnvelope.serializer(), file.readText())
+            val detail = ContractJson.decodeFromJsonElement(CommunityGroupData.serializer(), envelope.data)
+            assertTrue(file.name, detail.title.isNotEmpty() && detail.members.isNotEmpty())
         }
     }
 

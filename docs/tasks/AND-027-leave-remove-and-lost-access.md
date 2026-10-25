@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-026, SUP-014]
 paired_with: [IOS-026]
-status: Draft
+status: Ready
 ---
 
 # AND-027: Handle call actions and lost access, and add leave and swipe to remove on Android

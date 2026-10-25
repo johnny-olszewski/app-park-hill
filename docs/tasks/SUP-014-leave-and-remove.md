@@ -19,7 +19,9 @@ Members need to leave a group and leaders need to remove someone quickly, in one
 
 - Contract: `CallAction` (`type` `call`, `function`, `params`, optional `confirm` with `title`, `message`, `confirm_label`, `cancel_label`, `on_success` enum `refresh`, `dismiss`, `none`, optional `role`) joins the `Action` union; `ActionButton` (`label`, `action`) in `contract/types/`. Documented in `contract/README.md` (`specs/COMMUNITY.md` 3.2).
 - `MemberRow` gains optional `remove` (`ActionButton`, destructive, with confirmation, `on_success` `refresh`); `GroupDetail` gains optional `leave` (`ActionButton`, destructive, with confirmation, `on_success` `dismiss`).
-- `remove_member(p_group_id, p_user_id)` and `leave_group(p_group_id)`; leaving ends membership and leadership and may leave a group leaderless.
+- `remove_member(p_group_id, p_user_id, p_locale)` and `leave_group(p_group_id, p_locale)`; leaving ends membership and leadership and may leave a group leaderless. Clients add `p_locale` to every `call`'s params, so the backend leaves it out of `params`. Each returns `{}` on success; clients do not decode the body (EP-03.E describes the result when it adds `then`). Removing someone who is no longer a member is refused with `action_refused`.
+- Wording (migration strings): Leave is "Leave group", confirming with "Leave {group}?", "You'll no longer see this group or its members.", "Leave", "Cancel". Remove is "Remove", confirming with "Remove {name}?", "{name} will no longer be in {group}.", "Remove", "Cancel". A refused call says "You can't make this change anymore."
+- The commit that adds `CallAction` to the `Action` union also adds a `call` case to both clients' action switches that treats it as not yet tappable and logs it, so every commit builds; IOS-026 and AND-027 replace it.
 - Error `action_refused` with the backend's localized message in `details`, for a call the caller may no longer make; documented with `screen_unavailable`.
 - `community.group` refused after leaving carries the message "You're no longer in this group".
 - Add both functions to `contract/names.json`; strings in migrations; mock responses regenerated.

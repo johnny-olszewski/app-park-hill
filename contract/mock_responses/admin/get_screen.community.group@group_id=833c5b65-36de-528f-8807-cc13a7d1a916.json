@@ -6,51 +6,241 @@
     "members": [
       {
         "title": "Chloe Dubois",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Chloe Dubois?",
+              "message": "Chloe Dubois will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
         "is_leader": true
       },
       {
         "title": "Noah Patel",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Noah Patel?",
+              "message": "Noah Patel will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
         "is_leader": true
       },
       {
         "title": "Abigail Foster",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Abigail Foster?",
+              "message": "Abigail Foster will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
         "is_leader": false
       },
       {
         "title": "Fatima Rahman",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "302ad677-0ae5-53c2-9092-1a9772129c94",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Fatima Rahman?",
+              "message": "Fatima Rahman will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "302ad677-0ae5-53c2-9092-1a9772129c94",
         "is_leader": false
       },
       {
         "title": "Isabella Rossi",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "aa011d59-1919-5c71-adbc-7f3f00ebf10d",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Isabella Rossi?",
+              "message": "Isabella Rossi will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "aa011d59-1919-5c71-adbc-7f3f00ebf10d",
         "is_leader": false
       },
       {
         "title": "Luke Anderson",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "26642996-8fed-5d6d-9f47-68390279d999",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Luke Anderson?",
+              "message": "Luke Anderson will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "26642996-8fed-5d6d-9f47-68390279d999",
         "is_leader": false
       },
       {
         "title": "Micah Johnson",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "0ac0e727-0f58-50f2-ae83-7f39e0d7fd35",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Micah Johnson?",
+              "message": "Micah Johnson will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "0ac0e727-0f58-50f2-ae83-7f39e0d7fd35",
         "is_leader": false
       },
       {
         "title": "Owen Murphy",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "9918d3d6-f50e-50f6-8c2d-acc7a29b6b37",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Owen Murphy?",
+              "message": "Owen Murphy will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "9918d3d6-f50e-50f6-8c2d-acc7a29b6b37",
         "is_leader": false
       },
       {
         "title": "Victor Hernandez",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Victor Hernandez?",
+              "message": "Victor Hernandez will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
         "is_leader": false
       },
       {
         "title": "Zoe Laurent",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "ca862a89-4cb8-5f29-acf1-970a55a41f8e",
+              "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+            },
+            "confirm": {
+              "title": "Remove Zoe Laurent?",
+              "message": "Zoe Laurent will no longer be in Normal Heights Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "ca862a89-4cb8-5f29-acf1-970a55a41f8e",
         "is_leader": false
       }

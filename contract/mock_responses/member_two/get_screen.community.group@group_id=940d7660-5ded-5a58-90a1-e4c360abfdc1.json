@@ -1,6 +1,24 @@
 {
   "key": "community.group",
   "data": {
+    "leave": {
+      "label": "Leave group",
+      "action": {
+        "role": "destructive",
+        "type": "call",
+        "params": {
+          "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+        },
+        "confirm": {
+          "title": "Leave Young Families?",
+          "message": "You'll no longer see this group or its members.",
+          "cancel_label": "Cancel",
+          "confirm_label": "Leave"
+        },
+        "function": "leave_group",
+        "on_success": "dismiss"
+      }
+    },
     "title": "Young Families",
     "meeting": "Sundays · 4:00 PM",
     "members": [
@@ -17,36 +35,169 @@
       },
       {
         "title": "Caleb Wright",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "6338e781-f31b-51ac-a4c9-def6988dbc68",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Caleb Wright?",
+              "message": "Caleb Wright will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "6338e781-f31b-51ac-a4c9-def6988dbc68",
         "is_leader": false
       },
       {
         "title": "James Okafor",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "f7cca5d6-22cb-5a92-bf6a-999b1e9cd86f",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove James Okafor?",
+              "message": "James Okafor will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "f7cca5d6-22cb-5a92-bf6a-999b1e9cd86f",
         "is_leader": false
       },
       {
         "title": "Kevin Tran",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "560616ef-26c3-5d09-bee3-ca49afa1b0b5",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Kevin Tran?",
+              "message": "Kevin Tran will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "560616ef-26c3-5d09-bee3-ca49afa1b0b5",
         "is_leader": false
       },
       {
         "title": "Lauren Mitchell",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "ed1a627d-0bcd-5559-9657-f7c5f4d3e189",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Lauren Mitchell?",
+              "message": "Lauren Mitchell will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "ed1a627d-0bcd-5559-9657-f7c5f4d3e189",
         "is_leader": false
       },
       {
         "title": "Naomi Fischer",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "f78bbb09-d693-5500-9288-3f0a361820c2",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Naomi Fischer?",
+              "message": "Naomi Fischer will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "f78bbb09-d693-5500-9288-3f0a361820c2",
         "is_leader": false
       },
       {
         "title": "Sofia Alvarez",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "14faa8ac-6d79-5ea2-9161-84ba47be7714",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Sofia Alvarez?",
+              "message": "Sofia Alvarez will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "14faa8ac-6d79-5ea2-9161-84ba47be7714",
         "is_leader": false
       },
       {
         "title": "Tyler Grant",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "408644ee-ed2f-56dc-ac3a-8080ff2c0fd6",
+              "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+            },
+            "confirm": {
+              "title": "Remove Tyler Grant?",
+              "message": "Tyler Grant will no longer be in Young Families.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "408644ee-ed2f-56dc-ac3a-8080ff2c0fd6",
         "is_leader": false
       }

@@ -133,7 +133,7 @@ select is(
   'Leaders: none yet', 'a leaderless group says so'
 );
 select is(
-  (select (g - 'group_id' - 'members') || jsonb_build_object(
+  (select (g - 'group_id' - 'members' - 'leave') || jsonb_build_object(
      'leaders', (select jsonb_agg(m ->> 'title' order by o) from jsonb_array_elements(g -> 'members') with ordinality e(m, o) where (m ->> 'is_leader')::boolean),
      'you', (select jsonb_agg(m ->> 'title') from jsonb_array_elements(g -> 'members') m where m ->> 'note' = 'You'),
      'leaders_first', (select bool_and(not (m ->> 'is_leader')::boolean or o <= 2) from jsonb_array_elements(g -> 'members') with ordinality e(m, o)),

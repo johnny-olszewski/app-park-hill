@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-012]
 paired_with: []
-status: Ready
+status: Done
 ---
 
 # SUP-014: Add call actions, leaving a group and removing a member

@@ -116,8 +116,9 @@ Shared types for Community screens, all text backend formatted and localized:
 |---|---|
 | `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), optional `badge_tone` (`attention`, for example on "No leader"), `action` |
 | `ToolbarItem` | `id`, `label` (also the accessibility label of an icon button), `icon_key` (a bundled icon), `action` |
-| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members` |
-| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader` |
+| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members) |
+| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove) |
+| `ActionButton` | `label`, `action`; sent only to people who may use it |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
 | `EmptyState` | `title`, `message`; shown with no buttons |
 

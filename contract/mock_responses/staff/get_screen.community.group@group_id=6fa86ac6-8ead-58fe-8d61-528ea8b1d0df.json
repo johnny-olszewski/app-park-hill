@@ -6,36 +6,169 @@
     "members": [
       {
         "title": "Josiah Banks",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Josiah Banks?",
+              "message": "Josiah Banks will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
         "is_leader": true
       },
       {
         "title": "Benjamin Ford",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "2be4e812-0d16-5d31-b899-8aaa925f4647",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Benjamin Ford?",
+              "message": "Benjamin Ford will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "2be4e812-0d16-5d31-b899-8aaa925f4647",
         "is_leader": false
       },
       {
         "title": "Clara Weiss",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Clara Weiss?",
+              "message": "Clara Weiss will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
         "is_leader": false
       },
       {
         "title": "Irene Costa",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "51c9e3a6-cd4d-59f8-a654-860af66a0369",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Irene Costa?",
+              "message": "Irene Costa will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "51c9e3a6-cd4d-59f8-a654-860af66a0369",
         "is_leader": false
       },
       {
         "title": "Philip Mendez",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "8c472eda-d650-52cf-9184-2db9c7cb9e60",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Philip Mendez?",
+              "message": "Philip Mendez will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "8c472eda-d650-52cf-9184-2db9c7cb9e60",
         "is_leader": false
       },
       {
         "title": "Silas Turner",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "1c7426f5-a982-5903-a41d-f823d781d9f6",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Silas Turner?",
+              "message": "Silas Turner will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "1c7426f5-a982-5903-a41d-f823d781d9f6",
         "is_leader": false
       },
       {
         "title": "Vera Ivanova",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "6943e821-0f55-5b70-b457-67d8f3ead096",
+              "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+            },
+            "confirm": {
+              "title": "Remove Vera Ivanova?",
+              "message": "Vera Ivanova will no longer be in South Park Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "6943e821-0f55-5b70-b457-67d8f3ead096",
         "is_leader": false
       }

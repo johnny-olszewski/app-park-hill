@@ -1,6 +1,24 @@
 {
   "key": "community.group",
   "data": {
+    "leave": {
+      "label": "Leave group",
+      "action": {
+        "role": "destructive",
+        "type": "call",
+        "params": {
+          "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+        },
+        "confirm": {
+          "title": "Leave Tuesday Night Group?",
+          "message": "You'll no longer see this group or its members.",
+          "cancel_label": "Cancel",
+          "confirm_label": "Leave"
+        },
+        "function": "leave_group",
+        "on_success": "dismiss"
+      }
+    },
     "title": "Tuesday Night Group",
     "meeting": "Tuesdays · 7:00 PM",
     "members": [

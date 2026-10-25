@@ -6,26 +6,121 @@
     "members": [
       {
         "title": "Andre Thompson",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "7ea18780-b3bb-538f-9a98-c67b4000cdfc",
+              "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+            },
+            "confirm": {
+              "title": "Remove Andre Thompson?",
+              "message": "Andre Thompson will no longer be in Point Loma Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "7ea18780-b3bb-538f-9a98-c67b4000cdfc",
         "is_leader": false
       },
       {
         "title": "Ethan Walsh",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "35c64e2d-2825-583f-94d2-11b1077d40e6",
+              "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+            },
+            "confirm": {
+              "title": "Remove Ethan Walsh?",
+              "message": "Ethan Walsh will no longer be in Point Loma Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "35c64e2d-2825-583f-94d2-11b1077d40e6",
         "is_leader": false
       },
       {
         "title": "Julia Santos",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "69f0760e-7d8e-538d-bc61-394ff38cda3c",
+              "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+            },
+            "confirm": {
+              "title": "Remove Julia Santos?",
+              "message": "Julia Santos will no longer be in Point Loma Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "69f0760e-7d8e-538d-bc61-394ff38cda3c",
         "is_leader": false
       },
       {
         "title": "Leah Goldberg",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "023aa20f-cf34-5316-934b-fac5c95d6330",
+              "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+            },
+            "confirm": {
+              "title": "Remove Leah Goldberg?",
+              "message": "Leah Goldberg will no longer be in Point Loma Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "023aa20f-cf34-5316-934b-fac5c95d6330",
         "is_leader": false
       },
       {
         "title": "Mei Chen",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "05b05497-f377-52c5-ba07-449728c897fd",
+              "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+            },
+            "confirm": {
+              "title": "Remove Mei Chen?",
+              "message": "Mei Chen will no longer be in Point Loma Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "05b05497-f377-52c5-ba07-449728c897fd",
         "is_leader": false
       }

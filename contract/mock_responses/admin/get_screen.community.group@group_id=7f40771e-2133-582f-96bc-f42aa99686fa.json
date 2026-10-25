@@ -1,6 +1,24 @@
 {
   "key": "community.group",
   "data": {
+    "leave": {
+      "label": "Leave group",
+      "action": {
+        "role": "destructive",
+        "type": "call",
+        "params": {
+          "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+        },
+        "confirm": {
+          "title": "Leave Mission Hills Group?",
+          "message": "You'll no longer see this group or its members.",
+          "cancel_label": "Cancel",
+          "confirm_label": "Leave"
+        },
+        "function": "leave_group",
+        "on_success": "dismiss"
+      }
+    },
     "title": "Mission Hills Group",
     "meeting": "Thursdays · 6:30 PM",
     "members": [
@@ -12,31 +30,145 @@
       },
       {
         "title": "David Nguyen",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "a6bf2350-36f8-500e-a836-87c01b165be8",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove David Nguyen?",
+              "message": "David Nguyen will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "a6bf2350-36f8-500e-a836-87c01b165be8",
         "is_leader": false
       },
       {
         "title": "Elena Petrova",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "6ef074e8-a26e-5777-ab0a-4488e65c9656",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove Elena Petrova?",
+              "message": "Elena Petrova will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "6ef074e8-a26e-5777-ab0a-4488e65c9656",
         "is_leader": false
       },
       {
         "title": "Hannah Brooks",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "e9040602-cc31-5561-906f-340653a133c6",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove Hannah Brooks?",
+              "message": "Hannah Brooks will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "e9040602-cc31-5561-906f-340653a133c6",
         "is_leader": false
       },
       {
         "title": "Isaac Morales",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "67e1302f-d65d-50b9-b96b-2cadb6109506",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove Isaac Morales?",
+              "message": "Isaac Morales will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "67e1302f-d65d-50b9-b96b-2cadb6109506",
         "is_leader": false
       },
       {
         "title": "Marcus Reed",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b54ca79b-4f44-5f67-b28a-1854665f7dd5",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove Marcus Reed?",
+              "message": "Marcus Reed will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b54ca79b-4f44-5f67-b28a-1854665f7dd5",
         "is_leader": false
       },
       {
         "title": "Olivia Bennett",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "c57b9adf-ff84-5463-ba75-14d631d3d247",
+              "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+            },
+            "confirm": {
+              "title": "Remove Olivia Bennett?",
+              "message": "Olivia Bennett will no longer be in Mission Hills Group.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "c57b9adf-ff84-5463-ba75-14d631d3d247",
         "is_leader": false
       }

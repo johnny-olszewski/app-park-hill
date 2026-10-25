@@ -6,71 +6,337 @@
     "members": [
       {
         "title": "Anna Yamamoto",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b92d641b-2553-59a1-9348-24de0a126694",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Anna Yamamoto?",
+              "message": "Anna Yamamoto will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b92d641b-2553-59a1-9348-24de0a126694",
         "is_leader": true
       },
       {
         "title": "Joel Ramirez",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "51560e1f-9011-54c3-96a8-a90ab629f3ca",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Joel Ramirez?",
+              "message": "Joel Ramirez will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "51560e1f-9011-54c3-96a8-a90ab629f3ca",
         "is_leader": true
       },
       {
         "title": "Adam Sokolov",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "fe1d6390-d2da-53d0-983e-a5c16d0decc7",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Adam Sokolov?",
+              "message": "Adam Sokolov will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "fe1d6390-d2da-53d0-983e-a5c16d0decc7",
         "is_leader": false
       },
       {
         "title": "Christopher Hale",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "00d3726e-bb06-5137-bf18-a8e9aec47fc9",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Christopher Hale?",
+              "message": "Christopher Hale will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "00d3726e-bb06-5137-bf18-a8e9aec47fc9",
         "is_leader": false
       },
       {
         "title": "Deborah Wu",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "8ed52264-6c91-506b-bc63-116173ce4d41",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Deborah Wu?",
+              "message": "Deborah Wu will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "8ed52264-6c91-506b-bc63-116173ce4d41",
         "is_leader": false
       },
       {
         "title": "Eva Horvath",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "48915778-8790-5db9-8066-45c40c1141b8",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Eva Horvath?",
+              "message": "Eva Horvath will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "48915778-8790-5db9-8066-45c40c1141b8",
         "is_leader": false
       },
       {
         "title": "Lily Nakamura",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "5e5e18ac-9120-5292-9b6d-9bd123472b80",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Lily Nakamura?",
+              "message": "Lily Nakamura will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "5e5e18ac-9120-5292-9b6d-9bd123472b80",
         "is_leader": false
       },
       {
         "title": "Lucia Ferreira",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "e0b975bd-9687-5673-9f97-26a6450a7c14",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Lucia Ferreira?",
+              "message": "Lucia Ferreira will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "e0b975bd-9687-5673-9f97-26a6450a7c14",
         "is_leader": false
       },
       {
         "title": "Martha Quinn",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b01917c9-9cd5-5f9f-a540-1b2ad0d44f80",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Martha Quinn?",
+              "message": "Martha Quinn will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b01917c9-9cd5-5f9f-a540-1b2ad0d44f80",
         "is_leader": false
       },
       {
         "title": "Michael O'Brien",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "7d166e12-aff9-5859-9bdb-49232dfd4060",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Michael O'Brien?",
+              "message": "Michael O'Brien will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "7d166e12-aff9-5859-9bdb-49232dfd4060",
         "is_leader": false
       },
       {
         "title": "Miriam Levy",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "6dd6533b-1f5f-5270-8c48-4a98e52f8fcf",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Miriam Levy?",
+              "message": "Miriam Levy will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "6dd6533b-1f5f-5270-8c48-4a98e52f8fcf",
         "is_leader": false
       },
       {
         "title": "Paul Henderson",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "52ca675d-0091-5a4d-b33b-aef327ec69a0",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Paul Henderson?",
+              "message": "Paul Henderson will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "52ca675d-0091-5a4d-b33b-aef327ec69a0",
         "is_leader": false
       },
       {
         "title": "Stephen Clarke",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "4951173b-ebb1-55af-b0ef-7631104052bf",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Stephen Clarke?",
+              "message": "Stephen Clarke will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "4951173b-ebb1-55af-b0ef-7631104052bf",
         "is_leader": false
       },
       {
         "title": "Timothy Ward",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "1147adbc-c302-5c08-9593-eae8a0937433",
+              "p_group_id": "b3498332-6110-5058-b0f3-ccaf9900b056"
+            },
+            "confirm": {
+              "title": "Remove Timothy Ward?",
+              "message": "Timothy Ward will no longer be in College and Young Adults.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "1147adbc-c302-5c08-9593-eae8a0937433",
         "is_leader": false
       }

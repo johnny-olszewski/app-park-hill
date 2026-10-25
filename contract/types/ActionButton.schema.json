@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ActionButton",
+  "description": "A button the backend sends only to people who may use it: its text and what tapping it does.",
+  "type": "object",
+  "properties": {
+    "label": {
+      "description": "The button's text, and its accessibility label.",
+      "type": "string"
+    },
+    "action": {
+      "$ref": "Action.schema.json"
+    }
+  },
+  "required": [
+    "label",
+    "action"
+  ],
+  "additionalProperties": false
+}

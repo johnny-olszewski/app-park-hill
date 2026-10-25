@@ -22,4 +22,6 @@ data class GroupDetail(
     /** The member list's heading. */
     @SerialName("members_title") val membersTitle: String,
     val members: List<MemberRow>,
+    /** Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`. */
+    val leave: ActionButton? = null,
 )

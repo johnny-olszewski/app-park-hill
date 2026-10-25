@@ -1,18 +1,20 @@
--- Leaving a group and removing a member (SUP-014 AC2 to AC4, AC7): one
+-- Leaving a group and removing a member (SUP-014 AC1 to AC5, AC7): one
 -- allowed and one refused test for "Leave a group" and groups.remove_member.
 begin;
 
-select plan(19);
+select plan(27);
 
 create temporary table ids as
 select
   (select id from public.groups where name = 'Tuesday Night Group') as tuesday,
   (select id from public.groups where name = 'Young Families') as families,
+  (select id from public.groups where name = 'Mission Hills Group') as mission,
   (select id from public.groups where name = 'Point Loma Group') as point_loma,
   (select id from auth.users where email = 'leader@parkhill.test') as leader,
   (select id from auth.users where email = 'member.one@parkhill.test') as member_one,
   (select id from auth.users where email = 'member.two@parkhill.test') as member_two,
   (select id from auth.users where email = 'staff@parkhill.test') as staff,
+  (select id from auth.users where email = 'admin@parkhill.test') as admin,
   (select id from auth.users where email = 'attendee@parkhill.test') as attendee,
   (select id from auth.users where email = 'disabled@parkhill.test') as disabled,
   (select id from public.profiles where display_name = 'Jordan Lee') as jordan,
@@ -73,6 +75,79 @@ create function pg_temp.leave(p_group uuid)
 returns text
 language sql
 as $$ select format('select public.leave_group(%L, ''en'')', p_group) $$;
+
+-- A group's detail as p_user sees it.
+create function pg_temp.detail(p_user uuid, p_group uuid)
+returns jsonb
+language sql
+as $$ select pg_temp.as_user(p_user, format($q$ select public.get_screen('community.group', 'en', '{"group_id": "%s"}') -> 'data' $q$, p_group)) $$;
+
+-- Who carries a remove button in p_user's view of p_group.
+create function pg_temp.removable(p_user uuid, p_group uuid)
+returns text[]
+language sql
+as $$
+  select coalesce(array_agg(m ->> 'title' order by m ->> 'title') filter (where m ? 'remove'), '{}')
+  from jsonb_array_elements(pg_temp.detail(p_user, p_group) -> 'members') m
+$$;
+
+-- AC1: each button only for people who may use it.
+select is(
+  pg_temp.detail((select member_one from ids), (select tuesday from ids)) -> 'leave',
+  jsonb_build_object(
+    'label', 'Leave group',
+    'action', jsonb_build_object(
+      'type', 'call', 'function', 'leave_group',
+      'params', jsonb_build_object('p_group_id', (select tuesday from ids)),
+      'confirm', jsonb_build_object(
+        'title', 'Leave Tuesday Night Group?',
+        'message', 'You''ll no longer see this group or its members.',
+        'confirm_label', 'Leave', 'cancel_label', 'Cancel'
+      ),
+      'on_success', 'dismiss', 'role', 'destructive'
+    )
+  ),
+  'a member gets Leave, with the backend''s confirmation'
+);
+select ok(pg_temp.detail((select leader from ids), (select tuesday from ids)) ? 'leave', 'a leader gets Leave too');
+select ok(not pg_temp.detail((select staff from ids), (select tuesday from ids)) ? 'leave', 'staff outside the group get no Leave');
+select is(pg_temp.removable((select member_one from ids), (select tuesday from ids)), '{}'::text[], 'a member removes nobody');
+select is(
+  pg_temp.removable((select member_two from ids), (select families from ids)),
+  (select array_agg(p.display_name order by p.display_name) from public.group_members m join public.profiles p on p.id = m.user_id, ids
+   where m.group_id = ids.families and not exists (select 1 from public.group_leaders l where l.group_id = m.group_id and l.user_id = m.user_id)),
+  'a leader may remove every non-leader, and no leader'
+);
+select is(
+  pg_temp.detail((select leader from ids), (select tuesday from ids)) -> 'members' -> 1 -> 'remove',
+  (select jsonb_build_object(
+    'label', 'Remove',
+    'action', jsonb_build_object(
+      'type', 'call', 'function', 'remove_member',
+      'params', jsonb_build_object('p_group_id', ids.tuesday, 'p_user_id', (pg_temp.detail(ids.leader, ids.tuesday) -> 'members' -> 1 ->> 'user_id')::uuid),
+      'confirm', jsonb_build_object(
+        'title', 'Remove ' || (pg_temp.detail(ids.leader, ids.tuesday) -> 'members' -> 1 ->> 'title') || '?',
+        'message', (pg_temp.detail(ids.leader, ids.tuesday) -> 'members' -> 1 ->> 'title') || ' will no longer be in Tuesday Night Group.',
+        'confirm_label', 'Remove', 'cancel_label', 'Cancel'
+      ),
+      'on_success', 'refresh', 'role', 'destructive'
+    )
+  ) from ids),
+  'remove names the member and the group, and refreshes'
+);
+select is(
+  pg_temp.removable((select staff from ids), (select families from ids)),
+  (select array_agg(p.display_name order by p.display_name) from public.group_members m join public.profiles p on p.id = m.user_id, ids
+   where m.group_id = ids.families),
+  'staff may remove everyone, leaders included'
+);
+select ok(
+  not exists (
+    select 1 from jsonb_array_elements(pg_temp.detail((select admin from ids), (select mission from ids)) -> 'members') m
+    where m ->> 'note' = 'You' and m ? 'remove'
+  ) and exists (select 1 from jsonb_array_elements(pg_temp.detail((select admin from ids), (select mission from ids)) -> 'members') m where m ->> 'note' = 'You') and (select count(*) from jsonb_array_elements(pg_temp.detail((select admin from ids), (select mission from ids)) -> 'members') m where m ? 'remove') > 0,
+  'nobody gets remove on their own row'
+);
 
 -- AC3, AC4, AC7: groups.remove_member, allowed and refused.
 select is(

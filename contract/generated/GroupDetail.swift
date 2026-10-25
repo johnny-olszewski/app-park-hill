@@ -16,6 +16,20 @@ struct GroupDetail: Codable, Equatable, Sendable {
     /// The member list's heading.
     let membersTitle: String
     let members: [MemberRow]
+    /// Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`.
+    let leave: ActionButton?
+
+    init(groupId: String, title: String, description: String, meeting: String, location: String, leadersLine: String, membersTitle: String, members: [MemberRow], leave: ActionButton? = nil) {
+        self.groupId = groupId
+        self.title = title
+        self.description = description
+        self.meeting = meeting
+        self.location = location
+        self.leadersLine = leadersLine
+        self.membersTitle = membersTitle
+        self.members = members
+        self.leave = leave
+    }
 
     enum CodingKeys: String, CodingKey {
         case groupId = "group_id"
@@ -26,5 +40,6 @@ struct GroupDetail: Codable, Equatable, Sendable {
         case leadersLine = "leaders_line"
         case membersTitle = "members_title"
         case members
+        case leave
     }
 }

@@ -1,10 +1,12 @@
 import SwiftUI
 
-/// A group's details and members, read-only (specs/COMMUNITY.md 5.1). A
-/// client component shared by `community.group` and Community home's one
-/// group; every word comes from the data.
+/// A group's details and members (specs/COMMUNITY.md 5.1, 5.2): swipe to
+/// remove on rows the backend sends `remove` for, and a Leave footer when it
+/// sends `leave`. A client component shared by `community.group` and
+/// Community home's one group; every word comes from the data.
 struct GroupDetailView: View {
     let detail: GroupDetail
+    @Environment(\.screenActions) private var actions
 
     var body: some View {
         List {
@@ -35,6 +37,16 @@ struct GroupDetailView: View {
             Section {
                 ForEach(detail.members, id: \.userId) { member in
                     MemberRowView(member: member)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            // A destructive role would animate the row away
+                            // before the confirmation, so the button is only
+                            // tinted. It is also VoiceOver's action for the row.
+                            if let remove = member.remove {
+                                Button(remove.label) { actions.perform(remove.action) }
+                                    .tint(Color.phDanger)
+                                    .accessibilityIdentifier("groupDetail.remove")
+                            }
+                        }
                 }
             } header: {
                 Text(detail.membersTitle)
@@ -42,6 +54,20 @@ struct GroupDetailView: View {
                     .accessibilityIdentifier("groupDetail.membersTitle")
             }
             .listRowBackground(Color.phSurfaceRaised)
+
+            if let leave = detail.leave {
+                Section {
+                    Button(role: .destructive) {
+                        actions.perform(leave.action)
+                    } label: {
+                        Text(leave.label).frame(maxWidth: .infinity)
+                    }
+                        .buttonStyle(SecondaryButtonStyle())
+                        .accessibilityIdentifier("groupDetail.leave")
+                }
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets())
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.phSurface)

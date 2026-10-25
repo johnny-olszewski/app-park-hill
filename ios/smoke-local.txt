@@ -1,0 +1,3 @@
+# Smoke UI tests for the merge gate against local Supabase (make test-local-smoke).
+ParkHillUITests/SignInUITests/testSignInStaysSignedInAcrossRelaunchThenSignsOut
+ParkHillUITests/LocalCommunityUITests/testMemberTwo

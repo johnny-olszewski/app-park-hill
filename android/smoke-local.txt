@@ -1,3 +1,4 @@
 # Smoke instrumented tests for the merge gate against local Supabase (make test-local-smoke).
 app.parkhill.ui.SignInUiTest#signInStaysSignedInAcrossARelaunchThenSignsOut
 app.parkhill.ui.LocalCommunityUiTest#memberTwo
+app.parkhill.ui.LocalCommunityUiTest#staffBrowsesAndSearches

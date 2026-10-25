@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Shows a `ScreenModel`: loading, the screen with pull to refresh, or the
-/// error screen with retry.
+/// Shows a `ScreenModel`: loading, the screen with pull to refresh and its
+/// toolbar, or the error screen with retry.
 struct ScreenHostView: View {
     let model: ScreenModel
 
@@ -16,6 +16,7 @@ struct ScreenHostView: View {
         case .screen(let screen):
             screen.view
                 .refreshable { await model.load() }
+                .toolbar { BackendToolbar(items: screen.envelope.toolbar ?? []) }
         case .error:
             ScreenErrorView {
                 Task { await model.retry() }

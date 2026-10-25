@@ -19,4 +19,19 @@ enum AssetProvider {
     static func hasTabIcon(_ key: String) -> Bool {
         tabIcons[key] != nil
     }
+
+    private static let toolbarIcons = [
+        "toolbar.browse": "magnifyingglass",
+    ]
+
+    /// The icon for a toolbar item's `icon_key`; an unknown key gets the
+    /// fallback, so a new key from the backend never breaks a toolbar.
+    static func toolbarIcon(_ key: String) -> Image {
+        Image(systemName: toolbarIcons[key] ?? "circle.grid.2x2")
+    }
+
+    /// Whether `key` has its own bundled toolbar icon rather than the fallback.
+    static func hasToolbarIcon(_ key: String) -> Bool {
+        toolbarIcons[key] != nil
+    }
 }

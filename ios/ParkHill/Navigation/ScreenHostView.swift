@@ -4,6 +4,7 @@ import SwiftUI
 /// toolbar, or the error screen with retry.
 struct ScreenHostView: View {
     let model: ScreenModel
+    @Environment(\.screenActions) private var actions
 
     var body: some View {
         switch model.state {
@@ -17,6 +18,7 @@ struct ScreenHostView: View {
             screen.view
                 .refreshable { await model.load() }
                 .toolbar { BackendToolbar(items: screen.envelope.toolbar ?? []) }
+                .environment(\.screenActions, actions.from(model))
         case .error:
             ScreenErrorView {
                 Task { await model.retry() }

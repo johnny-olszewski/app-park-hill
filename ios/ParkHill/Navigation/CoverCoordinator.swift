@@ -4,7 +4,8 @@ import OSLog
 
 /// A screen presented as a full-screen cover (`full_screen_cover`): its own
 /// root, fetched fresh each time the cover opens, and its own stack. Closing
-/// the cover drops it, so the next opening starts over.
+/// the cover drops it, so the next opening starts over. Calls and lost access
+/// go to the tab that opened it, which owns the confirmation and messages.
 @MainActor
 @Observable
 final class CoverCoordinator: Identifiable {
@@ -14,32 +15,61 @@ final class CoverCoordinator: Identifiable {
     var path: [Route] = []
 
     private let context: ScreenContext
+    private let performCall: @MainActor (CallAction, ScreenModel?) -> Void
+    private let lostAccess: @MainActor (ScreenModel, String) -> Void
 
-    init(key: String, params: [String: JSONValue], context: ScreenContext) {
+    init(
+        key: String,
+        params: [String: JSONValue],
+        context: ScreenContext,
+        performCall: @escaping @MainActor (CallAction, ScreenModel?) -> Void = { _, _ in },
+        lostAccess: @escaping @MainActor (ScreenModel, String) -> Void = { _, _ in }
+    ) {
         root = ScreenModel(key: key, params: params, context: context)
         self.context = context
+        self.performCall = performCall
+        self.lostAccess = lostAccess
+        root.onLostAccess = lostAccess
     }
 
     /// What the cover's screens call when something is tapped.
     var actions: ScreenActions {
-        ScreenActions(perform: { [weak self] action in self?.perform(action) })
+        ScreenActions(coordinator: { [weak self] action, source in self?.perform(action, from: source) })
     }
 
-    /// Pushes `navigate` targets onto the cover's own stack. A cover opened
-    /// from inside a cover is not supported, and is logged.
-    func perform(_ action: Action) {
-        guard case .navigate(let navigate) = action else {
+    /// Pushes `navigate` targets onto the cover's own stack and hands calls
+    /// to the tab. A cover opened from inside a cover is not supported, and
+    /// is logged.
+    func perform(_ action: Action, from source: ScreenModel? = nil) {
+        switch action {
+        case .navigate(let navigate):
+            switch navigate.presentation {
+            case .push:
+                guard let screen = context.target(of: navigate) else { return }
+                screen.onLostAccess = lostAccess
+                path.append(Route(screen: screen))
+                Task { await screen.load() }
+            case .fullScreenCover:
+                Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public) inside a cover")
+            }
+        case .call(let call):
+            performCall(call, source)
+        case .unknown:
             _ = ScreenActions.isKnown(action)
-            return
         }
-        switch navigate.presentation {
-        case .push:
-            guard let screen = context.target(of: navigate) else { return }
-            path.append(Route(screen: screen))
-            Task { await screen.load() }
-        case .fullScreenCover:
-            Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public) inside a cover")
-        }
+    }
+
+    /// Whether `screen` is the cover's root or pushed inside it.
+    func contains(_ screen: ScreenModel) -> Bool {
+        root === screen || path.contains { $0.screen === screen }
+    }
+
+    /// Removes `screen` and everything pushed over it, returning the screen
+    /// now on top. Nil for the root, which only closing the cover removes.
+    func close(_ screen: ScreenModel) -> ScreenModel? {
+        guard let index = path.firstIndex(where: { $0.screen === screen }) else { return nil }
+        path.removeSubrange(index...)
+        return path.last?.screen ?? root
     }
 }
 

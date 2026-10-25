@@ -61,8 +61,10 @@ private struct TabRoot: View {
                 }
         }
         .environment(\.screenActions, tab.actions)
+        .modifier(TabAlerts(tab: tab, inCover: false))
         .fullScreenCover(item: $tab.cover) { cover in
             CoverView(cover: cover, close: tab.closeCover)
+                .modifier(TabAlerts(tab: tab, inCover: true))
         }
         .sheet(item: $tab.presented) { route in
             NavigationStack {
@@ -98,5 +100,37 @@ private struct CoverView: View {
         }
         .environment(\.screenActions, cover.actions)
         .tint(Color.phInk)
+    }
+}
+
+/// The tab's `call` confirmation and its backend messages (guide 5.5: an
+/// alert, with one button for a message), shown over the cover while one is
+/// open and over the tab otherwise.
+private struct TabAlerts: ViewModifier {
+    @Bindable var tab: TabCoordinator
+    let inCover: Bool
+
+    private var here: Bool { (tab.cover != nil) == inCover }
+
+    func body(content: Content) -> some View {
+        content
+            .alert(
+                tab.pendingCall?.confirm.title ?? "",
+                isPresented: Binding(get: { here && tab.pendingCall != nil }, set: { if !$0 { tab.cancelCall() } }),
+                presenting: tab.pendingCall
+            ) { pending in
+                Button(pending.confirm.confirmLabel, role: pending.isDestructive ? .destructive : nil) {
+                    tab.confirm(pending)
+                }
+                Button(pending.confirm.cancelLabel, role: .cancel) {
+                    tab.cancelCall()
+                }
+            } message: { pending in
+                Text(pending.confirm.message)
+            }
+            .alert(
+                tab.message ?? "",
+                isPresented: Binding(get: { here && tab.message != nil }, set: { if !$0 { tab.message = nil } })
+            ) {}
     }
 }

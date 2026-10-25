@@ -52,7 +52,7 @@ A `call`'s result may carry `then`, an action the client performs after `on_succ
   "action": { "type": "navigate", "screen_key": "community.group", "params": { "group_id": "uuid" }, "presentation": "push" } }
 ```
 
-`badge` is optional. All text is backend formatted and localized.
+`badge` is optional. `badge_tone` is optional too: `attention` marks a badge that needs attention, such as "No leader", which clients draw in the danger color; without it a badge is plain. All text is backend formatted and localized.
 
 `GroupDetail`: defined in section 5.
 
@@ -131,7 +131,7 @@ Who can open it (as `community.group`, or as the `group` part of `community.home
 ### 5.6 Leaders
 
 - A group may have zero leaders. Leaders can leave like anyone else (membership and leadership both end).
-- Leaderless groups show a "No leader" badge on their browse row; the details line reads "Leaders: none yet".
+- Leaderless groups show a "No leader" badge, with `badge_tone` `attention`, on their browse row; the details line reads "Leaders: none yet".
 
 ### 5.7 Create and delete
 

@@ -2,7 +2,7 @@
 
 Park Hill is a real app and a proving ground for a transferable architecture and an agent-driven way of working (`docs/ENGINEERING_GUIDE.md`, Purpose). When two approaches both work, prefer the one that generalizes and that the next agent can follow from the repo alone.
 
-Start a session with `/status`: where the work stands and the next step. Implement a slice with `/implement-slice <ID>`. Act on a PR's review with `/address-review <PR>` once its checks have finished. Both skills live in `.claude/skills/`.
+Start a session with `/status`: where the work stands and the next step. Implement a slice with `/implement-slice <ID>`; it first checks a Draft slice against the code (`/ready-slice`), with those commits first on the slice branch. Act on a PR's review with `/address-review <PR>` once its checks have finished. The skills live in `.claude/skills/`.
 
 Before changing anything:
 
@@ -13,7 +13,7 @@ Before changing anything:
 Rules:
 
 - Work only within the Scope of the slice's tasks. Do not expand it.
-- Implement the tasks in the slice's order. Verify each task's acceptance criteria and run its tests before starting the next; verify the slice's behavior criteria at the end.
+- Write no task's code until the slice is Ready (guide 7.2 rule 7), then implement its tasks in the slice's order. Checks run in tiers (guide 7.2 rule 4): fast checks every commit; a task's unit and backend tests before the next task; UI tests, `make test-local` and the behavior criteria once, at the end of the slice. iOS and Android tasks may run in parallel worktrees once the backend tasks are committed.
 - If you find ambiguity or a conflict with the guide, stop and ask. Do not guess.
 - Decisions that change the guide are recorded in its decision log (section 8) in the same change.
 - Temporary code only when a task says so, with every line marked `TEMPORARY(<epic>): <what removes it>`.

@@ -179,7 +179,7 @@ Any email and password then give the armed result. While a result other than Suc
 | `src/testDebug` | Both debug variants | Nothing. Dev tools registry, current screen and JSON formatting |
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
-| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu |
+| `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu; each persona's Community tab, its toolbar and Browse all groups |
 | `src/androidTestLocal` | local, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedLocalDebugAndroidTest` |
 
 Client CI runs Mock only (guide 6), so run the local tests on your machine before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:

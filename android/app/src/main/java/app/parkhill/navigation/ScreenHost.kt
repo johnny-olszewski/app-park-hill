@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +30,10 @@ import app.parkhill.design.ParkHill
 import app.parkhill.design.SecondaryButton
 import kotlinx.coroutines.launch
 
-/** Shows a [ScreenModel]: loading, the screen with pull to refresh, or the error screen with retry. */
+/**
+ * Shows a [ScreenModel]: loading, the screen with pull to refresh, or the
+ * error screen with retry. The screen's actions are performed on its behalf.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenHost(model: ScreenModel) {
@@ -57,7 +61,10 @@ fun ScreenHost(model: ScreenModel) {
                 },
                 modifier = Modifier.fillMaxSize(),
             ) {
-                state.screen.content()
+                val outer = LocalScreenActions.current
+                CompositionLocalProvider(LocalScreenActions provides remember(outer, model) { outer.from(model) }) {
+                    state.screen.content()
+                }
             }
         }
         ScreenState.Error -> ScreenError { scope.launch { model.retry() } }

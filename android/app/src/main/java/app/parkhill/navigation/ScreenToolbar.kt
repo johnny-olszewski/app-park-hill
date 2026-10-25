@@ -34,16 +34,17 @@ data class ToolbarLayout(val bar: List<ToolbarItem>, val overflow: List<ToolbarI
 }
 
 /**
- * A screen envelope's toolbar as top app bar actions (guide 5.5): each item
- * an icon from [AssetProvider] with the backend's label as its content
- * description, extras in the overflow menu. Tapping performs the item's
- * action through [LocalScreenActions]; an action this build does not know is
- * disabled. No items, no actions.
+ * A screen's toolbar as top app bar actions (guide 5.5): each item an icon
+ * from [AssetProvider] with the backend's label as its content description,
+ * extras in the overflow menu. Tapping performs the item's action through
+ * [LocalScreenActions], on behalf of `screen`; an action this build does not
+ * know is disabled. No items, no actions.
  */
 @Composable
-fun ToolbarActions(items: List<ToolbarItem>?) {
-    val actions = LocalScreenActions.current
-    val layout = ToolbarLayout.of(items.orEmpty())
+fun ToolbarActions(screen: ScreenModel) {
+    val outer = LocalScreenActions.current
+    val actions = remember(outer, screen) { outer.from(screen) }
+    val layout = ToolbarLayout.of(screen.envelope?.toolbar.orEmpty())
     layout.bar.forEach { item ->
         IconButton(
             onClick = { actions.perform(item.action) },

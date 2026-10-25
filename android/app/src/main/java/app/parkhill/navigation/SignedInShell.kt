@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import app.parkhill.R
+import app.parkhill.contract.CallActionRole
 import app.parkhill.design.AssetProvider
 import app.parkhill.design.ParkHill
 import app.parkhill.screens.launch.LaunchErrorScreen
@@ -70,6 +72,7 @@ fun SignedInShell(
             val saveableState = rememberSaveableStateHolder()
             val snackbar = remember(selected) { SnackbarHostState() }
             TabMessages(selected, snackbar)
+            CallConfirmationDialog(selected)
             Box(Modifier.fillMaxSize()) {
                 Scaffold(
                     containerColor = ParkHill.colors.surface,
@@ -121,6 +124,36 @@ private fun TabMessages(tab: TabCoordinator, snackbar: SnackbarHostState) {
     }
 }
 
+/**
+ * The backend's confirmation for the tab's pending `call` (guide 5.5: a
+ * Material alert dialog), its confirm button in the danger color when the
+ * call is destructive. Cancelling, or dismissing the dialog, calls nothing.
+ */
+@Composable
+private fun CallConfirmationDialog(tab: TabCoordinator) {
+    val pending = tab.pendingCall ?: return
+    val confirm = pending.action.confirm ?: return
+    val destructive = pending.action.role == CallActionRole.DESTRUCTIVE
+    AlertDialog(
+        onDismissRequest = tab::cancelCall,
+        title = { Text(confirm.title, modifier = Modifier.testTag("confirm.title")) },
+        text = { Text(confirm.message, modifier = Modifier.testTag("confirm.message")) },
+        confirmButton = {
+            TextButton(onClick = tab::confirmCall, modifier = Modifier.testTag("confirm.confirm")) {
+                Text(confirm.confirmLabel, color = if (destructive) ParkHill.colors.danger else ParkHill.colors.ink)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = tab::cancelCall, modifier = Modifier.testTag("confirm.cancel")) {
+                Text(confirm.cancelLabel, color = ParkHill.colors.ink)
+            }
+        },
+        containerColor = ParkHill.colors.surface,
+        titleContentColor = ParkHill.colors.ink,
+        textContentColor = ParkHill.colors.ink,
+    )
+}
+
 /** Where a tab's `Snackbar` appears. */
 @Composable
 internal fun MessageHost(snackbar: SnackbarHostState) {
@@ -146,7 +179,7 @@ private fun TabRoot(
                 LargeTopAppBar(
                     title = { Text(tab.title, style = ParkHill.heading, modifier = Modifier.testTag("tab.title")) },
                     actions = {
-                        ToolbarActions(tab.root.envelope?.toolbar)
+                        ToolbarActions(tab.root)
                         if (signOut != null) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                             TextButton(onClick = signOut, modifier = Modifier.testTag("home.signOut")) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                                 Text(stringResource(R.string.shell_sign_out), color = ParkHill.colors.ink) // TEMPORARY(EP-04): remove with IOS-015/AND-015
@@ -188,7 +221,7 @@ internal fun ScreenTopBar(screen: ScreenModel, navigationIcon: @Composable () ->
             )
         },
         navigationIcon = navigationIcon,
-        actions = { ToolbarActions(screen.envelope?.toolbar) },
+        actions = { ToolbarActions(screen) },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = ParkHill.colors.surface,
             scrolledContainerColor = ParkHill.colors.surface,

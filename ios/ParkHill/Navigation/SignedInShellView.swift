@@ -50,7 +50,7 @@ private struct TabRoot: View {
                 .navigationTitle(tab.title)
                 .toolbar {
                     if let signOut { // TEMPORARY(EP-04): remove with IOS-015/AND-015
-                        ToolbarItem(placement: .topBarTrailing) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
+                        SwiftUI.ToolbarItem(placement: .topBarTrailing) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                             Button(String(localized: "shell.sign_out", defaultValue: "Sign out"), role: .destructive, action: signOut) // TEMPORARY(EP-04): remove with IOS-015/AND-015
                                 .accessibilityIdentifier("home.signOut") // TEMPORARY(EP-04): remove with IOS-015/AND-015
                         } // TEMPORARY(EP-04): remove with IOS-015/AND-015

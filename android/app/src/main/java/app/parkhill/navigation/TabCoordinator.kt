@@ -59,6 +59,7 @@ class TabCoordinator(item: TabItem, private val context: ScreenContext) {
                 }
                 when (action.presentation) {
                     NavigateActionPresentation.PUSH -> _path += Route(ScreenModel.toFetch(action.screenKey, action.params, context))
+                    NavigateActionPresentation.FULL_SCREEN_COVER -> Log.e(TAG, "Ignored full_screen_cover to ${action.screenKey}: not built yet")
                 }
             }
             is Action.Unknown -> ScreenActions.isKnown(action)

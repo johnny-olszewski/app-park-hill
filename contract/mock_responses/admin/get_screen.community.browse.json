@@ -1,0 +1,64 @@
+{
+  "key": "community.browse",
+  "data": {
+    "rows": [
+      {
+        "badge": "Leader",
+        "title": "Mission Hills Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa",
+        "subtitle": "Thursdays · 6:30 PM · Shah home"
+      },
+      {
+        "badge": "No leader",
+        "title": "Point Loma Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85",
+        "subtitle": "Wednesdays · 7:00 PM · Vesper Hall",
+        "badge_tone": "attention"
+      },
+      {
+        "title": "Tuesday Night Group",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e",
+        "subtitle": "Tuesdays · 7:00 PM · Lee home, North Park"
+      },
+      {
+        "title": "Young Families",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+          },
+          "screen_key": "community.group",
+          "presentation": "push"
+        },
+        "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1",
+        "subtitle": "Sundays · 4:00 PM · Vesper Hall"
+      }
+    ],
+    "title": "All groups",
+    "search_placeholder": "Search groups"
+  }
+}

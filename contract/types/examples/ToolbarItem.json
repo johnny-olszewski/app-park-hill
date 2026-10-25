@@ -1,0 +1,11 @@
+{
+  "id": "browse_all_groups",
+  "label": "Browse all groups",
+  "icon_key": "toolbar.browse",
+  "action": {
+    "type": "navigate",
+    "screen_key": "community.browse",
+    "params": {},
+    "presentation": "full_screen_cover"
+  }
+}

@@ -53,6 +53,8 @@ final class TabCoordinator: Identifiable {
                 let screen = ScreenModel(key: navigate.screenKey, params: navigate.params.objectValue, context: context)
                 path.append(Route(screen: screen))
                 Task { await screen.load() }
+            case .fullScreenCover:
+                Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public): not built yet")
             }
         case .unknown:
             _ = ScreenActions.isKnown(action)

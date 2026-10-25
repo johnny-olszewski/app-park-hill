@@ -19,6 +19,13 @@
       "description": "For example \"Leader\".",
       "type": "string"
     },
+    "badge_tone": {
+      "description": "How the badge reads: `attention` for one that needs attention, such as \"No leader\". Absent: plain.",
+      "type": "string",
+      "enum": [
+        "attention"
+      ]
+    },
     "action": {
       "$ref": "Action.schema.json"
     }

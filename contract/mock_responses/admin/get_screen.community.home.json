@@ -18,5 +18,18 @@
       "leaders_line": "Leaders: Admin",
       "members_title": "Members"
     }
-  }
+  },
+  "toolbar": [
+    {
+      "id": "browse_all_groups",
+      "label": "Browse all groups",
+      "action": {
+        "type": "navigate",
+        "params": {},
+        "screen_key": "community.browse",
+        "presentation": "full_screen_cover"
+      },
+      "icon_key": "toolbar.browse"
+    }
+  ]
 }

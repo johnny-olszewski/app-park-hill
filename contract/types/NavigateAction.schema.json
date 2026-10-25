@@ -23,7 +23,8 @@
       "description": "How to show the screen, mapped to each platform's equivalent.",
       "type": "string",
       "enum": [
-        "push"
+        "push",
+        "full_screen_cover"
       ]
     },
     "role": {

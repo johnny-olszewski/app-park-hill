@@ -9,13 +9,16 @@ struct GroupRow: Codable, Equatable, Sendable {
     let subtitle: String
     /// For example "Leader".
     let badge: String?
+    /// How the badge reads: `attention` for one that needs attention, such as "No leader". Absent: plain.
+    let badgeTone: GroupRowBadgeTone?
     let action: Action
 
-    init(groupId: String, title: String, subtitle: String, badge: String? = nil, action: Action) {
+    init(groupId: String, title: String, subtitle: String, badge: String? = nil, badgeTone: GroupRowBadgeTone? = nil, action: Action) {
         self.groupId = groupId
         self.title = title
         self.subtitle = subtitle
         self.badge = badge
+        self.badgeTone = badgeTone
         self.action = action
     }
 
@@ -24,6 +27,11 @@ struct GroupRow: Codable, Equatable, Sendable {
         case title
         case subtitle
         case badge
+        case badgeTone = "badge_tone"
         case action
     }
+}
+
+enum GroupRowBadgeTone: String, Codable, Equatable, Sendable {
+    case attention
 }

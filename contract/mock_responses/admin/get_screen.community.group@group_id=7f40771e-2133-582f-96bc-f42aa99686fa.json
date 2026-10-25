@@ -1,0 +1,20 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Mission Hills Group",
+    "meeting": "Thursdays · 6:30 PM",
+    "members": [
+      {
+        "note": "You",
+        "title": "Admin",
+        "user_id": "c02348f0-ad95-58bc-a073-cd90ea7ac705",
+        "is_leader": true
+      }
+    ],
+    "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa",
+    "location": "Shah home",
+    "description": "Bible study and prayer for Mission Hills neighbors.",
+    "leaders_line": "Leaders: Admin",
+    "members_title": "Members"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Tuesday Night Group",
+    "meeting": "Tuesdays · 7:00 PM",
+    "members": [
+      {
+        "title": "Leader",
+        "user_id": "a3201a9f-a3a3-5e46-94bb-48b6807b1b1f",
+        "is_leader": true
+      },
+      {
+        "title": "Member One",
+        "user_id": "018919a6-047d-52b8-b6e3-363a7e80888c",
+        "is_leader": false
+      },
+      {
+        "title": "Member Two",
+        "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+        "is_leader": false
+      }
+    ],
+    "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e",
+    "location": "Lee home, North Park",
+    "description": "Study, conversation and dinner together.",
+    "leaders_line": "Leaders: Leader",
+    "members_title": "Members"
+  }
+}

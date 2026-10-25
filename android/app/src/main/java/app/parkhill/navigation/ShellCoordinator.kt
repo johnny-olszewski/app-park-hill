@@ -94,7 +94,8 @@ class ShellCoordinator(
             val existing = tabs.firstOrNull { it.id == item.id && it.root.key == item.screen.key }
             when {
                 existing != null -> existing.also { it.update(item) }
-                registry.resolve(item.screen) != null -> TabCoordinator(item, screens)
+                // A root whose data cannot be shown falls back in its tab, to its cached copy or the error screen.
+                registry.isRegistered(item.screen.key) -> TabCoordinator(item, screens)
                 else -> null.also { Log.e(TAG, "Dropped tab ${item.id}: its screen is not registered") }
             }
         }

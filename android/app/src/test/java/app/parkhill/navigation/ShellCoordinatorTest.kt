@@ -124,7 +124,7 @@ class ShellCoordinatorTest {
         val home = shell.tabs.first()
         val community = shell.tabs.last()
 
-        assertTrue(home.push(empty("community.home")))
+        assertTrue(home.push(empty("home.root")))
         shell.selectedTabId = "community"
         shell.selectedTabId = "home"
 

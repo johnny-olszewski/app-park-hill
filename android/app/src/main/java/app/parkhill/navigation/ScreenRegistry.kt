@@ -22,17 +22,20 @@ class ScreenRegistry(private val tracker: ScreenTracker? = null) {
     /**
      * Registers `key`; its data is decoded with `serializer` when an envelope
      * is resolved. `title`, when given, is the title a pushed screen shows in
-     * the top app bar.
+     * the top app bar. Data that decodes but that the screen cannot show
+     * (`isUsable` false) does not resolve, like data that does not decode.
      */
     fun <Data> register(
         key: String,
         serializer: KSerializer<Data>,
         title: ((Data) -> String)? = null,
+        isUsable: (Data) -> Boolean = { true },
         screen: @Composable (Data) -> Unit,
     ) {
         require(key !in factories) { "Screen $key registered twice" }
         factories[key] = { json ->
             val data = ContractJson.decodeFromJsonElement(serializer, json)
+            require(isUsable(data)) { "Screen $key cannot show this data" }
             val content: @Composable () -> Unit = { screen(data) }
             title?.invoke(data) to content
         }
@@ -56,7 +59,7 @@ class ScreenRegistry(private val tracker: ScreenTracker? = null) {
             Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
             null
         } catch (error: IllegalArgumentException) {
-            Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model")
+            Log.e(TAG, "Dropped screen ${envelope.key}: data does not match its model or cannot be shown")
             null
         }
     }

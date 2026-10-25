@@ -8,6 +8,7 @@ import app.parkhill.contract.SignInScreenData
 import app.parkhill.screens.auth.SignInScreen
 import app.parkhill.screens.community.CommunityGroupScreen
 import app.parkhill.screens.community.CommunityHomeScreen
+import app.parkhill.screens.community.CommunityHomeState
 import app.parkhill.screens.home.HomeRootScreen
 import app.parkhill.services.auth.AuthService
 
@@ -15,6 +16,8 @@ import app.parkhill.services.auth.AuthService
 fun ScreenRegistry.registerSharedScreens(auth: AuthService) {
     register(ScreenKey.authSignIn, SignInScreenData.serializer()) { data -> SignInScreen(data, auth) }
     register(ScreenKey.homeRoot, HomeRootData.serializer()) { data -> HomeRootScreen(data) }
-    register(ScreenKey.communityHome, CommunityHomeData.serializer()) { data -> CommunityHomeScreen(data) }
+    register(ScreenKey.communityHome, CommunityHomeData.serializer(), isUsable = { CommunityHomeState.of(it) != null }) { data ->
+        CommunityHomeScreen(data)
+    }
     register(ScreenKey.communityGroup, CommunityGroupData.serializer(), title = { it.title }) { data -> CommunityGroupScreen(data) }
 }

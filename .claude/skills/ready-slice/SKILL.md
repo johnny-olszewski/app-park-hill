@@ -18,6 +18,8 @@ On the slice branch. `/implement-slice` has already created it; run alone, creat
 
 The guide; the slice file in `docs/slices/`; the spec it references; every task in the slice and its `depends_on` tasks; then the code each task's Scope names or touches.
 
+Also `gh issue list --label nightly-failure --state open`: a nightly full test run that is failing is a finding (the next heading's **Nightly**), settled before the slice builds on it.
+
 ## 3. Check each task against the code
 
 List every finding, per task, under these headings:
@@ -29,6 +31,8 @@ List every finding, per task, under these headings:
 - **Missing tooling:** the Scope needs a generator, script, contract keyword, mock response layout or test helper that does not exist and no task builds.
 - **Test data:** the personas, seed rows or mock responses the acceptance and behavior criteria assume are missing or arranged differently.
 - **Order:** a task that needs something a later task builds, or a commit that would break another platform's tests until a later task lands (for example a recorded screen the apps do not register yet).
+- **Nightly:** an open `nightly-failure` issue, with what fails and whether this slice should fix it first.
+- **Smoke tests:** which of the slice's new UI tests covers each new screen's main path and joins `smoke-mock.txt` and `smoke-local.txt`.
 - **Too big:** a slice whose state halfway through is worth having on its own (guide 7.2 rule 2), such as tooling every later slice uses.
 
 ## 4. Settle the findings

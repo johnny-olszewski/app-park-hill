@@ -36,9 +36,9 @@ None.
 - [ ] Branch is named `slice/<slice ID>-<short name>`
 - [ ] Each task's commits follow `[<TASK-ID>][<k>/n]`, are standalone and logical, and are not interleaved with another task's
 - [ ] The readiness check's commits come first and mark the slice Ready; its findings are in Reviewer notes (guide 7.2 rule 7)
-- [ ] Each task's unit and backend tests ran before the next task; UI tests, `make test-local` and the release check ran once at the end (guide 7.2 rule 4)
+- [ ] Every commit builds; each task's unit tests ran before the next task; the merge gate ran once at the end: all unit and backend tests, smoke UI tests and the release check (guide 7.2 rule 4)
 - [ ] Every CI check is green; never merge red (guide 7.1 rule 10)
-- [ ] `make test-local` passed locally in each app the slice touches, when it changes an app, `/backend` or `/contract` (CI runs Mock only)
+- [ ] `make test-local-smoke` passed locally in each app the slice touches, when it changes an app, `/backend` or `/contract` (CI runs Mock only)
 - [ ] Every behavior criterion recorded in `recordings/<slice ID>/` (not linked here)
 - [ ] Each task, and then the slice, set to `status: Done` in its own file
 - [ ] No work outside the Scope of the slice's tasks

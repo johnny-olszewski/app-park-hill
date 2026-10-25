@@ -29,15 +29,15 @@ final class BrowseUITests: XCTestCase {
 
     func testStaffBrowseSearchOpenAndCloseResetsTheSearch() throws {
         let data = try XCTUnwrap(UITestData.json("mock_responses/staff/get_screen.community.browse")["data"] as? [String: Any])
-        let all = try XCTUnwrap(data["rows"] as? [[String: Any]])
+        let placeholder = try XCTUnwrap(data["search_placeholder"] as? String)
         openCommunity(as: "staff")
 
         XCTAssertTrue(browseButton.waitForExistence(timeout: 5))
         browseButton.tap()
         XCTAssertTrue(app.navigationBars[try XCTUnwrap(data["title"] as? String)].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["cover.close"].exists)
-        XCTAssertEqual(rows.count, all.count)
-        XCTAssertTrue(app.staticTexts["groupRow.badge.attention"].exists, "the leaderless group is flagged")
+        XCTAssertGreaterThan(rows.count, 1, "the list draws the rows on screen, never counted in full")
+        XCTAssertTrue(scrollTo(app.staticTexts["groupRow.badge.attention"]), "the leaderless group is flagged")
 
         let search = app.searchFields.firstMatch
         search.tap()
@@ -47,13 +47,32 @@ final class BrowseUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars["Mission Hills Group"].waitForExistence(timeout: 5), "the detail pushes inside the cover")
         app.navigationBars["Mission Hills Group"].buttons.firstMatch.tap()
         XCTAssertTrue(app.navigationBars[try XCTUnwrap(data["title"] as? String)].waitForExistence(timeout: 5), "back returns to browse")
-        XCTAssertEqual(rows.count, all.count, "opening a group ended the search")
+        XCTAssertGreaterThan(rows.count, 1, "opening a group ended the search")
+        XCTAssertTrue(isEmpty(app.searchFields.firstMatch, placeholder: placeholder))
 
         app.buttons["cover.close"].tap()
         XCTAssertTrue(app.navigationBars["Community"].waitForExistence(timeout: 5))
         browseButton.tap()
         XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 5))
-        XCTAssertEqual(rows.count, all.count, "reopening starts with an empty search")
+        XCTAssertGreaterThan(rows.count, 1, "reopening starts with an empty search")
+        XCTAssertTrue(isEmpty(app.searchFields.firstMatch, placeholder: placeholder))
+    }
+
+    /// Swipes up until `element` is on screen, at most a few times.
+    private func scrollTo(_ element: XCUIElement) -> Bool {
+        for _ in 0..<5 where !element.exists {
+            app.swipeUp()
+        }
+        return element.exists
+    }
+
+    /// A search field shows its placeholder (or nothing) when empty. iOS 26
+    /// collapses the search bar once the list scrolls, and a collapsed search
+    /// holds no query.
+    private func isEmpty(_ field: XCUIElement, placeholder: String) -> Bool {
+        guard field.waitForExistence(timeout: 2) else { return true }
+        let value = field.value as? String ?? ""
+        return value.isEmpty || value == placeholder
     }
 
     func testAdminSeesBrowseOnTheirGroup() {

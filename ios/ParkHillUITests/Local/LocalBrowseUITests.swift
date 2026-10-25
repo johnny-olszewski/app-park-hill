@@ -34,7 +34,7 @@ final class LocalBrowseUITests: XCTestCase {
         browse.tap()
         let rows = app.buttons.matching(identifier: "groupRow")
         XCTAssertTrue(rows.firstMatch.waitForExistence(timeout: 10))
-        XCTAssertEqual(rows.count, 4)
+        XCTAssertGreaterThan(rows.count, 1)
 
         let search = app.searchFields.firstMatch
         search.tap()

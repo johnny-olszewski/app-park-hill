@@ -8,6 +8,36 @@
         "title": "Admin",
         "user_id": "c02348f0-ad95-58bc-a073-cd90ea7ac705",
         "is_leader": true
+      },
+      {
+        "title": "David Nguyen",
+        "user_id": "a6bf2350-36f8-500e-a836-87c01b165be8",
+        "is_leader": false
+      },
+      {
+        "title": "Elena Petrova",
+        "user_id": "6ef074e8-a26e-5777-ab0a-4488e65c9656",
+        "is_leader": false
+      },
+      {
+        "title": "Hannah Brooks",
+        "user_id": "e9040602-cc31-5561-906f-340653a133c6",
+        "is_leader": false
+      },
+      {
+        "title": "Isaac Morales",
+        "user_id": "67e1302f-d65d-50b9-b96b-2cadb6109506",
+        "is_leader": false
+      },
+      {
+        "title": "Marcus Reed",
+        "user_id": "b54ca79b-4f44-5f67-b28a-1854665f7dd5",
+        "is_leader": false
+      },
+      {
+        "title": "Olivia Bennett",
+        "user_id": "c57b9adf-ff84-5463-ba75-14d631d3d247",
+        "is_leader": false
       }
     ],
     "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa",

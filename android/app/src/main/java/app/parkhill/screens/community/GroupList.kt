@@ -51,7 +51,7 @@ fun GroupListView(list: GroupList) {
 /** Group rows with dividers in a scrolling list, after `header`. */
 @Composable
 fun GroupRows(rows: List<GroupRow>, modifier: Modifier = Modifier, header: LazyListScope.() -> Unit = {}) {
-    LazyColumn(modifier.fillMaxSize().background(ParkHill.colors.surface)) {
+    LazyColumn(modifier.fillMaxSize().background(ParkHill.colors.surface).testTag("groupList")) {
         header()
         items(rows, key = { it.groupId }) { row ->
             GroupRowView(row)

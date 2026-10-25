@@ -9,10 +9,12 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.parkhill.app.MainActivity
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,7 +81,8 @@ class LocalCommunityUiTest {
         compose.onNodeWithTag("toolbar.browse_all_groups").performClick()
         compose.waitUntilAtLeastOneExists(hasTestTag("screen.title").and(hasText("All groups")), 10_000)
         compose.await("groupRow")
-        compose.onAllNodesWithTag("groupRow").assertCountEquals(4)
+        assertTrue(compose.onAllNodesWithTag("groupRow").fetchSemanticsNodes().size > 1)
+        compose.onNodeWithTag("groupList").performScrollToNode(hasText("Point Loma Group"))
         compose.onNodeWithTag("groupRow.badge.attention", useUnmergedTree = true).assertTextEquals("NO LEADER")
 
         compose.onNodeWithTag("browse.search").performTextInput("hill")
@@ -88,7 +91,7 @@ class LocalCommunityUiTest {
         compose.waitUntilAtLeastOneExists(hasTestTag("screen.title").and(hasText("Mission Hills Group")), 10_000)
         compose.onNodeWithTag("screen.back").performClick()
         compose.await("browse.search")
-        compose.onAllNodesWithTag("groupRow").assertCountEquals(4)
+        assertTrue(compose.onAllNodesWithTag("groupRow").fetchSemanticsNodes().size > 1)
 
         compose.onNodeWithTag("browse.search").performTextInput("loma")
         compose.onAllNodesWithTag("groupRow").assertCountEquals(1)
@@ -97,7 +100,7 @@ class LocalCommunityUiTest {
         compose.waitUntilDoesNotExist(hasTestTag("cover"), 10_000)
         compose.onNodeWithTag("toolbar.browse_all_groups").performClick()
         compose.await("groupRow")
-        compose.onAllNodesWithTag("groupRow").assertCountEquals(4)
+        assertTrue(compose.onAllNodesWithTag("groupRow").fetchSemanticsNodes().size > 1)
         compose.onNodeWithTag("cover.close").performClick()
         compose.waitUntilDoesNotExist(hasTestTag("cover"), 10_000)
     }

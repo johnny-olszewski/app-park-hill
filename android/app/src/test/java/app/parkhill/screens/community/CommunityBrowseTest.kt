@@ -49,7 +49,8 @@ class CommunityBrowseTest {
 
     @Test
     fun filtersByTitleIgnoringCaseAndSurroundingSpaces() {
-        assertEquals(listOf("Mission Hills Group", "Point Loma Group", "Tuesday Night Group"), titles("group"))
+        assertEquals(rows.map { it.title }.filter { it.contains("group", ignoreCase = true) }, titles("GROUP"))
+        assertEquals(listOf("Mission Hills Group"), titles(" hill "))
         assertEquals(listOf("Point Loma Group"), titles(" LOMA "))
         assertEquals(listOf("Young Families"), titles("fam"))
     }

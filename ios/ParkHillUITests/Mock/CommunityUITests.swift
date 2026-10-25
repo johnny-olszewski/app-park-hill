@@ -44,10 +44,17 @@ final class CommunityUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["groupDetail.title"].label, title, file: file, line: line)
         XCTAssertTrue(app.staticTexts["groupDetail.leadersLine"].label.contains(try XCTUnwrap(group["leaders_line"] as? String)), file: file, line: line)
         let members = try XCTUnwrap(group["members"] as? [[String: Any]])
-        for member in members {
-            XCTAssertTrue(app.staticTexts[try XCTUnwrap(member["title"] as? String)].exists, "member \(member)", file: file, line: line)
+        // Leaders come first, so their icons are on screen before scrolling.
+        if members.contains(where: { $0["is_leader"] as? Bool == true }) {
+            XCTAssertTrue(app.images["groupDetail.leaderIcon"].firstMatch.exists, file: file, line: line)
         }
-        XCTAssertEqual(app.images.matching(identifier: "groupDetail.leaderIcon").count, members.filter { $0["is_leader"] as? Bool == true }.count, file: file, line: line)
+        for member in members {
+            let row = app.staticTexts[try XCTUnwrap(member["title"] as? String)]
+            for _ in 0..<5 where !row.exists {
+                app.swipeUp()
+            }
+            XCTAssertTrue(row.exists, "member \(member)", file: file, line: line)
+        }
         if let note = members.compactMap({ $0["note"] as? String }).first {
             XCTAssertEqual(app.staticTexts["groupDetail.note"].label.lowercased(), note.lowercased(), file: file, line: line)
         }

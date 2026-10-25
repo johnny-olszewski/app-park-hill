@@ -1,0 +1,59 @@
+{
+  "key": "community.group",
+  "data": {
+    "title": "Grupo en Español",
+    "meeting": "Wednesdays · 7:00 PM",
+    "members": [
+      {
+        "title": "Peter Lindqvist",
+        "user_id": "622787b9-ba93-5716-9db5-6b8b99937e3b",
+        "is_leader": true
+      },
+      {
+        "title": "Anna Yamamoto",
+        "user_id": "b92d641b-2553-59a1-9348-24de0a126694",
+        "is_leader": false
+      },
+      {
+        "title": "Camila Torres",
+        "user_id": "b4451fe6-3cd9-541b-b386-53d8477fa0fa",
+        "is_leader": false
+      },
+      {
+        "title": "Christopher Hale",
+        "user_id": "00d3726e-bb06-5137-bf18-a8e9aec47fc9",
+        "is_leader": false
+      },
+      {
+        "title": "Deborah Wu",
+        "user_id": "8ed52264-6c91-506b-bc63-116173ce4d41",
+        "is_leader": false
+      },
+      {
+        "title": "Joel Ramirez",
+        "user_id": "51560e1f-9011-54c3-96a8-a90ab629f3ca",
+        "is_leader": false
+      },
+      {
+        "title": "Jonah Price",
+        "user_id": "10adb58e-512b-5126-90e1-378b554b1277",
+        "is_leader": false
+      },
+      {
+        "title": "Lydia Kowalski",
+        "user_id": "8ae986df-3b6e-5e84-b851-def069138c14",
+        "is_leader": false
+      },
+      {
+        "title": "Michael O'Brien",
+        "user_id": "7d166e12-aff9-5859-9bdb-49232dfd4060",
+        "is_leader": false
+      }
+    ],
+    "group_id": "66df7968-d702-5b96-b22b-6ad83ea0e79e",
+    "location": "Salón de la iglesia",
+    "description": "Estudio bíblico y oración en español.",
+    "leaders_line": "Leaders: Peter Lindqvist",
+    "members_title": "Members"
+  }
+}

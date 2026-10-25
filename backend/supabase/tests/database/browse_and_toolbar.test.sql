@@ -61,16 +61,18 @@ select is(
 -- AC3: every community group by name, own groups and leaderless groups badged.
 select results_eq(
   $$ select r ->> 'title' from jsonb_array_elements(pg_temp.browse('staff@parkhill.test') -> 'rows') r $$,
-  array['Mission Hills Group', 'Point Loma Group', 'Tuesday Night Group', 'Young Families'],
-  'staff see every group by name'
+  $$ select g.name from public.groups g join public.group_types t on t.id = g.group_type_id
+     where t.key = 'community' and g.archived_at is null order by g.name, g.id $$,
+  'staff see every community group that is not archived, by name'
 );
 insert into public.group_members (group_id, user_id)
 select g.id, pg_temp.persona('admin@parkhill.test') from public.groups g where g.name in ('Tuesday Night Group', 'Point Loma Group');
 update public.groups set archived_at = now() where name = 'Young Families';
 select results_eq(
-  $$ select r ->> 'title', r ->> 'badge', r ->> 'badge_tone' from jsonb_array_elements(pg_temp.browse('admin@parkhill.test') -> 'rows') r $$,
-  $$ values ('Mission Hills Group', 'Leader', null::text), ('Point Loma Group', 'No leader', 'attention'),
-            ('Tuesday Night Group', 'Member', null::text) $$,
+  $$ select r ->> 'title', r ->> 'badge', r ->> 'badge_tone' from jsonb_array_elements(pg_temp.browse('admin@parkhill.test') -> 'rows') r
+     where r ->> 'title' in ('Mission Hills Group', 'Point Loma Group', 'Tuesday Night Group', 'Young Families', 'Normal Heights Group') $$,
+  $$ values ('Mission Hills Group', 'Leader', null::text), ('Normal Heights Group', null, null),
+            ('Point Loma Group', 'No leader', 'attention'), ('Tuesday Night Group', 'Member', null::text) $$,
   'own groups badged Leader or Member, No leader wins with attention, archived groups left out'
 );
 

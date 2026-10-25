@@ -17,10 +17,11 @@ select
 grant select on ids to authenticated;
 
 -- AC6: the seed creates the spec's personas and groups.
-select results_eq(
-  $$ select name from public.groups order by name $$,
-  array['Mission Hills Group', 'Point Loma Group', 'Tuesday Night Group', 'Young Families'],
-  'the four seed groups exist'
+select is(
+  (select count(*)::int from public.groups
+   where name in ('Mission Hills Group', 'Point Loma Group', 'Tuesday Night Group', 'Young Families')),
+  4,
+  'the seed groups the personas are in exist, among the others'
 );
 select results_eq(
   $$ select g.name from public.groups g

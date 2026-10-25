@@ -10,6 +10,36 @@
         "is_leader": true
       },
       {
+        "title": "Ana Ruiz",
+        "user_id": "c2882fc1-75b0-5af0-ae50-8d5936b8cf9d",
+        "is_leader": false
+      },
+      {
+        "title": "Ben Carter",
+        "user_id": "a348d8a1-3ee7-5aff-9024-567478505aca",
+        "is_leader": false
+      },
+      {
+        "title": "Daniel Kim",
+        "user_id": "39dcc18f-0a69-59ea-a55e-ecb5185e394c",
+        "is_leader": false
+      },
+      {
+        "title": "Grace Park",
+        "user_id": "bf88c312-4d9b-584f-855b-0e758b120bbb",
+        "is_leader": false
+      },
+      {
+        "title": "Jordan Lee",
+        "user_id": "c94cc0cd-844d-53cf-9494-bc3f0701f668",
+        "is_leader": false
+      },
+      {
+        "title": "Maria Lopez",
+        "user_id": "d6bd764d-5b38-59a4-85c4-4341e8b402a2",
+        "is_leader": false
+      },
+      {
         "title": "Member One",
         "user_id": "018919a6-047d-52b8-b6e3-363a7e80888c",
         "is_leader": false
@@ -18,6 +48,16 @@
         "note": "You",
         "title": "Member Two",
         "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+        "is_leader": false
+      },
+      {
+        "title": "Priya Shah",
+        "user_id": "8d6eab13-15db-517a-95ff-4e6dd3dbd335",
+        "is_leader": false
+      },
+      {
+        "title": "Sam Ortiz",
+        "user_id": "971ca6f8-95af-5126-b307-592c663356d1",
         "is_leader": false
       }
     ],

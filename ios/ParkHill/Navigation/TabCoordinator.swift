@@ -1,5 +1,5 @@
+import Foundation
 import Observation
-import OSLog
 
 /// One tab's navigation (guide 5.1): its root screen, the screens pushed over
 /// it and the one presented as a sheet. Kept while the tab is switched away
@@ -15,6 +15,8 @@ final class TabCoordinator: Identifiable {
     var path: [Route] = []
     /// The screen presented as a sheet, if any.
     var presented: Route?
+    /// The full-screen cover showing over the tab, if any.
+    var cover: CoverCoordinator?
 
     private let context: ScreenContext
 
@@ -39,26 +41,31 @@ final class TabCoordinator: Identifiable {
     }
 
     /// Performs a backend action: `navigate` with `push` fetches the target
-    /// screen over a loading state on this tab's stack. An unknown action, or
-    /// a target this build does not register, does nothing and is logged.
+    /// screen over a loading state on this tab's stack; with
+    /// `full_screen_cover` it opens a cover whose root is fetched fresh. An
+    /// unknown action, or a target this build does not register, does nothing
+    /// and is logged.
     func perform(_ action: Action) {
         switch action {
         case .navigate(let navigate):
-            guard context.registry.isRegistered(navigate.screenKey) else {
-                Logger.navigation.error("Dropped navigation to unregistered screen key \(navigate.screenKey, privacy: .public)")
-                return
-            }
+            guard let screen = context.target(of: navigate) else { return }
             switch navigate.presentation {
             case .push:
-                let screen = ScreenModel(key: navigate.screenKey, params: navigate.params.objectValue, context: context)
                 path.append(Route(screen: screen))
                 Task { await screen.load() }
             case .fullScreenCover:
-                Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public): not built yet")
+                let cover = CoverCoordinator(key: navigate.screenKey, params: navigate.params.objectValue, context: context)
+                self.cover = cover
+                Task { await cover.root.load() }
             }
         case .unknown:
             _ = ScreenActions.isKnown(action)
         }
+    }
+
+    /// Closes the full-screen cover, dropping its stack and screens.
+    func closeCover() {
+        cover = nil
     }
 
     /// Pushes the screen for `envelope`. False, and logged by the registry,

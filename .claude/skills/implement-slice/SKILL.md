@@ -14,13 +14,13 @@ The workflow in `CLAUDE.md` and `docs/ENGINEERING_GUIDE.md` 7.1 and 7.2, as step
 - `git config core.hooksPath .githooks` (once per clone).
 - Branch `slice/<ID>-<short-kebab-name>`, for example `slice/EP-06.B-mock-sign-in`.
 
-## 2. Read, and confirm the slice is Ready
+## 2. Make the slice Ready
 
-Implement only a Ready slice (guide 7.2 rule 7). If the slice file says Draft, stop: its readiness check comes first, with `/ready-slice <ID>`.
+If the slice file says Draft, run `/ready-slice <ID>` now, on this branch: it checks every task against the code, asks you about every finding at once, and commits the answers and `Mark <ID> ready` before any task's code (guide 7.2 rule 7). Continue only once it has.
 
-Read in this order: the guide; the slice file in `docs/slices/` (behavior criteria B1…); the spec it references; every task in the slice and its `depends_on` tasks.
+If it is already Ready (the check ran earlier on this branch), read in this order: the guide; the slice file in `docs/slices/` (behavior criteria B1…); the spec it references; every task in the slice and its `depends_on` tasks.
 
-The readiness check settled the gaps it found. If anything has changed since, or you find something it missed (undefined, stale, in conflict with the guide, or missing a behavior one platform gets free from a system component, guide 5.5 rule 5), stop and ask with a recommendation. Do not guess, and do not expand the Scope.
+Either way, if you find something the check missed (undefined, stale, in conflict with the guide, or missing a behavior one platform gets free from a system component, guide 5.5 rule 5), stop and ask with a recommendation. Do not guess, and do not expand the Scope.
 
 ## 3. Implement each task, in the slice's order
 
@@ -66,6 +66,6 @@ Checks run in three tiers (guide 7.2 rule 4), so the slow ones run once per slic
    - For developers: `scripts/record.sh terminal <ID> <B#-what> "<commands>"`, showing the failure and the passing run where the criterion is about a check failing.
    - Check every criterion has its recordings in `recordings/<ID>/`. Do not link them in the PR; tell the user the folder.
 3. Last commit on the branch: `[<ID>] Mark <ID> done`, setting `status: Done` in the slice file.
-4. Push, then open one PR titled `[<ID>] <slice title>` with the body from `.github/pull_request_template.md`: each task with how each criterion was verified, then the behavior criteria as an unchecked list for the reviewer, then reviewer notes (decisions, deviations, follow-ups).
+4. Push, then open one PR titled `[<ID>] <slice title>` with the body from `.github/pull_request_template.md`: each task with how each criterion was verified, then the behavior criteria as an unchecked list for the reviewer, then reviewer notes: the readiness check's findings and how each was settled, then decisions, deviations and follow-ups.
 5. Tell the user the PR link, what changed, what was verified, where the recordings are, and any decisions made. CI must be green before merging, never red or pending (guide 7.1 rule 10).
 6. Watch the PR: if this session can be notified of its checks and review comments (for example the desktop app's PR monitor, with addressing comments and fixing checks turned on), turn that on. When every check has finished, including the automated review, run `/address-review <PR>` (guide 7.1 rule 11).

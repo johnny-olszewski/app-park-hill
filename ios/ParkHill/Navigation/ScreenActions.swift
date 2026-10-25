@@ -18,6 +18,9 @@ struct ScreenActions {
         switch action {
         case .navigate:
             return true
+        case .call: // TEMPORARY(EP-03): IOS-026 performs call actions
+            Logger.navigation.error("Ignored call action: not performed by this build yet") // TEMPORARY(EP-03): IOS-026 performs call actions
+            return false // TEMPORARY(EP-03): IOS-026 performs call actions
         case .unknown(let type):
             Logger.navigation.error("Ignored action of unknown type \(type ?? "none", privacy: .public)")
             return false

@@ -100,13 +100,15 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 | `type` | Type | Fields |
 |---|---|---|
 | `navigate` | `NavigateAction` | `screen_key`, `params` (any object, passed to `get_screen` as `p_params`), `presentation`, optional `role` |
+| `call` | `CallAction` | `function` (a name from `names.json`), `params` (the function's named arguments; the client adds `p_locale`), optional `confirm` (`CallConfirmation`: `title`, `message`, `confirm_label`, `cancel_label`), `on_success`, optional `role` |
 
 | Field | Values |
 |---|---|
 | `presentation` | `push`: the current tab's stack. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. EP-03.D adds `sheet` |
+| `on_success` | `refresh`: refetch the screen. `dismiss`: close a pushed screen and refresh the one below, or refresh a tab root in place (guide 5.3 rule 9). `none`: nothing |
 | `role` | `destructive`: a meaning each platform styles its own way |
 
-`call` actions arrive with EP-03.C.
+A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns `{}`, which clients do not decode (EP-03.E adds `then`). A refused call is an error (Errors below).
 
 Shared types for Community screens, all text backend formatted and localized:
 

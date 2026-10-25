@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CallConfirmation",
+  "description": "The backend's wording for confirming a `call` before it is made.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "confirm_label": {
+      "description": "The button that makes the call, styled destructive when the action's `role` is `destructive`.",
+      "type": "string"
+    },
+    "cancel_label": {
+      "description": "The button that closes the confirmation and calls nothing.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "message",
+    "confirm_label",
+    "cancel_label"
+  ],
+  "additionalProperties": false
+}

@@ -3,6 +3,7 @@ package app.parkhill.navigation
 import android.util.Log
 import androidx.compose.runtime.staticCompositionLocalOf
 import app.parkhill.contract.Action
+import app.parkhill.contract.CallAction // TEMPORARY(EP-03): AND-027 performs call actions
 import app.parkhill.contract.NavigateAction
 
 /**
@@ -18,6 +19,10 @@ class ScreenActions(val perform: (Action) -> Unit = {}) {
         /** True for action types this build performs; an unknown type is logged. */
         fun isKnown(action: Action): Boolean = when (action) {
             is NavigateAction -> true
+            is CallAction -> { // TEMPORARY(EP-03): AND-027 performs call actions
+                Log.e("Navigation", "Ignored call action: not performed by this build yet") // TEMPORARY(EP-03): AND-027 performs call actions
+                false // TEMPORARY(EP-03): AND-027 performs call actions
+            } // TEMPORARY(EP-03): AND-027 performs call actions
             is Action.Unknown -> {
                 Log.e("Navigation", "Ignored action of unknown type ${action.type ?: "none"}")
                 false

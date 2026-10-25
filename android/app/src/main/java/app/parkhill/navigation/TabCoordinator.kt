@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import app.parkhill.contract.Action
+import app.parkhill.contract.CallAction // TEMPORARY(EP-03): AND-027 performs call actions
 import app.parkhill.contract.NavigateAction
 import app.parkhill.contract.NavigateActionPresentation
 import app.parkhill.contract.ScreenEnvelope
@@ -74,6 +75,7 @@ class TabCoordinator(item: TabItem, private val context: ScreenContext) {
                     }
                 }
             }
+            is CallAction -> ScreenActions.isKnown(action) // TEMPORARY(EP-03): AND-027 performs call actions
             is Action.Unknown -> ScreenActions.isKnown(action)
         }
     }

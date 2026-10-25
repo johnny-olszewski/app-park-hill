@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CallAction",
+  "description": "A one-tap backend operation: the client asks `confirm` first when present, calls `function` with `params` (adding `p_locale`), then applies `on_success` (specs/COMMUNITY.md 3.2). The backend re-checks permission on every call.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "description": "Always `call`.",
+      "type": "string",
+      "enum": [
+        "call"
+      ]
+    },
+    "function": {
+      "description": "The backend function to call, a name from contract/names.json.",
+      "type": "string"
+    },
+    "params": {
+      "description": "The function's named arguments, sent as given with `p_locale` added.",
+      "type": "object"
+    },
+    "confirm": {
+      "description": "The backend's wording for a confirmation shown before calling. Absent: call at once.",
+      "$ref": "CallConfirmation.schema.json"
+    },
+    "on_success": {
+      "description": "What the client does after the call succeeds: refresh the screen, dismiss it (guide 5.3 rule 9), or nothing.",
+      "type": "string",
+      "enum": [
+        "refresh",
+        "dismiss",
+        "none"
+      ]
+    },
+    "role": {
+      "description": "A meaning each platform styles its own way.",
+      "type": "string",
+      "enum": [
+        "destructive"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "function",
+    "params",
+    "on_success"
+  ],
+  "additionalProperties": false
+}

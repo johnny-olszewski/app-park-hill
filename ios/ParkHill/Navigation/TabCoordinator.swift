@@ -58,7 +58,7 @@ final class TabCoordinator: Identifiable {
                 self.cover = cover
                 Task { await cover.root.load() }
             }
-        case .unknown:
+        case .call, .unknown: // TEMPORARY(EP-03): IOS-026 performs call actions
             _ = ScreenActions.isKnown(action)
         }
     }

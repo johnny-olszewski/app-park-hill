@@ -3,6 +3,7 @@
 /// What happens when something is tapped, told apart by `type` (specs/COMMUNITY.md 3.2).
 enum Action: Codable, Equatable, Sendable {
     case navigate(NavigateAction)
+    case call(CallAction)
     /// A `type` this build does not know (contract rule 3).
     case unknown(type: String?)
 
@@ -14,6 +15,7 @@ enum Action: Codable, Equatable, Sendable {
         let type = try? decoder.container(keyedBy: CodingKeys.self).decodeIfPresent(String.self, forKey: .type)
         switch type {
         case "navigate": self = .navigate(try NavigateAction(from: decoder))
+        case "call": self = .call(try CallAction(from: decoder))
         default: self = .unknown(type: type)
         }
     }
@@ -21,6 +23,7 @@ enum Action: Codable, Equatable, Sendable {
     func encode(to encoder: any Encoder) throws {
         switch self {
         case .navigate(let value): try value.encode(to: encoder)
+        case .call(let value): try value.encode(to: encoder)
         case .unknown(let type):
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encodeIfPresent(type, forKey: .type)

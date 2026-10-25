@@ -1,20 +1,33 @@
 import SwiftUI
 
-/// A titled list of groups: one row per GroupRow, performing its action when
-/// tapped. A client component shared by every screen that lists groups.
+/// A list of groups, with an optional heading: one row per GroupRow,
+/// performing its action when tapped. A client component shared by every
+/// screen that lists groups.
 struct GroupListView: View {
-    let list: GroupList
+    let title: String?
+    let rows: [GroupRow]
+
+    init(list: GroupList) {
+        self.init(title: list.title, rows: list.rows)
+    }
+
+    init(title: String?, rows: [GroupRow]) {
+        self.title = title
+        self.rows = rows
+    }
 
     var body: some View {
         List {
             Section {
-                ForEach(list.rows, id: \.groupId) { row in
+                ForEach(rows, id: \.groupId) { row in
                     GroupRowView(row: row)
                 }
             } header: {
-                Text(list.title)
-                    .brandLabel()
-                    .accessibilityIdentifier("groupList.title")
+                if let title {
+                    Text(title)
+                        .brandLabel()
+                        .accessibilityIdentifier("groupList.title")
+                }
             }
             .listRowBackground(Color.phSurfaceRaised)
         }
@@ -55,14 +68,17 @@ struct GroupRowView: View {
             }
             Spacer(minLength: 8)
             if let badge = row.badge {
+                let attention = row.badgeTone == .attention
                 Text(badge)
                     .font(.caption2.weight(.semibold))
                     .tracking(0.7)
                     .textCase(.uppercase)
-                    .foregroundStyle(Color.phInk)
+                    .foregroundStyle(attention ? Color.phDanger : Color.phInk)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 1)
-                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.phSky))
+                    .background(RoundedRectangle(cornerRadius: 4).fill(attention ? Color.clear : Color.phSky))
+                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(attention ? Color.phDanger : Color.clear, lineWidth: 1))
+                    .accessibilityIdentifier(attention ? "groupRow.badge.attention" : "groupRow.badge")
             }
             if chevron {
                 Image(systemName: "chevron.right")

@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-025, SUP-014]
 paired_with: [AND-027]
-status: Ready
+status: Done
 ---
 
 # IOS-026: Handle call actions and lost access, and add leave and swipe to remove on iOS

@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-010, SUP-023]
 paired_with: [AND-026]
-status: Ready
+status: Done
 ---
 
 # IOS-025: Build the iOS toolbar, full-screen cover and Browse all groups

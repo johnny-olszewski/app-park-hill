@@ -50,6 +50,21 @@ def main() -> int:
         if profiles.get(user["id"]) != persona["display_name"]:
             problems.append(f"{persona['id']}: profile display name {profiles.get(user['id'])!r} != {persona['display_name']!r}")
 
+    people = data.get("people", [])
+    expected_people = {dataset.person_email(p["id"]) for p in people}
+    for email in sorted(set(users_by_email) - expected_people):
+        if email.endswith("@" + dataset.PEOPLE_EMAIL_DOMAIN):
+            problems.append(f"account {email} is not in dataset.json people")
+    for person in people:
+        user = users_by_email.get(dataset.person_email(person["id"]))
+        if user is None:
+            problems.append(f"person {person['id']}: no account")
+            continue
+        if user["id"] != dataset.persona_uuid(person["id"]):
+            problems.append(f"person {person['id']}: account id {user['id']} is not the stable id")
+        if profiles.get(user["id"]) != person["display_name"]:
+            problems.append(f"person {person['id']}: profile display name {profiles.get(user['id'])!r} != {person['display_name']!r}")
+
     root = dataset.MOCK_RESPONSES_PATH
     response_dirs = {d.name for d in root.iterdir() if d.is_dir()} if root.exists() else set()
     active = {p["id"] for p in dataset.active_personas(data)}
@@ -62,7 +77,7 @@ def main() -> int:
         print(problem)
     if problems:
         return 1
-    print(f"Personas consistent: {', '.join(p['id'] for p in data['personas'])}")
+    print(f"Personas consistent: {', '.join(p['id'] for p in data['personas'])}; {len(people)} people")
     return 0
 
 

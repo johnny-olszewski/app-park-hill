@@ -15,6 +15,7 @@ STATES = {"active", "banned"}
 PERSONA_ID = re.compile(r"^[a-z][a-z0-9_]*$")
 PERSONA_NAMESPACE = uuid.UUID("6f1c8a52-3b0e-4f5e-9d3a-2a7c1e0b9d41")
 GROUP_NAMESPACE = uuid.UUID("0d3e6b7a-58c4-4b8e-a1f2-7c9e4d2b6a10")
+PEOPLE_EMAIL_DOMAIN = "people.parkhill.test"
 MEETING_TIME = re.compile(r"^([01][0-9]|2[0-3]):[0-5][0-9]$")
 
 
@@ -81,10 +82,34 @@ def validate(data: dict) -> None:
         roles = persona.get("roles", [])
         if not isinstance(roles, list) or not all(isinstance(r, str) and PERSONA_ID.match(r) for r in roles):
             raise DatasetError(f"{pid}: roles must be a list of role keys")
-    validate_groups(data.get("groups", []), ids)
+    people = validate_people(data.get("people", []), ids)
+    validate_groups(data.get("groups", []), ids | people)
+
+
+def validate_people(people, persona_ids: set[str]) -> set[str]:
+    """People are accounts that cannot sign in: group members and leaders
+    that make the data realistic, never personas. Returns their ids."""
+    if not isinstance(people, list):
+        raise DatasetError("people must be a list")
+    ids = set()
+    for person in people:
+        pid = person.get("id")
+        if not isinstance(pid, str) or not PERSONA_ID.match(pid):
+            raise DatasetError(f"invalid person id: {pid!r}")
+        if pid in ids or pid in persona_ids:
+            raise DatasetError(f"duplicate person id: {pid}")
+        ids.add(pid)
+        if not isinstance(person.get("display_name"), str) or not person["display_name"]:
+            raise DatasetError(f"{pid}: display_name is required")
+    return ids
+
+
+def person_email(person_id: str) -> str:
+    return f"{person_id}@{PEOPLE_EMAIL_DOMAIN}"
 
 
 def validate_groups(groups, persona_ids: set[str]) -> None:
+    """`persona_ids` holds both persona and people ids."""
     if not isinstance(groups, list):
         raise DatasetError("groups must be a list")
     ids = set()
@@ -107,10 +132,14 @@ def validate_groups(groups, persona_ids: set[str]) -> None:
         time = group.get("meeting_time")
         if time is not None and (not isinstance(time, str) or not MEETING_TIME.match(time)):
             raise DatasetError(f"{gid}: meeting_time must be HH:MM")
+        if not isinstance(group.get("archived", False), bool):
+            raise DatasetError(f"{gid}: archived must be true or false")
         members, leaders = group.get("members", []), group.get("leaders", [])
         for field, people in (("members", members), ("leaders", leaders)):
             if not isinstance(people, list) or not all(p in persona_ids for p in people):
-                raise DatasetError(f"{gid}: {field} must list persona ids")
+                raise DatasetError(f"{gid}: {field} must list persona or people ids")
+            if len(set(people)) != len(people):
+                raise DatasetError(f"{gid}: {field} lists someone twice")
         if not set(leaders) <= set(members):
             raise DatasetError(f"{gid}: every leader must also be a member")
 

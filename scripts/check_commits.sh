@@ -25,6 +25,7 @@ extra=$1
 
 work=$(mktemp -d)/worktree
 derived=$(dirname "$work")/ios-derived
+log=$(dirname "$work")/build.log
 git worktree add --quiet --detach "$work" "$base"
 trap 'git -C "$root" worktree remove --force "$work"' EXIT
 
@@ -41,14 +42,19 @@ for commit in $commits; do
     done
     echo "== $(git -C "$work" log -1 --format='%h %s')"
     changed=$(git -C "$work" diff --name-only "$commit~1" "$commit")
-    failed() { echo "Failed at $(git -C "$work" log -1 --format='%h %s'): $1"; exit 1; }
+    failed() {
+        echo "Failed at $(git -C "$work" log -1 --format='%h %s'): $1"
+        if [ -s "$log" ]; then echo "Last lines of the output:"; tail -n 30 "$log"; fi
+        exit 1
+    }
+    : > "$log"
 
     if echo "$changed" | grep -q '^ios/'; then "$work/ios/scripts/check_sources.sh" || failed "iOS source checks"; fi
     if echo "$changed" | grep -q '^android/'; then "$work/android/scripts/check_sources.sh" || failed "Android source checks"; fi
 
     if echo "$changed" | grep -qE '^(backend|contract)/'; then
         if supabase_running; then
-            (cd "$work/backend" && supabase db reset >/dev/null 2>&1) || failed "migrations"
+            (cd "$work/backend" && supabase db reset >"$log" 2>&1) || failed "migrations"
             echo "Migrations apply."
         else
             echo "Local Supabase is not running: skipped applying the migrations."
@@ -57,11 +63,11 @@ for commit in $commits; do
     if echo "$changed" | grep -qE '^(ios|contract)/'; then
         (cd "$work/ios" && make -s project >/dev/null \
             && xcodebuild -scheme ParkHill-Mock -destination "id=$(scripts/simulator.sh)" \
-                -derivedDataPath "$derived" build-for-testing >/dev/null 2>&1) || failed "iOS build"
+                -derivedDataPath "$derived" build-for-testing >"$log" 2>&1) || failed "iOS build"
         echo "iOS builds."
     fi
     if echo "$changed" | grep -qE '^(android|contract)/'; then
-        (cd "$work/android" && ./gradlew -q assembleMockDebug assembleMockDebugUnitTest assembleMockDebugAndroidTest >/dev/null 2>&1) \
+        (cd "$work/android" && ./gradlew -q assembleMockDebug assembleMockDebugUnitTest assembleMockDebugAndroidTest >"$log" 2>&1) \
             || failed "Android build"
         echo "Android builds."
     fi

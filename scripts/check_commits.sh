@@ -35,6 +35,10 @@ supabase_running() {
     (cd "$work/backend" && supabase status >/dev/null 2>&1)
 }
 
+# Applying an older commit's migrations resets the shared local database, so
+# finish by resetting it to the branch tip.
+reset_database=false
+
 for commit in $commits; do
     git -C "$work" checkout --quiet "$commit"
     for file in $local_files; do
@@ -56,8 +60,10 @@ for commit in $commits; do
         if supabase_running; then
             (cd "$work/backend" && supabase db reset >"$log" 2>&1) || failed "migrations"
             echo "Migrations apply."
+            reset_database=true
         else
             echo "Local Supabase is not running: skipped applying the migrations."
+            skipped_migrations=true
         fi
     fi
     if echo "$changed" | grep -qE '^(ios|contract)/'; then
@@ -73,4 +79,10 @@ for commit in $commits; do
     fi
     if [ -n "$extra" ]; then (cd "$work" && sh -c "$extra") || failed "$extra"; fi
 done
+if [ "$reset_database" = true ]; then
+    (cd "$root/backend" && supabase db reset >/dev/null 2>&1) && echo "Local database reset to the branch tip."
+fi
+if [ "${skipped_migrations:-false}" = true ]; then
+    echo "Migrations were not checked: start local Supabase and run again to check them."
+fi
 echo "Every commit passed."

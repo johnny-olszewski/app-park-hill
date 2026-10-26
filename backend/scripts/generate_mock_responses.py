@@ -12,12 +12,16 @@ Layout:
   <persona>/get_tabs.json                          get_tabs() as that persona
   sign_in.ok.json, sign_in.error.json              the sign_in Edge Function
   sign_in.error.<code>.json                        each other sign_in refusal
+  save_group_changes.ok.json, .failed.json         a save as `leader` that applies
+                                                   nothing: an empty batch, and one
+                                                   with a field and a row error
 A screen a caller may not see (any 4xx) gets no file for that caller.
 Session tokens in sign_in.ok.json are placeholders, so it never churns.
 """
 
 import json
 import shutil
+from urllib.parse import quote
 from pathlib import Path
 
 import dataset
@@ -152,6 +156,33 @@ def write_refusal_mock_responses(supabase: LocalSupabase, data: dict) -> None:
     write_refusal({"status": "error", "code": "unknown", "message": message})
 
 
+def write_save_mock_responses(supabase: LocalSupabase, data: dict) -> None:
+    """One ok and one failed save_group_changes as `leader`, on the group they
+    lead. Neither changes anything: the ok batch is empty and a failed save
+    applies nothing."""
+    leader = next(p for p in dataset.active_personas(data) if p["id"] == "leader")
+    member = next(p for p in dataset.active_personas(data) if p["id"] == "member_one")
+    group = next(g for g in data["groups"] if "leader" in g["leaders"])
+    group_id = supabase.request("GET", f"/rest/v1/groups?select=id&name=eq.{quote(group['name'])}", service=True)[0]["id"]
+    member_id = supabase.request(
+        "GET", f"/rest/v1/profiles?select=id&display_name=eq.{quote(member['display_name'])}", service=True
+    )[0]["id"]
+    token = supabase.sign_in(leader["email"], data["local_password"])
+
+    def save(batch: dict):
+        return supabase.rpc("save_group_changes", {"p_group_id": group_id, "p_batch": batch, "p_locale": LOCALE}, token=token)
+
+    ok = save({})
+    if ok != {"ok": True}:
+        raise SystemExit(f"save_group_changes ok mock response: got {ok}")
+    write(dataset.MOCK_RESPONSES_PATH / "save_group_changes.ok.json", ok)
+
+    failed = save({"fields": {"name": ""}, "add": [member_id]})
+    if failed.get("ok") is not False:
+        raise SystemExit(f"save_group_changes failed mock response: got {failed}")
+    write(dataset.MOCK_RESPONSES_PATH / "save_group_changes.failed.json", failed)
+
+
 def main() -> None:
     data = dataset.load()
     supabase = LocalSupabase()
@@ -185,6 +216,9 @@ def main() -> None:
         for key in keys:
             recorded.append(capture(folder / f"get_screen.{key}.json", lambda key=key: screen(key, {})))
         capture_reachable(folder, recorded, screen)
+
+    print("save_group_changes:")
+    write_save_mock_responses(supabase, data)
 
 
 if __name__ == "__main__":

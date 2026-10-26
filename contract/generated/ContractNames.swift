@@ -8,6 +8,7 @@ enum RPCFunction: String {
     case whoami = "whoami"
     case leaveGroup = "leave_group"
     case removeMember = "remove_member"
+    case saveGroupChanges = "save_group_changes"
 }
 
 /// Backend Edge Functions clients call.

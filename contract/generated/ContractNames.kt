@@ -10,6 +10,7 @@ enum class RpcFunction(val value: String) {
     whoami("whoami"),
     leaveGroup("leave_group"),
     removeMember("remove_member"),
+    saveGroupChanges("save_group_changes"),
 }
 
 /** Backend Edge Functions clients call. */

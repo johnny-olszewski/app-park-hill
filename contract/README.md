@@ -27,7 +27,7 @@ Every response a client decodes is described once in `/contract`, for both clien
 - `screens/<key>.schema.json` describes one backend screen's `data`.
 - `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, `Action`, `GroupRow`). The file name is the type's `title`.
 - `types/examples/<TypeName>.json` is an example value of a shared type, for types no recorded response contains yet, so clients can build views before screens exist.
-- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder, `@` params or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
+- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder, `@` params or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`, `save_group_changes.ok`, `save_group_changes.failed`), to the type that describes it.
 
 `make models` in `/backend` generates a Swift and a Kotlin model from each screen and type into `generated/`, named by its `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. Swift models are `Codable, Equatable, Sendable`; Kotlin models are `@Serializable`.
 
@@ -108,7 +108,7 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 | `on_success` | `refresh`: refetch the screen. `dismiss`: close a pushed screen and refresh the one below, or refresh a tab root in place (guide 5.3 rule 9). `none`: nothing |
 | `role` | `destructive`: a meaning each platform styles its own way |
 
-A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns `{}`, which clients do not decode (EP-03.E adds `then`). A refused call is an error (Errors below).
+A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns a body: `{}` for most, which clients ignore (EP-03.E adds `then`), and a `SaveResult` for `save_group_changes`, which edit mode decodes. A refused call is an error (Errors below).
 
 Shared types for Community screens, all text backend formatted and localized:
 
@@ -149,6 +149,7 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_tabs(p_locale)` | Signed in only | The enabled tabs in order, at most five: `{ "tabs": [ { "id", "title", "icon_key", "screen": <envelope> } ] }`. `title` is resolved for the locale; `icon_key` names a bundled client asset |
 | `leave_group(p_group_id, p_locale)` | Signed in, in the group | `{}`. Ends the caller's membership and leadership; the last leader may leave. Else `action_refused` |
 | `remove_member(p_group_id, p_user_id, p_locale)` | Signed in, with `groups.remove_member` for the group; leaders cannot remove leaders | `{}`. Ends that member's membership and leadership. Else `action_refused` |
+| `save_group_changes(p_group_id, p_batch, p_locale)` | Signed in, with the permission for each change | `SaveResult`: `{ "ok": true }` with every change applied, or `ok: false` with `field_errors` (field id to message) and `row_errors` (user id to message) and nothing applied. `p_batch` is `{ fields: { <id>: value }, add, remove, make_leader, remove_leader: [user_id] }`; field ids `name`, `description`, `day` (`"1"` to `"7"`), `time` (`"19:00"`), `location`; name, day and time are required |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 ### `sign_in` Edge Function

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PersonRow",
+  "description": "One person in a list of people, such as the people picker (specs/COMMUNITY.md 5.8); the future directory reuses it.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "title": {
+      "description": "The person's display name.",
+      "type": "string"
+    },
+    "subtitle": {
+      "description": "A second line, when there is one.",
+      "type": "string"
+    },
+    "note": {
+      "description": "Why the person cannot be chosen, for example \"Already a member\".",
+      "type": "string"
+    },
+    "selectable": {
+      "description": "Whether the person can be chosen; when false the row shows its note and does nothing.",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "user_id",
+    "title",
+    "selectable"
+  ],
+  "additionalProperties": false
+}

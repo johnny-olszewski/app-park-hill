@@ -4,6 +4,7 @@ import app.parkhill.contract.CommunityBrowseData
 import app.parkhill.contract.CommunityGroupData
 import app.parkhill.contract.CommunityHomeData
 import app.parkhill.contract.HomeRootData
+import app.parkhill.contract.PeoplePickerData
 import app.parkhill.contract.ScreenKey
 import app.parkhill.contract.SignInScreenData
 import app.parkhill.screens.auth.SignInScreen
@@ -12,6 +13,7 @@ import app.parkhill.screens.community.CommunityGroupScreen
 import app.parkhill.screens.community.CommunityHomeScreen
 import app.parkhill.screens.community.CommunityHomeState
 import app.parkhill.screens.home.HomeRootScreen
+import app.parkhill.screens.people.PeoplePickerScreen
 import app.parkhill.services.auth.AuthService
 
 /** Screens every flavor can show. */
@@ -23,4 +25,5 @@ fun ScreenRegistry.registerSharedScreens(auth: AuthService) {
     }
     register(ScreenKey.communityGroup, CommunityGroupData.serializer(), title = { it.title }) { data -> CommunityGroupScreen(data) }
     register(ScreenKey.communityBrowse, CommunityBrowseData.serializer(), title = { it.title }) { data -> CommunityBrowseScreen(data) }
+    register(ScreenKey.peoplePicker, PeoplePickerData.serializer(), title = { it.title }) { data -> PeoplePickerScreen(data) }
 }

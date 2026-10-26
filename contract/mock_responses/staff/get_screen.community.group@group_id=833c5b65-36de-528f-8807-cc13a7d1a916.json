@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Normal Heights Group",
     "meeting": "Mondays · 7:00 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Noah Patel",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Abigail Foster",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Fatima Rahman",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "302ad677-0ae5-53c2-9092-1a9772129c94",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Isabella Rossi",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "aa011d59-1919-5c71-adbc-7f3f00ebf10d",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Luke Anderson",
@@ -146,7 +164,8 @@
           }
         },
         "user_id": "26642996-8fed-5d6d-9f47-68390279d999",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Micah Johnson",
@@ -170,7 +189,8 @@
           }
         },
         "user_id": "0ac0e727-0f58-50f2-ae83-7f39e0d7fd35",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Owen Murphy",
@@ -194,7 +214,8 @@
           }
         },
         "user_id": "9918d3d6-f50e-50f6-8c2d-acc7a29b6b37",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Victor Hernandez",
@@ -218,7 +239,8 @@
           }
         },
         "user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Zoe Laurent",
@@ -242,12 +264,86 @@
           }
         },
         "user_id": "ca862a89-4cb8-5f29-acf1-970a55a41f8e",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "833c5b65-36de-528f-8807-cc13a7d1a916",
     "location": "Kim home, Normal Heights",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "833c5b65-36de-528f-8807-cc13a7d1a916"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "Dinner, discussion and prayer for neighbors in Normal Heights.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Normal Heights Group"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "Dinner, discussion and prayer for neighbors in Normal Heights."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "1",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "19:00"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Kim home, Normal Heights"
+      }
+    ],
     "leaders_line": "Leaders: Chloe Dubois, Noah Patel",
     "members_title": "Members"
   }

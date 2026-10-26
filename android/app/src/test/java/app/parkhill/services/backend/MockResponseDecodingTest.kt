@@ -2,6 +2,7 @@ package app.parkhill.services.backend
 
 import app.parkhill.contract.CommunityGroupData
 import app.parkhill.contract.Profile
+import app.parkhill.contract.SaveResult
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.SignInFailure
 import app.parkhill.contract.SignInSuccess
@@ -32,6 +33,7 @@ class MockResponseDecodingTest {
         "Profile" to Profile.serializer(),
         "SignInSuccess" to SignInSuccess.serializer(),
         "SignInFailure" to SignInFailure.serializer(),
+        "SaveResult" to SaveResult.serializer(),
     )
 
     @Test

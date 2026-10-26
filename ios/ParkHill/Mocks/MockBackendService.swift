@@ -5,7 +5,9 @@ import Foundation
 /// `auth.sign_in`); `get_screen` reads `get_screen.<key>@<params>.json`, else
 /// `get_screen.<key>.json`; `get_tabs` and
 /// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
-/// A `call` succeeds and changes nothing: mock responses are static (guide 6).
+/// A `call` succeeds and changes nothing (mock responses are static, guide
+/// 6), returning the recorded `<function>.ok.json` when there is one, such as
+/// a save's, else `{}`.
 struct MockBackendService: BackendService {
     private let responses: MockResponseStore
     private let personaState: MockPersonaState
@@ -38,8 +40,10 @@ struct MockBackendService: BackendService {
         return try decode(RPCFunction.whoami.rawValue, missing: .server)
     }
 
-    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) -> JSONValue {
         guard personaState.current != nil else { throw .unauthorized }
+        guard responses.data(named: "\(function).ok", persona: personaState.current) != nil else { return .object([:]) }
+        return try decode("\(function).ok", missing: .server)
     }
 
     private func decode<Response: Decodable>(_ name: String, missing: BackendError) throws(BackendError) -> Response {

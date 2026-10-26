@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GroupEditLabels",
+  "description": "The backend's labels for edit mode's buttons; present when the caller holds any edit capability (specs/COMMUNITY.md 5.3).",
+  "type": "object",
+  "properties": {
+    "edit_label": {
+      "type": "string"
+    },
+    "done_label": {
+      "description": "Saves every staged change.",
+      "type": "string"
+    },
+    "cancel_label": {
+      "description": "Discards every staged change.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "edit_label",
+    "done_label",
+    "cancel_label"
+  ],
+  "additionalProperties": false
+}

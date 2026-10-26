@@ -40,6 +40,25 @@
     "leave": {
       "description": "Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`.",
       "$ref": "ActionButton.schema.json"
+    },
+    "edit": {
+      "description": "Edit mode's labels, present when the caller holds any edit capability.",
+      "$ref": "GroupEditLabels.schema.json"
+    },
+    "add_member": {
+      "description": "Opens the people picker as a sheet, for holders of groups.add_member.",
+      "$ref": "ActionButton.schema.json"
+    },
+    "edit_fields": {
+      "description": "The details edited inline, for holders of groups.edit_details.",
+      "type": "array",
+      "items": {
+        "$ref": "EditField.schema.json"
+      }
+    },
+    "save": {
+      "description": "Done's call: save_group_changes, to which the client adds `p_batch` (specs/COMMUNITY.md 5.4).",
+      "$ref": "CallAction.schema.json"
     }
   },
   "required": [

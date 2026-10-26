@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "767a6aa8-c916-5926-a015-7bc0e8610022"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Women's Morning Study",
     "meeting": "Wednesdays · 9:30 AM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "e42a80b0-b74b-54eb-8cd3-7e9d2b1a01e3",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Aaliyah Davis",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Camila Torres",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "b4451fe6-3cd9-541b-b386-53d8477fa0fa",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Diego Castillo",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Emily Sato",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "c13b680a-0c15-594e-a035-3010d035d546",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Hope Williams",
@@ -146,7 +164,8 @@
           }
         },
         "user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Jonah Price",
@@ -170,7 +189,8 @@
           }
         },
         "user_id": "10adb58e-512b-5126-90e1-378b554b1277",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Lydia Kowalski",
@@ -194,7 +214,8 @@
           }
         },
         "user_id": "8ae986df-3b6e-5e84-b851-def069138c14",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Nathan Brooks",
@@ -218,7 +239,8 @@
           }
         },
         "user_id": "75d746fc-a982-5d3a-a243-42a3b55c2ba6",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Peter Lindqvist",
@@ -242,7 +264,8 @@
           }
         },
         "user_id": "622787b9-ba93-5716-9db5-6b8b99937e3b",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Ruth Adeyemi",
@@ -266,7 +289,8 @@
           }
         },
         "user_id": "a40b182d-b970-5410-b880-29974e9dcd8b",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Simon Novak",
@@ -290,12 +314,86 @@
           }
         },
         "user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "767a6aa8-c916-5926-a015-7bc0e8610022",
     "location": "Church lounge",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "767a6aa8-c916-5926-a015-7bc0e8610022"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "A slow walk through one book of the Bible each term, with coffee.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Women's Morning Study"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "A slow walk through one book of the Bible each term, with coffee."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "3",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "09:30"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Church lounge"
+      }
+    ],
     "leaders_line": "Leaders: Gabriel Silva",
     "members_title": "Members"
   }

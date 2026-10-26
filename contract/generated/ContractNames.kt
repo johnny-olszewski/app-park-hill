@@ -10,6 +10,7 @@ enum class RpcFunction(val value: String) {
     whoami("whoami"),
     leaveGroup("leave_group"),
     removeMember("remove_member"),
+    saveGroupChanges("save_group_changes"),
 }
 
 /** Backend Edge Functions clients call. */
@@ -24,4 +25,5 @@ object ScreenKey {
     const val communityHome = "community.home"
     const val communityGroup = "community.group"
     const val communityBrowse = "community.browse"
+    const val peoplePicker = "people.picker"
 }

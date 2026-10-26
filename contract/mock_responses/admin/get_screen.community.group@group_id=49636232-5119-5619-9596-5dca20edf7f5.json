@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Grief and Hope",
     "meeting": "Mondays · 6:00 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "0ce04da4-5572-533e-8837-1139146723c3",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Aaliyah Davis",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Diego Castillo",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Hope Williams",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Jacob Rivera",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "899397aa-d671-5768-ae6d-79ce7a889021",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Simon Novak",
@@ -146,12 +164,86 @@
           }
         },
         "user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "49636232-5119-5619-9596-5dca20edf7f5",
     "location": "Room 2, church building",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "A small group for those who have lost someone.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Grief and Hope"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "A small group for those who have lost someone."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "1",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "18:00"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Room 2, church building"
+      }
+    ],
     "leaders_line": "Leaders: Tabitha Young",
     "members_title": "Members"
   }

@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-013]
 paired_with: []
-status: Draft
+status: Done
 ---
 
 # SUP-024: Send group edit capabilities and save every change at once
@@ -20,10 +20,11 @@ Leaders update their group in one pass: details, people added and removed, and (
 - Contract (`specs/COMMUNITY.md` 5.3 and 5.4), in `contract/types/`:
   - `GroupDetail` gains optional `edit` (`edit_label`, `done_label`, `cancel_label`), present when the caller holds any edit capability; optional `add_member` (`ActionButton`, `navigate` to `people.picker` as a `sheet`); optional `edit_fields` (list of `EditField`); optional `save` (`CallAction` to `save_group_changes`, `on_success` `refresh`)
   - `MemberRow` gains optional `toggle_leader` (`true` when the caller may make or remove this leader)
-  - `EditField`: `id`, `label`, `kind` (enum `text`, `multiline`, `day`, `time`), `value`, optional `options` (`{ value, label }` list, for `day`)
+  - `EditField`: `id`, `label`, `kind` (enum `text`, `multiline`, `day`, `time`), `value` (a string: day `"1"` to `"7"`, time `"19:00"`), optional `options` (a list of `EditFieldOption`: `value`, `label`, for `day`). Name, day and time are required: an empty one is a field error ("Enter a name." for the name)
   - `SaveResult`: `ok`, optional `field_errors` (field id to message), optional `row_errors` (user id to message)
-- `save_group_changes(p_group_id, p_batch)`, `p_batch` = `{ fields: { <id>: value }, add: [user_id], remove: [user_id], make_leader: [user_id], remove_leader: [user_id] }`: one transaction, permission checked per change; any problem applies nothing and returns `SaveResult` with every error localized.
-- Add the function to `contract/names.json`; map its ok and failed results in `contract/responses.json`; strings in migrations; mock responses for `leader`, `staff` and `admin`, and for one ok and one failed save.
+- `save_group_changes(p_group_id, p_batch, p_locale)`; `save`'s `params` carry `p_group_id`, and the client adds `p_batch` and `p_locale`. A save returns `SaveResult` (HTTP 200 whether `ok` or not), which clients decode. `p_batch` = `{ fields: { <id>: value }, add: [user_id], remove: [user_id], make_leader: [user_id], remove_leader: [user_id] }`: one transaction, permission checked per change; any problem applies nothing and returns `SaveResult` with every error localized.
+- Row errors include "Already a member", "No longer in this group" and the refusal message; a change on a row the caller may not make is a row error.
+- Add the function to `contract/names.json`; map its ok and failed results in `contract/responses.json`; strings in migrations; mock responses for `leader`, `staff` and `admin`, including the `people.picker` each one's `add_member` opens (mapped in `responses.json`), and for one ok and one failed save: `make mock-responses` records `save_group_changes.ok.json` and `save_group_changes.failed.json` (shared, not per persona) after every persona, then resets local Supabase so nothing it saved remains.
 
 ## Out of scope
 

@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -51,11 +52,15 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
 
     /** Answers `call`; by default a success. */
     var callResult: (function: String) -> Unit = {}
+
+    /** The body a successful `call` returns; by default `{}`. */
+    var callBody: (function: String) -> JsonElement = { JsonObject(emptyMap()) }
     val calls = mutableListOf<Triple<String, JsonObject, String>>()
 
-    override suspend fun call(function: String, params: JsonObject, locale: String) {
+    override suspend fun call(function: String, params: JsonObject, locale: String): JsonElement {
         calls += Triple(function, params, locale)
         callResult(function)
+        return callBody(function)
     }
 
     companion object {

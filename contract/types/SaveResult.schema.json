@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SaveResult",
+  "description": "What save_group_changes returns (specs/COMMUNITY.md 5.4): ok, or every problem keyed to its field or row, with nothing saved.",
+  "type": "object",
+  "properties": {
+    "ok": {
+      "description": "True when every change was saved; false when none was.",
+      "type": "boolean"
+    },
+    "field_errors": {
+      "description": "Edit field id to the backend's message, shown under that field.",
+      "type": "object"
+    },
+    "row_errors": {
+      "description": "User id to the backend's message, shown on that person's row.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "ok"
+  ],
+  "additionalProperties": false
+}

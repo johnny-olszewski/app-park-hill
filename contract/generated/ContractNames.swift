@@ -8,6 +8,7 @@ enum RPCFunction: String {
     case whoami = "whoami"
     case leaveGroup = "leave_group"
     case removeMember = "remove_member"
+    case saveGroupChanges = "save_group_changes"
 }
 
 /// Backend Edge Functions clients call.
@@ -22,4 +23,5 @@ enum ScreenKey {
     static let communityHome = "community.home"
     static let communityGroup = "community.group"
     static let communityBrowse = "community.browse"
+    static let peoplePicker = "people.picker"
 }

@@ -16,8 +16,10 @@ protocol BackendService: Sendable {
     func whoami() async throws(BackendError) -> Profile
 
     /// A `call` action's backend function, with the action's `params` and
-    /// `p_locale` added. A success's body is not read.
-    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError)
+    /// `p_locale` added. Returns the response body, which most callers
+    /// ignore; edit mode's save decodes it as a `SaveResult`.
+    @discardableResult
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) -> JSONValue
 }
 
 extension BackendService {

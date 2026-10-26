@@ -102,6 +102,19 @@ class SupabaseBackendServiceTest {
     }
 
     @Test
+    fun callReturnsTheResponseBody() = runTest {
+        respond(200, """{"ok": false, "field_errors": {"name": "Enter a name."}}""")
+        val body = service.call("save_group_changes", JsonObject(emptyMap()), "en")
+        assertEquals(Json.parseToJsonElement("""{"ok": false, "field_errors": {"name": "Enter a name."}}"""), body)
+    }
+
+    @Test
+    fun aCallWithAnEmptyBodyReturnsAnEmptyObject() = runTest {
+        respond(204, "")
+        assertEquals(JsonObject(emptyMap()), service.call("leave_group", JsonObject(emptyMap()), "en"))
+    }
+
+    @Test
     fun actionRefusedCarriesTheBackendsMessage() = runTest {
         respond(400, """{"code": "P0001", "message": "action_refused", "details": "You can't make this change anymore.", "hint": null}""")
         expectError(BackendError.ActionRefused("You can't make this change anymore.")) {

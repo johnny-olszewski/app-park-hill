@@ -5,7 +5,8 @@
     "get_tabs",
     "whoami",
     "leave_group",
-    "remove_member"
+    "remove_member",
+    "save_group_changes"
   ],
   "edge_functions": [
     "sign_in"
@@ -15,6 +16,7 @@
     "home.root",
     "community.home",
     "community.group",
-    "community.browse"
+    "community.browse",
+    "people.picker"
   ]
 }

@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Point Loma Group",
     "meeting": "Wednesdays · 7:00 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "7ea18780-b3bb-538f-9a98-c67b4000cdfc",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Ethan Walsh",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "35c64e2d-2825-583f-94d2-11b1077d40e6",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Julia Santos",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "69f0760e-7d8e-538d-bc61-394ff38cda3c",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Leah Goldberg",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "023aa20f-cf34-5316-934b-fac5c95d6330",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Mei Chen",
@@ -122,12 +139,86 @@
           }
         },
         "user_id": "05b05497-f377-52c5-ba07-449728c897fd",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85",
     "location": "Vesper Hall",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "18deaa2c-8386-5f7a-9778-749f4a44bc85"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "A new group looking for a leader.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Point Loma Group"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "A new group looking for a leader."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "3",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "19:00"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Vesper Hall"
+      }
+    ],
     "leaders_line": "Leaders: none yet",
     "members_title": "Members"
   }

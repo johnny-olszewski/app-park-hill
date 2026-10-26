@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-012, SUP-024]
 paired_with: [IOS-013]
-status: Draft
+status: Done
 ---
 
 # AND-013: Build Android group edit mode with batched changes
@@ -19,7 +19,8 @@ Leaders update their group in one pass, and staff change who leads it. This task
 
 - The platform-standard Edit button when the data has `edit`; Done and Cancel labels from it.
 - Staging in edit mode, each control only where its capability is sent: a minus button on rows with `remove`; the leader icon as a toggle on rows with `toggle_leader` (filled for leaders, greyed for others); Add member from `add_member`, opening the picker (AND-012), whose people appear as pending rows; `edit_fields` as inline fields by `kind` (text, multiline, day picker, time picker).
-- Done sends one `save` call with the staged batch (`specs/COMMUNITY.md` 5.4); Cancel discards every staged change.
+- Done sends one `save` call with the staged batch added as `p_batch` (`specs/COMMUNITY.md` 5.4) and decodes its `SaveResult`: `BackendService.call` now returns the response body, which other calls keep ignoring. Cancel discards every staged change.
+- In edit mode the minus only stages a removal (a row's `remove` means the caller may remove them); swipe to remove, Leave and pull to refresh are off; pending rows (people added from the picker) have no leader toggle; staged changes survive a refresh of the data underneath. In Mock a save returns the recorded ok result.
 - A failed save keeps edit mode open with each `field_errors` message under its field and each `row_errors` message on its row.
 - Local UI tests in `make test-local`: `leader` edits details, adds and removes members, and the changes persist after relaunch; `staff` makes someone a leader.
 
@@ -40,6 +41,7 @@ Leaders update their group in one pass, and staff change who leads it. This task
 ## Technical notes
 
 - Edit is a top app bar action switching the screen into edit mode; Done and Cancel replace it, Cancel on the navigation icon.
+- The minus is one tap that stages the removal; iOS's system delete control takes two (IOS-013). The behavior, staging with no alert, is the same.
 - Behavior must match IOS-013.
 
 ## Verification

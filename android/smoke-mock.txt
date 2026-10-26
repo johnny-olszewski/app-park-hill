@@ -9,3 +9,4 @@ app.parkhill.ui.TabsUiTest#signInShowsTheTabsAndSwitchingFollowsInTheMenu
 app.parkhill.ui.DevToolsUiTest#menuShowsTheCurrentScreenAndTheAppStillTakesTouches
 app.parkhill.ui.CommunityUiTest#memberTwoListsBothGroupsAndOpensEach
 app.parkhill.ui.BrowseUiTest#staffBrowsesSearchesOpensAGroupAndCloses
+app.parkhill.ui.PeoplePickerUiTest#leaderAddsPeopleFromThePickerAndSaves

@@ -53,6 +53,9 @@ class ScreenModel private constructor(
      */
     internal var onUnavailable: ((String) -> Unit)? = null
 
+    /** What the screen asks of its top app bar now, if anything ([ScreenChromeEffect]). */
+    internal var chrome: ScreenChrome? by mutableStateOf(null)
+
     /** The envelope showing now, if any. */
     val envelope: ScreenEnvelope? get() = (state as? ScreenState.Showing)?.screen?.envelope
 

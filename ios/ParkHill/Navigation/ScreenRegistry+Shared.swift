@@ -16,5 +16,8 @@ extension ScreenRegistry {
         register(ScreenKey.communityBrowse, data: CommunityBrowseData.self) { data in
             CommunityBrowseScreen(data: data)
         }
+        register(ScreenKey.peoplePicker, data: PeoplePickerData.self) { data in
+            PeoplePickerScreen(data: data)
+        }
     }
 }

@@ -24,6 +24,7 @@
       "type": "string",
       "enum": [
         "push",
+        "sheet",
         "full_screen_cover"
       ]
     },

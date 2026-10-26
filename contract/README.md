@@ -27,7 +27,7 @@ Every response a client decodes is described once in `/contract`, for both clien
 - `screens/<key>.schema.json` describes one backend screen's `data`.
 - `types/<TypeName>.schema.json` describes a shared type: a whole response (`ScreenEnvelope`, `TabsResponse`, `Profile`, `SignInSuccess`, `SignInFailure`) or a part used inside one (`TabItem`, `SignInSession`, `Action`, `GroupRow`). The file name is the type's `title`.
 - `types/examples/<TypeName>.json` is an example value of a shared type, for types no recorded response contains yet, so clients can build views before screens exist.
-- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder, `@` params or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`), to the type that describes it.
+- `responses.json` maps each recorded response in `mock_responses/`, by file name without its persona folder, `@` params or `.json` (`get_entry`, `get_screen.<key>`, `get_tabs`, `whoami`, `sign_in.ok`, `sign_in.error`, `sign_in.error.<code>`, `save_group_changes.ok`, `save_group_changes.failed`), to the type that describes it.
 
 `make models` in `/backend` generates a Swift and a Kotlin model from each screen and type into `generated/`, named by its `title` (`SignInScreenData.swift`, `SignInScreenData.kt`, package `app.parkhill.contract`); never edit them by hand. Swift models are `Codable, Equatable, Sendable`; Kotlin models are `@Serializable`.
 
@@ -104,11 +104,11 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 
 | Field | Values |
 |---|---|
-| `presentation` | `push`: the current tab's stack. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. EP-03.D adds `sheet` |
+| `presentation` | `push`: the current tab's stack. `sheet`: a sheet over the screen, fetched with a loading state, opened from a tab or a cover. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. |
 | `on_success` | `refresh`: refetch the screen. `dismiss`: close a pushed screen and refresh the one below, or refresh a tab root in place (guide 5.3 rule 9). `none`: nothing |
 | `role` | `destructive`: a meaning each platform styles its own way |
 
-A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns `{}`, which clients do not decode (EP-03.E adds `then`). A refused call is an error (Errors below).
+A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns a body: `{}` for most, which clients ignore (EP-03.E adds `then`), and a `SaveResult` for `save_group_changes`, which edit mode decodes. A refused call is an error (Errors below).
 
 Shared types for Community screens, all text backend formatted and localized:
 
@@ -116,10 +116,14 @@ Shared types for Community screens, all text backend formatted and localized:
 |---|---|
 | `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), optional `badge_tone` (`attention`, for example on "No leader"), `action` |
 | `ToolbarItem` | `id`, `label` (also the accessibility label of an icon button), `icon_key` (a bundled icon), `action` |
-| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members) |
-| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove) |
+| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members); for edit mode, optional `edit` (`GroupEditLabels`), `add_member` (`ActionButton` opening `people.picker` as a sheet), `edit_fields` (`EditField`s) and `save` (`CallAction` to `save_group_changes`) |
+| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove), optional `toggle_leader` (true when the caller may change this member's leadership) |
 | `ActionButton` | `label`, `action`; sent only to people who may use it |
+| `GroupEditLabels` | `edit_label`, `done_label`, `cancel_label` |
+| `EditField` | `id` (the key in the save batch and in `field_errors`), `label`, `kind` (`text`, `multiline`, `day`, `time`), `value` (a string), optional `options` (`EditFieldOption`s: `value`, `label`, for a `day`) |
+| `SaveResult` | `ok`, optional `field_errors` (field id to message), optional `row_errors` (user id to message) |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
+| `PersonRow` | `user_id`, `title` (display name), optional `subtitle`, optional `note` (why they cannot be chosen, for example "Already a member"), `selectable` |
 | `EmptyState` | `title`, `message`; shown with no buttons |
 
 ## Screen keys
@@ -133,6 +137,7 @@ Lowercase and dot separated. A key ending in `.mock` is registered only in the M
 | `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: one of `group` (`GroupDetail`), `my_groups` (`GroupList`) or `empty` (`EmptyState`) | `mock responses/<persona>/get_screen.community.home.json` |
 | `community.browse` | `get_screen`; holders of `groups.view_all`, else `screen_unavailable` | `screens/community.browse.schema.json`: `title`, `search_placeholder`, `rows` (every group by name, `GroupRow`s badged for the caller) | `mock responses/<persona>/get_screen.community.browse.json` |
 | `community.group` | `get_screen` with `{"group_id"}`; members, leaders and holders of `groups.view_all`, else `screen_unavailable` | `screens/community.group.schema.json`: `GroupDetail` | `mock responses/<persona>/get_screen.community.group@group_id=<id>.json`, for each group a persona's responses open |
+| `people.picker` | `get_screen` with `{"group_id"}`; holders of `groups.add_member` on that group, else `screen_unavailable` | `screens/people.picker.schema.json`: `title`, `search_placeholder`, `add_label`, `cancel_label`, `rows` (every active person by name, `PersonRow`s; current members not `selectable`, with a `note`) | `mock responses/<persona>/get_screen.people.picker@group_id=<id>.json`, for each group a persona's `add_member` opens |
 
 A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.
 
@@ -147,6 +152,7 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_tabs(p_locale)` | Signed in only | The enabled tabs in order, at most five: `{ "tabs": [ { "id", "title", "icon_key", "screen": <envelope> } ] }`. `title` is resolved for the locale; `icon_key` names a bundled client asset |
 | `leave_group(p_group_id, p_locale)` | Signed in, in the group | `{}`. Ends the caller's membership and leadership; the last leader may leave. Else `action_refused` |
 | `remove_member(p_group_id, p_user_id, p_locale)` | Signed in, with `groups.remove_member` for the group; leaders cannot remove leaders | `{}`. Ends that member's membership and leadership. Else `action_refused` |
+| `save_group_changes(p_group_id, p_batch, p_locale)` | Signed in, with the permission for each change | `SaveResult`: `{ "ok": true }` with every change applied, or `ok: false` with `field_errors` (field id to message) and `row_errors` (user id to message) and nothing applied. `p_batch` is `{ fields: { <id>: value }, add, remove, make_leader, remove_leader: [user_id] }`; field ids `name`, `description`, `day` (`"1"` to `"7"`), `time` (`"19:00"`), `location`; name, day and time are required |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 ### `sign_in` Edge Function

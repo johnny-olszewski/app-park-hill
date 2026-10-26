@@ -5,6 +5,7 @@ import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -26,7 +27,7 @@ class SessionRenewingBackendService(
 
     override suspend fun whoami(): Profile = withRenewal { base.whoami() }
 
-    override suspend fun call(function: String, params: JsonObject, locale: String) =
+    override suspend fun call(function: String, params: JsonObject, locale: String): JsonElement =
         withRenewal { base.call(function, params, locale) }
 
     private suspend fun <T> withRenewal(request: suspend () -> T): T = try {

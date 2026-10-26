@@ -65,13 +65,9 @@ private struct TabRoot: View {
         .fullScreenCover(item: $tab.cover) { cover in
             CoverView(cover: cover, close: tab.closeCover)
                 .modifier(TabAlerts(tab: tab, inCover: true))
+                .modifier(TabSheet(tab: tab, inCover: true))
         }
-        .sheet(item: $tab.presented) { route in
-            NavigationStack {
-                ScreenHostView(model: route.screen)
-            }
-            .environment(\.screenActions, tab.actions)
-        }
+        .modifier(TabSheet(tab: tab, inCover: false))
     }
 }
 
@@ -132,5 +128,29 @@ private struct TabAlerts: ViewModifier {
                 tab.message ?? "",
                 isPresented: Binding(get: { here && tab.message != nil }, set: { if !$0 { tab.message = nil } })
             ) {}
+    }
+}
+
+/// The tab's sheet (guide 5.5: a sheet with detents), shown over the cover
+/// while one is open and over the tab otherwise. Dragging it down, like
+/// Cancel, closes it handing back nothing.
+private struct TabSheet: ViewModifier {
+    @Bindable var tab: TabCoordinator
+    let inCover: Bool
+
+    private var here: Bool { (tab.cover != nil) == inCover }
+
+    func body(content: Content) -> some View {
+        // Read here, not only in the binding, so a new sheet updates the view.
+        let presented = here ? tab.presented : nil
+        return content.sheet(item: Binding(get: { presented }, set: { if $0 == nil { tab.dismiss() } })) { route in
+            NavigationStack {
+                ScreenHostView(model: route.screen)
+            }
+            .environment(\.screenActions, tab.actions)
+            .environment(\.sheetActions, SheetActions(returnPeople: tab.returnPeople, cancel: tab.dismiss))
+            .presentationDetents([.medium, .large])
+            .tint(Color.phInk)
+        }
     }
 }

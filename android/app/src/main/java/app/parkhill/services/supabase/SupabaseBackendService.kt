@@ -19,6 +19,7 @@ import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -40,13 +41,20 @@ class SupabaseBackendService(private val client: SupabaseClient) : BackendServic
 
     override suspend fun whoami(): Profile = call(RpcFunction.whoami, JsonObject(emptyMap()), Profile.serializer())
 
-    override suspend fun call(function: String, params: JsonObject, locale: String) {
-        try {
-            client.postgrest.rpc(function, JsonObject(params + ("p_locale" to JsonPrimitive(locale))))
+    override suspend fun call(function: String, params: JsonObject, locale: String): JsonElement {
+        val body = try {
+            client.postgrest.rpc(function, JsonObject(params + ("p_locale" to JsonPrimitive(locale)))).data
         } catch (error: CancellationException) {
             throw error
         } catch (error: Exception) {
             throw map(error)
+        }
+        // A function that returns nothing answers with an empty body.
+        if (body.isBlank()) return JsonObject(emptyMap())
+        return try {
+            ContractJson.parseToJsonElement(body)
+        } catch (error: SerializationException) {
+            throw BackendError.Decoding
         }
     }
 

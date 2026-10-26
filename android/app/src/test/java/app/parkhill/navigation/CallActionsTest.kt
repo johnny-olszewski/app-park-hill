@@ -15,6 +15,8 @@ import app.parkhill.services.backend.ContractJson
 import java.io.File
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
@@ -176,5 +178,55 @@ class CallActionsTest {
         assertEquals(1, tab.path.size)
         assertTrue(backend.screenCalls.isEmpty())
         assertNull(tab.message)
+    }
+
+    // A form's submit (AND-013 AC3, AC4): fields added, the body handed back, on_success only on success.
+
+    private fun save(): CallAction = homeData(home("leader")).group!!.save!!
+
+    private val batch = mapOf("p_batch" to JsonObject(mapOf("add" to JsonArray(listOf(JsonPrimitive("u"))))))
+
+    @Test
+    fun aSubmitAddsItsFieldsAndRefreshesOnSuccessBeforeHandingBackTheBody() {
+        backend.screen = { _, _ -> home("leader") }
+        backend.callBody = { JsonObject(mapOf("ok" to JsonPrimitive(true))) }
+        val tab = tab(home("leader"))
+        var screenCallsWhenDone = -1
+        var body: JsonElement? = null
+        tab.actions.from(tab.root).submit(save(), batch, succeeded = { true }) {
+            body = it
+            screenCallsWhenDone = backend.screenCalls.size
+        }
+
+        assertEquals(listOf(Triple("save_group_changes", JsonObject(save().params + batch), "en")), backend.calls)
+        assertEquals(JsonObject(mapOf("ok" to JsonPrimitive(true))), body)
+        assertEquals(1, screenCallsWhenDone)
+    }
+
+    @Test
+    fun aSubmitWhoseBodyIsNotASuccessDoesNotRefresh() {
+        backend.callBody = { JsonObject(mapOf("ok" to JsonPrimitive(false))) }
+        val tab = tab(home("leader"))
+        var body: JsonElement? = null
+        tab.actions.from(tab.root).submit(save(), batch, succeeded = { false }) { body = it }
+
+        assertEquals(JsonObject(mapOf("ok" to JsonPrimitive(false))), body)
+        assertTrue(backend.screenCalls.isEmpty())
+    }
+
+    @Test
+    fun aFailedSubmitHandsBackNothing() {
+        backend.callResult = { throw BackendError.Network }
+        val tab = tab(home("leader"))
+        var done = false
+        var body: JsonElement? = JsonObject(emptyMap())
+        tab.actions.from(tab.root).submit(save(), batch, succeeded = { true }) {
+            done = true
+            body = it
+        }
+
+        assertTrue(done)
+        assertNull(body)
+        assertTrue(backend.screenCalls.isEmpty())
     }
 }

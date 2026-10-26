@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EditFieldOption",
+  "description": "One choice for an edit field, such as a meeting day.",
+  "type": "object",
+  "properties": {
+    "value": {
+      "description": "Sent as the field's value when chosen.",
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "value",
+    "label"
+  ],
+  "additionalProperties": false
+}

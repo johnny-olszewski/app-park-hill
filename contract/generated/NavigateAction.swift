@@ -36,6 +36,7 @@ enum NavigateActionType: String, Codable, Equatable, Sendable {
 
 enum NavigateActionPresentation: String, Codable, Equatable, Sendable {
     case push
+    case sheet
     case fullScreenCover = "full_screen_cover"
 }
 

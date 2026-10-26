@@ -3,6 +3,7 @@ package app.parkhill.services.backend
 import app.parkhill.contract.Profile
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.TabsResponse
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -25,9 +26,10 @@ interface BackendService {
 
     /**
      * A `call` action's backend function, with the action's `params` and
-     * `p_locale` added. A success's body is not read.
+     * `p_locale` added. Returns the response body: `{}` for most calls,
+     * which callers ignore, and a `SaveResult` for `save_group_changes`.
      */
-    suspend fun call(function: String, params: JsonObject, locale: String)
+    suspend fun call(function: String, params: JsonObject, locale: String): JsonElement
 }
 
 /** The small set of failures callers react to, never SDK errors. */

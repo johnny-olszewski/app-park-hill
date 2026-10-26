@@ -1,0 +1,449 @@
+{
+  "key": "people.picker",
+  "data": {
+    "rows": [
+      {
+        "title": "Aaliyah Davis",
+        "user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Aaron Fleming",
+        "user_id": "9110e485-dccc-5e54-986e-985f982ab382",
+        "selectable": false
+      },
+      {
+        "title": "Abigail Foster",
+        "user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
+        "selectable": true
+      },
+      {
+        "title": "Adam Sokolov",
+        "user_id": "fe1d6390-d2da-53d0-983e-a5c16d0decc7",
+        "selectable": true
+      },
+      {
+        "title": "Admin",
+        "user_id": "c02348f0-ad95-58bc-a073-cd90ea7ac705",
+        "selectable": true
+      },
+      {
+        "title": "Ana Ruiz",
+        "user_id": "c2882fc1-75b0-5af0-ae50-8d5936b8cf9d",
+        "selectable": true
+      },
+      {
+        "title": "Andre Thompson",
+        "user_id": "7ea18780-b3bb-538f-9a98-c67b4000cdfc",
+        "selectable": true
+      },
+      {
+        "title": "Anna Yamamoto",
+        "user_id": "b92d641b-2553-59a1-9348-24de0a126694",
+        "selectable": true
+      },
+      {
+        "title": "Attendee",
+        "user_id": "9f6798b4-9e35-5b41-8207-9290979b50c3",
+        "selectable": true
+      },
+      {
+        "title": "Ben Carter",
+        "user_id": "a348d8a1-3ee7-5aff-9024-567478505aca",
+        "selectable": true
+      },
+      {
+        "title": "Benjamin Ford",
+        "user_id": "2be4e812-0d16-5d31-b899-8aaa925f4647",
+        "selectable": true
+      },
+      {
+        "title": "Caleb Wright",
+        "user_id": "6338e781-f31b-51ac-a4c9-def6988dbc68",
+        "selectable": true
+      },
+      {
+        "title": "Camila Torres",
+        "user_id": "b4451fe6-3cd9-541b-b386-53d8477fa0fa",
+        "selectable": true
+      },
+      {
+        "title": "Chloe Dubois",
+        "user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
+        "selectable": true
+      },
+      {
+        "title": "Christopher Hale",
+        "user_id": "00d3726e-bb06-5137-bf18-a8e9aec47fc9",
+        "selectable": true
+      },
+      {
+        "title": "Clara Weiss",
+        "user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
+        "selectable": true
+      },
+      {
+        "title": "Daniel Kim",
+        "user_id": "39dcc18f-0a69-59ea-a55e-ecb5185e394c",
+        "selectable": true
+      },
+      {
+        "title": "David Nguyen",
+        "user_id": "a6bf2350-36f8-500e-a836-87c01b165be8",
+        "selectable": true
+      },
+      {
+        "title": "Deborah Wu",
+        "user_id": "8ed52264-6c91-506b-bc63-116173ce4d41",
+        "selectable": true
+      },
+      {
+        "title": "Diego Castillo",
+        "user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
+        "selectable": true
+      },
+      {
+        "title": "Elena Petrova",
+        "user_id": "6ef074e8-a26e-5777-ab0a-4488e65c9656",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Elijah Moore",
+        "user_id": "2a029eaf-5685-5569-a277-cc081e75e604",
+        "selectable": false
+      },
+      {
+        "title": "Emily Sato",
+        "user_id": "c13b680a-0c15-594e-a035-3010d035d546",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Esther Mensah",
+        "user_id": "94b87fab-7cae-594b-8bb7-ddba32f10bd5",
+        "selectable": false
+      },
+      {
+        "title": "Ethan Walsh",
+        "user_id": "35c64e2d-2825-583f-94d2-11b1077d40e6",
+        "selectable": true
+      },
+      {
+        "title": "Eva Horvath",
+        "user_id": "48915778-8790-5db9-8066-45c40c1141b8",
+        "selectable": true
+      },
+      {
+        "title": "Fatima Rahman",
+        "user_id": "302ad677-0ae5-53c2-9092-1a9772129c94",
+        "selectable": true
+      },
+      {
+        "title": "Gabriel Silva",
+        "user_id": "e42a80b0-b74b-54eb-8cd3-7e9d2b1a01e3",
+        "selectable": true
+      },
+      {
+        "title": "Grace Park",
+        "user_id": "bf88c312-4d9b-584f-855b-0e758b120bbb",
+        "selectable": true
+      },
+      {
+        "title": "Hannah Brooks",
+        "user_id": "e9040602-cc31-5561-906f-340653a133c6",
+        "selectable": true
+      },
+      {
+        "title": "Hope Williams",
+        "user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
+        "selectable": true
+      },
+      {
+        "title": "Irene Costa",
+        "user_id": "51c9e3a6-cd4d-59f8-a654-860af66a0369",
+        "selectable": true
+      },
+      {
+        "title": "Isaac Morales",
+        "user_id": "67e1302f-d65d-50b9-b96b-2cadb6109506",
+        "selectable": true
+      },
+      {
+        "title": "Isabella Rossi",
+        "user_id": "aa011d59-1919-5c71-adbc-7f3f00ebf10d",
+        "selectable": true
+      },
+      {
+        "title": "Jacob Rivera",
+        "user_id": "899397aa-d671-5768-ae6d-79ce7a889021",
+        "selectable": true
+      },
+      {
+        "title": "James Okafor",
+        "user_id": "f7cca5d6-22cb-5a92-bf6a-999b1e9cd86f",
+        "selectable": true
+      },
+      {
+        "title": "Joel Ramirez",
+        "user_id": "51560e1f-9011-54c3-96a8-a90ab629f3ca",
+        "selectable": true
+      },
+      {
+        "title": "Jonah Price",
+        "user_id": "10adb58e-512b-5126-90e1-378b554b1277",
+        "selectable": true
+      },
+      {
+        "title": "Jordan Lee",
+        "user_id": "c94cc0cd-844d-53cf-9494-bc3f0701f668",
+        "selectable": true
+      },
+      {
+        "title": "Josiah Banks",
+        "user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Joy Okonkwo",
+        "user_id": "4ba39b63-2f40-5c12-83a0-f0e6bc6a24ff",
+        "selectable": false
+      },
+      {
+        "title": "Julia Santos",
+        "user_id": "69f0760e-7d8e-538d-bc61-394ff38cda3c",
+        "selectable": true
+      },
+      {
+        "title": "Kevin Tran",
+        "user_id": "560616ef-26c3-5d09-bee3-ca49afa1b0b5",
+        "selectable": true
+      },
+      {
+        "title": "Lauren Mitchell",
+        "user_id": "ed1a627d-0bcd-5559-9657-f7c5f4d3e189",
+        "selectable": true
+      },
+      {
+        "title": "Leader",
+        "user_id": "a3201a9f-a3a3-5e46-94bb-48b6807b1b1f",
+        "selectable": true
+      },
+      {
+        "title": "Leah Goldberg",
+        "user_id": "023aa20f-cf34-5316-934b-fac5c95d6330",
+        "selectable": true
+      },
+      {
+        "title": "Lily Nakamura",
+        "user_id": "5e5e18ac-9120-5292-9b6d-9bd123472b80",
+        "selectable": true
+      },
+      {
+        "title": "Lucia Ferreira",
+        "user_id": "e0b975bd-9687-5673-9f97-26a6450a7c14",
+        "selectable": true
+      },
+      {
+        "title": "Luke Anderson",
+        "user_id": "26642996-8fed-5d6d-9f47-68390279d999",
+        "selectable": true
+      },
+      {
+        "title": "Lydia Kowalski",
+        "user_id": "8ae986df-3b6e-5e84-b851-def069138c14",
+        "selectable": true
+      },
+      {
+        "title": "Marcus Reed",
+        "user_id": "b54ca79b-4f44-5f67-b28a-1854665f7dd5",
+        "selectable": true
+      },
+      {
+        "title": "Maria Lopez",
+        "user_id": "d6bd764d-5b38-59a4-85c4-4341e8b402a2",
+        "selectable": true
+      },
+      {
+        "title": "Martha Quinn",
+        "user_id": "b01917c9-9cd5-5f9f-a540-1b2ad0d44f80",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Matthew Ellis",
+        "user_id": "b010b520-0f3f-508c-8fe5-ed682ae3263a",
+        "selectable": false
+      },
+      {
+        "title": "Mei Chen",
+        "user_id": "05b05497-f377-52c5-ba07-449728c897fd",
+        "selectable": true
+      },
+      {
+        "title": "Member One",
+        "user_id": "018919a6-047d-52b8-b6e3-363a7e80888c",
+        "selectable": true
+      },
+      {
+        "title": "Member Two",
+        "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+        "selectable": true
+      },
+      {
+        "title": "Micah Johnson",
+        "user_id": "0ac0e727-0f58-50f2-ae83-7f39e0d7fd35",
+        "selectable": true
+      },
+      {
+        "title": "Michael O'Brien",
+        "user_id": "7d166e12-aff9-5859-9bdb-49232dfd4060",
+        "selectable": true
+      },
+      {
+        "title": "Miriam Levy",
+        "user_id": "6dd6533b-1f5f-5270-8c48-4a98e52f8fcf",
+        "selectable": true
+      },
+      {
+        "title": "Naomi Fischer",
+        "user_id": "f78bbb09-d693-5500-9288-3f0a361820c2",
+        "selectable": true
+      },
+      {
+        "title": "Nathan Brooks",
+        "user_id": "75d746fc-a982-5d3a-a243-42a3b55c2ba6",
+        "selectable": true
+      },
+      {
+        "title": "Noah Patel",
+        "user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
+        "selectable": true
+      },
+      {
+        "title": "Olivia Bennett",
+        "user_id": "c57b9adf-ff84-5463-ba75-14d631d3d247",
+        "selectable": true
+      },
+      {
+        "title": "Owen Murphy",
+        "user_id": "9918d3d6-f50e-50f6-8c2d-acc7a29b6b37",
+        "selectable": true
+      },
+      {
+        "title": "Paul Henderson",
+        "user_id": "52ca675d-0091-5a4d-b33b-aef327ec69a0",
+        "selectable": true
+      },
+      {
+        "title": "Peter Lindqvist",
+        "user_id": "622787b9-ba93-5716-9db5-6b8b99937e3b",
+        "selectable": true
+      },
+      {
+        "title": "Philip Mendez",
+        "user_id": "8c472eda-d650-52cf-9184-2db9c7cb9e60",
+        "selectable": true
+      },
+      {
+        "title": "Priya Shah",
+        "user_id": "8d6eab13-15db-517a-95ff-4e6dd3dbd335",
+        "selectable": true
+      },
+      {
+        "title": "Rachel Cohen",
+        "user_id": "79bfd124-baa3-51c4-905f-ea7f14b15627",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Rebecca Hart",
+        "user_id": "ef87952e-a5e2-573b-bcd4-d0f5b8b1387b",
+        "selectable": false
+      },
+      {
+        "title": "Ruth Adeyemi",
+        "user_id": "a40b182d-b970-5410-b880-29974e9dcd8b",
+        "selectable": true
+      },
+      {
+        "title": "Sam Ortiz",
+        "user_id": "971ca6f8-95af-5126-b307-592c663356d1",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Sarah Ibrahim",
+        "user_id": "22814fc1-b99f-5156-8c09-06853f945975",
+        "selectable": false
+      },
+      {
+        "title": "Silas Turner",
+        "user_id": "1c7426f5-a982-5903-a41d-f823d781d9f6",
+        "selectable": true
+      },
+      {
+        "title": "Simon Novak",
+        "user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
+        "selectable": true
+      },
+      {
+        "title": "Sofia Alvarez",
+        "user_id": "14faa8ac-6d79-5ea2-9161-84ba47be7714",
+        "selectable": true
+      },
+      {
+        "title": "Staff",
+        "user_id": "be2958ec-7e54-567f-9f92-243ede8154d3",
+        "selectable": true
+      },
+      {
+        "title": "Stephen Clarke",
+        "user_id": "4951173b-ebb1-55af-b0ef-7631104052bf",
+        "selectable": true
+      },
+      {
+        "title": "Tabitha Young",
+        "user_id": "0ce04da4-5572-533e-8837-1139146723c3",
+        "selectable": true
+      },
+      {
+        "note": "Already a member",
+        "title": "Thomas Becker",
+        "user_id": "c9f59ed1-2522-5d3a-a6f1-fee729bfe49f",
+        "selectable": false
+      },
+      {
+        "title": "Timothy Ward",
+        "user_id": "1147adbc-c302-5c08-9593-eae8a0937433",
+        "selectable": true
+      },
+      {
+        "title": "Tyler Grant",
+        "user_id": "408644ee-ed2f-56dc-ac3a-8080ff2c0fd6",
+        "selectable": true
+      },
+      {
+        "title": "Vera Ivanova",
+        "user_id": "6943e821-0f55-5b70-b457-67d8f3ead096",
+        "selectable": true
+      },
+      {
+        "title": "Victor Hernandez",
+        "user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
+        "selectable": true
+      },
+      {
+        "title": "Zoe Laurent",
+        "user_id": "ca862a89-4cb8-5f29-acf1-970a55a41f8e",
+        "selectable": true
+      }
+    ],
+    "title": "Add people",
+    "add_label": "Add",
+    "cancel_label": "Cancel",
+    "search_placeholder": "Search people"
+  }
+}

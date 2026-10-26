@@ -32,7 +32,6 @@ import app.parkhill.contract.CommunityBrowseData
 import app.parkhill.contract.GroupRow
 import app.parkhill.design.ParkHill
 import app.parkhill.navigation.LocalScreenActions
-import app.parkhill.navigation.ScreenActions
 
 /** The rows whose title contains `query`, ignoring case and surrounding spaces, in order; every row for a blank query. */
 fun filterGroupRows(rows: List<GroupRow>, query: String): List<GroupRow> {
@@ -58,11 +57,10 @@ fun CommunityBrowseScreen(data: CommunityBrowseData) {
     val focus = LocalFocusManager.current
     val actions = LocalScreenActions.current
     val endingSearch = remember(actions) {
-        ScreenActions(handler = { action, _ ->
+        actions.onPerform {
             query = ""
             focus.clearFocus()
-            actions.perform(action)
-        })
+        }
     }
     Column(Modifier.fillMaxSize().background(ParkHill.colors.surface)) {
         DockedSearchBar(

@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Kensington Couples",
     "meeting": "Thursdays · 7:00 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Abigail Foster",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Chloe Dubois",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Clara Weiss",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Emily Sato",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "c13b680a-0c15-594e-a035-3010d035d546",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Gabriel Silva",
@@ -146,7 +164,8 @@
           }
         },
         "user_id": "e42a80b0-b74b-54eb-8cd3-7e9d2b1a01e3",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Josiah Banks",
@@ -170,7 +189,8 @@
           }
         },
         "user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Nathan Brooks",
@@ -194,7 +214,8 @@
           }
         },
         "user_id": "75d746fc-a982-5d3a-a243-42a3b55c2ba6",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Ruth Adeyemi",
@@ -218,7 +239,8 @@
           }
         },
         "user_id": "a40b182d-b970-5410-b880-29974e9dcd8b",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Victor Hernandez",
@@ -242,12 +264,86 @@
           }
         },
         "user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81",
     "location": "Bennett home, Kensington",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "Married and engaged couples meeting every other week.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Kensington Couples"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "Married and engaged couples meeting every other week."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "4",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "19:00"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Bennett home, Kensington"
+      }
+    ],
     "leaders_line": "Leaders: Noah Patel",
     "members_title": "Members"
   }

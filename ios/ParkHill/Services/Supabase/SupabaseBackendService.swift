@@ -30,13 +30,20 @@ struct SupabaseBackendService: BackendService {
         try await call(.whoami, params: NoParams())
     }
 
-    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) -> JSONValue {
         var params = params
         params["p_locale"] = .string(locale)
+        let data: Data
         do {
-            _ = try await client.rpc(function, params: params).execute()
+            data = try await client.rpc(function, params: params).execute().data
         } catch {
             throw Self.map(error)
+        }
+        guard !data.isEmpty else { return .null }
+        do {
+            return try JSONDecoder().decode(JSONValue.self, from: data)
+        } catch {
+            throw .decoding
         }
     }
 

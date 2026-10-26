@@ -29,7 +29,7 @@ struct SessionRenewingBackendService: BackendService {
         try await withRenewal { () async throws(BackendError) in try await base.whoami() }
     }
 
-    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) -> JSONValue {
         try await withRenewal { () async throws(BackendError) in
             try await base.call(function: function, params: params, locale: locale)
         }

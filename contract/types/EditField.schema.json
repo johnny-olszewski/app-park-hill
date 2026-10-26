@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EditField",
+  "description": "One group detail edited inline in edit mode (specs/COMMUNITY.md 5.3).",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The key in the save batch's `fields` and in `field_errors`.",
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "kind": {
+      "description": "The control: a text field, a multiline field, a day picker or a time picker.",
+      "type": "string",
+      "enum": [
+        "text",
+        "multiline",
+        "day",
+        "time"
+      ]
+    },
+    "value": {
+      "description": "The current value as a string: a day is \"1\" (Monday) to \"7\", a time \"19:00\".",
+      "type": "string"
+    },
+    "options": {
+      "description": "The choices, for a `day`.",
+      "type": "array",
+      "items": {
+        "$ref": "EditFieldOption.schema.json"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "label",
+    "kind",
+    "value"
+  ],
+  "additionalProperties": false
+}

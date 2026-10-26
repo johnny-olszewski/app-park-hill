@@ -24,6 +24,7 @@ struct MockResponseDecodingTests {
         "Profile": { _ = try JSONDecoder().decode(Profile.self, from: $0) },
         "SignInSuccess": { _ = try JSONDecoder().decode(SignInSuccess.self, from: $0) },
         "SignInFailure": { _ = try JSONDecoder().decode(SignInFailure.self, from: $0) },
+        "SaveResult": { _ = try JSONDecoder().decode(SaveResult.self, from: $0) },
     ]
 
     @Test(arguments: TestMockResponses.screenEnvelopePaths())

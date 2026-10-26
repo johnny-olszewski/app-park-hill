@@ -70,7 +70,7 @@ struct SupabaseBackendServiceTests {
     @Test func callSendsTheActionsParamsWithTheLocale() async throws {
         StubURLProtocol.stub(.http(status: 200, body: "{}"))
 
-        try await makeService().call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "es")
+        #expect(try await makeService().call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "es") == .object([:]))
 
         let request = try #require(StubURLProtocol.requests.last)
         #expect(request.url?.path == "/rest/v1/rpc/leave_group")

@@ -87,7 +87,15 @@ struct MockBackendServiceTests {
             try await service.call(function: "leave_group", params: [:], locale: "en")
         }
         personaState.current = "member_one"
-        try await service.call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "en")
+        #expect(try await service.call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "en") == .object([:]))
+    }
+
+    @Test func aCallWithARecordedOkResultReturnsIt() async throws {
+        let personaState = MockPersonaState()
+        personaState.current = "leader"
+        let service = MockBackendService(responses: .bundled, personaState: personaState)
+        let expected = try JSONDecoder().decode(JSONValue.self, from: TestMockResponses.data("save_group_changes.ok.json"))
+        #expect(try await service.call(function: "save_group_changes", params: [:], locale: "en") == expected)
     }
 
     @Test func malformedMockResponseThrowsDecoding() async throws {

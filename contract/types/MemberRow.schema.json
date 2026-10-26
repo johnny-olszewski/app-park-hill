@@ -22,6 +22,10 @@
     "remove": {
       "description": "Removes this member (swipe to remove, specs/COMMUNITY.md 5.2), sent only to people who may remove them: a destructive `call` with confirmation and `on_success` `refresh`.",
       "$ref": "ActionButton.schema.json"
+    },
+    "toggle_leader": {
+      "description": "True when the caller may make this member a leader or remove their leadership, in edit mode.",
+      "type": "boolean"
     }
   },
   "required": [

@@ -24,4 +24,12 @@ data class GroupDetail(
     val members: List<MemberRow>,
     /** Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`. */
     val leave: ActionButton? = null,
+    /** Edit mode's labels, present when the caller holds any edit capability. */
+    val edit: GroupEditLabels? = null,
+    /** Opens the people picker as a sheet, for holders of groups.add_member. */
+    @SerialName("add_member") val addMember: ActionButton? = null,
+    /** The details edited inline, for holders of groups.edit_details. */
+    @SerialName("edit_fields") val editFields: List<EditField>? = null,
+    /** Done's call: save_group_changes, to which the client adds `p_batch` (specs/COMMUNITY.md 5.4). */
+    val save: CallAction? = null,
 )

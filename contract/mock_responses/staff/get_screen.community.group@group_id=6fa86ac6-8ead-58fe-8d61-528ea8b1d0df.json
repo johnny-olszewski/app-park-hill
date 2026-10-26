@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "South Park Group",
     "meeting": "Tuesdays · 6:30 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Benjamin Ford",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "2be4e812-0d16-5d31-b899-8aaa925f4647",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Clara Weiss",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Irene Costa",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "51c9e3a6-cd4d-59f8-a654-860af66a0369",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Philip Mendez",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "8c472eda-d650-52cf-9184-2db9c7cb9e60",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Silas Turner",
@@ -146,7 +164,8 @@
           }
         },
         "user_id": "1c7426f5-a982-5903-a41d-f823d781d9f6",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Vera Ivanova",
@@ -170,12 +189,86 @@
           }
         },
         "user_id": "6943e821-0f55-5b70-b457-67d8f3ead096",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df",
     "location": "Nguyen home, South Park",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "6fa86ac6-8ead-58fe-8d61-528ea8b1d0df"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "A mixed group of families and singles in South Park.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "South Park Group"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "A mixed group of families and singles in South Park."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "2",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "18:30"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Nguyen home, South Park"
+      }
+    ],
     "leaders_line": "Leaders: Josiah Banks",
     "members_title": "Members"
   }

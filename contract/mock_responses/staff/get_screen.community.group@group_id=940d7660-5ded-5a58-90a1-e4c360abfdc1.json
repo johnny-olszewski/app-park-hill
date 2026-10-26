@@ -1,6 +1,19 @@
 {
   "key": "community.group",
   "data": {
+    "edit": {
+      "done_label": "Done",
+      "edit_label": "Edit",
+      "cancel_label": "Cancel"
+    },
+    "save": {
+      "type": "call",
+      "params": {
+        "p_group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+      },
+      "function": "save_group_changes",
+      "on_success": "refresh"
+    },
     "title": "Young Families",
     "meeting": "Sundays · 4:00 PM",
     "members": [
@@ -26,7 +39,8 @@
           }
         },
         "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Rachel Cohen",
@@ -50,7 +64,8 @@
           }
         },
         "user_id": "79bfd124-baa3-51c4-905f-ea7f14b15627",
-        "is_leader": true
+        "is_leader": true,
+        "toggle_leader": true
       },
       {
         "title": "Caleb Wright",
@@ -74,7 +89,8 @@
           }
         },
         "user_id": "6338e781-f31b-51ac-a4c9-def6988dbc68",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "James Okafor",
@@ -98,7 +114,8 @@
           }
         },
         "user_id": "f7cca5d6-22cb-5a92-bf6a-999b1e9cd86f",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Kevin Tran",
@@ -122,7 +139,8 @@
           }
         },
         "user_id": "560616ef-26c3-5d09-bee3-ca49afa1b0b5",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Lauren Mitchell",
@@ -146,7 +164,8 @@
           }
         },
         "user_id": "ed1a627d-0bcd-5559-9657-f7c5f4d3e189",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Naomi Fischer",
@@ -170,7 +189,8 @@
           }
         },
         "user_id": "f78bbb09-d693-5500-9288-3f0a361820c2",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Sofia Alvarez",
@@ -194,7 +214,8 @@
           }
         },
         "user_id": "14faa8ac-6d79-5ea2-9161-84ba47be7714",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       },
       {
         "title": "Tyler Grant",
@@ -218,12 +239,86 @@
           }
         },
         "user_id": "408644ee-ed2f-56dc-ac3a-8080ff2c0fd6",
-        "is_leader": false
+        "is_leader": false,
+        "toggle_leader": true
       }
     ],
     "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1",
     "location": "Vesper Hall",
+    "add_member": {
+      "label": "Add member",
+      "action": {
+        "type": "navigate",
+        "params": {
+          "group_id": "940d7660-5ded-5a58-90a1-e4c360abfdc1"
+        },
+        "screen_key": "people.picker",
+        "presentation": "sheet"
+      }
+    },
     "description": "Parents of young children, with childcare on site.",
+    "edit_fields": [
+      {
+        "id": "name",
+        "kind": "text",
+        "label": "Name",
+        "value": "Young Families"
+      },
+      {
+        "id": "description",
+        "kind": "multiline",
+        "label": "Description",
+        "value": "Parents of young children, with childcare on site."
+      },
+      {
+        "id": "day",
+        "kind": "day",
+        "label": "Meeting day",
+        "value": "7",
+        "options": [
+          {
+            "label": "Mondays",
+            "value": "1"
+          },
+          {
+            "label": "Tuesdays",
+            "value": "2"
+          },
+          {
+            "label": "Wednesdays",
+            "value": "3"
+          },
+          {
+            "label": "Thursdays",
+            "value": "4"
+          },
+          {
+            "label": "Fridays",
+            "value": "5"
+          },
+          {
+            "label": "Saturdays",
+            "value": "6"
+          },
+          {
+            "label": "Sundays",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "id": "time",
+        "kind": "time",
+        "label": "Meeting time",
+        "value": "16:00"
+      },
+      {
+        "id": "location",
+        "kind": "text",
+        "label": "Location",
+        "value": "Vesper Hall"
+      }
+    ],
     "leaders_line": "Leaders: Member Two, Rachel Cohen",
     "members_title": "Members"
   }

@@ -16,6 +16,19 @@
         "key": "community.home",
         "data": {
           "group": {
+            "edit": {
+              "done_label": "Done",
+              "edit_label": "Edit",
+              "cancel_label": "Cancel"
+            },
+            "save": {
+              "type": "call",
+              "params": {
+                "p_group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+              },
+              "function": "save_group_changes",
+              "on_success": "refresh"
+            },
             "leave": {
               "label": "Leave group",
               "action": {
@@ -41,7 +54,8 @@
                 "note": "You",
                 "title": "Admin",
                 "user_id": "c02348f0-ad95-58bc-a073-cd90ea7ac705",
-                "is_leader": true
+                "is_leader": true,
+                "toggle_leader": true
               },
               {
                 "title": "David Nguyen",
@@ -65,7 +79,8 @@
                   }
                 },
                 "user_id": "a6bf2350-36f8-500e-a836-87c01b165be8",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               },
               {
                 "title": "Elena Petrova",
@@ -89,7 +104,8 @@
                   }
                 },
                 "user_id": "6ef074e8-a26e-5777-ab0a-4488e65c9656",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               },
               {
                 "title": "Hannah Brooks",
@@ -113,7 +129,8 @@
                   }
                 },
                 "user_id": "e9040602-cc31-5561-906f-340653a133c6",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               },
               {
                 "title": "Isaac Morales",
@@ -137,7 +154,8 @@
                   }
                 },
                 "user_id": "67e1302f-d65d-50b9-b96b-2cadb6109506",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               },
               {
                 "title": "Marcus Reed",
@@ -161,7 +179,8 @@
                   }
                 },
                 "user_id": "b54ca79b-4f44-5f67-b28a-1854665f7dd5",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               },
               {
                 "title": "Olivia Bennett",
@@ -185,12 +204,86 @@
                   }
                 },
                 "user_id": "c57b9adf-ff84-5463-ba75-14d631d3d247",
-                "is_leader": false
+                "is_leader": false,
+                "toggle_leader": true
               }
             ],
             "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa",
             "location": "Shah home",
+            "add_member": {
+              "label": "Add member",
+              "action": {
+                "type": "navigate",
+                "params": {
+                  "group_id": "7f40771e-2133-582f-96bc-f42aa99686fa"
+                },
+                "screen_key": "people.picker",
+                "presentation": "sheet"
+              }
+            },
             "description": "Bible study and prayer for Mission Hills neighbors.",
+            "edit_fields": [
+              {
+                "id": "name",
+                "kind": "text",
+                "label": "Name",
+                "value": "Mission Hills Group"
+              },
+              {
+                "id": "description",
+                "kind": "multiline",
+                "label": "Description",
+                "value": "Bible study and prayer for Mission Hills neighbors."
+              },
+              {
+                "id": "day",
+                "kind": "day",
+                "label": "Meeting day",
+                "value": "4",
+                "options": [
+                  {
+                    "label": "Mondays",
+                    "value": "1"
+                  },
+                  {
+                    "label": "Tuesdays",
+                    "value": "2"
+                  },
+                  {
+                    "label": "Wednesdays",
+                    "value": "3"
+                  },
+                  {
+                    "label": "Thursdays",
+                    "value": "4"
+                  },
+                  {
+                    "label": "Fridays",
+                    "value": "5"
+                  },
+                  {
+                    "label": "Saturdays",
+                    "value": "6"
+                  },
+                  {
+                    "label": "Sundays",
+                    "value": "7"
+                  }
+                ]
+              },
+              {
+                "id": "time",
+                "kind": "time",
+                "label": "Meeting time",
+                "value": "18:30"
+              },
+              {
+                "id": "location",
+                "kind": "text",
+                "label": "Location",
+                "value": "Shah home"
+              }
+            ],
             "leaders_line": "Leaders: Admin",
             "members_title": "Members"
           }

@@ -2,6 +2,19 @@
   "key": "community.home",
   "data": {
     "group": {
+      "edit": {
+        "done_label": "Done",
+        "edit_label": "Edit",
+        "cancel_label": "Cancel"
+      },
+      "save": {
+        "type": "call",
+        "params": {
+          "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+        },
+        "function": "save_group_changes",
+        "on_success": "refresh"
+      },
       "leave": {
         "label": "Leave group",
         "action": {
@@ -272,7 +285,80 @@
       ],
       "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e",
       "location": "Lee home, North Park",
+      "add_member": {
+        "label": "Add member",
+        "action": {
+          "type": "navigate",
+          "params": {
+            "group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+          },
+          "screen_key": "people.picker",
+          "presentation": "sheet"
+        }
+      },
       "description": "Study, conversation and dinner together.",
+      "edit_fields": [
+        {
+          "id": "name",
+          "kind": "text",
+          "label": "Name",
+          "value": "Tuesday Night Group"
+        },
+        {
+          "id": "description",
+          "kind": "multiline",
+          "label": "Description",
+          "value": "Study, conversation and dinner together."
+        },
+        {
+          "id": "day",
+          "kind": "day",
+          "label": "Meeting day",
+          "value": "2",
+          "options": [
+            {
+              "label": "Mondays",
+              "value": "1"
+            },
+            {
+              "label": "Tuesdays",
+              "value": "2"
+            },
+            {
+              "label": "Wednesdays",
+              "value": "3"
+            },
+            {
+              "label": "Thursdays",
+              "value": "4"
+            },
+            {
+              "label": "Fridays",
+              "value": "5"
+            },
+            {
+              "label": "Saturdays",
+              "value": "6"
+            },
+            {
+              "label": "Sundays",
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "id": "time",
+          "kind": "time",
+          "label": "Meeting time",
+          "value": "19:00"
+        },
+        {
+          "id": "location",
+          "kind": "text",
+          "label": "Location",
+          "value": "Lee home, North Park"
+        }
+      ],
       "leaders_line": "Leaders: Leader",
       "members_title": "Members"
     }

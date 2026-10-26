@@ -11,13 +11,16 @@ struct MemberRow: Codable, Equatable, Sendable {
     let isLeader: Bool
     /// Removes this member (swipe to remove, specs/COMMUNITY.md 5.2), sent only to people who may remove them: a destructive `call` with confirmation and `on_success` `refresh`.
     let remove: ActionButton?
+    /// True when the caller may make this member a leader or remove their leadership, in edit mode.
+    let toggleLeader: Bool?
 
-    init(userId: String, title: String, note: String? = nil, isLeader: Bool, remove: ActionButton? = nil) {
+    init(userId: String, title: String, note: String? = nil, isLeader: Bool, remove: ActionButton? = nil, toggleLeader: Bool? = nil) {
         self.userId = userId
         self.title = title
         self.note = note
         self.isLeader = isLeader
         self.remove = remove
+        self.toggleLeader = toggleLeader
     }
 
     enum CodingKeys: String, CodingKey {
@@ -26,5 +29,6 @@ struct MemberRow: Codable, Equatable, Sendable {
         case note
         case isLeader = "is_leader"
         case remove
+        case toggleLeader = "toggle_leader"
     }
 }

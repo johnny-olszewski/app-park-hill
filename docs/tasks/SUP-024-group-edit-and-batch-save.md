@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-013]
 paired_with: []
-status: Ready
+status: Done
 ---
 
 # SUP-024: Send group edit capabilities and save every change at once

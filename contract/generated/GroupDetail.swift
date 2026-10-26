@@ -18,8 +18,16 @@ struct GroupDetail: Codable, Equatable, Sendable {
     let members: [MemberRow]
     /// Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`.
     let leave: ActionButton?
+    /// Edit mode's labels, present when the caller holds any edit capability.
+    let edit: GroupEditLabels?
+    /// Opens the people picker as a sheet, for holders of groups.add_member.
+    let addMember: ActionButton?
+    /// The details edited inline, for holders of groups.edit_details.
+    let editFields: [EditField]?
+    /// Done's call: save_group_changes, to which the client adds `p_batch` (specs/COMMUNITY.md 5.4).
+    let save: CallAction?
 
-    init(groupId: String, title: String, description: String, meeting: String, location: String, leadersLine: String, membersTitle: String, members: [MemberRow], leave: ActionButton? = nil) {
+    init(groupId: String, title: String, description: String, meeting: String, location: String, leadersLine: String, membersTitle: String, members: [MemberRow], leave: ActionButton? = nil, edit: GroupEditLabels? = nil, addMember: ActionButton? = nil, editFields: [EditField]? = nil, save: CallAction? = nil) {
         self.groupId = groupId
         self.title = title
         self.description = description
@@ -29,6 +37,10 @@ struct GroupDetail: Codable, Equatable, Sendable {
         self.membersTitle = membersTitle
         self.members = members
         self.leave = leave
+        self.edit = edit
+        self.addMember = addMember
+        self.editFields = editFields
+        self.save = save
     }
 
     enum CodingKeys: String, CodingKey {
@@ -41,5 +53,9 @@ struct GroupDetail: Codable, Equatable, Sendable {
         case membersTitle = "members_title"
         case members
         case leave
+        case edit
+        case addMember = "add_member"
+        case editFields = "edit_fields"
+        case save
     }
 }

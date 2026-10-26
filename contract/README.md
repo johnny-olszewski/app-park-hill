@@ -116,9 +116,12 @@ Shared types for Community screens, all text backend formatted and localized:
 |---|---|
 | `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), optional `badge_tone` (`attention`, for example on "No leader"), `action` |
 | `ToolbarItem` | `id`, `label` (also the accessibility label of an icon button), `icon_key` (a bundled icon), `action` |
-| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members) |
-| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove) |
+| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members); for edit mode, optional `edit` (`GroupEditLabels`), `add_member` (`ActionButton` opening `people.picker` as a sheet), `edit_fields` (`EditField`s) and `save` (`CallAction` to `save_group_changes`) |
+| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove), optional `toggle_leader` (true when the caller may change this member's leadership) |
 | `ActionButton` | `label`, `action`; sent only to people who may use it |
+| `GroupEditLabels` | `edit_label`, `done_label`, `cancel_label` |
+| `EditField` | `id` (the key in the save batch and in `field_errors`), `label`, `kind` (`text`, `multiline`, `day`, `time`), `value` (a string), optional `options` (`EditFieldOption`s: `value`, `label`, for a `day`) |
+| `SaveResult` | `ok`, optional `field_errors` (field id to message), optional `row_errors` (user id to message) |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
 | `PersonRow` | `user_id`, `title` (display name), optional `subtitle`, optional `note` (why they cannot be chosen, for example "Already a member"), `selectable` |
 | `EmptyState` | `title`, `message`; shown with no buttons |

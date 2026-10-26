@@ -10,7 +10,7 @@ final class LocalDatabase {
     private static let url = URL(string: "http://127.0.0.1:54321/rest/v1")!
     private static let serviceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU"
 
-    private var snapshots: [(group: String, members: [[String: Any]], leaders: [[String: Any]])] = []
+    private var snapshots: [(group: String, details: [String: Any], members: [[String: Any]], leaders: [[String: Any]])] = []
 
     /// The id of the group named `name`.
     func groupID(named name: String) async throws -> String {
@@ -24,11 +24,13 @@ final class LocalDatabase {
         return try XCTUnwrap(rows.first?["id"] as? String, "person \(displayName)")
     }
 
-    /// Remembers `group`'s members and leaders, so `restore()` puts them back
-    /// whatever the test or the app changes.
+    /// Remembers `group`'s details, members and leaders, so `restore()` puts
+    /// them back whatever the test or the app changes.
     func keep(_ group: String) async throws {
+        let details = try await request("GET", "groups?select=name,description,meeting_day,meeting_time,location&id=eq.\(group)")
         snapshots.append((
             group,
+            try XCTUnwrap(details.first),
             try await request("GET", "group_members?select=*&group_id=eq.\(group)"),
             try await request("GET", "group_leaders?select=*&group_id=eq.\(group)")
         ))
@@ -49,9 +51,10 @@ final class LocalDatabase {
         try await request("POST", "group_leaders", body: [["group_id": group, "user_id": user]])
     }
 
-    /// Puts every kept group's members and leaders back as they were.
+    /// Puts every kept group's details, members and leaders back as they were.
     func restore() async throws {
         for snapshot in snapshots.reversed() {
+            try await request("PATCH", "groups?id=eq.\(snapshot.group)", body: snapshot.details)
             try await request("DELETE", "group_members?group_id=eq.\(snapshot.group)")
             if !snapshot.members.isEmpty { try await request("POST", "group_members", body: snapshot.members) }
             if !snapshot.leaders.isEmpty { try await request("POST", "group_leaders", body: snapshot.leaders) }
@@ -60,7 +63,7 @@ final class LocalDatabase {
     }
 
     @discardableResult
-    private func request(_ method: String, _ path: String, body: [[String: Any]]? = nil) async throws -> [[String: Any]] {
+    private func request(_ method: String, _ path: String, body: Any? = nil) async throws -> [[String: Any]] {
         var request = URLRequest(url: URL(string: "\(Self.url.absoluteString)/\(path)")!)
         request.httpMethod = method
         request.setValue(Self.serviceKey, forHTTPHeaderField: "apikey")

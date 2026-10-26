@@ -16,6 +16,7 @@ final class CoverCoordinator: Identifiable {
 
     private let context: ScreenContext
     private let performCall: @MainActor (CallAction, ScreenModel?) -> Void
+    private let presentSheet: @MainActor (NavigateAction, ScreenActions.PeopleHandler?) -> Void
     private let lostAccess: @MainActor (ScreenModel, String) -> Void
 
     init(
@@ -23,24 +24,26 @@ final class CoverCoordinator: Identifiable {
         params: [String: JSONValue],
         context: ScreenContext,
         performCall: @escaping @MainActor (CallAction, ScreenModel?) -> Void = { _, _ in },
+        presentSheet: @escaping @MainActor (NavigateAction, ScreenActions.PeopleHandler?) -> Void = { _, _ in },
         lostAccess: @escaping @MainActor (ScreenModel, String) -> Void = { _, _ in }
     ) {
         root = ScreenModel(key: key, params: params, context: context)
         self.context = context
         self.performCall = performCall
+        self.presentSheet = presentSheet
         self.lostAccess = lostAccess
         root.onLostAccess = lostAccess
     }
 
     /// What the cover's screens call when something is tapped.
     var actions: ScreenActions {
-        ScreenActions(coordinator: { [weak self] action, source in self?.perform(action, from: source) })
+        ScreenActions(coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) })
     }
 
-    /// Pushes `navigate` targets onto the cover's own stack and hands calls
-    /// to the tab. A cover opened from inside a cover is not supported, and
-    /// is logged.
-    func perform(_ action: Action, from source: ScreenModel? = nil) {
+    /// Pushes `navigate` targets onto the cover's own stack and hands sheets
+    /// and calls to the tab. A cover opened from inside a cover is not
+    /// supported, and is logged.
+    func perform(_ action: Action, from source: ScreenModel? = nil, onPeople: ScreenActions.PeopleHandler? = nil) {
         switch action {
         case .navigate(let navigate):
             switch navigate.presentation {
@@ -49,8 +52,8 @@ final class CoverCoordinator: Identifiable {
                 screen.onLostAccess = lostAccess
                 path.append(Route(screen: screen))
                 Task { await screen.load() }
-            case .sheet: // TEMPORARY(EP-03): IOS-012 presents sheets
-                Logger.navigation.error("Ignored sheet to \(navigate.screenKey, privacy: .public): not presented by this build yet") // TEMPORARY(EP-03): IOS-012 presents sheets
+            case .sheet:
+                presentSheet(navigate, onPeople)
             case .fullScreenCover:
                 Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public) inside a cover")
             }

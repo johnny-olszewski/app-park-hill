@@ -49,16 +49,17 @@ final class TabCoordinator: Identifiable {
 
     /// What this tab's screens call when something is tapped.
     var actions: ScreenActions {
-        ScreenActions(coordinator: { [weak self] action, source in self?.perform(action, from: source) })
+        ScreenActions(coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) })
     }
 
     /// Performs a backend action: `navigate` with `push` fetches the target
     /// screen over a loading state on this tab's stack; with
-    /// `full_screen_cover` it opens a cover whose root is fetched fresh. A
-    /// `call` asks for the backend's confirmation first when it has one. An
-    /// unknown action, or a target this build does not register, does
-    /// nothing and is logged.
-    func perform(_ action: Action, from source: ScreenModel? = nil) {
+    /// `full_screen_cover` it opens a cover whose root is fetched fresh; with
+    /// `sheet` it presents the target as a sheet, handing what it returns to
+    /// `onPeople`. A `call` asks for the backend's confirmation first when it
+    /// has one. An unknown action, or a target this build does not register,
+    /// does nothing and is logged.
+    func perform(_ action: Action, from source: ScreenModel? = nil, onPeople: ScreenActions.PeopleHandler? = nil) {
         switch action {
         case .navigate(let navigate):
             switch navigate.presentation {
@@ -67,8 +68,8 @@ final class TabCoordinator: Identifiable {
                 screen.onLostAccess = lostAccessHandler
                 path.append(Route(screen: screen))
                 Task { await screen.load() }
-            case .sheet: // TEMPORARY(EP-03): IOS-012 presents sheets
-                Logger.navigation.error("Ignored sheet to \(navigate.screenKey, privacy: .public): not presented by this build yet") // TEMPORARY(EP-03): IOS-012 presents sheets
+            case .sheet:
+                presentSheet(navigate, onPeople: onPeople)
             case .fullScreenCover:
                 guard context.registry.isRegistered(navigate.screenKey) else {
                     _ = context.target(of: navigate)
@@ -79,6 +80,7 @@ final class TabCoordinator: Identifiable {
                     params: navigate.params.objectValue,
                     context: context,
                     performCall: { [weak self] call, source in self?.performCall(call, from: source) },
+                    presentSheet: { [weak self] navigate, onPeople in self?.presentSheet(navigate, onPeople: onPeople) },
                     lostAccess: lostAccessHandler
                 )
                 self.cover = cover
@@ -89,6 +91,23 @@ final class TabCoordinator: Identifiable {
         case .unknown:
             _ = ScreenActions.isKnown(action)
         }
+    }
+
+    /// Presents `navigate`'s target as a sheet over a loading state, from the
+    /// tab or from inside its cover. What the sheet returns goes to
+    /// `onPeople`.
+    func presentSheet(_ navigate: NavigateAction, onPeople: ScreenActions.PeopleHandler?) {
+        guard let screen = context.target(of: navigate) else { return }
+        screen.onLostAccess = lostAccessHandler
+        presented = Route(screen: screen, onPeople: onPeople)
+        Task { await screen.load() }
+    }
+
+    /// The sheet's people were chosen: close it and hand them to its opener.
+    func returnPeople(_ people: [PersonRow]) {
+        let onPeople = presented?.onPeople
+        presented = nil
+        onPeople?(people)
     }
 
     /// Asks to confirm `call` when it carries a confirmation, else makes it.
@@ -224,6 +243,8 @@ struct PendingCall: Identifiable {
 struct Route: Identifiable, Hashable {
     let id = UUID()
     let screen: ScreenModel
+    /// Where a sheet hands back the people chosen in it, if anywhere.
+    var onPeople: ScreenActions.PeopleHandler?
 
     static func == (lhs: Route, rhs: Route) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }

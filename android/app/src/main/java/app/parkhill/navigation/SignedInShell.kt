@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -35,6 +36,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
@@ -198,9 +200,29 @@ private fun TabRoot(
             }
             ScreenStackContent(tab.stack, Modifier.weight(1f))
         }
-        tab.presented?.let { route ->
-            ModalBottomSheet(onDismissRequest = tab::dismiss, containerColor = ParkHill.colors.surface) {
-                ScreenHost(route.screen)
+        TabSheet(tab)
+    }
+}
+
+/**
+ * The tab's sheet (guide 5.5: a Material modal bottom sheet), over the cover
+ * while one is open, since a sheet is its own window. It opens fully over a
+ * loading state; dragging it down, like its Cancel, closes it handing back
+ * nothing. Its screen has no pull to refresh: dragging down is for closing.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TabSheet(tab: TabCoordinator) {
+    val sheet = tab.presented ?: return
+    ModalBottomSheet(
+        onDismissRequest = tab::dismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = ParkHill.colors.surface,
+        modifier = Modifier.testTag("sheet"),
+    ) {
+        key(sheet.route.id) {
+            CompositionLocalProvider(LocalSheetActions provides tab.sheetActions) {
+                ScreenHost(sheet.screen, refreshable = false)
             }
         }
     }

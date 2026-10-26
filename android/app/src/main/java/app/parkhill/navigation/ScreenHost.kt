@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -31,12 +33,13 @@ import app.parkhill.design.SecondaryButton
 import kotlinx.coroutines.launch
 
 /**
- * Shows a [ScreenModel]: loading, the screen with pull to refresh, or the
- * error screen with retry. The screen's actions are performed on its behalf.
+ * Shows a [ScreenModel]: loading, the screen with pull to refresh unless
+ * `refreshable` is false, or the error screen with retry. The screen's
+ * actions are performed on its behalf.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenHost(model: ScreenModel) {
+fun ScreenHost(model: ScreenModel, refreshable: Boolean = true) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(model) {
         if (model.needsLoad) model.load()
@@ -50,20 +53,24 @@ fun ScreenHost(model: ScreenModel) {
         }
         is ScreenState.Showing -> {
             var refreshing by remember { mutableStateOf(false) }
-            PullToRefreshBox(
-                isRefreshing = refreshing,
-                onRefresh = {
-                    scope.launch {
-                        refreshing = true
-                        model.load()
-                        refreshing = false
-                    }
-                },
-                modifier = Modifier.fillMaxSize(),
+            val pullState = rememberPullToRefreshState()
+            val refresh = {
+                scope.launch {
+                    refreshing = true
+                    model.load()
+                    refreshing = false
+                }
+                Unit
+            }
+            Box(
+                Modifier.fillMaxSize().pullToRefresh(refreshing, pullState, enabled = refreshable, onRefresh = refresh),
             ) {
                 val outer = LocalScreenActions.current
                 CompositionLocalProvider(LocalScreenActions provides remember(outer, model) { outer.from(model) }) {
                     state.screen.content()
+                }
+                if (refreshable) {
+                    PullToRefreshDefaults.Indicator(pullState, refreshing, Modifier.align(Alignment.TopCenter))
                 }
             }
         }

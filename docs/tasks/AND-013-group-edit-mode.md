@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-012, SUP-024]
 paired_with: [IOS-013]
-status: Ready
+status: Done
 ---
 
 # AND-013: Build Android group edit mode with batched changes

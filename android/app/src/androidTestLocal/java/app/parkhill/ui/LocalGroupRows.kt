@@ -15,23 +15,31 @@ import org.junit.rules.ExternalResource
 /**
  * Changes `group_members` and `group_leaders` rows in local Supabase, through
  * its REST API with the local service-role key, as someone else would while a
- * test looks on. A rule: when the test ends, pass or fail, every group it
- * kept ([keep], and every change here keeps its group first) gets back exactly
- * the members and leaders it had, including changes the test made through the
- * app. Test sources only; the key never reaches the app.
+ * test looks on, and reads them and the group's details back. A rule: when the
+ * test ends, pass or fail, every group it kept ([keep], and every change here
+ * keeps its group first) gets back exactly the members, leaders and details
+ * it had, including changes the test made through the app. Test sources only;
+ * the key never reaches the app.
  */
 class LocalGroupRows : ExternalResource() {
-    private class Snapshot(val members: Set<String>, val leaders: Set<String>)
+    private class Snapshot(val members: Set<String>, val leaders: Set<String>, val details: JsonObject)
 
     private val kept = mutableMapOf<String, Snapshot>()
 
     /** Remembers the group's rows now, to put them back when the test ends. Call before the test changes the group. */
     fun keep(groupId: String) {
-        if (groupId !in kept) kept[groupId] = Snapshot(members(groupId), leaders(groupId))
+        if (groupId !in kept) kept[groupId] = Snapshot(members(groupId), leaders(groupId), details(groupId))
     }
 
     /** The group's member ids now. */
     fun members(groupId: String): Set<String> = userIds(MEMBERS, groupId)
+
+    /** The group's leader ids now. */
+    fun leaders(groupId: String): Set<String> = userIds(LEADERS, groupId)
+
+    /** The group's details now, as the `groups` row has them: name, description, meeting_day, meeting_time, location. */
+    fun details(groupId: String): JsonObject =
+        Json.parseToJsonElement(request("GET", "groups?select=$DETAILS&id=eq.${encode(groupId)}")).jsonArray.single().jsonObject
 
     /** Ends `userId`'s membership, and with it any leadership. */
     fun removeMember(groupId: String, userId: String) {
@@ -51,11 +59,12 @@ class LocalGroupRows : ExternalResource() {
             (members(groupId) - snapshot.members).forEach { delete(MEMBERS, groupId, it) }
             (snapshot.members - members(groupId)).forEach { insert(MEMBERS, groupId, it) }
             (snapshot.leaders - leaders(groupId)).forEach { insert(LEADERS, groupId, it) }
+            if (details(groupId) != snapshot.details) {
+                request("PATCH", "groups?id=eq.${encode(groupId)}", body = snapshot.details.toString())
+            }
         }
         kept.clear()
     }
-
-    private fun leaders(groupId: String): Set<String> = userIds(LEADERS, groupId)
 
     private fun userIds(table: String, groupId: String): Set<String> =
         Json.parseToJsonElement(request("GET", "$table?select=user_id&group_id=eq.${encode(groupId)}")).jsonArray
@@ -98,6 +107,7 @@ class LocalGroupRows : ExternalResource() {
     private companion object {
         const val MEMBERS = "group_members"
         const val LEADERS = "group_leaders"
+        const val DETAILS = "name,description,meeting_day,meeting_time,location"
 
         /**
          * Local Supabase's well-known service-role key (the CLI's fixed

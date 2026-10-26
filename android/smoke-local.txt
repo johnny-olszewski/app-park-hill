@@ -2,3 +2,4 @@
 app.parkhill.ui.SignInUiTest#signInStaysSignedInAcrossARelaunchThenSignsOut
 app.parkhill.ui.LocalCommunityUiTest#memberTwo
 app.parkhill.ui.LocalCommunityUiTest#staffBrowsesAndSearches
+app.parkhill.ui.LocalGroupEditUiTest#leaderEditsDetailsAddsAndRemovesMembersAndTheyStayAfterRelaunch

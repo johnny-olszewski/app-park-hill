@@ -141,7 +141,8 @@ begin
     and m.user_id in (select (jsonb_array_elements_text(coalesce(v_batch -> 'remove', '[]'::jsonb)))::uuid);
 
   insert into public.group_members (group_id, user_id)
-  select p_group_id, (jsonb_array_elements_text(coalesce(v_batch -> 'add', '[]'::jsonb)))::uuid;
+  select p_group_id, id
+  from (select distinct (jsonb_array_elements_text(coalesce(v_batch -> 'add', '[]'::jsonb)))::uuid as id) added;
 
   -- Making a non-member a leader adds the membership (SUP-010's trigger).
   insert into public.group_leaders (group_id, user_id)

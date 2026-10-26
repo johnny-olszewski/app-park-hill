@@ -3,7 +3,7 @@
 -- groups.assign_leader, and all or nothing.
 begin;
 
-select plan(23);
+select plan(24);
 
 create temporary table ids as
 select
@@ -128,6 +128,12 @@ select ok(
   (select not pg_temp.is_leader(tuesday, member_one) and pg_temp.is_member(tuesday, member_one)
      and not pg_temp.is_member(tuesday, rachel) and not pg_temp.is_leader(tuesday, rachel) from ids),
   'removing leadership keeps the membership; removing a member removes their leadership'
+);
+
+-- Someone listed twice is added once.
+select is(
+  (select pg_temp.save_as(staff, families, jsonb_build_object('add', jsonb_build_array(jordan, jordan))) from ids),
+  '{"ok": true}'::jsonb, 'a person listed twice in add is added once'
 );
 
 -- Only active people can be made leaders; a disabled leader can be removed.

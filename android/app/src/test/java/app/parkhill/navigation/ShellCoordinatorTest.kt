@@ -26,7 +26,7 @@ class ShellCoordinatorTest {
         val backend = StubBackendService { StubBackendService.signIn() }
         backend.tabs = { (if (queue.size > 1) queue.removeFirst() else queue.first())() }
         val registry = ScreenRegistry().apply { registerSharedScreens(FakeAuthService()) }
-        return ShellCoordinator(backend, registry, cache, ScreenCache(Files.createTempDirectory("screens").toFile())) { "en" } to backend
+        return ShellCoordinator(backend, registry, cache, ScreenCache(Files.createTempDirectory("screens").toFile()), eagerScope()) { "en" } to backend
     }
 
     private fun empty(key: String) = ScreenEnvelope(key, JsonObject(emptyMap()))

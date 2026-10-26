@@ -5,6 +5,7 @@ import Foundation
 /// `auth.sign_in`); `get_screen` reads `get_screen.<key>@<params>.json`, else
 /// `get_screen.<key>.json`; `get_tabs` and
 /// `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
+/// A `call` succeeds and changes nothing: mock responses are static (guide 6).
 struct MockBackendService: BackendService {
     private let responses: MockResponseStore
     private let personaState: MockPersonaState
@@ -35,6 +36,10 @@ struct MockBackendService: BackendService {
     func whoami() async throws(BackendError) -> Profile {
         guard personaState.current != nil else { throw .unauthorized }
         return try decode(RPCFunction.whoami.rawValue, missing: .server)
+    }
+
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+        guard personaState.current != nil else { throw .unauthorized }
     }
 
     private func decode<Response: Decodable>(_ name: String, missing: BackendError) throws(BackendError) -> Response {

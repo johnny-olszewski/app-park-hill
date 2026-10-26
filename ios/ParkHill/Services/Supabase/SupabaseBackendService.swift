@@ -30,6 +30,16 @@ struct SupabaseBackendService: BackendService {
         try await call(.whoami, params: NoParams())
     }
 
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError) {
+        var params = params
+        params["p_locale"] = .string(locale)
+        do {
+            _ = try await client.rpc(function, params: params).execute()
+        } catch {
+            throw Self.map(error)
+        }
+    }
+
     private func call<Response: Decodable>(
         _ function: RPCFunction,
         params: some Encodable & Sendable
@@ -54,6 +64,8 @@ struct SupabaseBackendService: BackendService {
         case let error as PostgrestError:
             if error.message == "unknown_screen" { return .unknownScreen }
             if error.message == "session_ended" { return .unauthorized }
+            if error.message == "screen_unavailable" { return .screenUnavailable(message: error.detail ?? "") }
+            if error.message == "action_refused" { return .actionRefused(message: error.detail ?? "") }
             // PGRST30x: missing, invalid or expired JWT.
             if let code = error.code, code.hasPrefix("PGRST30") { return .unauthorized }
             return .server

@@ -44,7 +44,7 @@ class ScreenModelTest {
 
     private fun navigate(to: String) = NavigateAction(NavigateActionType.NAVIGATE, to, params, NavigateActionPresentation.PUSH)
 
-    private fun tab() = TabCoordinator(TabItem("t", "T", "tab.t", screen("Root")), context)
+    private fun tab() = TabCoordinator(TabItem("t", "T", "tab.t", screen("Root")), context, eagerScope())
 
     // AC1, AC3: a push action opens its target over a loading state; what this build does not know does nothing.
 

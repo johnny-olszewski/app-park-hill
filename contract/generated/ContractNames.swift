@@ -6,6 +6,8 @@ enum RPCFunction: String {
     case getScreen = "get_screen"
     case getTabs = "get_tabs"
     case whoami = "whoami"
+    case leaveGroup = "leave_group"
+    case removeMember = "remove_member"
 }
 
 /// Backend Edge Functions clients call.

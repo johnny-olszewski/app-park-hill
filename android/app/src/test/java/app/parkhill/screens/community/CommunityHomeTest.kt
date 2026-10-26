@@ -13,6 +13,7 @@ import app.parkhill.navigation.ScreenRegistry
 import app.parkhill.navigation.ScreenState
 import app.parkhill.navigation.ShellCoordinator
 import app.parkhill.navigation.StubBackendService
+import app.parkhill.navigation.eagerScope
 import app.parkhill.navigation.registerSharedScreens
 import app.parkhill.services.auth.FakeAuthService
 import app.parkhill.services.backend.ContractJson
@@ -97,7 +98,7 @@ class CommunityHomeTest {
         backend.tabs = { StubBackendService.tabs("home" to "home.root", "community" to "community.home") }
         val shell = ShellCoordinator(
             backend, registry, TabsCache(Files.createTempDirectory("tabs").toFile()),
-            ScreenCache(Files.createTempDirectory("screens").toFile()),
+            ScreenCache(Files.createTempDirectory("screens").toFile()), eagerScope(),
         ) { "en" }
         shell.load()
         assertEquals(listOf("home", "community"), shell.tabs.map { it.id })

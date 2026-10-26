@@ -18,6 +18,10 @@
     "is_leader": {
       "description": "Whether this member leads the group.",
       "type": "boolean"
+    },
+    "remove": {
+      "description": "Removes this member (swipe to remove, specs/COMMUNITY.md 5.2), sent only to people who may remove them: a destructive `call` with confirmation and `on_success` `refresh`.",
+      "$ref": "ActionButton.schema.json"
     }
   },
   "required": [

@@ -31,6 +31,7 @@ object ActionSerializer : KSerializer<Action> {
         val type = ((element as? JsonObject)?.get("type") as? JsonPrimitive)?.contentOrNull
         return when (type) {
             "navigate" -> input.json.decodeFromJsonElement(NavigateAction.serializer(), element)
+            "call" -> input.json.decodeFromJsonElement(CallAction.serializer(), element)
             else -> Action.Unknown(type)
         }
     }
@@ -38,6 +39,7 @@ object ActionSerializer : KSerializer<Action> {
     override fun serialize(encoder: Encoder, value: Action) {
         when (value) {
             is NavigateAction -> encoder.encodeSerializableValue(NavigateAction.serializer(), value)
+            is CallAction -> encoder.encodeSerializableValue(CallAction.serializer(), value)
             is Action.Unknown -> encoder.encodeSerializableValue(Action.Unknown.serializer(), value)
         }
     }

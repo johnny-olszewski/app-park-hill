@@ -36,6 +36,10 @@
       "items": {
         "$ref": "MemberRow.schema.json"
       }
+    },
+    "leave": {
+      "description": "Leaves the group (the footer button), sent to its members, leaders included: a destructive `call` with confirmation and `on_success` `dismiss`.",
+      "$ref": "ActionButton.schema.json"
     }
   },
   "required": [

@@ -47,6 +47,20 @@ class MockBackendServiceTest {
     }
 
     @Test
+    fun aCallSucceedsForASignedInPersona() = runTest {
+        val persona = MockPersonaState()
+        val service = MockBackendService(MockResponseStore.directory(bundled), persona)
+        try {
+            service.call("leave_group", JsonObject(emptyMap()), "en")
+            fail("expected Unauthorized")
+        } catch (error: BackendError) {
+            assertEquals(BackendError.Unauthorized, error)
+        }
+        persona.current = "member_one"
+        service.call("leave_group", JsonObject(mapOf("p_group_id" to JsonPrimitive("g"))), "en")
+    }
+
+    @Test
     fun mockResponseNamesSortParamsByName() {
         assertEquals("get_screen.a", MockResponseStore.name("get_screen.a", JsonObject(emptyMap())))
         val params = JsonObject(mapOf("z" to JsonPrimitive(2), "b" to JsonPrimitive("x")))

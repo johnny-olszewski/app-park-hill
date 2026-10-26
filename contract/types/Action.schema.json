@@ -5,6 +5,9 @@
   "oneOf": [
     {
       "$ref": "NavigateAction.schema.json"
+    },
+    {
+      "$ref": "CallAction.schema.json"
     }
   ]
 }

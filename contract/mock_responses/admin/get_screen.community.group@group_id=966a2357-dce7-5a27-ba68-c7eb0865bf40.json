@@ -6,41 +6,193 @@
     "members": [
       {
         "title": "Elijah Moore",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "2a029eaf-5685-5569-a277-cc081e75e604",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Elijah Moore?",
+              "message": "Elijah Moore will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "2a029eaf-5685-5569-a277-cc081e75e604",
         "is_leader": true
       },
       {
         "title": "Aaron Fleming",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "9110e485-dccc-5e54-986e-985f982ab382",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Aaron Fleming?",
+              "message": "Aaron Fleming will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "9110e485-dccc-5e54-986e-985f982ab382",
         "is_leader": false
       },
       {
         "title": "Esther Mensah",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "94b87fab-7cae-594b-8bb7-ddba32f10bd5",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Esther Mensah?",
+              "message": "Esther Mensah will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "94b87fab-7cae-594b-8bb7-ddba32f10bd5",
         "is_leader": false
       },
       {
         "title": "Joy Okonkwo",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "4ba39b63-2f40-5c12-83a0-f0e6bc6a24ff",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Joy Okonkwo?",
+              "message": "Joy Okonkwo will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "4ba39b63-2f40-5c12-83a0-f0e6bc6a24ff",
         "is_leader": false
       },
       {
         "title": "Matthew Ellis",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b010b520-0f3f-508c-8fe5-ed682ae3263a",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Matthew Ellis?",
+              "message": "Matthew Ellis will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b010b520-0f3f-508c-8fe5-ed682ae3263a",
         "is_leader": false
       },
       {
         "title": "Rebecca Hart",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "ef87952e-a5e2-573b-bcd4-d0f5b8b1387b",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Rebecca Hart?",
+              "message": "Rebecca Hart will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "ef87952e-a5e2-573b-bcd4-d0f5b8b1387b",
         "is_leader": false
       },
       {
         "title": "Sarah Ibrahim",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "22814fc1-b99f-5156-8c09-06853f945975",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Sarah Ibrahim?",
+              "message": "Sarah Ibrahim will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "22814fc1-b99f-5156-8c09-06853f945975",
         "is_leader": false
       },
       {
         "title": "Thomas Becker",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "c9f59ed1-2522-5d3a-a6f1-fee729bfe49f",
+              "p_group_id": "966a2357-dce7-5a27-ba68-c7eb0865bf40"
+            },
+            "confirm": {
+              "title": "Remove Thomas Becker?",
+              "message": "Thomas Becker will no longer be in Men's Breakfast.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "c9f59ed1-2522-5d3a-a6f1-fee729bfe49f",
         "is_leader": false
       }

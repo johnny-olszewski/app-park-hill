@@ -29,6 +29,15 @@ struct SessionRenewingBackendServiceTests {
         #expect(auth.endSessions == 0)
     }
 
+    @Test func aCallRefusedAsUnauthorizedRenewsAndRetries() async throws {
+        let backend = StubBackendService(environment: .init(name: "Stub", backend: nil))
+        backend.enqueueCall(.failure(.unauthorized), .success(()))
+        let auth = StubAuthService(renewal: .renewed)
+        try await SessionRenewingBackendService(base: backend, auth: auth).call(function: "leave_group", params: [:], locale: "en")
+        #expect(backend.calls.count == 2)
+        #expect(auth.renewals == 1)
+    }
+
     @Test func unauthorizedAgainAfterRenewalEndsTheSession() async {
         let (service, backend, auth) = makeService(.failure(.unauthorized), .failure(.unauthorized), renewal: .renewed)
         await #expect(throws: BackendError.unauthorized) { _ = try await service.getEntry(locale: "en") }

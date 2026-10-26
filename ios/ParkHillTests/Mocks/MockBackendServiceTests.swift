@@ -80,6 +80,16 @@ struct MockBackendServiceTests {
         #expect(try await service.getEntry(locale: "en").key == "shared")
     }
 
+    @Test func aCallSucceedsForASignedInPersona() async throws {
+        let personaState = MockPersonaState()
+        let service = MockBackendService(responses: .bundled, personaState: personaState)
+        await #expect(throws: BackendError.unauthorized) {
+            try await service.call(function: "leave_group", params: [:], locale: "en")
+        }
+        personaState.current = "member_one"
+        try await service.call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "en")
+    }
+
     @Test func malformedMockResponseThrowsDecoding() async throws {
         let root = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)

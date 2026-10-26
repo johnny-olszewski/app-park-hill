@@ -19,6 +19,7 @@ import kotlinx.serialization.json.JsonObject
  * `get_screen.<key>@<params>.json`, else `get_screen.<key>.json`, preferring
  * the current persona's copy; `getTabs`
  * and `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
+ * A `call` succeeds and changes nothing: mock responses are static (guide 6).
  */
 class MockBackendService(
     private val responses: MockResponseStore,
@@ -42,6 +43,10 @@ class MockBackendService(
     override suspend fun whoami(): Profile {
         if (personaState.current == null) throw BackendError.Unauthorized
         return decode(RpcFunction.whoami.value, missing = BackendError.Server, Profile.serializer())
+    }
+
+    override suspend fun call(function: String, params: JsonObject, locale: String) {
+        if (personaState.current == null) throw BackendError.Unauthorized
     }
 
     private fun decode(name: String, missing: BackendError): ScreenEnvelope =

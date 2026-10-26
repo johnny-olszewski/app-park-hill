@@ -58,11 +58,11 @@ fun CommunityBrowseScreen(data: CommunityBrowseData) {
     val focus = LocalFocusManager.current
     val actions = LocalScreenActions.current
     val endingSearch = remember(actions) {
-        ScreenActions { action ->
+        ScreenActions(handler = { action, _ ->
             query = ""
             focus.clearFocus()
             actions.perform(action)
-        }
+        })
     }
     Column(Modifier.fillMaxSize().background(ParkHill.colors.surface)) {
         DockedSearchBar(

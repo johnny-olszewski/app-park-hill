@@ -16,6 +16,24 @@
         "key": "community.home",
         "data": {
           "group": {
+            "leave": {
+              "label": "Leave group",
+              "action": {
+                "role": "destructive",
+                "type": "call",
+                "params": {
+                  "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                },
+                "confirm": {
+                  "title": "Leave Tuesday Night Group?",
+                  "message": "You'll no longer see this group or its members.",
+                  "cancel_label": "Cancel",
+                  "confirm_label": "Leave"
+                },
+                "function": "leave_group",
+                "on_success": "dismiss"
+              }
+            },
             "title": "Tuesday Night Group",
             "meeting": "Tuesdays · 7:00 PM",
             "members": [
@@ -27,51 +45,241 @@
               },
               {
                 "title": "Ana Ruiz",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "c2882fc1-75b0-5af0-ae50-8d5936b8cf9d",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Ana Ruiz?",
+                      "message": "Ana Ruiz will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "c2882fc1-75b0-5af0-ae50-8d5936b8cf9d",
                 "is_leader": false
               },
               {
                 "title": "Ben Carter",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "a348d8a1-3ee7-5aff-9024-567478505aca",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Ben Carter?",
+                      "message": "Ben Carter will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "a348d8a1-3ee7-5aff-9024-567478505aca",
                 "is_leader": false
               },
               {
                 "title": "Daniel Kim",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "39dcc18f-0a69-59ea-a55e-ecb5185e394c",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Daniel Kim?",
+                      "message": "Daniel Kim will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "39dcc18f-0a69-59ea-a55e-ecb5185e394c",
                 "is_leader": false
               },
               {
                 "title": "Grace Park",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "bf88c312-4d9b-584f-855b-0e758b120bbb",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Grace Park?",
+                      "message": "Grace Park will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "bf88c312-4d9b-584f-855b-0e758b120bbb",
                 "is_leader": false
               },
               {
                 "title": "Jordan Lee",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "c94cc0cd-844d-53cf-9494-bc3f0701f668",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Jordan Lee?",
+                      "message": "Jordan Lee will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "c94cc0cd-844d-53cf-9494-bc3f0701f668",
                 "is_leader": false
               },
               {
                 "title": "Maria Lopez",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "d6bd764d-5b38-59a4-85c4-4341e8b402a2",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Maria Lopez?",
+                      "message": "Maria Lopez will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "d6bd764d-5b38-59a4-85c4-4341e8b402a2",
                 "is_leader": false
               },
               {
                 "title": "Member One",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "018919a6-047d-52b8-b6e3-363a7e80888c",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Member One?",
+                      "message": "Member One will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "018919a6-047d-52b8-b6e3-363a7e80888c",
                 "is_leader": false
               },
               {
                 "title": "Member Two",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Member Two?",
+                      "message": "Member Two will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "175eb30f-796d-56d2-84d4-4082b6512629",
                 "is_leader": false
               },
               {
                 "title": "Priya Shah",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "8d6eab13-15db-517a-95ff-4e6dd3dbd335",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Priya Shah?",
+                      "message": "Priya Shah will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "8d6eab13-15db-517a-95ff-4e6dd3dbd335",
                 "is_leader": false
               },
               {
                 "title": "Sam Ortiz",
+                "remove": {
+                  "label": "Remove",
+                  "action": {
+                    "role": "destructive",
+                    "type": "call",
+                    "params": {
+                      "p_user_id": "971ca6f8-95af-5126-b307-592c663356d1",
+                      "p_group_id": "d44d5b87-37ce-5db5-9e33-43f477b42f1e"
+                    },
+                    "confirm": {
+                      "title": "Remove Sam Ortiz?",
+                      "message": "Sam Ortiz will no longer be in Tuesday Night Group.",
+                      "cancel_label": "Cancel",
+                      "confirm_label": "Remove"
+                    },
+                    "function": "remove_member",
+                    "on_success": "refresh"
+                  }
+                },
                 "user_id": "971ca6f8-95af-5126-b307-592c663356d1",
                 "is_leader": false
               }

@@ -41,7 +41,7 @@ class FullScreenCoverTest {
     private val openCover = navigate("test.cover", NavigateActionPresentation.FULL_SCREEN_COVER)
     private val push = navigate("test.screen", NavigateActionPresentation.PUSH)
 
-    private fun tab() = TabCoordinator(TabItem("t", "T", "tab.t", screen("Root")), context)
+    private fun tab() = TabCoordinator(TabItem("t", "T", "tab.t", screen("Root")), context, eagerScope())
 
     @Test
     fun opensOverALoadingStateAndFetchesItsTarget() = runTest {

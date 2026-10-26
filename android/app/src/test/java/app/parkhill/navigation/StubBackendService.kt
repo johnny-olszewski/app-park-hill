@@ -6,11 +6,14 @@ import app.parkhill.contract.TabItem
 import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-/** A [BackendService] whose entry, screen and tabs answers each test sets. */
+/** A [BackendService] whose entry, screen, tabs and call answers each test sets. */
 class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
     var entryCalls = 0
         private set
@@ -46,6 +49,15 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
         return profile()
     }
 
+    /** Answers `call`; by default a success. */
+    var callResult: (function: String) -> Unit = {}
+    val calls = mutableListOf<Triple<String, JsonObject, String>>()
+
+    override suspend fun call(function: String, params: JsonObject, locale: String) {
+        calls += Triple(function, params, locale)
+        callResult(function)
+    }
+
     companion object {
         /** Tabs with empty root screens, one per `id to screen key`, in order. */
         fun tabs(vararg tabs: Pair<String, String>) = TabsResponse(
@@ -70,3 +82,7 @@ class StubBackendService(var entry: () -> ScreenEnvelope) : BackendService {
         )
     }
 }
+
+/** A scope that runs what coordinators launch at once, up to its first suspension; stubs never suspend. */
+@OptIn(ExperimentalCoroutinesApi::class)
+fun eagerScope(): CoroutineScope = CoroutineScope(UnconfinedTestDispatcher())

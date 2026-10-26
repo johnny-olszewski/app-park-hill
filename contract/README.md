@@ -100,13 +100,15 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 | `type` | Type | Fields |
 |---|---|---|
 | `navigate` | `NavigateAction` | `screen_key`, `params` (any object, passed to `get_screen` as `p_params`), `presentation`, optional `role` |
+| `call` | `CallAction` | `function` (a name from `names.json`), `params` (the function's named arguments; the client adds `p_locale`), optional `confirm` (`CallConfirmation`: `title`, `message`, `confirm_label`, `cancel_label`), `on_success`, optional `role` |
 
 | Field | Values |
 |---|---|
 | `presentation` | `push`: the current tab's stack. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. EP-03.D adds `sheet` |
+| `on_success` | `refresh`: refetch the screen. `dismiss`: close a pushed screen and refresh the one below, or refresh a tab root in place (guide 5.3 rule 9). `none`: nothing |
 | `role` | `destructive`: a meaning each platform styles its own way |
 
-`call` actions arrive with EP-03.C.
+A `call` with `confirm` shows the backend's wording first; cancelling calls nothing. A successful call returns `{}`, which clients do not decode (EP-03.E adds `then`). A refused call is an error (Errors below).
 
 Shared types for Community screens, all text backend formatted and localized:
 
@@ -114,8 +116,9 @@ Shared types for Community screens, all text backend formatted and localized:
 |---|---|
 | `GroupRow` | `group_id`, `title`, `subtitle` (for example "Tuesdays · 7:00 PM · Lee home"), optional `badge` (for example "Leader"), optional `badge_tone` (`attention`, for example on "No leader"), `action` |
 | `ToolbarItem` | `id`, `label` (also the accessibility label of an icon button), `icon_key` (a bundled icon), `action` |
-| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members` |
-| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader` |
+| `GroupDetail` | `group_id`, `title`, `description` and `location` (empty when unset), `meeting` (one line, for example "Tuesdays · 7:00 PM"), `leaders_line` ("Leaders: Jordan Lee", or "Leaders: none yet"), `members_title`, `members`, optional `leave` (`ActionButton`, for the group's members) |
+| `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove) |
+| `ActionButton` | `label`, `action`; sent only to people who may use it |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
 | `EmptyState` | `title`, `message`; shown with no buttons |
 
@@ -142,6 +145,8 @@ Postgres functions called through PostgREST: `POST /rest/v1/rpc/<function>` with
 | `get_entry(p_locale)` | Signed out (`anon`) | The signed-out entry screen envelope. Today always `auth.sign_in` |
 | `get_screen(p_key, p_locale, p_params)` | Depends on the screen | One screen envelope. Used for refresh and for screens reached by navigation |
 | `get_tabs(p_locale)` | Signed in only | The enabled tabs in order, at most five: `{ "tabs": [ { "id", "title", "icon_key", "screen": <envelope> } ] }`. `title` is resolved for the locale; `icon_key` names a bundled client asset |
+| `leave_group(p_group_id, p_locale)` | Signed in, in the group | `{}`. Ends the caller's membership and leadership; the last leader may leave. Else `action_refused` |
+| `remove_member(p_group_id, p_user_id, p_locale)` | Signed in, with `groups.remove_member` for the group; leaders cannot remove leaders | `{}`. Ends that member's membership and leadership. Else `action_refused` |
 | `whoami()` | Signed in only | The caller's profile: `{ "id": "<uuid>", "display_name": "Attendee" }` |
 
 ### `sign_in` Edge Function
@@ -178,6 +183,7 @@ Errors use PostgREST's error body. The `message` field is a stable code clients 
 | `unknown_screen` | 400 | `P0001` | `get_screen` called with a key the backend does not register | The requested key |
 | `session_ended` | 400 | `P0001` | A signed-in function was called with no valid user, or the account is banned or deleted | None |
 | `screen_unavailable` | 400 | `P0001` | `get_screen` for a screen the caller may not see, such as a group they are not in, for example after losing access | The backend's localized message for the caller's locale, shown as given (specs/COMMUNITY.md 5.5) |
+| `action_refused` | 400 | `P0001` | A `call` the caller may not make (any more), such as removing a member who already left | The backend's localized message for the caller's locale, shown as given; the client then refreshes the screen |
 
 Clients treat `session_ended` like an HTTP 401 (expired or invalid token): one silent session renewal and retry, then sign out (`specs/AUTH.md` 4.3).
 

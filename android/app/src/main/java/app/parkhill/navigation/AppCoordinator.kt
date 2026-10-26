@@ -136,7 +136,7 @@ class AppCoordinator(
         }
     }
 
-    private fun makeShell() = ShellCoordinator(backend, registry, tabsCache, screenCache, locale)
+    private fun makeShell() = ShellCoordinator(backend, registry, tabsCache, screenCache, scope, locale)
 
     private fun observeAuth() {
         authObservation?.cancel()

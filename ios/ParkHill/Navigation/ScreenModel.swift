@@ -27,6 +27,12 @@ final class ScreenModel: Identifiable {
     let params: [String: JSONValue]
     private(set) var state: State
 
+    /// Told when the backend refuses this screen with `screen_unavailable`,
+    /// with its message, by whoever shows the screen, which then applies the
+    /// lost-access rule (guide 5.3 rule 9). Unset, the screen falls back like
+    /// after any failure.
+    @ObservationIgnored var onLostAccess: (@MainActor (ScreenModel, String) -> Void)?
+
     private let context: ScreenContext
 
     /// A screen whose content is already here, such as a tab root embedded in
@@ -55,13 +61,17 @@ final class ScreenModel: Identifiable {
     }
 
     /// Fetches the screen. Also pull to refresh: a failure keeps a screen
-    /// already showing.
+    /// already showing; lost access goes to `onLostAccess`.
     func load() async {
         let locale = context.locale()
         do {
             let envelope = try await context.backend.getScreen(key: key, locale: locale, params: params)
             show(envelope, locale: locale)
         } catch {
+            if case .screenUnavailable(let message) = error, let onLostAccess {
+                onLostAccess(self, message)
+                return
+            }
             Logger.navigation.error("\(RPCFunction.getScreen.rawValue, privacy: .public) \(self.key, privacy: .public) failed: \(String(describing: error), privacy: .public)")
             showFallback(locale: locale)
         }

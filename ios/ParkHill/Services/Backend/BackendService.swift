@@ -14,6 +14,10 @@ protocol BackendService: Sendable {
     /// The signed-in caller's profile (`whoami`). Refused as `unauthorized`
     /// when there is no active session.
     func whoami() async throws(BackendError) -> Profile
+
+    /// A `call` action's backend function, with the action's `params` and
+    /// `p_locale` added. A success's body is not read.
+    func call(function: String, params: [String: JSONValue], locale: String) async throws(BackendError)
 }
 
 extension BackendService {
@@ -32,6 +36,12 @@ enum BackendError: Error, Equatable, Sendable {
     case unauthorized
     /// A response arrived but did not match the contract.
     case decoding
+    /// The caller may no longer see the screen (`screen_unavailable`), with
+    /// the backend's message (guide 5.3 rule 9).
+    case screenUnavailable(message: String)
+    /// The caller may no longer make the call (`action_refused`), with the
+    /// backend's message.
+    case actionRefused(message: String)
     /// Any other refusal or failure reported by the backend.
     case server
 }

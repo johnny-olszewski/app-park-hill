@@ -10,6 +10,7 @@ import app.parkhill.contract.RpcFunction
 import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendService
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 
 /** What the signed-in shell shows. */
 enum class ShellState { Loading, Tabs, Error }
@@ -17,13 +18,15 @@ enum class ShellState { Loading, Tabs, Error }
 /**
  * The signed-in shell (EP-02): the backend's tabs, each with its own
  * [TabCoordinator]. Fetched with `get_tabs`, cached per locale, refreshed on
- * return to the foreground (guide 5.3). Snapshot state, read by the shell.
+ * return to the foreground (guide 5.3). Tabs run their refreshes in `scope`.
+ * Snapshot state, read by the shell.
  */
 class ShellCoordinator(
     private val backend: BackendService,
     private val registry: ScreenRegistry,
     private val cache: TabsCache,
     screenCache: ScreenCache,
+    private val scope: CoroutineScope,
     private val locale: () -> String,
 ) {
     private val screens = ScreenContext(backend, registry, screenCache, locale)
@@ -95,7 +98,7 @@ class ShellCoordinator(
             when {
                 existing != null -> existing.also { it.update(item) }
                 // A root whose data cannot be shown falls back in its tab, to its cached copy or the error screen.
-                registry.isRegistered(item.screen.key) -> TabCoordinator(item, screens)
+                registry.isRegistered(item.screen.key) -> TabCoordinator(item, screens, scope)
                 else -> null.also { Log.e(TAG, "Dropped tab ${item.id}: its screen is not registered") }
             }
         }

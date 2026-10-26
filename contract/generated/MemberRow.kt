@@ -15,4 +15,6 @@ data class MemberRow(
     val note: String? = null,
     /** Whether this member leads the group. */
     @SerialName("is_leader") val isLeader: Boolean,
+    /** Removes this member (swipe to remove, specs/COMMUNITY.md 5.2), sent only to people who may remove them: a destructive `call` with confirmation and `on_success` `refresh`. */
+    val remove: ActionButton? = null,
 )

@@ -119,6 +119,12 @@ Tab icons come from `AssetProvider` (`design/`): bundled placeholder drawables f
 
 **Browse all groups:** `community.browse` (`screens/community/CommunityBrowseScreen.kt`) opens from Community home's toolbar as a full-screen cover. It shows the group rows of Community home's list with a Material search field that filters the loaded rows by title as you type (`filterGroupRows`), pull to refresh, and rows that push `community.group` inside the cover. Tapping a row ends the search first (clears it and drops focus), so back from a group shows every group, as on iOS. A row's badge with `badge_tone` `attention` (such as "No leader") is drawn in the danger color. With animations off (developer options) every change is instant. Screens know nothing about it.
 
+**Call actions:** a `call` (`TabCoordinator.perform`) shows its backend `confirm` in a Material alert dialog first, the confirm button in the danger color when `role` is `destructive`; cancelling calls nothing. Confirmed, `BackendService.call` sends `function` with `params` plus `p_locale`, then applies `on_success` to the screen the action came from (`ScreenActions` are bound to it by `ScreenHost` and the toolbar): `refresh` reloads it, `dismiss` closes it as lost access does but with no message (a tab root refreshes in place), `none` does nothing. A call refused with `action_refused` refreshes the screen and shows the backend's message as a `Snackbar`, unless that refresh finds the screen gone. The mock's `call` succeeds and changes nothing.
+
+**Lost access** (guide 5.3 rule 9): a screen refused with `screen_unavailable`, on its first load or a refresh, is reported to its tab instead of falling back. A pushed screen closes with everything over it and the one below refreshes; a cover's root closes the cover and the tab's top refreshes; a tab root keeps showing. The backend's message shows as a `Snackbar`, over the cover while one is open.
+
+**Group detail:** rows with `remove` swipe from the end to remove (`SwipeToDismissBox`, the label behind them in the danger color): past the threshold the backend's confirmation shows and the row settles back, and TalkBack offers the same as a custom action named with the label. `leave` is a large footer button in the danger color.
+
 **Entry by flavor:** both show the production `auth.sign_in` from `get_entry`. In mock, the persona and result come from the mock menu (Mock sign-in, below).
 
 **Sign-in errors:** backend refusals show under the password field in the danger color; `cannot_connect_message` and `session_ended_message` show in a box above the fields.
@@ -180,7 +186,7 @@ Any email and password then give the armed result. While a result other than Suc
 | `src/testMock` | mock | Nothing |
 | `src/androidTest` | Both flavors, on a device or emulator | Nothing. The Keystore session cipher; shared UI test helpers |
 | `src/androidTestMock` | mock, on a device or emulator | Nothing. The dev tools pill and menu; sign-in as a chosen persona, a refusal, No connection and Switch persona through the menu; each persona's Community tab, its toolbar and Browse all groups |
-| `src/androidTestLocal` | local, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedLocalDebugAndroidTest` |
+| `src/androidTestLocal` | local, on a device or emulator | Local Supabase, reset recently (each run adds one failed sign-in for `admin`, and 5 within 15 minutes lock it): `cd backend && supabase start && supabase db reset`, then `./gradlew connectedLocalDebugAndroidTest`. Tests that change group rows use `LocalGroupRows`, which writes through local Supabase's REST API with its well-known service-role key and puts every row back when the test ends |
 
 Client CI runs Mock only (guide 6), so run the local tests on your machine before merging changes to `/android`, `/backend` or `/contract`, with an emulator running:
 

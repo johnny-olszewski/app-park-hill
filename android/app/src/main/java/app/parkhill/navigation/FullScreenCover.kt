@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.key
@@ -30,12 +31,13 @@ import app.parkhill.design.ParkHill
  * The tab's full-screen cover (guide 5.5): a layer over the whole shell,
  * drawn inside the activity rather than as a dialog so the dev tools pill
  * stays above it. It slides up from the bottom when it opens and back down
- * when it closes, like the entry (AND-023) and the iOS cover. Its root has a
+ * when it closes, like the entry (AND-023) and the iOS cover. The tab's
+ * messages show over it while it is open. Its root has a
  * close button; screens pushed inside it have a back button. Everything in
  * it, such as a search field's text, starts afresh each time it opens.
  */
 @Composable
-fun FullScreenCover(tab: TabCoordinator) {
+fun FullScreenCover(tab: TabCoordinator, snackbar: SnackbarHostState) {
     val cover = tab.cover
     // The closing cover stays drawn while it slides away.
     val shown = remember { object { var stack: ScreenStack? = null } }
@@ -49,17 +51,18 @@ fun FullScreenCover(tab: TabCoordinator) {
         val stack = shown.stack ?: return@AnimatedVisibility
         key(stack) {
             CompositionLocalProvider(LocalScreenActions provides tab.actions) {
-                CoverContent(stack, close = tab::closeCover)
+                CoverContent(stack, snackbar, close = tab::closeCover)
             }
         }
     }
 }
 
 @Composable
-private fun CoverContent(stack: ScreenStack, close: () -> Unit) {
+private fun CoverContent(stack: ScreenStack, snackbar: SnackbarHostState, close: () -> Unit) {
     val top = stack.path.lastOrNull()
     Scaffold(
         containerColor = ParkHill.colors.surface,
+        snackbarHost = { MessageHost(snackbar) },
         topBar = {
             if (top == null) {
                 ScreenTopBar(stack.root) {

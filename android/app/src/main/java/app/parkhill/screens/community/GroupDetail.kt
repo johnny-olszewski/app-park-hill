@@ -22,6 +22,9 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -36,14 +41,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.parkhill.R
+import app.parkhill.contract.ActionButton
 import app.parkhill.contract.GroupDetail
 import app.parkhill.contract.MemberRow
 import app.parkhill.design.ParkHill
+import app.parkhill.design.SecondaryButton
+import app.parkhill.navigation.LocalScreenActions
 
 /**
- * A group's details and members, read-only (specs/COMMUNITY.md 5.1). A client
+ * A group's details and members (specs/COMMUNITY.md 5.1, 5.2). A client
  * component shared by `community.group` and Community home's one group;
- * every word comes from the data.
+ * every word comes from the data. Rows the caller may remove swipe to remove,
+ * and the Leave footer shows when the backend sends it.
  */
 @Composable
 fun GroupDetailView(detail: GroupDetail) {
@@ -76,10 +85,73 @@ fun GroupDetailView(detail: GroupDetail) {
             )
         }
         items(detail.members, key = { it.userId }) { member ->
-            MemberRowView(member)
+            val remove = member.remove
+            if (remove != null && LocalScreenActions.current.canPerform(remove.action)) {
+                RemovableMemberRow(member, remove)
+            } else {
+                MemberRowView(member)
+            }
             HorizontalDivider(color = ParkHill.colors.line, modifier = Modifier.padding(start = 58.dp))
         }
+        detail.leave?.let { leave ->
+            item { LeaveButton(leave) }
+        }
     }
+}
+
+/**
+ * A member the caller may remove (guide 5.5: swipe to dismiss): swiped from
+ * the end far enough, it asks for the backend's confirmation and settles back
+ * in place, so cancelling leaves it where it was; confirming removes it on the
+ * refresh. Behind it, the remove label in the danger color. TalkBack offers
+ * the same as a custom action named with the label.
+ */
+@Composable
+private fun RemovableMemberRow(member: MemberRow, remove: ActionButton) {
+    val actions = LocalScreenActions.current
+    val state = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            if (value == SwipeToDismissBoxValue.EndToStart) actions.perform(remove.action)
+            false
+        },
+    )
+    SwipeToDismissBox(
+        state = state,
+        enableDismissFromStartToEnd = false,
+        backgroundContent = {
+            Box(
+                Modifier.fillMaxSize().background(ParkHill.colors.danger).padding(horizontal = 16.dp),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                Text(remove.label, color = ParkHill.colors.surface, fontWeight = FontWeight.SemiBold)
+            }
+        },
+        modifier = Modifier
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(remove.label) {
+                        actions.perform(remove.action)
+                        true
+                    },
+                )
+            }
+            .testTag("groupDetail.removableMember"),
+    ) {
+        Box(Modifier.background(ParkHill.colors.surface)) { MemberRowView(member) }
+    }
+}
+
+/** The footer button that leaves the group, in the danger color. */
+@Composable
+private fun LeaveButton(leave: ActionButton) {
+    val actions = LocalScreenActions.current
+    if (!actions.canPerform(leave.action)) return
+    SecondaryButton(
+        leave.label,
+        onClick = { actions.perform(leave.action) },
+        destructive = true,
+        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 24.dp).testTag("groupDetail.leave"),
+    )
 }
 
 /** One backend-formatted line of the details, with an icon for scanning. */

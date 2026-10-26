@@ -6,31 +6,145 @@
     "members": [
       {
         "title": "Tabitha Young",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "0ce04da4-5572-533e-8837-1139146723c3",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Tabitha Young?",
+              "message": "Tabitha Young will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "0ce04da4-5572-533e-8837-1139146723c3",
         "is_leader": true
       },
       {
         "title": "Aaliyah Davis",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Aaliyah Davis?",
+              "message": "Aaliyah Davis will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "8068cff4-da13-57fe-b50e-41ee8dbe8da0",
         "is_leader": false
       },
       {
         "title": "Diego Castillo",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Diego Castillo?",
+              "message": "Diego Castillo will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "f9b22f4b-090e-58c0-982b-400dad5ed995",
         "is_leader": false
       },
       {
         "title": "Hope Williams",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Hope Williams?",
+              "message": "Hope Williams will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "e9771803-71cb-54dc-990e-212d50a9fd34",
         "is_leader": false
       },
       {
         "title": "Jacob Rivera",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "899397aa-d671-5768-ae6d-79ce7a889021",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Jacob Rivera?",
+              "message": "Jacob Rivera will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "899397aa-d671-5768-ae6d-79ce7a889021",
         "is_leader": false
       },
       {
         "title": "Simon Novak",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
+              "p_group_id": "49636232-5119-5619-9596-5dca20edf7f5"
+            },
+            "confirm": {
+              "title": "Remove Simon Novak?",
+              "message": "Simon Novak will no longer be in Grief and Hope.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "6f0f483e-447c-51ac-8cc8-2d99aec4c24f",
         "is_leader": false
       }

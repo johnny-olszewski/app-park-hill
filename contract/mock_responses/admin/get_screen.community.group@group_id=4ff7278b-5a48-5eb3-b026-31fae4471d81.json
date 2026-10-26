@@ -6,51 +6,241 @@
     "members": [
       {
         "title": "Noah Patel",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Noah Patel?",
+              "message": "Noah Patel will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "1add3d4e-749e-57aa-86e9-029543a3d1e8",
         "is_leader": true
       },
       {
         "title": "Abigail Foster",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Abigail Foster?",
+              "message": "Abigail Foster will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "b0e4543a-1327-599a-b5e6-f679df65ea12",
         "is_leader": false
       },
       {
         "title": "Chloe Dubois",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Chloe Dubois?",
+              "message": "Chloe Dubois will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "11f02fd2-4b07-53e4-a57d-ba4275f2f394",
         "is_leader": false
       },
       {
         "title": "Clara Weiss",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Clara Weiss?",
+              "message": "Clara Weiss will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "ad98dbfd-d1f9-5b2f-844f-bcb2946d3a57",
         "is_leader": false
       },
       {
         "title": "Emily Sato",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "c13b680a-0c15-594e-a035-3010d035d546",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Emily Sato?",
+              "message": "Emily Sato will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "c13b680a-0c15-594e-a035-3010d035d546",
         "is_leader": false
       },
       {
         "title": "Gabriel Silva",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "e42a80b0-b74b-54eb-8cd3-7e9d2b1a01e3",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Gabriel Silva?",
+              "message": "Gabriel Silva will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "e42a80b0-b74b-54eb-8cd3-7e9d2b1a01e3",
         "is_leader": false
       },
       {
         "title": "Josiah Banks",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Josiah Banks?",
+              "message": "Josiah Banks will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "0838c371-3769-565a-924a-f6ec0cf904f2",
         "is_leader": false
       },
       {
         "title": "Nathan Brooks",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "75d746fc-a982-5d3a-a243-42a3b55c2ba6",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Nathan Brooks?",
+              "message": "Nathan Brooks will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "75d746fc-a982-5d3a-a243-42a3b55c2ba6",
         "is_leader": false
       },
       {
         "title": "Ruth Adeyemi",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "a40b182d-b970-5410-b880-29974e9dcd8b",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Ruth Adeyemi?",
+              "message": "Ruth Adeyemi will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "a40b182d-b970-5410-b880-29974e9dcd8b",
         "is_leader": false
       },
       {
         "title": "Victor Hernandez",
+        "remove": {
+          "label": "Remove",
+          "action": {
+            "role": "destructive",
+            "type": "call",
+            "params": {
+              "p_user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
+              "p_group_id": "4ff7278b-5a48-5eb3-b026-31fae4471d81"
+            },
+            "confirm": {
+              "title": "Remove Victor Hernandez?",
+              "message": "Victor Hernandez will no longer be in Kensington Couples.",
+              "cancel_label": "Cancel",
+              "confirm_label": "Remove"
+            },
+            "function": "remove_member",
+            "on_success": "refresh"
+          }
+        },
         "user_id": "06cd9d56-66f5-59d0-b298-17aa8d2efbe0",
         "is_leader": false
       }

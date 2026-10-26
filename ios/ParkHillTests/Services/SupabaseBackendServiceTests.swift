@@ -67,6 +67,23 @@ struct SupabaseBackendServiceTests {
         #expect(response.tabs.first?.iconKey == "tab.home")
     }
 
+    @Test func callSendsTheActionsParamsWithTheLocale() async throws {
+        StubURLProtocol.stub(.http(status: 200, body: "{}"))
+
+        try await makeService().call(function: "leave_group", params: ["p_group_id": .string("g")], locale: "es")
+
+        let request = try #require(StubURLProtocol.requests.last)
+        #expect(request.url?.path == "/rest/v1/rpc/leave_group")
+        #expect(try body(of: request) == ["p_group_id": .string("g"), "p_locale": .string("es")])
+    }
+
+    @Test func aRefusedCallCarriesTheBackendsMessage() async {
+        StubURLProtocol.stub(.http(status: 400, body: #"{"code":"P0001","message":"action_refused","details":"Not any more.","hint":null}"#))
+        await #expect(throws: BackendError.actionRefused(message: "Not any more.")) {
+            try await makeService().call(function: "remove_member", params: [:], locale: "en")
+        }
+    }
+
     @Test func standardHeadersFallBackToEnglish() {
         #expect(StandardHeaders.make(environment: Self.environment, preferredLanguages: ["fr-CA", "en"])["Accept-Language"] == "fr-CA")
         #expect(StandardHeaders.make(environment: Self.environment, preferredLanguages: [])["Accept-Language"] == "en")
@@ -83,6 +100,8 @@ struct SupabaseBackendServiceTests {
     @Test(arguments: [
         (StubURLProtocol.Response.http(status: 400, body: #"{"code":"P0001","message":"unknown_screen","details":"x","hint":null}"#), BackendError.unknownScreen),
         (.http(status: 400, body: #"{"code":"P0001","message":"session_ended","details":null,"hint":null}"#), .unauthorized),
+        (.http(status: 400, body: #"{"code":"P0001","message":"screen_unavailable","details":"You're no longer in this group.","hint":null}"#), .screenUnavailable(message: "You're no longer in this group.")),
+        (.http(status: 400, body: #"{"code":"P0001","message":"action_refused","details":"You can't make this change anymore.","hint":null}"#), .actionRefused(message: "You can't make this change anymore.")),
         (.http(status: 401, body: #"{"code":"PGRST301","message":"JWT expired","details":null,"hint":null}"#), .unauthorized),
         (.http(status: 401, body: "Unauthorized"), .unauthorized),
         (.http(status: 500, body: #"{"code":"XX000","message":"boom","details":null,"hint":null}"#), .server),

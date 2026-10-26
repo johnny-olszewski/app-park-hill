@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import app.parkhill.cache.ScreenCache
 import app.parkhill.contract.RpcFunction
 import app.parkhill.contract.ScreenEnvelope
+import app.parkhill.services.backend.BackendError
 import app.parkhill.services.backend.BackendService
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.JsonObject
@@ -30,7 +31,8 @@ sealed interface ScreenState {
  * One shown backend screen: its key and params, and what it shows now.
  * Fetches with `get_screen`, refreshes on demand, and falls back to the last
  * good copy for its key and params, else the error screen (guide 5.3 rules 4
- * and 10). Snapshot state, read by [ScreenHost].
+ * and 10). A fetch refused with `screen_unavailable` is reported to its owner
+ * through [onUnavailable] instead (rule 9). Snapshot state, read by [ScreenHost].
  */
 class ScreenModel private constructor(
     val key: String,
@@ -44,23 +46,38 @@ class ScreenModel private constructor(
     internal var needsLoad = false
         private set
 
+    /**
+     * Told the backend's message when the screen is refused as unavailable;
+     * set by whoever shows the screen, which applies the lost-access rule.
+     * Without one, the screen falls back as for any failure.
+     */
+    internal var onUnavailable: ((String) -> Unit)? = null
+
     /** The envelope showing now, if any. */
     val envelope: ScreenEnvelope? get() = (state as? ScreenState.Showing)?.screen?.envelope
 
-    /** Fetches the screen. Also pull to refresh: a failure keeps a screen already showing. */
-    suspend fun load() {
+    /**
+     * Fetches the screen. Also pull to refresh: a failure keeps a screen
+     * already showing. False when the backend refused it as unavailable.
+     */
+    suspend fun load(): Boolean {
         needsLoad = false
         val locale = context.locale()
         val envelope = try {
             context.backend.getScreen(key, locale, params)
         } catch (error: CancellationException) {
             throw error
+        } catch (unavailable: BackendError.ScreenUnavailable) {
+            Log.i(TAG, "${RpcFunction.getScreen.value} $key refused: no longer available")
+            onUnavailable?.invoke(unavailable.message) ?: showFallback(locale)
+            return false
         } catch (error: Exception) {
             Log.e(TAG, "${RpcFunction.getScreen.value} $key failed: $error")
             showFallback(locale)
-            return
+            return true
         }
         show(envelope, locale)
+        return true
     }
 
     /** Error screen retry. */

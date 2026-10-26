@@ -11,6 +11,7 @@ import app.parkhill.services.backend.BackendService
 import app.parkhill.services.backend.ContractJson
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -20,6 +21,8 @@ import kotlinx.serialization.json.JsonObject
  * the current persona's copy; `getTabs`
  * and `whoami` read the signed-in persona's `get_tabs.json` and `whoami.json`.
  * A `call` succeeds and changes nothing: mock responses are static (guide 6).
+ * It returns the recorded `<function>.ok.json` when there is one, such as a
+ * save's `SaveResult`, else `{}`.
  */
 class MockBackendService(
     private val responses: MockResponseStore,
@@ -45,8 +48,14 @@ class MockBackendService(
         return decode(RpcFunction.whoami.value, missing = BackendError.Server, Profile.serializer())
     }
 
-    override suspend fun call(function: String, params: JsonObject, locale: String) {
+    override suspend fun call(function: String, params: JsonObject, locale: String): JsonElement {
         if (personaState.current == null) throw BackendError.Unauthorized
+        val text = responses.text("$function.ok", personaState.current) ?: return JsonObject(emptyMap())
+        return try {
+            ContractJson.parseToJsonElement(text)
+        } catch (_: SerializationException) {
+            throw BackendError.Decoding
+        }
     }
 
     private fun decode(name: String, missing: BackendError): ScreenEnvelope =

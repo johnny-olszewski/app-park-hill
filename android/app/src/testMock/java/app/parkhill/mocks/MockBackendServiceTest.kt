@@ -1,5 +1,6 @@
 package app.parkhill.mocks
 
+import app.parkhill.contract.SaveResult
 import app.parkhill.contract.ScreenEnvelope
 import app.parkhill.contract.TabsResponse
 import app.parkhill.services.backend.BackendError
@@ -7,6 +8,7 @@ import app.parkhill.services.backend.ContractJson
 import java.io.File
 import java.nio.file.Files
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
@@ -57,7 +59,15 @@ class MockBackendServiceTest {
             assertEquals(BackendError.Unauthorized, error)
         }
         persona.current = "member_one"
-        service.call("leave_group", JsonObject(mapOf("p_group_id" to JsonPrimitive("g"))), "en")
+        assertEquals(JsonObject(emptyMap()), service.call("leave_group", JsonObject(mapOf("p_group_id" to JsonPrimitive("g"))), "en"))
+    }
+
+    @Test
+    fun aSaveReturnsTheRecordedOkResult() = runTest {
+        val service = MockBackendService(MockResponseStore.directory(bundled), MockPersonaState().apply { current = "leader" })
+        val body = service.call("save_group_changes", JsonObject(mapOf("p_group_id" to JsonPrimitive("g"))), "en")
+        assertEquals(Json.parseToJsonElement(File(bundled, "save_group_changes.ok.json").readText()), body)
+        assertEquals(true, ContractJson.decodeFromJsonElement(SaveResult.serializer(), body).ok)
     }
 
     @Test

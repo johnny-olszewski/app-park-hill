@@ -30,6 +30,7 @@ To see everything at once, open `docs/` as a vault in [Obsidian](https://obsidia
 12. [EP-03.C](slices/EP-03.C-members-leave-and-leaders-swipe-to-remove.md): members leave and leaders swipe to remove
 13. [EP-03.D](slices/EP-03.D-leaders-edit-their-group-in-one-pass.md): leaders edit their group in one pass
 14. [EP-03.E](slices/EP-03.E-staff-create-and-delete-groups.md): staff create and delete groups
+15. [EP-07.A](slices/EP-07.A-the-api-style-is-chosen-from-a-measured-comparison.md): the API style is chosen from a measured comparison (spike)
 
 Android is level after EP-06.C; new feature slices include every platform.
 
@@ -41,3 +42,4 @@ Android is level after EP-06.C; new feature slices include every platform.
 - [EP-04: People and roles](epics/EP-04-people-and-roles.md)
 - [EP-05: Contract names](epics/EP-05-contract-names.md)
 - [EP-06: Mock menu](epics/EP-06-mock-menu.md)
+- [EP-07: API style spike](epics/EP-07-api-style-spike.md)

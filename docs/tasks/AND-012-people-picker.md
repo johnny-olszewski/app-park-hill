@@ -6,7 +6,7 @@ area: android
 epic: EP-03
 depends_on: [AND-027, SUP-013]
 paired_with: [IOS-012]
-status: Draft
+status: Ready
 ---
 
 # AND-012: Build the Android sheet presentation and people picker

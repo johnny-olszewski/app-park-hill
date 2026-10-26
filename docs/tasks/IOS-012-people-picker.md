@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-026, SUP-013]
 paired_with: [AND-012]
-status: Draft
+status: Ready
 ---
 
 # IOS-012: Build the iOS sheet presentation and people picker

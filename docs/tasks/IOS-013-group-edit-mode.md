@@ -6,7 +6,7 @@ area: ios
 epic: EP-03
 depends_on: [IOS-012, SUP-024]
 paired_with: [AND-013]
-status: Draft
+status: Ready
 ---
 
 # IOS-013: Build iOS group edit mode with batched changes

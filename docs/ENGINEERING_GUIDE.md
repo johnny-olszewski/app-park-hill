@@ -39,7 +39,7 @@ Monorepo.
 /contract    API contract docs, JSON mock responses and personas (single source of truth for both clients)
 /ios         SwiftUI app
 /android     Kotlin + Compose app
-/docs        This guide, the task template, the backlog, epics, slices, specs, tasks
+/docs        This guide, the task template, the backlog, epics, slices, specs, tasks, spike reports
 /.github     GitHub Actions workflows and the pull request template
 /.claude     Project skills for agent sessions (/status, /ready-slice, /implement-slice, /review-pr, /address-review)
 /scripts     Workflow scripts: check_commits.sh, record.sh
@@ -202,7 +202,7 @@ Rules:
 
 The repo is `app-park-hill` on GitHub (private). `main` only changes through merged pull requests.
 
-1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9; chores: rule 12). Work before 2026-10-15 used one `task/<task file name>` branch per task.
+1. **One branch per slice** (7.2), created from an up-to-date `main` and named `slice/` plus the slice ID and a short kebab-case name, for example `slice/EP-06.B-mock-sign-in`. Other kinds of branches get their own prefix (planning: rule 9; chores: rule 12; spikes: rule 13). Work before 2026-10-15 used one `task/<task file name>` branch per task.
 2. **Commits are standalone and logical**, ordered for review. Each does one thing, leaves the repo consistent and reads on its own. Prefer several small commits to one large one. Separate mechanical changes (moves, renames, generated files) from hand-written ones.
 3. **Commit message format:**
 
@@ -230,6 +230,7 @@ The repo is `app-park-hill` on GitHub (private). `main` only changes through mer
     - The fix commits follow rule 7. The reviewer still checks the behavior criteria and merges.
     - Setup, once per repository: install the Claude GitHub app and add the `CLAUDE_CODE_OAUTH_TOKEN` secret from `claude setup-token`.
 12. **Chore branches.** Changes that neither implement a task nor only plan, such as renames, tooling and other housekeeping, use a branch named `chore/` plus a short kebab-case name, for example `chore/housekeeping`. One chore branch and PR may cover several unrelated items, each in its own commits. Commits are `[CHORE][<k>/n] <summary>`, numbered across the branch; the PR title is `[CHORE] <summary>`, and the PR template's slice, task and behavior sections are replaced by one section per item saying how it was verified. A chore changes no behavior a slice should own and sets no task to Done.
+13. **Spike branches.** A spike slice measures a design that is not adopted yet. Its tasks' code commits go on `spike/` plus the slice ID and a short name (for example `spike/EP-07.A-graphql`), branched from the slice branch after its readiness commits, and that branch is pushed but never merged. The slice branch carries the readiness commits, the findings report in `docs/spikes/<slice ID>-<short name>.md`, each task's Done commit and the slice's Done commit, and its PR links the spike branch for reading the code. Commit subjects follow rule 3 on both branches. Adopting the design is planned afterwards on a `plan/` branch.
 
 ### 7.2 Slices
 
@@ -336,6 +337,7 @@ Epics, slices and tasks are Markdown files whose structured facts live once, in 
 | 2026-10-24 | Mock responses for screens with params (SUP-012): `make mock-responses` follows every `navigate` action with params in each persona's recorded responses and records the screen it opens as `get_screen.<key>@<param>=<value>.json`; client mocks look a call up with its params first, then by name alone, and `responses.json` maps the name without params. Chosen over one file per screen key per persona (every row would open the same group in Mock) and over params in subfolders (a second layout for the mocks and the check). A screen whose data is a shared type is an alias screen (`$ref` alone), generated as a typealias, so `community.group` and `community.home`'s `group` part share `GroupDetail` |
 | 2026-10-25 | EP-03.B readiness check: Android draws `full_screen_cover` as a full-screen layer inside the activity, sliding up like the entry (AND-023), not a `Dialog`, which is a separate window and would hide the dev tools pill (5.2 rule 5). Toolbar overflow is left to each platform's bar: items beyond what it fits go to its overflow menu, in backend order. `GroupRow` gains an optional `badge_tone` (`attention`) so clients can mark "No leader" without reading the badge text |
 | 2026-10-25 | Test tiers (6, 7.2 rule 4): commits only have to build, checked with `scripts/check_commits.sh` building what each commit changed; tasks run the unit tests of the platforms they touched; the merge gate runs every unit and backend test plus a smoke set of UI tests (about one per screen's main path, listed in each app's `smoke-mock.txt` and `smoke-local.txt`) in CI and against local Supabase; the full UI suites run nightly in CI (`nightly.yml`), filing a `nightly-failure` issue on failure. Recordings come from UI test runs where one shows the criterion, recorded once. Replaces running every test per commit and every UI suite per slice, which made EP-03.B take far longer than its code. Chosen over test plans and annotations (one plain list format both apps share) and over running the full suite on PRs only for some paths (every slice touches the shared shell). iOS against local Supabase stays a local run: CI's Mac runners have no Docker |
+| 2026-10-26 | Spike branches (7.1 rule 13): a slice that measures a design not yet adopted keeps its code on an unmerged `spike/` branch and merges only its findings report (`docs/spikes/`) and status changes through its slice PR. First use: EP-07 compares backend-built screen data with backend-driven navigation over `pg_graphql` and Apollo, for `community.group`, backend and iOS only. Chosen over merging spike code to `main` (leaves a dependency in place if the design is rejected) and over a report with no code (the cost would be guessed, not measured) |
 
 ## 9. Known risks
 

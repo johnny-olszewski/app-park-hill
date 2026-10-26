@@ -180,8 +180,9 @@ private fun TabRoot(
             if (top == null) {
                 LargeTopAppBar(
                     title = { Text(tab.title, style = ParkHill.heading, modifier = Modifier.testTag("tab.title")) },
+                    navigationIcon = { tab.root.chrome?.navigationIcon?.invoke() },
                     actions = {
-                        ToolbarActions(tab.root)
+                        ScreenBarActions(tab.root)
                         if (signOut != null) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                             TextButton(onClick = signOut, modifier = Modifier.testTag("home.signOut")) { // TEMPORARY(EP-04): remove with IOS-015/AND-015
                                 Text(stringResource(R.string.shell_sign_out), color = ParkHill.colors.ink) // TEMPORARY(EP-04): remove with IOS-015/AND-015
@@ -192,6 +193,7 @@ private fun TabRoot(
                         containerColor = ParkHill.colors.surface,
                         scrolledContainerColor = ParkHill.colors.surface,
                         titleContentColor = ParkHill.colors.ink,
+                        navigationIconContentColor = ParkHill.colors.ink,
                         actionIconContentColor = ParkHill.colors.ink,
                     ),
                 )
@@ -228,7 +230,7 @@ private fun TabSheet(tab: TabCoordinator) {
     }
 }
 
-/** A backend screen's top app bar: its own title, `navigationIcon` and its toolbar. */
+/** A backend screen's top app bar: its own title, `navigationIcon` unless the screen replaces it, and its toolbar ([ScreenBarActions]). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ScreenTopBar(screen: ScreenModel, navigationIcon: @Composable () -> Unit) {
@@ -242,8 +244,8 @@ internal fun ScreenTopBar(screen: ScreenModel, navigationIcon: @Composable () ->
                 modifier = Modifier.testTag("screen.title"),
             )
         },
-        navigationIcon = navigationIcon,
-        actions = { ToolbarActions(screen) },
+        navigationIcon = { (screen.chrome?.navigationIcon ?: navigationIcon)() },
+        actions = { ScreenBarActions(screen) },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = ParkHill.colors.surface,
             scrolledContainerColor = ParkHill.colors.surface,

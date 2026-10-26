@@ -16,6 +16,8 @@ import app.parkhill.services.backend.BackendError
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 /** A `call` waiting for its confirmation, and the screen it came from. */
 class PendingCall(val action: CallAction, val source: ScreenModel?)
@@ -68,7 +70,9 @@ class TabCoordinator(item: TabItem, private val context: ScreenContext, private 
         private set
 
     /** What this tab's screens, and its cover's, call when something is tapped. */
-    val actions = ScreenActions(handler = ::perform)
+    val actions = ScreenActions(handler = ::perform, submitter = { call, fields, source, succeeded, done ->
+        scope.launch { done(submit(call, fields, source, succeeded)) }
+    })
 
     /** What the sheet's screen calls to finish. */
     val sheetActions = SheetActions(returnPeople = ::returnPeople, cancel = ::dismiss)
@@ -189,24 +193,40 @@ class TabCoordinator(item: TabItem, private val context: ScreenContext, private 
      * then only the lost-access message shows. Other failures are logged.
      */
     internal suspend fun call(action: CallAction, source: ScreenModel?) {
-        try {
-            context.backend.call(action.function, action.params, context.locale())
+        submit(action, emptyMap(), source) { true }
+    }
+
+    /**
+     * [call] for a form: makes `action` with `fields` added to its params
+     * and returns the body, applying `on_success` only when `succeeded` says
+     * the body is a success (a save's `SaveResult` can report problems).
+     * Null when the call failed.
+     */
+    internal suspend fun submit(
+        action: CallAction,
+        fields: Map<String, JsonElement>,
+        source: ScreenModel?,
+        succeeded: (JsonElement) -> Boolean,
+    ): JsonElement? {
+        val body = try {
+            context.backend.call(action.function, JsonObject(action.params + fields), context.locale())
         } catch (error: CancellationException) {
             throw error
         } catch (refused: BackendError.ActionRefused) {
             Log.i(TAG, "${action.function} refused")
             if (source == null || source.load()) message = TabMessage(refused.message)
-            return
+            return null
         } catch (error: Exception) {
             Log.e(TAG, "${action.function} failed: $error")
-            return
+            return null
         }
-        if (source == null) return
+        if (source == null || !succeeded(body)) return body
         when (action.onSuccess) {
             CallActionOnSuccess.REFRESH -> source.load()
             CallActionOnSuccess.DISMISS -> close(source, refreshRoot = true)
             CallActionOnSuccess.NONE -> Unit
         }
+        return body
     }
 
     fun messageShown(message: TabMessage) {

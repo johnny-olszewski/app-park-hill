@@ -34,8 +34,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Shows a [ScreenModel]: loading, the screen with pull to refresh unless
- * `refreshable` is false, or the error screen with retry. The screen's
- * actions are performed on its behalf.
+ * `refreshable` is false or the screen turns it off ([ScreenChrome]), or the
+ * error screen with retry. The screen's actions are performed on its behalf.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +54,7 @@ fun ScreenHost(model: ScreenModel, refreshable: Boolean = true) {
         is ScreenState.Showing -> {
             var refreshing by remember { mutableStateOf(false) }
             val pullState = rememberPullToRefreshState()
+            val pullable = refreshable && model.chrome?.refreshable != false
             val refresh = {
                 scope.launch {
                     refreshing = true
@@ -63,13 +64,16 @@ fun ScreenHost(model: ScreenModel, refreshable: Boolean = true) {
                 Unit
             }
             Box(
-                Modifier.fillMaxSize().pullToRefresh(refreshing, pullState, enabled = refreshable, onRefresh = refresh),
+                Modifier.fillMaxSize().pullToRefresh(refreshing, pullState, enabled = pullable, onRefresh = refresh),
             ) {
                 val outer = LocalScreenActions.current
-                CompositionLocalProvider(LocalScreenActions provides remember(outer, model) { outer.from(model) }) {
+                CompositionLocalProvider(
+                    LocalScreenActions provides remember(outer, model) { outer.from(model) },
+                    LocalShownScreen provides model,
+                ) {
                     state.screen.content()
                 }
-                if (refreshable) {
+                if (pullable) {
                     PullToRefreshDefaults.Indicator(pullState, refreshing, Modifier.align(Alignment.TopCenter))
                 }
             }

@@ -3,7 +3,7 @@ type: epic
 id: EP-07
 title: "API style spike"
 status: Draft
-specs: []
+specs: [specs/COMMUNITY.md, specs/ROLES.md]  # the screen it rebuilds and the permissions its capability fields check
 depends_on: [EP-03]  # the spike rebuilds community.group as EP-03.C left it
 ---
 

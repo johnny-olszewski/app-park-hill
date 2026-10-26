@@ -34,7 +34,7 @@ Measure what an iOS screen costs when the backend sends only its key and the scr
 | # | Criterion | Intent |
 |---|---|---|
 | AC1 | In Local, opening a group from Community home shows its detail from GraphQL, matching what the current screen shows for the same persona | Like for like, so the comparison is fair |
-| AC2 | Leave and remove appear only where the capability fields allow, and behave as in IOS-026 AC for confirm, refresh and lost access | Permissions stay with the backend (guide 2) |
+| AC2 | Leave and remove appear only where the capability fields allow, and otherwise behave as IOS-026 AC1 (backend confirmation, cancelling calls nothing), AC2 (swipe, cancel returns the row, accessibility action), AC3 (leaving lands on a refreshed screen), AC4 (lost access closes the screen with the backend message) and AC5 (a refused call shows its message and refreshes) | Permissions stay with the backend (guide 2), and the comparison is like for like |
 | AC3 | No Swift code checks a role or permission name | The client renders capabilities, it does not derive them |
 | AC4 | The report gives, for `community.group` in each style: files and lines touched per platform, generated versus hand-written code, setup cost of the codegen, and how Mock, the screen cache (guide 5.3 rule 10) and `make data-check` would work | The decision weighs the whole cost, not only the screen |
 | AC5 | The report ends in a recommendation with what it was chosen over, written as a draft decision log row | The reviewer can record the decision directly |

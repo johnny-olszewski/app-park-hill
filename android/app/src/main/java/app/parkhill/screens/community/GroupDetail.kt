@@ -1,5 +1,6 @@
 package app.parkhill.screens.community
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +29,10 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,38 +50,70 @@ import app.parkhill.R
 import app.parkhill.contract.ActionButton
 import app.parkhill.contract.GroupDetail
 import app.parkhill.contract.MemberRow
+import app.parkhill.contract.SaveResult
 import app.parkhill.design.ParkHill
 import app.parkhill.design.SecondaryButton
 import app.parkhill.navigation.LocalScreenActions
+import app.parkhill.navigation.ScreenChrome
+import app.parkhill.navigation.ScreenChromeEffect
+import app.parkhill.services.backend.ContractJson
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.JsonElement
 
 /**
- * A group's details and members (specs/COMMUNITY.md 5.1, 5.2). A client
+ * A group's details and members (specs/COMMUNITY.md 5.1 to 5.4). A client
  * component shared by `community.group` and Community home's one group;
- * every word comes from the data. Rows the caller may remove swipe to remove,
- * and the Leave footer shows when the backend sends it.
+ * every word comes from the data. Rows the caller may remove swipe to
+ * remove, the Leave footer shows when the backend sends it, and edit mode
+ * when it sends `edit`: Edit in the top app bar, then Done and Cancel in its
+ * place, with every change staged until Done saves them in one call. In edit
+ * mode swipe to remove, Leave and pull to refresh are off, and system back
+ * cancels; the staged changes survive a refresh of the data underneath.
  */
 @Composable
 fun GroupDetailView(detail: GroupDetail) {
+    var editing by remember(detail.groupId) { mutableStateOf<GroupEditState?>(null) }
+    var saving by remember(detail.groupId) { mutableStateOf(false) }
+    val actions = LocalScreenActions.current
+    val edit = editing
+
+    fun save() {
+        val staged = editing ?: return
+        val call = detail.save ?: return
+        saving = true
+        actions.submit(call, mapOf("p_batch" to staged.batch), GroupEditState::succeeded) { body ->
+            saving = false
+            val result = body?.let { decodeSaveResult(it) } ?: return@submit
+            if (editing !== staged) return@submit
+            if (result.ok) editing = null else staged.show(result)
+        }
+    }
+
+    detail.edit?.let { labels ->
+        ScreenChromeEffect(
+            if (edit == null) {
+                ScreenChrome(actions = { EditButton(labels.editLabel) { editing = GroupEditState(detail) } })
+            } else {
+                ScreenChrome(
+                    actions = { DoneButton(labels.doneLabel, enabled = !saving, onClick = ::save) },
+                    replacesToolbar = true,
+                    navigationIcon = { CancelButton(labels.cancelLabel, enabled = !saving) { editing = null } },
+                    refreshable = false,
+                )
+            },
+        )
+    }
+    BackHandler(enabled = edit != null) { if (!saving) editing = null }
+
     LazyColumn(
         Modifier.fillMaxSize().background(ParkHill.colors.surface).testTag("groupDetail"),
         verticalArrangement = Arrangement.spacedBy(0.dp),
     ) {
-        item {
-            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    detail.title,
-                    style = ParkHill.heading.copy(fontSize = 24.sp),
-                    color = ParkHill.colors.ink,
-                    modifier = Modifier.semantics { heading() }.testTag("groupDetail.title"),
-                )
-                if (detail.description.isNotEmpty()) {
-                    Text(detail.description, color = ParkHill.colors.inkMuted, modifier = Modifier.testTag("groupDetail.description"))
-                }
-            }
+        if (edit == null) {
+            details(detail)
+        } else {
+            editFields(detail.editFields.orEmpty(), edit)
         }
-        if (detail.meeting.isNotEmpty()) item { DetailLine(detail.meeting, Icons.Outlined.DateRange, "groupDetail.meeting") }
-        if (detail.location.isNotEmpty()) item { DetailLine(detail.location, Icons.Outlined.LocationOn, "groupDetail.location") }
-        item { DetailLine(detail.leadersLine, Icons.Outlined.Person, "groupDetail.leadersLine") }
         item {
             Text(
                 detail.membersTitle.uppercase(),
@@ -84,19 +122,63 @@ fun GroupDetailView(detail: GroupDetail) {
                 modifier = Modifier.padding(start = 16.dp, top = 24.dp, bottom = 6.dp).testTag("groupDetail.membersTitle"),
             )
         }
-        items(detail.members, key = { it.userId }) { member ->
-            val remove = member.remove
-            if (remove != null && LocalScreenActions.current.canPerform(remove.action)) {
-                RemovableMemberRow(member, remove)
-            } else {
-                MemberRowView(member)
+        if (edit == null) {
+            items(detail.members, key = { it.userId }) { member ->
+                val remove = member.remove
+                if (remove != null && LocalScreenActions.current.canPerform(remove.action)) {
+                    RemovableMemberRow(member, remove)
+                } else {
+                    MemberRowView(member)
+                }
+                HorizontalDivider(color = ParkHill.colors.line, modifier = Modifier.padding(start = 58.dp))
             }
-            HorizontalDivider(color = ParkHill.colors.line, modifier = Modifier.padding(start = 58.dp))
-        }
-        detail.leave?.let { leave ->
-            item { LeaveButton(leave) }
+            detail.leave?.let { leave ->
+                item { LeaveButton(leave) }
+            }
+        } else {
+            items(edit.rows, key = { it.id }) { row ->
+                EditMemberRow(
+                    row,
+                    error = edit.rowErrors[row.id],
+                    remove = { edit.remove(row.id) },
+                    toggleLeader = { edit.toggleLeader(row.id) },
+                )
+                HorizontalDivider(color = ParkHill.colors.line, modifier = Modifier.padding(start = 94.dp))
+            }
+            detail.addMember?.let { addMember ->
+                item { AddMemberButton(addMember) { actions.open(addMember.action) { people -> edit.add(people) } } }
+            }
         }
     }
+}
+
+/** The details as the backend formats them, outside edit mode. */
+private fun LazyListScope.details(detail: GroupDetail) {
+    item {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                detail.title,
+                style = ParkHill.heading.copy(fontSize = 24.sp),
+                color = ParkHill.colors.ink,
+                modifier = Modifier.semantics { heading() }.testTag("groupDetail.title"),
+            )
+            if (detail.description.isNotEmpty()) {
+                Text(detail.description, color = ParkHill.colors.inkMuted, modifier = Modifier.testTag("groupDetail.description"))
+            }
+        }
+    }
+    if (detail.meeting.isNotEmpty()) item { DetailLine(detail.meeting, Icons.Outlined.DateRange, "groupDetail.meeting") }
+    if (detail.location.isNotEmpty()) item { DetailLine(detail.location, Icons.Outlined.LocationOn, "groupDetail.location") }
+    item { DetailLine(detail.leadersLine, Icons.Outlined.Person, "groupDetail.leadersLine") }
+}
+
+/** A save's body as a `SaveResult`, or null when it is not one. */
+private fun decodeSaveResult(body: JsonElement): SaveResult? = try {
+    ContractJson.decodeFromJsonElement(SaveResult.serializer(), body)
+} catch (_: SerializationException) {
+    null
+} catch (_: IllegalArgumentException) {
+    null
 }
 
 /**

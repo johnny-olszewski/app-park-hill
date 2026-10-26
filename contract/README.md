@@ -104,7 +104,7 @@ Anything tappable carries an `Action` (`types/Action.schema.json`, specs/COMMUNI
 
 | Field | Values |
 |---|---|
-| `presentation` | `push`: the current tab's stack. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. EP-03.D adds `sheet` |
+| `presentation` | `push`: the current tab's stack. `sheet`: a sheet over the screen, fetched with a loading state, opened from a tab or a cover. `full_screen_cover`: over everything, with its own stack and a close button, fetched fresh each time. |
 | `on_success` | `refresh`: refetch the screen. `dismiss`: close a pushed screen and refresh the one below, or refresh a tab root in place (guide 5.3 rule 9). `none`: nothing |
 | `role` | `destructive`: a meaning each platform styles its own way |
 

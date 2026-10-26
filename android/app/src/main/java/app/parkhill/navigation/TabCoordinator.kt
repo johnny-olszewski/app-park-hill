@@ -90,6 +90,7 @@ class TabCoordinator(item: TabItem, private val context: ScreenContext, private 
                 }
                 when (action.presentation) {
                     NavigateActionPresentation.PUSH -> (cover ?: stack).push(action.screenKey, action.params)
+                    NavigateActionPresentation.SHEET -> Log.e(TAG, "Ignored sheet to ${action.screenKey}: not presented by this build yet") // TEMPORARY(EP-03): AND-012 presents sheets
                     NavigateActionPresentation.FULL_SCREEN_COVER -> {
                         if (cover != null) {
                             Log.e(TAG, "Ignored full_screen_cover to ${action.screenKey}: a cover is already open")

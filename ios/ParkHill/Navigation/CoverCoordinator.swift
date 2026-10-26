@@ -49,6 +49,8 @@ final class CoverCoordinator: Identifiable {
                 screen.onLostAccess = lostAccess
                 path.append(Route(screen: screen))
                 Task { await screen.load() }
+            case .sheet: // TEMPORARY(EP-03): IOS-012 presents sheets
+                Logger.navigation.error("Ignored sheet to \(navigate.screenKey, privacy: .public): not presented by this build yet") // TEMPORARY(EP-03): IOS-012 presents sheets
             case .fullScreenCover:
                 Logger.navigation.error("Ignored full_screen_cover to \(navigate.screenKey, privacy: .public) inside a cover")
             }

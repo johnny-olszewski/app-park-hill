@@ -19,7 +19,8 @@ Edit mode adds people by picking them from everyone signed up. This task opens `
 
 - `navigate` with `sheet`: a Material modal bottom sheet, fetched with a loading state.
 - `people.picker`: one row per `PersonRow` with `title`, optional `subtitle` and `note`; rows that are not `selectable` show their note and cannot be chosen; multi-select; a search field filtering by `title` as you type.
-- Add (backend `add_label`) returns every chosen `user_id` to the opener and closes the sheet; Cancel (backend `cancel_label`) and dismissing the sheet return nothing.
+- A `sheet` opens from a tab or from inside a full-screen cover. Replace the temporary `sheet` cases SUP-013 added.
+- Add (backend `add_label`) returns every chosen person (`user_id` and `title`, so the opener can show their names) to the opener and closes the sheet; Cancel (backend `cancel_label`) and dismissing the sheet return nothing.
 - `PersonRow` view as a shared component (the future directory reuses it).
 
 ## Out of scope
@@ -34,7 +35,7 @@ Edit mode adds people by picking them from everyone signed up. This task opens `
 | AC2 | Rows that are not selectable show their note and cannot be chosen | The backend decides who can be chosen |
 | AC3 | Add returns every chosen user id to the opener and closes the sheet; Cancel and dragging down return nothing | A reusable select-people pattern |
 | AC4 | Search filters by name as you type, keeping chosen people chosen | Fast with hundreds of people |
-| AC5 | Unit tests cover AC2 to AC4 with the picker mock responses; a Mock UI test covers AC1 and AC3 | Verified without a backend |
+| AC5 | Unit tests cover AC2 to AC4 with the picker mock responses; a Mock UI test covers AC1 and AC3; the picker's main path (leader: Edit, Add, pick, Done) joins `smoke-mock.txt` and `smoke-local.txt` once IOS-013/AND-013 build it | Verified without a backend |
 
 ## Technical notes
 

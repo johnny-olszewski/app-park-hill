@@ -17,10 +17,10 @@ Leaders and staff add people to a group by picking them from everyone signed up.
 
 ## Scope
 
-- Contract: `PersonRow` (`user_id`, `title`, optional `subtitle`, optional `note`, `selectable`) in `contract/types/`; `NavigateAction.presentation` gains `sheet`.
+- Contract: `PersonRow` (`user_id`, `title`, optional `subtitle`, optional `note`, `selectable`) in `contract/types/`; `NavigateAction.presentation` gains `sheet`. The commit that adds `sheet` also adds a `sheet` case to both clients' presentation switches that logs and does nothing, marked `TEMPORARY(EP-03)`, so every commit builds; IOS-012 and AND-012 replace it.
 - `people.picker` with `group_id`: `{ title, search_placeholder, add_label, cancel_label, rows: [PersonRow] }`, every active user by display name, current members not selectable with the note "Already a member" (`specs/COMMUNITY.md` 5.8).
 - Refused with `screen_unavailable` without `groups.add_member` on that group.
-- Add `people.picker` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations; mock responses for `leader` and `staff`.
+- Add `people.picker` to `contract/names.json`; describe it in `contract/screens/`; strings in migrations. Its mock responses come with SUP-024, whose `add_member` action is the first to open it (the generator records screens with params only through navigate actions).
 
 ## Out of scope
 
@@ -32,7 +32,7 @@ Leaders and staff add people to a group by picking them from everyone signed up.
 |---|---|---|
 | AC1 | The picker lists every active user by display name and marks current members not selectable with the backend note | The backend decides who can be chosen |
 | AC2 | The picker is refused with `screen_unavailable` for users without `groups.add_member` on that group, and returned for the group's leader and for staff | Only people who can add members can open it |
-| AC3 | `make data-check` passes with the new type, description and mock responses | Mocks mirror the real backend |
+| AC3 | `make data-check` passes with the new type and description | Mocks mirror the real backend |
 | AC4 | pgTAP tests cover AC1 and AC2 | Enforced, not documented |
 
 ## Technical notes

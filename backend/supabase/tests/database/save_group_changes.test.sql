@@ -3,7 +3,7 @@
 -- groups.assign_leader, and all or nothing.
 begin;
 
-select plan(20);
+select plan(23);
 
 create temporary table ids as
 select
@@ -128,6 +128,18 @@ select ok(
   (select not pg_temp.is_leader(tuesday, member_one) and pg_temp.is_member(tuesday, member_one)
      and not pg_temp.is_member(tuesday, rachel) and not pg_temp.is_leader(tuesday, rachel) from ids),
   'removing leadership keeps the membership; removing a member removes their leadership'
+);
+
+-- Only active people can be made leaders; a disabled leader can be removed.
+select is(
+  (select pg_temp.save_as(staff, tuesday, jsonb_build_object('make_leader', jsonb_build_array(disabled))) -> 'row_errors' ->> disabled::text from ids),
+  'You can''t make this change anymore.', 'a disabled account cannot be made a leader'
+);
+select ok((select not pg_temp.is_member(tuesday, disabled) from ids), 'nor added as a member through it');
+insert into public.group_leaders (group_id, user_id) select tuesday, disabled from ids;
+select is(
+  (select pg_temp.save_as(staff, tuesday, jsonb_build_object('remove_leader', jsonb_build_array(disabled))) from ids),
+  '{"ok": true}'::jsonb, 'a disabled leader can still be removed'
 );
 
 -- AC5: a disabled account is refused.

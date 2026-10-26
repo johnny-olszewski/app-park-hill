@@ -97,12 +97,23 @@ begin
     end if;
   end loop;
 
-  -- Leaders made and removed: groups.assign_leader for the group.
-  for v_id in
-    select jsonb_array_elements_text(coalesce(v_batch -> 'make_leader', '[]'::jsonb))
-    union all
-    select jsonb_array_elements_text(coalesce(v_batch -> 'remove_leader', '[]'::jsonb))
-  loop
+  -- Leaders made: groups.assign_leader for the group, and active people
+  -- only, as for additions, since making a leader adds the membership.
+  for v_id in select jsonb_array_elements_text(coalesce(v_batch -> 'make_leader', '[]'::jsonb)) loop
+    v_member := internal.try_uuid(v_id);
+    if not internal.has_permission(v_user_id, 'groups.assign_leader', p_group_id)
+      or v_member is null
+      or not exists (
+        select 1 from auth.users u
+        where u.id = v_member and u.deleted_at is null and (u.banned_until is null or u.banned_until <= now())
+      ) then
+      v_row_errors := v_row_errors || jsonb_build_object(v_id, v_refused);
+    end if;
+  end loop;
+
+  -- Leaders removed: groups.assign_leader for the group. A disabled leader
+  -- can still be removed.
+  for v_id in select jsonb_array_elements_text(coalesce(v_batch -> 'remove_leader', '[]'::jsonb)) loop
     v_member := internal.try_uuid(v_id);
     if not internal.has_permission(v_user_id, 'groups.assign_leader', p_group_id)
       or v_member is null

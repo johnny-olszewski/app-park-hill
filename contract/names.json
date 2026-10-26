@@ -15,6 +15,7 @@
     "home.root",
     "community.home",
     "community.group",
-    "community.browse"
+    "community.browse",
+    "people.picker"
   ]
 }

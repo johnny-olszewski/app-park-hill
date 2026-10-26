@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PeoplePickerData",
+  "description": "`people.picker` data: every active person by name for adding to a group, for holders of groups.add_member on it (specs/COMMUNITY.md 5.8).",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "search_placeholder": {
+      "description": "The search field's placeholder.",
+      "type": "string"
+    },
+    "add_label": {
+      "description": "The button that returns the chosen people.",
+      "type": "string"
+    },
+    "cancel_label": {
+      "description": "The button that closes the picker and returns nobody.",
+      "type": "string"
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "../types/PersonRow.schema.json"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "search_placeholder",
+    "add_label",
+    "cancel_label",
+    "rows"
+  ],
+  "additionalProperties": false
+}

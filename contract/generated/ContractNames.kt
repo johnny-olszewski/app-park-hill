@@ -24,4 +24,5 @@ object ScreenKey {
     const val communityHome = "community.home"
     const val communityGroup = "community.group"
     const val communityBrowse = "community.browse"
+    const val peoplePicker = "people.picker"
 }

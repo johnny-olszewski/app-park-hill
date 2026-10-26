@@ -6,7 +6,7 @@ area: contract, backend
 epic: EP-03
 depends_on: [SUP-014]
 paired_with: []
-status: Ready
+status: Done
 ---
 
 # SUP-013: Build the people picker screen

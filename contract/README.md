@@ -120,6 +120,7 @@ Shared types for Community screens, all text backend formatted and localized:
 | `MemberRow` | `user_id`, `title` (display name), optional `note` (for example "You"), `is_leader`, optional `remove` (`ActionButton`, on rows the caller may remove) |
 | `ActionButton` | `label`, `action`; sent only to people who may use it |
 | `GroupList` | `title`, `rows` (`GroupRow`s) |
+| `PersonRow` | `user_id`, `title` (display name), optional `subtitle`, optional `note` (why they cannot be chosen, for example "Already a member"), `selectable` |
 | `EmptyState` | `title`, `message`; shown with no buttons |
 
 ## Screen keys
@@ -133,6 +134,7 @@ Lowercase and dot separated. A key ending in `.mock` is registered only in the M
 | `community.home` | `get_tabs`, `get_screen`; signed in only | `screens/community.home.schema.json`: one of `group` (`GroupDetail`), `my_groups` (`GroupList`) or `empty` (`EmptyState`) | `mock responses/<persona>/get_screen.community.home.json` |
 | `community.browse` | `get_screen`; holders of `groups.view_all`, else `screen_unavailable` | `screens/community.browse.schema.json`: `title`, `search_placeholder`, `rows` (every group by name, `GroupRow`s badged for the caller) | `mock responses/<persona>/get_screen.community.browse.json` |
 | `community.group` | `get_screen` with `{"group_id"}`; members, leaders and holders of `groups.view_all`, else `screen_unavailable` | `screens/community.group.schema.json`: `GroupDetail` | `mock responses/<persona>/get_screen.community.group@group_id=<id>.json`, for each group a persona's responses open |
+| `people.picker` | `get_screen` with `{"group_id"}`; holders of `groups.add_member` on that group, else `screen_unavailable` | `screens/people.picker.schema.json`: `title`, `search_placeholder`, `add_label`, `cancel_label`, `rows` (every active person by name, `PersonRow`s; current members not `selectable`, with a `note`) | `mock responses/<persona>/get_screen.people.picker@group_id=<id>.json`, for each group a persona's `add_member` opens |
 
 A screen registered with `signed_in` in `public.screens` is refused to signed-out callers with `session_ended`, like every signed-in function.
 

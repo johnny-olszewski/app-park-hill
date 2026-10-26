@@ -49,7 +49,12 @@ final class TabCoordinator: Identifiable {
 
     /// What this tab's screens call when something is tapped.
     var actions: ScreenActions {
-        ScreenActions(coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) })
+        ScreenActions(
+            coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) },
+            submit: { [weak self] call, fields, source, succeeded in
+                await self?.submit(call, adding: fields, from: source, succeeded: succeeded)
+            }
+        )
     }
 
     /// Performs a backend action: `navigate` with `push` fetches the target
@@ -81,6 +86,9 @@ final class TabCoordinator: Identifiable {
                     context: context,
                     performCall: { [weak self] call, source in self?.performCall(call, from: source) },
                     presentSheet: { [weak self] navigate, onPeople in self?.presentSheet(navigate, onPeople: onPeople) },
+                    submit: { [weak self] call, fields, source, succeeded in
+                        await self?.submit(call, adding: fields, from: source, succeeded: succeeded)
+                    },
                     lostAccess: lostAccessHandler
                 )
                 self.cover = cover
@@ -134,17 +142,40 @@ final class TabCoordinator: Identifiable {
     /// from. A refusal refreshes that screen and shows the backend's message,
     /// unless the refresh lost access, whose message is shown instead.
     func run(_ call: CallAction, from source: ScreenModel?) async {
+        _ = await submit(call, adding: [:], from: source) { _ in true }
+    }
+
+    /// `run` for a form: makes `call` with `fields` added to its params and
+    /// returns the body, applying `on_success` only when `succeeded` says the
+    /// body is a success. Nil when the call failed.
+    func submit(
+        _ call: CallAction,
+        adding fields: [String: JSONValue],
+        from source: ScreenModel?,
+        succeeded: (JSONValue) -> Bool
+    ) async -> JSONValue? {
+        let body: JSONValue
         do {
-            try await context.backend.call(function: call.function, params: call.params.objectValue, locale: context.locale())
+            body = try await context.backend.call(
+                function: call.function,
+                params: call.params.objectValue.merging(fields) { _, field in field },
+                locale: context.locale()
+            )
         } catch .actionRefused(let refusal) {
             let count = lostAccessCount
             await source?.load()
             if lostAccessCount == count { message = refusal }
-            return
+            return nil
         } catch {
             Logger.navigation.error("\(call.function, privacy: .public) failed: \(String(describing: error), privacy: .public)")
-            return
+            return nil
         }
+        guard succeeded(body) else { return body }
+        await applySuccess(of: call, to: source)
+        return body
+    }
+
+    private func applySuccess(of call: CallAction, to source: ScreenModel?) async {
         switch call.onSuccess {
         case .refresh:
             await source?.load()

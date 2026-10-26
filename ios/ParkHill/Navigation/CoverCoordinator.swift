@@ -17,6 +17,7 @@ final class CoverCoordinator: Identifiable {
     private let context: ScreenContext
     private let performCall: @MainActor (CallAction, ScreenModel?) -> Void
     private let presentSheet: @MainActor (NavigateAction, ScreenActions.PeopleHandler?) -> Void
+    private let submit: ScreenActions.SubmitHandler?
     private let lostAccess: @MainActor (ScreenModel, String) -> Void
 
     init(
@@ -25,19 +26,21 @@ final class CoverCoordinator: Identifiable {
         context: ScreenContext,
         performCall: @escaping @MainActor (CallAction, ScreenModel?) -> Void = { _, _ in },
         presentSheet: @escaping @MainActor (NavigateAction, ScreenActions.PeopleHandler?) -> Void = { _, _ in },
+        submit: ScreenActions.SubmitHandler? = nil,
         lostAccess: @escaping @MainActor (ScreenModel, String) -> Void = { _, _ in }
     ) {
         root = ScreenModel(key: key, params: params, context: context)
         self.context = context
         self.performCall = performCall
         self.presentSheet = presentSheet
+        self.submit = submit
         self.lostAccess = lostAccess
         root.onLostAccess = lostAccess
     }
 
     /// What the cover's screens call when something is tapped.
     var actions: ScreenActions {
-        ScreenActions(coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) })
+        ScreenActions(coordinator: { [weak self] action, source, onPeople in self?.perform(action, from: source, onPeople: onPeople) }, submit: submit)
     }
 
     /// Pushes `navigate` targets onto the cover's own stack and hands sheets
